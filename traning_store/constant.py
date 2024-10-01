@@ -1,0 +1,10 @@
+COLOR_LEN: int = 7
+MAX_TIME: int = 720
+MEASURE_LEN: int = 16
+MAX_AMOUNT: int = 9000
+MIN_AMOUNT: int = 1
+MIN_TIME: int = 0
+SLUG_LEN: int = 128
+TITLE_LEN: int = 128
+EMAIL_MAX_LEN = 254
+NAME_LEN = 150

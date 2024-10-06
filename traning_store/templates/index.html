@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Проект Market</h1>
+  <p>
+    Market Corporation: <b>Trading</b> <b>C</b>ompany <b>M</b>ade <b>S</b>ale
+  </p>
+  <!-- Добавим строку "row" -->
+  <div class="row">
+    <!-- Добавим колонку "col-3" -->
+    <div class="col-3">
+      Количество  товаров в нашем проекте:
+    </div>
+    <div class="col-9">
+      <!-- Добавим колонку "col-9" и выведем значение переменной total_count.
+           С помощью стиля Bootstrap отобразим его очень крупным шрифтом  -->
+      <div class="display-1">{{'Около 100' }}</div>
+    </div>
+  </div>
+{% endblock %} 

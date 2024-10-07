@@ -35,24 +35,24 @@ class Migration(migrations.Migration):
         #        'ordering': ('name',),
         #    },
         #),
-        #migrations.AlterField(
-        #    model_name='product',
-        #    name='Side',
-        #    field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='catalog.side'),
-        #),
-        #migrations.AlterField(
-        #    model_name='product',
-        #    name='Wide_hips',
-        #    field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='catalog.wide_hips'),
-        #),
-        #migrations.AddField(
-        #    model_name='product',
-        #    name='Model_type',
-        #    field=models.ForeignKey(default='1', on_delete=django.db.models.deletion.CASCADE, to='catalog.model_type'),
-        #),
-        #migrations.AddField(
-        #    model_name='product',
-        #    name='Size',
-        #    field=models.ForeignKey(default='1', on_delete=django.db.models.deletion.CASCADE, to='catalog.size'),
-        #), 
+        migrations.AlterField(
+            model_name='product',
+            name='Side',
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='catalog.side'),
+        ),
+        migrations.AlterField(
+            model_name='product',
+            name='Wide_hips',
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='catalog.wide_hips'),
+        ),
+        migrations.AddField(
+            model_name='product',
+            name='Model_type',
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='catalog.model_type'),
+        ),
+        migrations.AddField(
+            model_name='product',
+            name='Size',
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='catalog.size'),
+        ), 
     ]

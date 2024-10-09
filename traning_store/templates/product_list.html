@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+ {% block content %}
+   <h1>Это страница со списком товаров!</h1>
+   {% for product in page_obj %}
+   <p>{{ product }}</p>
+   {% endfor %} 
+ {% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+ {% block content %}
+   <h1>Это страница со списком товаров!</h1>
+   {% for product in page_obj %}
+   <p>Наименование:{{ product.name }} </p>
+   <p>Производитель:{{ product.brand.name }}</p>
+   <p>Артикул:{{ "-" }}</p>
+   <p>Код товара:{{ "-" }}</p>
+   {% endfor %} 
+ {% endblock %}

@@ -1,7 +1,17 @@
 {% extends "base.html" %}
  {% block content %}
    <h1>Это страница со списком товаров!</h1>
-   {% for product in page_obj %}
+   <form method="get">
+    {{ filter.form.as_p }}
+    <button type="submit">Фильтровать</button>
+</form>
+<ul>
+    {% for product in filter.qs %}
+        <li>{{ product.Appointment }} - {{ product.sock }}</li>
+    {% empty %}
+        <li>Товары не найдены.</li>    
+</ul>
+<img src="{{ product.image.url }}" height="100"/>
    <p>Наименование:{{ product.name }} </p>
    <p>Производитель:{{ product.brand.name }}</p>
    <p>Артикул:{{ "-" }}</p>

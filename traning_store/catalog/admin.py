@@ -17,4 +17,12 @@ admin.site.register(Wide_hips)
 admin.site.register(Side)
 admin.site.register(Size)
 admin.site.register(Model_type)
-admin.site.register(Product)
+#admin.site.register(Product)
+
+@admin.register(Product)
+class MyModelAdmin(admin.ModelAdmin):
+    list_display = ['__str__', 'image_tag']
+
+    def image_tag(self, obj):
+        return obj.image.url if obj.image else None
+    image_tag.short_description = 'Image'

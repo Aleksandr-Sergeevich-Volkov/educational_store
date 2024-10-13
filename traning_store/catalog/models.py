@@ -191,6 +191,12 @@ class Product(models.Model):
         null=True,
         blank=True
     ) 
+    image = models.ImageField(
+        upload_to='images/', 
+        null=True,  
+        default=None
+        )
+
     class Meta:
         verbose_name = 'Товар'
         verbose_name_plural = 'Товары'

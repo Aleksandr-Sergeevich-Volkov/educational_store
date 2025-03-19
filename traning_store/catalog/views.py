@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from django.shortcuts import render,get_object_or_404
 from cart.forms import CartAddProductForm
 from django.views.generic import DetailView
@@ -11,6 +12,13 @@ logger = logging.getLogger(__name__)
 
 
 class ProductListView(FilterView):
+=======
+from django.shortcuts import render
+from django.views.generic import ListView
+from .models import Product
+
+class ProductListView(ListView):
+>>>>>>> 0295487ebcd6703410438ae8a892e0c32d23850d
     # Указываем модель, с которой работает CBV...
     model = Product
     # ...сортировку, которая будет применена при выводе списка объектов:
@@ -18,6 +26,7 @@ class ProductListView(FilterView):
     # ...и даже настройки пагинации:
     paginate_by = 10 
     template_name = 'product_list.html'
+<<<<<<< HEAD
     filterset_class = ProductFilter
     slug_url_kwarg = 'slug'
     #queryset = Product.objects.values('name', 'image','slug','brand__name')
@@ -70,3 +79,5 @@ class ProductDetailView(DetailView):
         #logger.warning([image for image in context['images_m']])
         #logger.warning([context['images_m']])
         return context 
+=======
+>>>>>>> 0295487ebcd6703410438ae8a892e0c32d23850d

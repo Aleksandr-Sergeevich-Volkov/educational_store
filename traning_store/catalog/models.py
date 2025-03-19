@@ -1,5 +1,6 @@
 from django.db import models
 from traning_store.constant import TITLE_LEN, COLOR_LEN
+import datetime as dt
 
 class Country(models.Model):
     name = models.CharField('Название', max_length=TITLE_LEN)
@@ -137,7 +138,7 @@ class Side(models.Model):
         ordering = ('name',)
 
     def __str__(self):
-        return f'{self.name}'                 
+        return f'{self.name}'                  
     
 class Product(models.Model):
     name = models.CharField('Название', max_length=TITLE_LEN)
@@ -191,11 +192,18 @@ class Product(models.Model):
         null=True,
         blank=True
     ) 
-    image = models.ImageField(
-        upload_to='images/', 
-        null=True,  
-        default=None
+    slug = models.SlugField(
+        max_length=255, 
+        unique=True, 
+        db_index=True, 
+        verbose_name="URL",
         )
+    
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    stock = models.PositiveIntegerField()
+    available = models.BooleanField(default=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = 'Товар'
@@ -204,3 +212,11 @@ class Product(models.Model):
 
     def __str__(self):
         return f'{self.name}, {self.brand}'
+    
+
+class Gallery(models.Model):
+    image = models.ImageField(upload_to='images/')
+    main = models.BooleanField(default=False)
+    product = models.ForeignKey(Product, 
+                                on_delete=models.CASCADE, 
+                                related_name='images')       

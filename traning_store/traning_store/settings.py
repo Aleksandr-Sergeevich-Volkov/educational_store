@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
+from dotenv import load_dotenv
 from pathlib import Path
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +27,10 @@ SECRET_KEY = 'django-insecure-4#xre@vo3c)grje)5kj3rrwt6@1=8dvyc!@6m-6nzl!kkb9dvm
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','localhost','0.0.0.0',]
+INTERNAL_IPS = [
+'127.0.0.1',
+]
 
 
 # Application definition
@@ -33,13 +38,19 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'catalog.apps.CatalogConfig',
     'homepage.apps.HomepageConfig',
+    'cart.apps.CartConfig',
+    'orders.apps.OrderConfig',
+    'coupons.apps.CouponsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'six',
+    'robokassa',
     'django_filters',
     'django.contrib.staticfiles',
+    'debug_toolbar',
     'django_bootstrap5',
 ]
 
@@ -51,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'traning_store.urls'
@@ -66,6 +78,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'cart.context_processors.cart',
             ],
         },
     },
@@ -78,13 +91,22 @@ WSGI_APPLICATION = 'traning_store.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
+      # Меняем настройку Django: теперь для работы будет использоваться
+        # бэкенд postgresql
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'DataApp',
-        'USER': 'postgres',
-        'PASSWORD': 'root',
-        'HOST': 'localhost',
-        'PORT': 5432,
+        'NAME': os.getenv('POSTGRES_DB', ''),
+        'USER': os.getenv('POSTGRES_USER', ''),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD',''),
+        'HOST': os.getenv('DB_HOST', ''),
+        'PORT': os.getenv('DB_PORT', 5432)
+   
+    #    'ENGINE': 'django.db.backends.postgresql',
+    #    'NAME': 'DataApp',
+    #    'USER': 'postgres',
+    #    'PASSWORD': 'root',
+    #    'HOST': 'localhost',
+    #    'PORT': 5432, """
     }
 }
 
@@ -126,7 +148,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / 'collected_static'
 
 
 # Default primary key field type
@@ -136,3 +158,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = BASE_DIR / 'media' 
 MEDIA_URL = '/media/'
+CART_SESSION_ID = 'cart'
+#EMAIL_HOST_PASSWORD = "ZxC_51723"
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = "smtp.yandex.ru"
+EMAIL_PORT = 465
+EMAIL_HOST_USER = "volkovaleksandrsergeevich@yandex.ru"
+EMAIL_HOST_PASSWORD = "qmkcilqgvjiotvve"
+EMAIL_USE_SSL = True
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
+CELERY_RESULT_BACKEND = 'rpc://'
+CELERY_BROKER_POOL_LIMIT = None

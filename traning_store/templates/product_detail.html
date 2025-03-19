@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+  <h1 class="pb-2 mb-0">{{ object.name }}</h1> 
+  <div class="row mt-3">
+    <div class="col-12 col-md-6">
+      <h2>Описание</h2>
+      <li>Производитель:{{ object.brand }} </li>
+      {% for image in images_m %}
+      <ul>
+      <li><img src="{{image.image.url }}" height=150></li> 
+      </ul>
+      {% endfor %}  
+    </div> 
+    <p class="price">${{ product.price }}</p>
+<form action="{% url "cart:cart_add" product.id %}" method="post">
+    {{ cart_product_form }}
+    {% csrf_token %}
+    <input type="submit" value="Add to cart">
+</form>    
+  </div>     
+{% endblock %} 

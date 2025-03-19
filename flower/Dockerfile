@@ -1,0 +1,1 @@
+CMD ["celery" "-A" "traning_store" "flower"]

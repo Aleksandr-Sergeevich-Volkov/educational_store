@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load django_bootstrap5 %}
 {% block content %}
   <h1>Проект Market</h1>
   <img src="static/logo.jpeg">
@@ -12,13 +12,13 @@
   <!-- Добавим строку "row" -->
   <div class="row">
     <!-- Добавим колонку "col-3" -->
-    <div class="container">
+    <div class="container" "card-body">
       <b><i>Количество  товаров в нашем проекте:</b></i>
     </div>
     <div class="col-8">
       <!-- Добавим колонку "col-9" и выведем значение переменной total_count.
            С помощью стиля Bootstrap отобразим его очень крупным шрифтом  -->
-      <div class="display-1">{{'Около 100' }}</div>
+      <div class="display-4">{{prod_count.id__count}}</div>
       <ul style="display: inline-block; font-size: 18px; font-family:sans-serif;">        
         <li>Контакты:</li>
         <li>Адрес:Московская область,Химки</li>

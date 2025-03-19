@@ -1,20 +1,25 @@
 {% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% load static %}
  {% block content %}
-   <h1>Это страница со списком товаров!</h1>
+   <h1>Это страница со списком товаров!Всего:{{prod_count.id__count}}</h1>
    <form method="get">
     {{ filter.form.as_p }}
-    <button type="submit">Фильтровать</button>
+    <button type="submit">Фильтр</button>
 </form>
 <ul>
     {% for product in filter.qs %}
-        <li>{{ product.Appointment }} - {{ product.sock }}</li>
+    <a href="{% url 'catalog:detail' product.slug %}"> <class="card-link">{{ product.name }}</a>
+         <li>Производитель:{{ product.brand }} </li>
+         {% for image in images_m %}
+         {% if  image.product_id == product.id and  image.main %}
+        <li><img src="{{image.image.url }}" height=100></li> 
+         {% endif %} 
+         {% endfor %} 
+    <li>Артикул:{{ "-" }} </li>
+    <li>Код товара:{{ "-"}} </li>
+</ul>    
     {% empty %}
-        <li>Товары не найдены.</li>    
-</ul>
-<img src="{{ product.image.url }}" height="100"/>
-   <p>Наименование:{{ product.name }} </p>
-   <p>Производитель:{{ product.brand.name }}</p>
-   <p>Артикул:{{ "-" }}</p>
-   <p>Код товара:{{ "-" }}</p>
-   {% endfor %} 
+        <li>Товары не найдены.</li>       
+   {% endfor %}  
  {% endblock %}

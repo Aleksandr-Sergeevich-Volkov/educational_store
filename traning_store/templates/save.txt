@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+ {% block content %}
+   <h1>Это страница со списком товаров!</h1>
+   {% for product in page_obj %}
+   <form method="get">
+    {{ filter.form.as_p }}
+    <button type="submit">Фильтровать</button>
+</form>
+
+<ul>
+    {% for product in filter.qs %}
+        <li>{{ product.Appointment }} - {{ product.sock }}</li>
+    {% empty %}
+        <li>Товары не найдены.</li>
+    {% endfor %}
+</ul>
+<img src="{{ product.image.url }}" height="100"/>
+   <p>Наименование:{{ product.name }} </p>
+   <p>Производитель:{{ product.brand.name }}</p>
+   <p>Артикул:{{ "-" }}</p>
+   <p>Код товара:{{ "-" }}</p>
+   {% endfor %} 
+ {% endblock %}
+
+ <div class="col-12 col-md-6 mb-3">          
+    <b><i>Цвет:</b></i>       
+<select>     
+{% for color in colors %}
+<option value="{{color.id}}">{{color.name}}</option>
+{% endfor %}  
+</select>  
+<b><i>Размер:</b></i> 
+<select> 
+{% for size in sizes %}
+<option value="{{'Размер:'}}{{size.id}}">{{size.name}}</option>
+{% endfor %}  
+</select>    
+<b><i>Модель:</b></i> 
+<select> 
+{% for model in model_t %}
+<option value="{{'Модель:'}}{{model.id}}">{{model.name}}</option>
+{% endfor %}  
+</select>    
+    </div> 
+
+    {% if image.product_id == "product.id" %}
+    {% endif %} 
+    {% else %}        
+    <li>End:{{ "-" }} </li>
+    <li>id:{{ image.product_id }} </li>
+    <li>id:{{ product.id }} </li>
+    <li><img src="{{product.image.url }}" height=150></li> 
+
+    {% for image in images_m %}
+             {% if image.product_id == product.id %}
+                 <li><img src="{{image.image.url }}" height=150></li> 

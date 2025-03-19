@@ -1,0 +1,82 @@
+# Файл docker-compose.yml
+
+# Версия docker-compose
+version: '3'
+
+# Перечень volume
+volumes:
+  pg_data:
+  static:
+  media:
+
+# Перечень контейнеров
+services:
+  # Имя и описание первого контейнера; имя выбирает разработчик. 
+  # Это контейнер БД
+  db:
+    # Из какого образа запустить контейнер:
+    image: postgres:13.10
+    # Файл (или список файлов) с переменными окружения
+    env_file: .env
+    # Какой volume подключить для этого контейнера
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+  # Имя и описание контейнера с бэкендом
+  rabbitmq:
+    image: rabbitmq:latest
+    hostname: rabbit
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit log_levels [{connection,error},{default,error}] 
+      - RABBITMQ_DEFAULT_VHOST=/
+    ports:
+      - 15672:15672
+      - 5672:5672
+  traning_store:
+    # Из какого Dockerfile собирать образ для этого контейнера:
+    build: ./traning_store/
+    env_file: .env
+    volumes:
+      - static:/backend_static
+      - media:/media
+    # Какие контейнеры нужно запустить до старта этого контейнера:
+    #command: celery -A traning_store worker -l info 
+    depends_on:
+      - db
+  celery:
+    build: ./traning_store
+    command: celery -A traning_store worker -l info    
+    environment:
+      - DB_HOST=db
+      - DB_NAME=app
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+    #env_file: .env
+    depends_on:
+      - db
+      - rabbitmq
+      - traning_store
+  flower:
+    build: ./traning_store
+    command: celery --broker=amqp://guest:guest@rabbitmq flower --basic_auth=guest:guest --loglevel=info  
+    ports:  
+     - 5555:5555 
+    depends_on:
+     - rabbitmq
+     - traning_store
+     - celery 
+  # Добавляем новый контейнер: gateway
+  gateway:
+    # Сбилдить и запустить образ, 
+    # описанный в Dockerfile в папке gateway
+    build: ./gateway/
+    # Ключ ports устанавливает
+    # перенаправление всех запросов с порта 8000 хоста
+    # на порт 80 контейнера
+    volumes:
+      - static:/staticfiles/
+      - media:/media
+    ports:
+      - 8000:80 

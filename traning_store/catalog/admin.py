@@ -3,7 +3,7 @@ from django.contrib import admin
 
 from .models import (Country,Brend,Appointment,Male,Color,
                      Class_compress,Soсk,Type_product,Wide_hips,Side,
-                     Size,Model_type,Product)
+                     Size,Model_type,Product,Gallery)
 
 admin.site.register(Country) 
 admin.site.register(Brend) 
@@ -17,12 +17,16 @@ admin.site.register(Wide_hips)
 admin.site.register(Side)
 admin.site.register(Size)
 admin.site.register(Model_type)
-#admin.site.register(Product)
+admin.site.register(Gallery)
+
+
+class GalleryInline(admin.TabularInline):
+    fk_name = 'product'
+    model = Gallery
 
 @admin.register(Product)
-class MyModelAdmin(admin.ModelAdmin):
-    list_display = ['__str__', 'image_tag']
+class ProductAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("name", )}
+    inlines = [GalleryInline,]
 
-    def image_tag(self, obj):
-        return obj.image.url if obj.image else None
-    image_tag.short_description = 'Image'
+ 

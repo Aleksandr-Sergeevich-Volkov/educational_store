@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-<<<<<<< HEAD
 {% load django_bootstrap5 %}
 {% load static %}
  {% block content %}
@@ -23,11 +22,4 @@
     {% empty %}
         <li>Товары не найдены.</li>       
    {% endfor %}  
-=======
- {% block content %}
-   <h1>Это страница со списком товаров!</h1>
-   {% for product in page_obj %}
-   <p>{{ product }}</p>
-   {% endfor %} 
->>>>>>> 0295487ebcd6703410438ae8a892e0c32d23850d
  {% endblock %}

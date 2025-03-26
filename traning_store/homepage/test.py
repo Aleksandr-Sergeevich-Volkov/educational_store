@@ -1,1 +1,0 @@
-request.session['foo'] = 'bar'

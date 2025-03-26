@@ -1,10 +1,13 @@
-from django.shortcuts import render, redirect, get_object_or_404
+import logging
+
+from catalog.models import Gallery, Product
+from coupons.forms import CouponApplyForm
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
-from catalog.models import Product, Gallery
+
 from .cart import Cart
 from .forms import CartAddProductForm
-from coupons.forms import CouponApplyForm
-import logging
+
 logger = logging.getLogger(__name__)
 
 
@@ -12,9 +15,8 @@ logger = logging.getLogger(__name__)
 def cart_add(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
-    images_m = Gallery.objects.filter(
-                                     product=product)
-    #logger.warning([image for image in images_m])
+    images_m = Gallery.objects.filter(product=product)
+    # logger.warning([image for image in images_m])
     form = CartAddProductForm(request.POST)
     if form.is_valid():
         cd = form.cleaned_data
@@ -39,10 +41,11 @@ def cart_detail(request):
     cart = Cart(request)
     for item in cart:
         item['update_quantity_form'] = CartAddProductForm(
-                            initial={'quantity': item['quantity'],
-                            'update': True})
+            initial={'quantity': item['quantity'], 'update': True})
     coupon_apply_form = CouponApplyForm()
-    images_m=Gallery.objects.all()
-    return render(request, 'cart_detail.html', {'cart': cart,
-                                                'coupon_apply_form': coupon_apply_form,
-                                                'images_m':images_m})
+    images_m = Gallery.objects.all()
+    return render(request, 'cart_detail.html',
+                  {'cart': cart,
+                   'coupon_apply_form': coupon_apply_form,
+                   'images_m': images_m}
+                  )

@@ -10,8 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
-from dotenv import load_dotenv
 from pathlib import Path
+
+from dotenv import load_dotenv
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -22,15 +24,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4#xre@vo3c)grje)5kj3rrwt6@1=8dvyc!@6m-6nzl!kkb9dvm'
+SECRET_KEY = 'django-insecure-4#xre@vo3c)grje)5kj3rrwt6@1=' \
+             '8dvyc!@6m-6nzl!kkb9dvm'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','localhost','0.0.0.0',]
-INTERNAL_IPS = [
-'127.0.0.1',
-]
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0',]
+INTERNAL_IPS = ['127.0.0.1']
 
 
 # Application definition
@@ -91,22 +92,15 @@ WSGI_APPLICATION = 'traning_store.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-      # Меняем настройку Django: теперь для работы будет использоваться
-        # бэкенд postgresql
+    # Меняем настройку Django: теперь для работы будет использоваться
+    # бэкенд postgresql
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB', ''),
-        'USER': os.getenv('POSTGRES_USER', ''),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD',''),
-        'HOST': os.getenv('DB_HOST', ''),
-        'PORT': os.getenv('DB_PORT', 5432)
-   
-    #    'ENGINE': 'django.db.backends.postgresql',
-    #    'NAME': 'DataApp',
-    #    'USER': 'postgres',
-    #    'PASSWORD': 'root',
-    #    'HOST': 'localhost',
-    #    'PORT': 5432, """
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': os.getenv('POSTGRES_DB', ''),
+                'USER': os.getenv('POSTGRES_USER', ''),
+                'PASSWORD': os.getenv('POSTGRES_PASSWORD', ''),
+                'HOST': os.getenv('DB_HOST', ''),
+                'PORT': os.getenv('DB_PORT', 5432)
     }
 }
 
@@ -156,10 +150,9 @@ STATIC_ROOT = BASE_DIR / 'collected_static'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_ROOT = BASE_DIR / 'media' 
+MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 CART_SESSION_ID = 'cart'
-#EMAIL_HOST_PASSWORD = "ZxC_51723"
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = "smtp.yandex.ru"
 EMAIL_PORT = 465

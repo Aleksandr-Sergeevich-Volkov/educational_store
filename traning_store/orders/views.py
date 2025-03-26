@@ -1,11 +1,11 @@
-from django.shortcuts import render
-from .models import OrderItem
-from .forms import OrderCreateForm
 from cart.cart import Cart
-from .tasks import order_created
 from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import get_object_or_404
-from .models import Order
+from django.shortcuts import get_object_or_404, render
+
+from .forms import OrderCreateForm
+from .models import Order, OrderItem
+from .tasks import order_created
+
 
 @staff_member_required
 def admin_order_detail(request, order_id):
@@ -13,6 +13,7 @@ def admin_order_detail(request, order_id):
     return render(request,
                   'admin_detail.html',
                   {'order': order})
+
 
 def order_create(request):
     cart = Cart(request)

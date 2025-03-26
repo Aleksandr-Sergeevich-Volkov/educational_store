@@ -1,5 +1,5 @@
-from django.db import models
 from catalog.models import Product
+from django.db import models
 
 
 class Order(models.Model):
@@ -7,7 +7,7 @@ class Order(models.Model):
     last_name = models.CharField(max_length=50)
     email = models.EmailField()
     address = models.CharField(max_length=250)
-    address_pvz = models.CharField(max_length=250,default='-')
+    address_pvz = models.CharField(max_length=250, default='-')
     postal_code = models.CharField(max_length=20)
     city = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True)

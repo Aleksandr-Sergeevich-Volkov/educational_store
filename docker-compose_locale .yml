@@ -36,8 +36,7 @@ services:
       - 5672:5672
   traning_store:
     # Из какого Dockerfile собирать образ для этого контейнера:
-    # build: ./traning_store/
-    image: volkovaleksandrsergeevich/traning_store
+    build: ./traning_store/
     env_file: .env
     volumes:
       - static:/backend_static
@@ -47,8 +46,7 @@ services:
     depends_on:
       - db
   celery:
-    # build: ./traning_store
-    image: volkovaleksandrsergeevich/traning_store
+    build: ./traning_store
     command: celery -A traning_store worker -l info    
     environment:
       - DB_HOST=db
@@ -61,8 +59,7 @@ services:
       - rabbitmq
       - traning_store
   flower:
-    # build: ./traning_store
-    image: volkovaleksandrsergeevich/traning_store
+    build: ./traning_store
     command: celery --broker=amqp://guest:guest@rabbitmq flower --basic_auth=guest:guest --loglevel=info  
     ports:  
      - 5555:5555 
@@ -74,9 +71,7 @@ services:
   gateway:
     # Сбилдить и запустить образ, 
     # описанный в Dockerfile в папке gateway
-    # build: ./gateway/
-    image: volkovaleksandrsergeevich/traning_store_gateway
-
+    build: ./gateway/
     # Ключ ports устанавливает
     # перенаправление всех запросов с порта 8000 хоста
     # на порт 80 контейнера

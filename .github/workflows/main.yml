@@ -32,8 +32,7 @@ jobs:
       # что нужно проверить файлы только в папке backend/
       run: python -m flake8 traning_store/
 
-    
-# Добавляем новую задачу: деплой приложения
+    # Добавляем новую задачу: деплой приложения
   build_and_push_to_docker_hub:
     name: Push Docker image to DockerHub
     runs-on: ubuntu-latest

@@ -86,7 +86,8 @@ jobs:
           context: ./gateway/
           push: true
           tags: volkovaleksandrsergeevich/traning_store_gateway:latest   
-            
+  
+          
   deploy:
     runs-on: ubuntu-latest
     needs: 

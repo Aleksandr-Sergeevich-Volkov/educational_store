@@ -1,5 +1,4 @@
 name: Main education_store Workflow
-
 on:
   push:
     branches:

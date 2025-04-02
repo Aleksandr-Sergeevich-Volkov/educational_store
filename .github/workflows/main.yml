@@ -104,6 +104,15 @@ jobs:
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
         source: "docker-compose.yml"
         target: "educational_store"
+    - name: Copy .env 
+      uses: appleboy/scp-action@master
+      with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}          
+          source: ".env"
+          target: "educational_store"    
     - name: Executing remote ssh commands to deploy
       uses: appleboy/ssh-action@master
       with:

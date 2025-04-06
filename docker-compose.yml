@@ -41,7 +41,7 @@ services:
     env_file: .env
     volumes:
       - static:/backend_static
-      - media:/media
+      - media:/app/media
     # Какие контейнеры нужно запустить до старта этого контейнера:
     #command: celery -A traning_store worker -l info 
     depends_on:

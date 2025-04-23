@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
 {% block content %}
-  <h1>Проект Market</h1>
+  <h1 class="card-header"> Проект Market</h1>
   <img src="static/logo.jpeg" width="400">
   <p>
     Market Corporation: <b>Trading</b> <b>C</b>ompany <b>M</b>ade <b>S</b>ale
   </p>
   <h2>
-    <a href="{{ catalog }}">Каталог товаров</a> 
+    <a href="" class="btn btn-primary{{ catalog }}">Каталог товаров</a> 
   </h2>
   <!-- Добавим строку "row" -->
   <div class="row">

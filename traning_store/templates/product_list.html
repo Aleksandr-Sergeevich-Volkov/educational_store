@@ -5,7 +5,7 @@
    <h1>Это страница со списком товаров!Всего:{{prod_count.id__count}}</h1>
    <form method="get">
     {{ filter.form.as_p }}
-    <button type="submit">Фильтр</button>
+    <button type="submit" class="btn btn-primary">Фильтр</button>
 </form>
 <ul>
     {% for product in filter.qs %}

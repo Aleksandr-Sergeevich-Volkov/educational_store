@@ -76,8 +76,8 @@
         {% csrf_token %}
     </form>
     <p class="text-right">
-        <a href="{% url "catalog:catalog" %}" class="button light">Continue shopping</a>
-        <a href="{% url "orders:order_create" %}" class="button">
+        <a href="{% url "catalog:catalog" %}"  class="btn btn-primary">Continue shopping</a>
+        <a href="{% url "orders:order_create" %}"  class="btn btn-primary">
             Checkout
         </a>                             
     </p>

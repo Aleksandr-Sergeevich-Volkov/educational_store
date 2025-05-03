@@ -1,4 +1,4 @@
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
@@ -20,4 +20,6 @@ def coupon_apply(request):
             request.session['coupon_id'] = coupon.id
         except Coupon.DoesNotExists:
             request.session['coupon_id'] = None
+            context = {'coupon_id': request.session['coupon_id']}
+            return render(request, 'coupon_not.html', context)
     return redirect('cart:cart_detail')

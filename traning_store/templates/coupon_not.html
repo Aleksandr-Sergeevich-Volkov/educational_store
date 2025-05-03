@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block content %}
+  <h1 class="card-header"> Купон не найден</h1>
+    <div class="col-9">
+      <!-- Добавим колонку "col-9" и выведем значение переменной total_count.
+           С помощью стиля Bootstrap отобразим его очень крупным шрифтом  -->
+      <div class="display-6">{{count_id}}</div>
+    </div>
+{% endblock %} 

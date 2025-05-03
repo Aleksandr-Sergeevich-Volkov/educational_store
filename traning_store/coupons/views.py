@@ -1,5 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 
@@ -22,7 +22,7 @@ def coupon_apply(request):
         # except Coupon.DoesNotExists:
         except ObjectDoesNotExist:
             request.session['coupon_id'] = None
-            context = {'coupon_id': request.session['coupon_id']}
+            # context = {'coupon_id': request.session['coupon_id']}
             # return render(request, 'coupon_not.html', context)
             return redirect('index')
     return redirect('cart:cart_detail')

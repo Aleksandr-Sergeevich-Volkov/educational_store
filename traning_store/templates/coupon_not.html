@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
 {% block content %}
-  <h1 class="card-header"> Купон не найден</h1>
+  <h1 class="card-header">Внимание:</h1>
     <div class="col-9">
       <!-- Добавим колонку "col-9" и выведем значение переменной total_count.
            С помощью стиля Bootstrap отобразим его очень крупным шрифтом  -->
-      <div class="display-6">{{coupon_id}}</div>
+      <div class="display-6">Купон с номером {{coupon_id}} не найден</div>
       <a href="{% url "cart:cart_detail" %}" class="btn btn-primary">Continue to cart</a>
     </div>
 {% endblock %} 

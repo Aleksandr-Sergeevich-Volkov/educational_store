@@ -20,8 +20,8 @@ def coupon_apply(request):
                                         active=True)
             request.session['coupon_id'] = coupon.id
         except ObjectDoesNotExist:
-            context = {'coupon_id': request.session['coupon_id']}
+            context = {'coupon_id': code}
             request.session['coupon_id'] = None
-            print(context)
+            print(code)
             return render(request, 'coupon_not.html', context)
     return redirect('cart:cart_detail')

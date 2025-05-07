@@ -7,7 +7,6 @@ from .filters import ProductFilter
 from .models import Color, Gallery, Model_type, Product, Size
 
 
-
 class ProductListView(FilterView):
     # Указываем модель, с которой работает CBV...
     model = Product

@@ -1,5 +1,3 @@
-# import logging
-
 from cart.forms import CartAddProductForm
 from django.db.models import Count
 from django.views.generic import DetailView
@@ -8,7 +6,6 @@ from django_filters.views import FilterView
 from .filters import ProductFilter
 from .models import Color, Gallery, Model_type, Product, Size
 
-# logger = logging.getLogger(__name__)
 
 
 class ProductListView(FilterView):
@@ -27,7 +24,6 @@ class ProductListView(FilterView):
         context = super().get_context_data(**kwargs)
         context['images_m'] = Gallery.objects.all()
         context['prod_count'] = Product.objects.aggregate(Count('id'))
-        # logger.warning(context['prod_count']['id__count'])
         return context
 
 

@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
 
-{% block title %}Thank you{% endblock %}
+{% block title %}Спасибо{% endblock %}
 
 {% block content %}
-    <h1>Thank you</h1>
-    <p>Your order has been successfully completed. Your order number is
+    <h1>Спасибо</h1>
+    <p>Ваш заказ успешно сформирован. Номер заказа 
         <strong>{{ order.id }}</strong>.</p>
         <a href="{% url "catalog:catalog" %}" class="btn btn-primary">Continue shopping</a>    
 {% endblock %}

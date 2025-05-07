@@ -40,7 +40,7 @@
                     <td>{{ item.m_type }}</td>                    
                     <td class="num">₽{{ item.price }}</td>
                     <td class="num">₽{{ item.total_price }}</td>
-                    <td><a href="{% url "cart:cart_remove" product.id%}" class="btn btn-primary">Remove</a></td>
+                    <td><a href="{% url "cart:cart_remove" product.id%}" class="btn btn-primary">Очистить</a></td>
                 </tr>
             {% endwith %}
         {% endfor %}
@@ -72,13 +72,13 @@
     </table>
     <form action="{% url "coupons:apply" %}" method="post">
         {{ coupon_apply_form }}
-        <input type="submit" class="btn btn-primary" value="Apply">
+        <input type="submit" class="btn btn-primary" value="Готово">
         {% csrf_token %}
     </form>
     <p class="text-right">
-        <a href="{% url "catalog:catalog" %}" class="btn btn-primary">Continue shopping</a>
+        <a href="{% url "catalog:catalog" %}" class="btn btn-primary">Продолжить покупки</a>
         <a href="{% url "orders:order_create" %}" class="btn btn-primary">
-            Checkout
+            Перейти к заказу
         </a>                             
     </p>
 {% endblock %}

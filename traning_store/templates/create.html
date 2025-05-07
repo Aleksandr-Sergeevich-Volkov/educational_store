@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Checkout{% endblock %}
+{% block title %}Заказ{% endblock %}
 
 {% block content %}
-    <h1>Checkout</h1>
+    <h1>Проверьте</h1>
     <div class="order-info">
-        <h3>Your order</h3>
+        <h3>Ваш заказ</h3>
         <ul>
             {% for item in cart %}
                 <li>
@@ -82,7 +82,7 @@
     </script>       
     </head>
         {{ form.as_p }}
-        <p><input type="submit" value="Place order"></p>
+        <p><input type="submit" value="Подтвердить заказ"></p>
         {% csrf_token %}
     </form>
 {% endblock %}

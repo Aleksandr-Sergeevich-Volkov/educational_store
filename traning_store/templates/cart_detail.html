@@ -38,8 +38,8 @@
                     <td>{{ item.size }}</td>
                     <td>{{ item.color }}</td>
                     <td>{{ item.m_type }}</td>                    
-                    <td class="num">${{ item.price }}</td>
-                    <td class="num">${{ item.total_price }}</td>
+                    <td class="num">₽{{ item.price }}</td>
+                    <td class="num">₽{{ item.total_price }}</td>
                     <td><a href="{% url "cart:cart_remove" product.id%}" class="btn btn-primary">Remove</a></td>
                 </tr>
             {% endwith %}
@@ -48,7 +48,7 @@
     <tr class="subtotal">
         <td>Subtotal</td>
         <td colspan="4"></td>
-        <td class="num">${{ cart.get_total_price }}</td>
+        <td class="num">₽{{ cart.get_total_price }}</td>
     </tr>
     <tr>
         <td>
@@ -57,7 +57,7 @@
         </td>
         <td colspan="4"></td>
         <td class="num neg">
-            - ${{ cart.get_discount|floatformat:"2" }}
+            - ₽{{ cart.get_discount|floatformat:"2" }}
         </td>
     </tr>
 {% endif %}
@@ -65,7 +65,7 @@
     <td>Total</td>
     <td colspan="4"></td>
     <td class="num">
-        ${{ cart.get_total_price_after_discount|floatformat:"2" }}
+        ₽{{ cart.get_total_price_after_discount|floatformat:"2" }}
     </td>
 </tr>
         </tbody>

@@ -12,6 +12,7 @@ urlpatterns = [
     re_path(r'^cart/', include(('cart.urls', 'cart'), namespace='cart')),
     path('', include('homepage.urls')),
     path('', include('catalog.urls')),
+    path('auth/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
 ]
 # Подключаем дебаг-панель:

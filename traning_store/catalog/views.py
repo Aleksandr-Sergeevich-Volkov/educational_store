@@ -2,9 +2,15 @@ from cart.forms import CartAddProductForm
 from django.db.models import Count
 from django.views.generic import DetailView
 from django_filters.views import FilterView
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404,redirect, render
 
 from .filters import ProductFilter
 from .models import Color, Gallery, Model_type, Product, Size
+from orders.models import Order 
+from .forms import UserForm
+User = get_user_model()
 
 
 class ProductListView(FilterView):
@@ -42,3 +48,29 @@ class ProductDetailView(DetailView):
         context['cart_product_form'] = CartAddProductForm()
         # Возвращаем словарь контекста.
         return context
+
+def user_profile(request, username):
+    profile = get_object_or_404(User, username=username)
+    if request.user == profile and request.user.is_authenticated:
+        post_list = Order.objects.filter(email=request.user.email)
+        context = {'page_obj': post_list,
+                   'profile': profile, }
+        return render(request, 'blog/profile.html', context)
+    else:
+        post_list = Order.objects.filter(email=request.user.email)
+        context = {'page_obj': post_list,
+                   'profile': profile, }
+        return render(request, 'blog/profile.html', context)
+
+
+
+
+@login_required
+def profile(request, username):
+    instance = User.objects.get(username=username)
+    form = UserForm(request.POST or None, instance=instance)
+    context = {'form': form, }
+    if not form.is_valid():
+        return render(request, 'blog/user.html', context)
+    form.save()
+    return redirect('blog:profile', username=request.user)    

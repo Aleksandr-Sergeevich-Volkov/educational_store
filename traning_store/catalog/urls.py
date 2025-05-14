@@ -9,4 +9,6 @@ urlpatterns = [
     path('catalog/<slug:slug>/',
          views.ProductDetailView.as_view(),
          name='detail'),
+    path('profile/<username>/',
+         views.user_profile, name='profile'),
 ]

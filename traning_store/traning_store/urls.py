@@ -1,10 +1,10 @@
 import debug_toolbar
+#from django.contrib.auth.forms import UserCreationForm
+from catalog.forms import SignUpForm
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path, reverse_lazy
-#from django.contrib.auth.forms import UserCreationForm
-from catalog.forms import SignUpForm
 from django.views.generic.edit import CreateView
 
 urlpatterns = [

@@ -57,7 +57,7 @@ def user_profile(request, username):
         post_list = Order.objects.values('id').filter(email=request.user.email).order_by('-id')
         orders_item = OrderItem.objects.filter(order__in=post_list).order_by('-order')
         context = {'page_obj': orders_item,
-                   'profile': profile, 
+                   'profile': profile,
                    }
         return render(request, 'blog/profile.html', context)
     else:

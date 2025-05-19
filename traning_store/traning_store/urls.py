@@ -18,9 +18,9 @@ urlpatterns = [
     path(
         'auth/registration/',
         CreateView.as_view(
-        template_name='registration/registration_form.html',   
-        form_class = SignUpForm,         
-        success_url=reverse_lazy('homepage:homepage'),
+        template_name='registration/registration_form.html',
+        form_class = SignUpForm,
+        success_url = reverse_lazy('homepage:homepage'),
         ),
         name='registration',
     ),

@@ -19,7 +19,7 @@ def order_create(request):
     cart = Cart(request)
     if request.method == 'POST':
         form = OrderCreateForm(request.POST)
-        if form.is_valid():
+        if form.is_valid():           
             order = form.save()
             for item in cart:
                 OrderItem.objects.create(order=order,
@@ -33,6 +33,13 @@ def order_create(request):
             return render(request, 'created.html',
                           {'order': order})
     else:
-        form = OrderCreateForm
+        if request.user.is_authenticated:
+            email = request.user.email
+            form = OrderCreateForm(initial={"email": email})
+        else:    
+            form = OrderCreateForm()    
+        # print(request.user.email)
+        
+
     return render(request, 'create.html',
                   {'cart': cart, 'form': form})

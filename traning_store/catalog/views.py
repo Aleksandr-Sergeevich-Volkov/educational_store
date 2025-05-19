@@ -5,7 +5,7 @@ from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView
 from django_filters.views import FilterView
-from orders.models import Order
+from orders.models import Order, OrderItem
 
 from .filters import ProductFilter
 from .forms import UserForm
@@ -54,9 +54,16 @@ class ProductDetailView(DetailView):
 def user_profile(request, username):
     profile = get_object_or_404(User, username=username)
     if request.user == profile and request.user.is_authenticated:
-        post_list = Order.objects.filter(email=request.user.email)
-        context = {'page_obj': post_list,
-                   'profile': profile, }
+        post_list_1 = Order.objects.filter(email=request.user.email)
+        post_list = Order.objects.values('id').filter(email=request.user.email).order_by('-id')
+        # print(post_list)
+        orders_item = OrderItem.objects.filter(order__in=post_list).order_by('-order')
+        # print(type(orders_item))
+        context = {'page_obj': orders_item,
+                   'profile': profile, 
+                   #'orders_item': orders_item
+                   }
+        # print(context)
         return render(request, 'blog/profile.html', context)
     else:
         post_list = Order.objects.filter(email=request.user.email)
@@ -73,4 +80,4 @@ def profile(request, username):
     if not form.is_valid():
         return render(request, 'blog/user.html', context)
     form.save()
-    return redirect('blog:profile', username=request.user)
+    return redirect('catalog:profile', username=request.user)

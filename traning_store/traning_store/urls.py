@@ -2,7 +2,10 @@ import debug_toolbar
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path, re_path
+from django.urls import include, path, re_path, reverse_lazy
+#from django.contrib.auth.forms import UserCreationForm
+from catalog.forms import SignUpForm
+from django.views.generic.edit import CreateView
 
 urlpatterns = [
     re_path(r'^coupons/', include(('coupons.urls', 'coupons'),
@@ -13,6 +16,16 @@ urlpatterns = [
     path('', include('homepage.urls')),
     path('', include('catalog.urls')),
     path('auth/', include('django.contrib.auth.urls')),
+        path(
+        'auth/registration/',
+        CreateView.as_view(
+            template_name='registration/registration_form.html',
+            #form_class=UserCreationForm,   
+            form_class = SignUpForm,         
+            success_url=reverse_lazy('homepage:homepage'),
+        ),
+        name='registration',
+    ),
     path('admin/', admin.site.urls),
 ]
 # Подключаем дебаг-панель:

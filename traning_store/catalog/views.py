@@ -47,7 +47,6 @@ class ProductDetailView(DetailView):
         context['sizes'] = Size.objects.all()
         context['model_t'] = Model_type.objects.all()
         context['cart_product_form'] = CartAddProductForm()
-        # Возвращаем словарь контекста.
         return context
 
 

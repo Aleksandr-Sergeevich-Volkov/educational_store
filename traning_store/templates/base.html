@@ -4,19 +4,25 @@
   <head>
     <style>
     h2,select {background-color: #00FFFF;
+      background-size: cover;
       display: inline-block; 
       font-size: 18px; 
       font-family:sans-serif;}
-    .container {background-color: #E6E6FA; 
-      background-size: 100%%;
+    .container-fluid {background-color: #E6E6FA; 
+      background-size: cover;
       display: inline-block; 
       font-size: 18px; 
       font-family:sans-serif;}  
     .col-9 {background-color: #ADFF2F;
-        background-size: 100%%;
+        background-size:cover;
         display: inline-block; 
         font-size: 18px; 
         font-family:sans-serif;}   
+    .col-4 {background-color:  #00FFFF;
+        background-size:cover;
+        display: inline-block; 
+        font-size: 18px; 
+        font-family:sans-serif;}       
     </style> 
     <meta charset="UTF-8" name="descripton" content="компрессионный трикотаж">
     <title>Проект Market</title>
@@ -45,7 +51,7 @@
   <div class="user_context_processor">
     Пользователь {{username}}
     </div>
-    <div class="container pt-5">
+    <div class="container-fluid pt-3">
       {% block content %}{% endblock %}
     </div>
   </body>

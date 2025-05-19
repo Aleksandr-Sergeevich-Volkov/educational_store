@@ -1,5 +1,4 @@
 import debug_toolbar
-#from django.contrib.auth.forms import UserCreationForm
 from catalog.forms import SignUpForm
 from django.conf import settings
 from django.conf.urls.static import static
@@ -16,13 +15,12 @@ urlpatterns = [
     path('', include('homepage.urls')),
     path('', include('catalog.urls')),
     path('auth/', include('django.contrib.auth.urls')),
-        path(
+    path(
         'auth/registration/',
         CreateView.as_view(
-            template_name='registration/registration_form.html',
-            #form_class=UserCreationForm,   
-            form_class = SignUpForm,         
-            success_url=reverse_lazy('homepage:homepage'),
+        template_name='registration/registration_form.html',   
+        form_class = SignUpForm,         
+        success_url=reverse_lazy('homepage:homepage'),
         ),
         name='registration',
     ),

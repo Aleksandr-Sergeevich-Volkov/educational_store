@@ -54,16 +54,11 @@ class ProductDetailView(DetailView):
 def user_profile(request, username):
     profile = get_object_or_404(User, username=username)
     if request.user == profile and request.user.is_authenticated:
-        post_list_1 = Order.objects.filter(email=request.user.email)
         post_list = Order.objects.values('id').filter(email=request.user.email).order_by('-id')
-        # print(post_list)
         orders_item = OrderItem.objects.filter(order__in=post_list).order_by('-order')
-        # print(type(orders_item))
         context = {'page_obj': orders_item,
                    'profile': profile, 
-                   #'orders_item': orders_item
                    }
-        # print(context)
         return render(request, 'blog/profile.html', context)
     else:
         post_list = Order.objects.filter(email=request.user.email)

@@ -5,19 +5,19 @@
     Your shopping cart
 {% endblock %}
 {% block content %}
-    <h1>Your shopping cart</h1>
+    <h1>Ваши покупки</h1>
     <table class="cart">
         <thead>
         <tr>
-            <th>Image</th>
-            <th>Product</th>
-            <th>Quantity</th>
-            <th>Size</th>
-            <th>Color</th>
-            <th>Model_type</th>
-            <th>Remove</th>
-            <th>Unit price</th>
-            <th>Price</th>
+            <th>Изображение</th>
+            <th>Наименование</th>
+            <th>Количество</th>
+            <th>Размер</th>
+            <th>Цвет</th>
+            <th>Модель</th>            
+            <th>Цена</th>
+            <th>Сумма</th>
+            <th>Очистить</th>
         </tr>
         </thead>
         <tbody>
@@ -62,7 +62,7 @@
     </tr>
 {% endif %}
 <tr class="total">
-    <td>Total</td>
+    <td>Итого</td>
     <td colspan="4"></td>
     <td class="num">
         ₽{{ cart.get_total_price_after_discount|floatformat:"2" }}

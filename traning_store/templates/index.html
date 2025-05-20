@@ -8,7 +8,7 @@
   {% if user.is_authenticated %}
             <div class="btn-group" role="group" aria-label="Basic outlined example">
               <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
-                  href="{% url 'catalog:profile' user.username %}">{{ user.username }}</a></button>
+                  href="{% url 'catalog:profile' user.username %}">Заказы покупателя {{ user.username }}</a></button>
               <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
                   href="{% url 'logout' %}">Выйти</a></button>
             </div>

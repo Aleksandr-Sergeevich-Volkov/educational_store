@@ -6,6 +6,8 @@ from django.contrib import admin
 from django.urls import include, path, re_path, reverse_lazy
 from django.views.generic.edit import CreateView
 
+from . import views
+
 urlpatterns = [
     re_path(r'^coupons/', include(('coupons.urls', 'coupons'),
                                   namespace='coupons')),
@@ -14,7 +16,8 @@ urlpatterns = [
     re_path(r'^cart/', include(('cart.urls', 'cart'), namespace='cart')),
     path('', include('homepage.urls')),
     path('', include('catalog.urls')),
-    path('auth/', include('django.contrib.auth.urls')),
+    path('auth/login/', views.login_view, name='login'),
+    path('logout/', views.logout_view, name='logout'),
     path(
         'auth/registration/',
         CreateView.as_view(

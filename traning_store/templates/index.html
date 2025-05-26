@@ -5,23 +5,7 @@
  <h2 class="card-header font-family:sans-serif"> Проект Market</h2>
 </p>
  <div class="btn-group">
-  {% if user.is_authenticated %}
-            <div class="btn-group" role="group" aria-label="Basic outlined example">
-              <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
-                  href="{% url 'catalog:profile' user.username %}">Заказы покупателя {{ user.username }}</a></button>
-              <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
-                  href="{% url 'logout' %}">Выйти</a></button>
-            </div>
-          {% else %}
-            <div class="btn-group" role="group" aria-label="Basic outlined example">
-              <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
-                  href="{% url 'login' %}">Войти</a></button>
-              <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
-                  href="{% url 'registration' %}">Регистрация</a></button>
-            </div>
-          {% endif %}
     <a href="{{catalog }}" class="btn btn-primary">Каталог всех товаров</a>      
-    <a href="static/oferta.pdf" class="btn btn-primary">Оферта</a> 
    </div>        
 <div class="row">
   <div class="col-8">

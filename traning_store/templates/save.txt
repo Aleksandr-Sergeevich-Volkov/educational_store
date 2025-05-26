@@ -54,3 +54,8 @@
     {% for image in images_m %}
              {% if image.product_id == product.id %}
                  <li><img src="{{image.image.url }}" height=150></li> 
+
+
+                 <footer>
+    <a href="static/oferta.pdf" class="btn btn-primary">Оферта</a> 
+    </footer>

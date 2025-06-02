@@ -29,7 +29,7 @@ urlpatterns = [
         name='registration',
     ),
     path('fail/', TemplateView.as_view(template_name='fail.html')),
-    path('robokassa/result/', robokassa.check_success_payment),
+    path('robokassa/result/', robokassa.result_payment),
     path('admin/', admin.site.urls),
 ]
 # Подключаем дебаг-панель:

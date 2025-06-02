@@ -11,7 +11,7 @@ from django.shortcuts import redirect, render
 from django.urls import is_valid_path, reverse_lazy
 from django.views.generic.edit import CreateView
 
-from .settings import ROBOKASSA_PASSWORD_U2
+from .settings import ROBOKASSA_PASSWORD_U1, ROBOKASSA_PASSWORD_U2
 
 
 class SomeEntityCreateView(CreateView):
@@ -131,6 +131,7 @@ def check_success_payment(merchant_password_1: str, request: str) -> str:
     """ Verification of operation parameters ("cashier check") in SuccessURL script.
     :param request: HTTP parameters
     """
+    merchant_password_1 = ROBOKASSA_PASSWORD_U1
     param_request = parse_response(request)
     cost = param_request['OutSum']
     number = param_request['InvId']

@@ -7,6 +7,6 @@
     <h1>Спасибо</h1>
     <p>Ваш заказ успешно сформирован. Номер заказа 
         <strong>{{ order.id }}</strong>.</p>
-        <a href= {{pay_link}}="btn btn-primary">Оплата заказа</a>    
+        <a href= {{pay_link}} class="btn btn-primary">Оплата заказа</a>    
         <a href="{% url "catalog:catalog" %}" class="btn btn-primary">Продолжить покупки</a>    
 {% endblock %}

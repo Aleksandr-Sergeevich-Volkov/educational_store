@@ -3,7 +3,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404, render
 
 from traning_store.robokassa import generate_payment_link
-from traning_store.settings import ROBOKASSA_LOGIN, ROBOKASSA_PASSWORD1
+from traning_store.settings import ROBOKASSA_LOGIN, ROBOKASSA_PASSWORD_U1
 
 from .forms import OrderCreateForm
 from .models import Order, OrderItem
@@ -34,13 +34,12 @@ def order_create(request):
             # запуск асинхронной задачи
             order_created.delay(order.id)
             pay_link = generate_payment_link(merchant_login=ROBOKASSA_LOGIN,
-                                             merchant_password_1=ROBOKASSA_PASSWORD1,
+                                             merchant_password_1=ROBOKASSA_PASSWORD_U1,
                                              cost=order.get_total_cost(),
                                              number=order.id,
-                                             description='kompressionnyj trikotazh',
-                                             is_test=0,
+                                             description='kompressionnyj_trikotazh',
+                                             is_test=1,
                                              robokassa_payment_url='https://auth.robokassa.ru/Merchant/Index.aspx',)
-            print(f'order_id {order.id}')
             context = {'order': order,
                        'pay_link': pay_link,
                        }

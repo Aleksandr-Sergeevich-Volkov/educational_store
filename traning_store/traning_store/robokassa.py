@@ -3,6 +3,8 @@ import hashlib
 from urllib import parse
 from urllib.parse import urlparse
 
+from .settings import ROBOKASSA_PASSWORD_U2
+
 
 def calculate_signature(*args) -> str:
     """Create signature MD5.
@@ -43,7 +45,7 @@ def generate_payment_link(
     cost: decimal,  # Cost of goods, RU
     number: int,  # Invoice number
     description: str,  # Description of the purchase
-    is_test=0,
+    is_test=1,
     robokassa_payment_url='https://auth.robokassa.ru/Merchant/Index.aspx',
 ) -> str:
     """URL for redirection of the customer to the service."""
@@ -54,7 +56,6 @@ def generate_payment_link(
         number,
         merchant_password_1
     )
-    print(signature)
 
     data = {
         'MerchantLogin': merchant_login,
@@ -73,11 +74,13 @@ def result_payment(merchant_password_2: str, request: str) -> str:
     """Verification of notification (ResultURL).
     :param request: HTTP parameters.
     """
+    merchant_password_2 = ROBOKASSA_PASSWORD_U2
     param_request = parse_response(request)
     cost = param_request['OutSum']
     number = param_request['InvId']
     signature = param_request['SignatureValue']
     if check_signature_result(number, cost, signature, merchant_password_2):
+        print(f'OK{param_request["InvId"]}')
         return f'OK{param_request["InvId"]}'
     return "bad sign"
 

@@ -31,7 +31,6 @@ def login_view(request):
             # Ensure next_url is safe or default to home page
             next_url = request.POST.get('next', next_url)
             parsed_url = urlparse(next_url)
-            print(parsed_url)
             if not parsed_url.netloc and is_valid_path(next_url):
                 return HttpResponseRedirect(next_url)
             return HttpResponseRedirect(next_url)
@@ -58,8 +57,7 @@ def parse_response(request: str) -> dict:
     :return: Dictionary.
     """
     params = {}
-
-    for item in urlparse(request).query.split('&'):
+    for item in urlparse(request.META.get('RAW_URI')).query.split('&'):
         key, value = item.split('=')
         params[key] = value
     return params
@@ -110,30 +108,26 @@ def generate_payment_link(
 
 # Получение уведомления об исполнении операции (ResultURL).
 
-def result_payment(merchant_password_2: str, request: str) -> str:
+def result_payment(request: str, merchant_password_2: str) -> str:
     """Verification of notification (ResultURL).
     :param request: HTTP parameters.
     """
-    print(request)
     merchant_password_2 = ROBOKASSA_PASSWORD_U2
     param_request = parse_response(request)
     cost = param_request['OutSum']
     number = param_request['InvId']
     signature = param_request['SignatureValue']
     if check_signature_result(number, cost, signature, merchant_password_2):
-        print(f'OK{param_request["InvId"]}')
+        # print(f'OK{param_request["InvId"]}')
         return f'OK{param_request["InvId"]}'
     return "bad sign"
 
 
 # Проверка параметров в скрипте завершения операции (SuccessURL).
 
-def check_success_payment(merchant_password_1: str, request: str) -> str:
+def check_success_payment(request: str, merchant_password_1: str = ROBOKASSA_PASSWORD_U1) -> str:
     """ Verification of operation parameters ("cashier check") in SuccessURL script.
-    :param request: HTTP parameters
-    """
-    print(request)
-    merchant_password_1 = ROBOKASSA_PASSWORD_U1
+    :param request: HTTP parameters"""
     param_request = parse_response(request)
     cost = param_request['OutSum']
     number = param_request['InvId']

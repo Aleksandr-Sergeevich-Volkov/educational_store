@@ -6,7 +6,7 @@ from urllib.parse import urlparse
 from catalog.forms import SignUpForm
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import is_valid_path, reverse_lazy
 from django.views.generic.edit import CreateView
@@ -56,8 +56,9 @@ def parse_response(request: str) -> dict:
     :param request: Link.
     :return: Dictionary.
     """
+    url = request.META.get('RAW_URI')
     params = {}
-    for item in urlparse(request.META.get('RAW_URI')).query.split('&'):
+    for item in urlparse(url).query.split('&'):
         key, value = item.split('=')
         params[key] = value
     return params
@@ -118,9 +119,8 @@ def result_payment(request: str, merchant_password_2: str) -> str:
     number = param_request['InvId']
     signature = param_request['SignatureValue']
     if check_signature_result(number, cost, signature, merchant_password_2):
-        # print(f'OK{param_request["InvId"]}')
-        return f'OK{param_request["InvId"]}'
-    return "bad sign"
+        return HttpResponse(f'OK{param_request["InvId"]}')
+    return HttpResponse('bad sign')
 
 
 # Проверка параметров в скрипте завершения операции (SuccessURL).
@@ -133,5 +133,5 @@ def check_success_payment(request: str, merchant_password_1: str = ROBOKASSA_PAS
     number = param_request['InvId']
     signature = param_request['SignatureValue']
     if check_signature_result(number, cost, signature, merchant_password_1):
-        return "Thank you for using our service"
-    return "bad sign"
+        return HttpResponse('Thank you for using our service')
+    return HttpResponse('bad sign')

@@ -2,8 +2,8 @@ from cart.cart import Cart
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404, render
 
-from traning_store.robokassa import generate_payment_link
 from traning_store.settings import ROBOKASSA_LOGIN, ROBOKASSA_PASSWORD_U1
+from traning_store.views import generate_payment_link
 
 from .forms import OrderCreateForm
 from .models import Order, OrderItem
@@ -39,7 +39,8 @@ def order_create(request):
                                              number=order.id,
                                              description='kompressionnyj_trikotazh',
                                              is_test=1,
-                                             robokassa_payment_url='https://auth.robokassa.ru/Merchant/Index.aspx',)
+                                             robokassa_payment_url='https://auth.robokassa.ru/Merchant/Index.aspx',
+                                             email=order.email,)
             context = {'order': order,
                        'pay_link': pay_link,
                        }

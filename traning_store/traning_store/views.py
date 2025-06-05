@@ -10,6 +10,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import is_valid_path, reverse_lazy
 from django.views.generic.edit import CreateView
+from orders.models import Order
 
 from .settings import ROBOKASSA_PASSWORD_U1, ROBOKASSA_PASSWORD_U2
 
@@ -86,6 +87,7 @@ def generate_payment_link(
     description: str,  # Description of the purchase
     is_test=1,
     robokassa_payment_url='https://auth.robokassa.ru/Merchant/Index.aspx',
+    email='test@mail.ru',
 ) -> str:
     """URL for redirection of the customer to the service."""
 
@@ -102,7 +104,8 @@ def generate_payment_link(
         'InvId': number,
         'Description': description,
         'SignatureValue': signature,
-        'IsTest': is_test
+        'IsTest': is_test,
+        'Email': email
     }
     return f'{robokassa_payment_url}?{parse.urlencode(data)}'
 
@@ -133,5 +136,8 @@ def check_success_payment(request: str, merchant_password_1: str = ROBOKASSA_PAS
     number = param_request['InvId']
     signature = param_request['SignatureValue']
     if check_signature_result(number, cost, signature, merchant_password_1):
+        order = Order.objects.get(pk=param_request['InvId'])
+        order.paid = True
+        order.save()
         return HttpResponse('Thank you for using our service')
     return HttpResponse('bad sign')

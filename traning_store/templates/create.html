@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load django_bootstrap5 %}
 {% block title %}Заказ{% endblock %}
 
 {% block content %}
@@ -81,8 +81,8 @@
     //document.getElementById('id_address').value = console.log(data.detail.address.full_address);
     </script>       
     </head>
-        {{ form.as_p }}
-        <p><input type="submit" value="Подтвердить заказ"></p>
+        {{ form.as_table }}
+        <p><input type="submit" class="btn btn-primary" value="Подтвердить заказ"></p>
         {% csrf_token %}
     </form>
 {% endblock %}

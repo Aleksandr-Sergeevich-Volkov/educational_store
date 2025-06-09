@@ -7,7 +7,7 @@
 </ul> 
       <h6 class="card-subtitle mb-2 text-muted">
       </h6>
-      <p class="card-text">{% if order.paid == True %} Заказ оплачен{% else %}не оплачен{% endif %} </p>
+      <p class="card-text">{% if order.paid == True %} <span style="color:green"> заказ оплачен{% else %} <span style="color:Fuchsia">не оплачен{% endif %} </p>
       <a href="{% url 'catalog:user_order_detail' order.id  %}"> <class="card-link">Детали заказа</a>
     </div>
   </div>

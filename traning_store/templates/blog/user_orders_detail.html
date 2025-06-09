@@ -10,6 +10,6 @@
       <li>{{item.price }}</li> 
       </ul>
       {% endfor %}
-      <p class="card-text">{% if order.paid == False %} <a href= {{pay_link}} class="btn btn-primary">Оплата заказа</a>{% else %}заказ оплачен{% endif %} </p>         
+      <p class="card-text">{% if order.paid == False %} <a href= {{pay_link}} class="btn btn-primary">Оплата заказа</a>{% else %} <span style="color:green"> заказ оплачен {% endif %} </p>         
     </div>          
 {% endblock %} 

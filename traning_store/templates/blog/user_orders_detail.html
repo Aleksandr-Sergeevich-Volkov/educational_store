@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% load static %}
+{% block content %}
+<div>
+      {% for item in order_item %}
+      <ul>
+      <li>{{item.product }}</li> 
+      <li>{{item.quantity }}</li>
+      <li>{{item.price }}</li> 
+      </ul>
+      {% endfor %}
+      <p class="card-text">{% if order.paid == False %} <a href= {{pay_link}} class="btn btn-primary">Оплата заказа</a>{% else %}заказ оплачен{% endif %} </p>         
+    </div>          
+{% endblock %} 

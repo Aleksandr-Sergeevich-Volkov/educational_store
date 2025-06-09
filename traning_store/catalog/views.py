@@ -7,6 +7,9 @@ from django.views.generic import DetailView
 from django_filters.views import FilterView
 from orders.models import Order, OrderItem
 
+from traning_store.settings import ROBOKASSA_LOGIN, ROBOKASSA_PASSWORD_U1
+from traning_store.views import generate_payment_link
+
 from .filters import ProductFilter
 from .forms import UserForm
 from .models import Color, Gallery, Model_type, Product, Size
@@ -53,17 +56,41 @@ class ProductDetailView(DetailView):
 def user_profile(request, username):
     profile = get_object_or_404(User, username=username)
     if request.user == profile and request.user.is_authenticated:
-        post_list = Order.objects.values('id').filter(email=request.user.email).order_by('-id')
-        orders_item = OrderItem.objects.filter(order__in=post_list).order_by('-order')
-        context = {'page_obj': orders_item,
+        orders = Order.objects.values('id', 'created', 'address_pvz', 'paid').filter(email=request.user.email).order_by('-id')
+        context = {'orders': orders,
                    'profile': profile,
                    }
         return render(request, 'blog/profile.html', context)
     else:
-        post_list = Order.objects.filter(email=request.user.email)
-        context = {'page_obj': post_list,
+        context = {'orders': orders,
                    'profile': profile, }
         return render(request, 'blog/profile.html', context)
+
+
+def user_order_detail(request, order_id):
+    profile = get_object_or_404(User, username=request.user)
+    order = get_object_or_404(Order, id=order_id)
+    if order.paid is False and request.user == profile and request.user.is_authenticated:
+        pay_link = generate_payment_link(merchant_login=ROBOKASSA_LOGIN,
+                                         merchant_password_1=ROBOKASSA_PASSWORD_U1,
+                                         cost=order.get_total_cost(),
+                                         number=order.id,
+                                         description='kompressionnyj_trikotazh',
+                                         is_test=1,
+                                         robokassa_payment_url='https://auth.robokassa.ru/Merchant/Index.aspx',
+                                         email=order.email,)
+        order_item = OrderItem.objects.filter(order=order_id)
+        context = {'order_item': order_item,
+                   'pay_link': pay_link,
+                   'order': order,
+                   }
+        return render(request, 'blog/user_orders_detail.html', context)
+    else:
+        order_item = OrderItem.objects.filter(order=order_id)
+        context = {'order_item': order_item,
+                   'order': order,
+                   }
+        return render(request, 'blog/user_orders_detail.html', context)
 
 
 @login_required

@@ -59,3 +59,21 @@
                  <footer>
     <a href="static/oferta.pdf" class="btn btn-primary">Оферта</a> 
     </footer>
+
+
+    <div class="col d-flex justify-content-center">
+  <div class="card" style="width: 40rem;">
+    <div class="card-body">
+      <h5 class="card-title">Заказ № {{ order.id }} от {{order.created}}</h5>
+      <ul>
+       <li>Адрес пункта выдачи:{{ order.address_pvz }} </li>  
+       <li> {% if order.paid == True %} Заказ оплачен{% else %}не оплачен{% endif %} </li>
+</ul> 
+    </div>
+  </div>
+</div>
+
+
+
+'catalog:user_order_detail' order.id
+<a href= {{pay_link}} class="btn btn-primary">Оплата заказа</a>  

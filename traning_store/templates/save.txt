@@ -77,3 +77,4 @@
 
 'catalog:user_order_detail' order.id
 <a href= {{pay_link}} class="btn btn-primary">Оплата заказа</a>  
+.replace("%40","@")

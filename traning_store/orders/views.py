@@ -2,7 +2,7 @@ from cart.cart import Cart
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404, render
 
-from traning_store.settings import ROBOKASSA_LOGIN, ROBOKASSA_PASSWORD_U1
+from traning_store.settings import ROBOKASSA_LOGIN, ROBOKASSA_PASSWORD_1
 from traning_store.views import generate_payment_link
 
 from .forms import OrderCreateForm
@@ -34,7 +34,7 @@ def order_create(request):
             # запуск асинхронной задачи
             order_created.delay(order.id)
             pay_link = generate_payment_link(merchant_login=ROBOKASSA_LOGIN,
-                                             merchant_password_1=ROBOKASSA_PASSWORD_U1,
+                                             merchant_password_1=ROBOKASSA_PASSWORD_1,
                                              cost=order.get_total_cost(),
                                              number=order.id,
                                              description='kompressionnyj_trikotazh',

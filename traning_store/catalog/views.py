@@ -7,7 +7,7 @@ from django.views.generic import DetailView
 from django_filters.views import FilterView
 from orders.models import Order, OrderItem
 
-from traning_store.settings import ROBOKASSA_LOGIN, ROBOKASSA_PASSWORD_U1
+from traning_store.settings import ROBOKASSA_LOGIN, ROBOKASSA_PASSWORD_1
 from traning_store.views import generate_payment_link
 
 from .filters import ProductFilter
@@ -72,7 +72,7 @@ def user_order_detail(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     if order.paid is False and request.user == profile and request.user.is_authenticated:
         pay_link = generate_payment_link(merchant_login=ROBOKASSA_LOGIN,
-                                         merchant_password_1=ROBOKASSA_PASSWORD_U1,
+                                         merchant_password_1=ROBOKASSA_PASSWORD_1,
                                          cost=order.get_total_cost(),
                                          number=order.id,
                                          description='kompressionnyj_trikotazh',

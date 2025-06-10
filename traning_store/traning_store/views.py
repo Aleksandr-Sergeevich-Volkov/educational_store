@@ -12,7 +12,7 @@ from django.urls import is_valid_path, reverse_lazy
 from django.views.generic.edit import CreateView
 from orders.models import Order
 
-from .settings import ROBOKASSA_PASSWORD_U1, ROBOKASSA_PASSWORD_U2
+from .settings import ROBOKASSA_PASSWORD_1, ROBOKASSA_PASSWORD_2
 
 
 class SomeEntityCreateView(CreateView):
@@ -107,7 +107,7 @@ def generate_payment_link(
         'IsTest': is_test,
         'Email': email
     }
-    return f'{robokassa_payment_url}?{parse.urlencode(data).replace("%40","@")}'
+    return f'{robokassa_payment_url}?{parse.urlencode(data)}'
 
 
 # Получение уведомления об исполнении операции (ResultURL).
@@ -116,7 +116,7 @@ def result_payment(request: str, merchant_password_2: str) -> str:
     """Verification of notification (ResultURL).
     :param request: HTTP parameters.
     """
-    merchant_password_2 = ROBOKASSA_PASSWORD_U2
+    merchant_password_2 = ROBOKASSA_PASSWORD_2
     param_request = parse_response(request)
     cost = param_request['OutSum']
     number = param_request['InvId']
@@ -128,7 +128,7 @@ def result_payment(request: str, merchant_password_2: str) -> str:
 
 # Проверка параметров в скрипте завершения операции (SuccessURL).
 
-def check_success_payment(request: str, merchant_password_1: str = ROBOKASSA_PASSWORD_U1) -> str:
+def check_success_payment(request: str, merchant_password_1: str = ROBOKASSA_PASSWORD_1) -> str:
     """ Verification of operation parameters ("cashier check") in SuccessURL script.
     :param request: HTTP parameters"""
     param_request = parse_response(request)

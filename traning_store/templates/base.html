@@ -60,6 +60,8 @@
     Пользователь {{username}}
     </div>
     <div class="btn-group">
+      <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
+                  href="{% url 'homepage:homepage' %}">Главная страница</a></button> 
   {% if user.is_authenticated %}
             <div class="btn-group" role="group" aria-label="Basic outlined example">
               <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"

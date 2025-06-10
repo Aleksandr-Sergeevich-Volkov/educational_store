@@ -85,7 +85,7 @@ def generate_payment_link(
     cost: decimal,  # Cost of goods, RU
     number: int,  # Invoice number
     description: str,  # Description of the purchase
-    is_test=1,
+    is_test=0,
     robokassa_payment_url='https://auth.robokassa.ru/Merchant/Index.aspx',
     email='test@mail.ru',
 ) -> str:

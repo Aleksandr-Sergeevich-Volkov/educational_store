@@ -76,7 +76,7 @@ def user_order_detail(request, order_id):
                                          cost=order.get_total_cost(),
                                          number=order.id,
                                          description='kompressionnyj_trikotazh',
-                                         is_test=1,
+                                         is_test=0,
                                          robokassa_payment_url='https://auth.robokassa.ru/Merchant/Index.aspx',
                                          email=order.email,)
         order_item = OrderItem.objects.filter(order=order_id)

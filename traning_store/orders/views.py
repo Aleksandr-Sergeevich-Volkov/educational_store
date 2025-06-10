@@ -38,7 +38,7 @@ def order_create(request):
                                              cost=order.get_total_cost(),
                                              number=order.id,
                                              description='kompressionnyj_trikotazh',
-                                             is_test=1,
+                                             is_test=0,
                                              robokassa_payment_url='https://auth.robokassa.ru/Merchant/Index.aspx',
                                              email=order.email,)
             context = {'order': order,

@@ -107,7 +107,7 @@ def generate_payment_link(
         'IsTest': is_test,
         'Email': email
     }
-    return f'{robokassa_payment_url}?{parse.urlencode(data)}'
+    return f'{robokassa_payment_url}?{parse.urlencode(data).replace("%40","@")}'
 
 
 # Получение уведомления об исполнении операции (ResultURL).

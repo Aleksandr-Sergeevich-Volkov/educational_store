@@ -39,9 +39,11 @@
                     size:{                              // Размеры виджета
                         "height": "450px",              // Высота
                         "width": "100%"                 // Ширина
-                    },                    
-                    delivery_price: "от 100",           // Стоимость доставки
-                    delivery_term: "от 1 дня",          // Срок доставки
+                    },
+                    source_platform_station: "0262bd9d-5837-4209-8f09-e3217a765198",  // Станция отгрузки
+                    physical_dims_weight_gross: 10000,                    // Вес отправления
+                    delivery_price: (price) => price + " руб",            // Стоимость доставки
+                    delivery_term: 3,                                     // Срок доставки                    
                     show_select_button: true,           // Отображение кнопки выбора ПВЗ (false — скрыть кнопку, true — показать кнопку)
                     filter: {
                         type: [                         // Тип способа доставки

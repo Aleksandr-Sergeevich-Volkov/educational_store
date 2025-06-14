@@ -7,9 +7,9 @@
       <ul>
       <li>{{item.product }}</li> 
       <li>{{item.quantity }}</li>
-      <li>{{item.price }}</li> 
       </ul>
       {% endfor %}
+      <p class="text">Сумма заказа: {{order.get_total_cost|floatformat:"2"}}</p> 
       <p class="card-text">{% if order.paid == False %} <a href= {{pay_link}} class="btn btn-primary">Оплата заказа</a>{% else %} <span style="color:green"> заказ оплачен {% endif %} </p>         
     </div>          
 {% endblock %} 

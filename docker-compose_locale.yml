@@ -51,8 +51,8 @@ services:
     environment:
       - DB_HOST=db
       - DB_NAME=app
-      - DB_USER=postgres
-      - DB_PASSWORD=postgres
+      - DB_USER=POSTGRES_USER
+      - DB_PASSWORD=POSTGRES_PASSWORD
     #env_file: .env
     depends_on:
       - db

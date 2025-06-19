@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% load static %}
+{% block content %}
+  <h2 class="pb-2 mb-0">{{ object.title }}</h2> 
+  <div class="row mt-3">
+    <div class="col-12 col-md-6">
+  <h4 class="pb-2 mb-0">{{ object.text }}</h4>     
+    </div>    
+{% endblock %} 

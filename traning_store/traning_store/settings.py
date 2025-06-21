@@ -83,6 +83,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'cart.context_processors.cart',
                 'cart.context_processors.user_context_processor',
+                'cart.context_processors.currency',
             ],
         },
     },

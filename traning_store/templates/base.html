@@ -74,10 +74,16 @@
               <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
                   href="{% url 'login' %}">Войти</a></button>
               <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
-                  href="{% url 'registration' %}">Регистрация</a></button>
+                  href="{% url 'registration' %}">Регистрация</a></button>                  
             </div>
           {% endif %}
+  <div class="currency">        
+  <div class="btn-group" role="group" aria-label="Basic outlined example">  
+    <type="text" class="btn btn-outline-primary"> 
+          <b><i>Курсы валют: {{EUR}} {{USD}} {{TRY}}</b></i>    
+           </div>  
            </div>
+            </div>
             </nav>
       </header>
     <div class="container-fluid pt-3">

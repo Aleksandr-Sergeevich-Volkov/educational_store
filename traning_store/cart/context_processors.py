@@ -24,3 +24,22 @@ def currency(request):
     return {'EUR': f'EUR: {EUR}',
             'TRY': f'TRY: {TRY}',
             'USD': f'USD: {USD}'}
+
+
+def weather(request):
+    API_key = '9abd4653f1dace07af61a88eaf62c350'
+    coordinates = {'Химки': [55.897, 37.4297], 'Стамбул': [41.0138, 28.9497]}
+    lang = 'ru'
+    celvin = 273.15
+    city_temp = {}
+    for city, coordinat in coordinates.items():
+        lat, lon = coordinat
+        ENDPOINT = f'https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API_key}&lang={lang}'
+        response = requests.get(ENDPOINT,)
+        data = response.json().get('main')['temp']
+        temp = round((data - celvin), 2)
+        city_temp[city] = temp
+    city_temp_str = ''
+    for city_str, temp_str in city_temp.items():
+        city_temp_str += f' {city_str}:{temp_str}'
+    return {'city_temp': city_temp_str}

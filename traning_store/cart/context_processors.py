@@ -1,6 +1,11 @@
+import os
+
 import requests
+from dotenv import load_dotenv
 
 from .cart import Cart
+
+load_dotenv()
 
 
 def cart(request):
@@ -27,7 +32,7 @@ def currency(request):
 
 
 def weather(request):
-    API_key = '9abd4653f1dace07af61a88eaf62c350'
+    API_key = os.getenv('HEADERS')
     coordinates = {'Химки': [55.897, 37.4297], 'Стамбул': [41.0138, 28.9497]}
     lang = 'ru'
     celvin = 273.15

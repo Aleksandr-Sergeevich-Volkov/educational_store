@@ -13,10 +13,10 @@ def order_created(order_id):
     при успешном создании заказа.
     """
     order = Order.objects.get(id=order_id)
-    subject = 'Order nr. {}'.format(order_id)
-    message = 'Dear {},\n\nYou have successfully placed an order.\
-                Your order id is {}.'.format(order.first_name,
-                                             order.id)
+    subject = 'Заказ №. {}'.format(order_id)
+    message = 'Уважаемый {},Ваш заказ успешео сформирован.\
+                Ваш заказ номер: {}.Адрес пункта выдачи: {}'.format(order.first_name,
+                                                                    order.id, order.address_pvz)
     mail_sent = send_mail(subject,
                           message,
                           EMAIL_HOST_USER,

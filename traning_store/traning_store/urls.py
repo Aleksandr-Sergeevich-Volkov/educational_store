@@ -17,6 +17,7 @@ urlpatterns = [
     re_path(r'^cart/', include(('cart.urls', 'cart'), namespace='cart')),
     path('', include('homepage.urls')),
     path('', include('catalog.urls')),
+    path('', include('delivery.urls')),
     path('auth/login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path(

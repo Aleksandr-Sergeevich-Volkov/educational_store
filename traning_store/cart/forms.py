@@ -17,3 +17,10 @@ class CartAddProductForm(forms.Form):
     m_type = forms.ModelChoiceField(label='Тип',
                                     queryset=Model_type.objects.all(),
                                     required=False)
+
+
+class DeliveryForm(forms.Form):
+    pvz_id = forms.CharField(label='Пункт выдачи',
+                             max_length=200, required=False)
+    address_pvz = forms.CharField(label='Адрес',
+                                  max_length=200, required=False)

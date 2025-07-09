@@ -52,8 +52,11 @@ def order_create(request):
     else:
         if request.user.is_authenticated:
             email = request.user.email
-            form = OrderCreateForm(initial={"email": email})
+            form = OrderCreateForm(initial={"email": email,
+                                   "address_pvz": request.session['delivery_address'],
+                                            "address": "-", "postal_code": "-", "city": "-"})
         else:
-            form = OrderCreateForm()
+            form = OrderCreateForm(initial={"address_pvz": request.session['delivery_address'],
+                                            "address": "-", "postal_code": "-", "city": "-"})
     return render(request, 'create.html',
                   {'cart': cart, 'form': form})

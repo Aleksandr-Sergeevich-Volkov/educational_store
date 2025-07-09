@@ -25,3 +25,9 @@ class OrderCreateForm(forms.ModelForm):
                   'email': 'Почта', 'address': 'Адрес',
                   'address_pvz': 'Адрес ПВЗ', 'postal_code': 'Индекс',
                   'city': 'Город'}
+
+    def __init__(self, *args, **kwargs):
+        super(OrderCreateForm, self).__init__(*args, **kwargs)
+
+        for name, field in self.fields.items():
+            field.widget.attrs.update({'class': 'form-control'})

@@ -1,85 +1,10 @@
 {% extends "base.html" %}
- {% block content %}
-   <h1>Это страница со списком товаров!</h1>
-   {% for product in page_obj %}
-   <form method="get">
-    {{ filter.form.as_p }}
-    <button type="submit">Фильтровать</button>
-</form>
+{% load django_bootstrap5 %}
+{% block title %}Заказ{% endblock %}
 
-<ul>
-    {% for product in filter.qs %}
-        <li>{{ product.Appointment }} - {{ product.sock }}</li>
-    {% empty %}
-        <li>Товары не найдены.</li>
-    {% endfor %}
-</ul>
-<img src="{{ product.image.url }}" height="100"/>
-   <p>Наименование:{{ product.name }} </p>
-   <p>Производитель:{{ product.brand.name }}</p>
-   <p>Артикул:{{ "-" }}</p>
-   <p>Код товара:{{ "-" }}</p>
-   {% endfor %} 
- {% endblock %}
-
- <div class="col-12 col-md-6 mb-3">          
-    <b><i>Цвет:</b></i>       
-<select>     
-{% for color in colors %}
-<option value="{{color.id}}">{{color.name}}</option>
-{% endfor %}  
-</select>  
-<b><i>Размер:</b></i> 
-<select> 
-{% for size in sizes %}
-<option value="{{'Размер:'}}{{size.id}}">{{size.name}}</option>
-{% endfor %}  
-</select>    
-<b><i>Модель:</b></i> 
-<select> 
-{% for model in model_t %}
-<option value="{{'Модель:'}}{{model.id}}">{{model.name}}</option>
-{% endfor %}  
-</select>    
-    </div> 
-
-    {% if image.product_id == "product.id" %}
-    {% endif %} 
-    {% else %}        
-    <li>End:{{ "-" }} </li>
-    <li>id:{{ image.product_id }} </li>
-    <li>id:{{ product.id }} </li>
-    <li><img src="{{product.image.url }}" height=150></li> 
-
-    {% for image in images_m %}
-             {% if image.product_id == product.id %}
-                 <li><img src="{{image.image.url }}" height=150></li> 
-
-
-                 <footer>
-    <a href="static/oferta.pdf" class="btn btn-primary">Оферта</a> 
-    </footer>
-
-
-    <div class="col d-flex justify-content-center">
-  <div class="card" style="width: 40rem;">
-    <div class="card-body">
-      <h5 class="card-title">Заказ № {{ order.id }} от {{order.created}}</h5>
-      <ul>
-       <li>Адрес пункта выдачи:{{ order.address_pvz }} </li>  
-       <li> {% if order.paid == True %} Заказ оплачен{% else %}не оплачен{% endif %} </li>
-</ul> 
-    </div>
-  </div>
-</div>
-
-
-
-'catalog:user_order_detail' order.id
-<a href= {{pay_link}} class="btn btn-primary">Оплата заказа</a>  
-.replace("%40","@")
-
-
+{% block content %}
+    <form action="" method="get" class="order-form">
+        <head>
             <script async src="https://ndd-widget.landpro.site/widget.js"></script>
     
     <div id="delivery-widget"></div>
@@ -132,9 +57,14 @@
         console.log(data.detail.address.house);
         console.log(data.detail.address.comment);
         document.getElementById('id_address_pvz').value = data.detail.address.full_address;
-        document.getElementById('id_address').value = data.detail.id;
-        document.getElementById('id_postal_code').value = '-';
-        document.getElementById('id_city').value = '-';
+        document.getElementById('id_pvz_id').value = data.detail.id;
     });
     //document.getElementById('id_address').value = console.log(data.detail.address.full_address);
-    </script> 
+    </script>       
+    </head>
+        {{ form.as_table }}
+        <p><input type="submit" class="btn btn-primary" value="Подтвердить заказ"></p>
+        {% csrf_token %}
+    </form>
+    <b><i>Cтоимость: {{cost}}</b></i>
+{% endblock %}

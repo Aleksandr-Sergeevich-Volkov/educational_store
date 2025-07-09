@@ -50,6 +50,7 @@
               <a href="{% url "cart:cart_detail" %}">
                   {{ total_items }} шт. {{ total_items|pluralize }},
                   ₽{{ cart.get_total_price_after_discount }}
+                  Доставка:{{cart.delivery}}
               </a>
           {% else %}
               Ваша корзина пуста.

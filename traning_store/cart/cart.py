@@ -22,6 +22,9 @@ class Cart(object):
         self.cart = cart
         # сохранение текущего примененного купона
         self.coupon_id = self.session.get('coupon_id')
+        self.cost = Decimal('5000.00')
+        if self.session.get('delivery_cost'):
+            self.delivery_cost = Decimal(self.session.get('delivery_cost'))
 
     def add(self, product, quantity=1, size='1', color='черный',
             m_type='Стандартный', images_m='1', update_quantity=False):
@@ -51,8 +54,11 @@ class Cart(object):
     def remove(self, product):
         # Удаление товара из корзины.
         product_id = str(product.id)
-        if product_id in self.cart:
+        if product_id in self.cart :
             del self.cart[product_id]
+            self.save()
+        if self.session.get('delivery_cost') is not None:
+            del self.session['delivery_cost']
             self.save()
 
     def __iter__(self):
@@ -78,13 +84,15 @@ class Cart(object):
 
     def get_images(self, product):
         images_m = Gallery.objects.filter(product=product)
-        logger.warning(product)
         return images_m[images_m]
 
     def clear(self):
         # удаление корзины из сессии
         del self.session[settings.CART_SESSION_ID]
         self.session.modified = True
+        if self.session.get('delivery_cost') is not None:
+            del self.session['delivery_cost']
+            self.session.modified = True
 
     @property
     def coupon(self):
@@ -98,5 +106,12 @@ class Cart(object):
                     ) * self.get_total_price()
         return Decimal('0')
 
+    def delivery(self):
+        if self.get_total_price() <= self.cost and self.__len__() != 0 and self.session.get('delivery_cost') is not None:
+            return self.delivery_cost
+        return Decimal('0')
+
     def get_total_price_after_discount(self):
+        if self.delivery:
+            return round((self.get_total_price() - self.get_discount()), 2) + self.delivery()
         return round((self.get_total_price() - self.get_discount()), 2)

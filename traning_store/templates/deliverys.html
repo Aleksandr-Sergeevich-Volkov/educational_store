@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block title %}Отлично{% endblock %}
+
+{% block content %}
+    <h1>Отлично</h1>
+    <p>Ваша доставка успешно сформирована.    
+ <b><i>Cтоимость: {{cost}}</b></i>
+        <a href="{% url "cart:cart_detail" %}" class="btn btn-primary">Создание заказа</a>    
+{% endblock %}

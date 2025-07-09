@@ -14,7 +14,7 @@ TELEGRAM_CHAT_ID = os.getenv('CHAT_ID')
 
 RETRY_PERIOD = 600
 VIEWING_PERIOD = 2592000
-ENDPOINT = 'https://b2b.taxi.tst.yandex.net/api/b2b/platform/pricing-calculator'
+ENDPOINT = 'https://b2b-authproxy.taxi.yandex.net/api/b2b/platform/pricing-calculator'
 HEADERS = {'Authorization': os.getenv('HEADERS')}
 
 """ def check_tokens():
@@ -39,9 +39,9 @@ def get_api_answer(timestamp):
     payload = {'from_date': timestamp}
     logging.info('Проверка отправки запроса')
     try:
-        data = {'destination': {'platform_station_id': 'fbed3aa1-2cc6-4370-ab4d-59c5cc9bb924'}, 'source': {'platform_station_id': '03840f16-3c53-400c-b382-1ecf30e06b64'},
-                'tariff': 'self_pickup', 'total_weight': 1000, 'client_price': 0, 'payment_method': 'already_paid', 'places': [
-               {"physical_dims": {"weight_gross": 5000, "dx": 50, "dy": 50, "dz": 50, "predefined_volume": 1000}}], 'total_assessed_price': 500}
+        data = {'destination': {'platform_station_id': '01966194107f77a4b6fa571557e60c31'}, 'source': {'platform_station_id': '01978d0f333b73d680d32e7d696090e3'},
+                'tariff': 'self_pickup', 'total_weight': 500, 'client_price': 0, 'payment_method': 'already_paid', 'places': [
+               {"physical_dims": {"weight_gross": 500, "dx": 40, "dy": 25, "dz": 7, "predefined_volume": 7000}}], 'total_assessed_price': 500}
         homework_statuses = requests.post(
             ENDPOINT,
             headers=HEADERS,

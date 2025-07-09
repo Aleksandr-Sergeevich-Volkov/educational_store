@@ -33,7 +33,6 @@ def currency(request):
 
 def weather(request):
     API_key = os.getenv('HEADERS')
-    print(API_key)
     coordinates = {'Химки': [55.897, 37.4297], 'Стамбул': [41.0138, 28.9497]}
     lang = 'ru'
     celvin = 273.15

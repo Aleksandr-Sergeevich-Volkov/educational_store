@@ -25,7 +25,7 @@ def delivery_add(request):
             headers=HEADERS,
             json=data,
         )
-        cost_ = float(homework_statuses.json().get('pricing_total').replace('RUB', ""))
+        cost_ = homework_statuses.json().get('pricing_total')
         request.session['delivery_cost'] = homework_statuses.json().get('pricing_total').replace('RUB', "")
         request.session['delivery_address'] = form.cleaned_data['address_pvz']
         return render(request, 'deliverys.html', {'cost': cost_})

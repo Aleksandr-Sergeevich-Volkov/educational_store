@@ -42,7 +42,6 @@ class ProductDetailView(DetailView):
     slug_url_kwarg = 'slug'
 
     def get_context_data(self, **kwargs):
-        # Получаем словарь контекста:
         context = super().get_context_data(**kwargs)
         # Добавляем в словарь новый ключ:
         context['images_m'] = Gallery.objects.filter(product=self.object)

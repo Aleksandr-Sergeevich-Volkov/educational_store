@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 def delivery_add(request):
     ENDPOINT = 'https://b2b-authproxy.taxi.yandex.net/api/b2b/platform/pricing-calculator'
-    logger.warning(f'test {os.getenv('HEADERS_Delivery')}')
+    logger.warning(f'test {os.getenv("HEADERS_Delivery")}')
     HEADERS = {'Authorization': os.getenv('HEADERS_Delivery')}
     form = DeliveryForm(request.GET or None)
     if form.is_valid():

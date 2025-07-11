@@ -16,7 +16,6 @@ def cart_add(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
     images_m = Gallery.objects.filter(product=product)
-    # logger.warning([image for image in images_m])
     form = CartAddProductForm(request.POST)
     if form.is_valid():
         cd = form.cleaned_data

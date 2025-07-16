@@ -25,6 +25,9 @@ class Order(models.Model):
     discount = models.IntegerField(default=0,
                                    validators=[MinValueValidator(0),
                                                MaxValueValidator(100)])
+    delivery_sum = models.DecimalField(default=0,
+                                       max_digits=10,
+                                       decimal_places=2)
 
     class Meta:
         ordering = ('-created',)
@@ -36,7 +39,7 @@ class Order(models.Model):
 
     def get_total_cost(self):
         total_cost = sum(item.get_cost() for item in self.items.all())
-        return (total_cost - total_cost * (self.discount / Decimal('100')))
+        return (total_cost - total_cost * (self.discount / Decimal('100'))) + self.delivery_sum
 
 
 class OrderItem(models.Model):

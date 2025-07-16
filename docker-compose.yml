@@ -49,6 +49,7 @@ services:
   celery:
     # build: ./traning_store
     image: volkovaleksandrsergeevich/traning_store
+    env_file: .env
     command: celery -A traning_store worker -l info    
     environment:
       - DB_HOST=db

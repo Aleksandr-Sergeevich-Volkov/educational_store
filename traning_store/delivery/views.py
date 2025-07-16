@@ -1,7 +1,9 @@
 import logging
 import os
+from decimal import Decimal
 
 import requests
+from cart.cart import Cart
 from django.shortcuts import render
 from dotenv import load_dotenv
 
@@ -16,6 +18,7 @@ def delivery_add(request):
     logger.warning(f'test {os.getenv("HEADERS_Delivery")}')
     HEADERS = {'Authorization': os.getenv('HEADERS_Delivery')}
     form = DeliveryForm(request.GET or None)
+    cart = Cart(request)
     if form.is_valid():
         pvz_id = form.cleaned_data['pvz_id']
         data = {'destination': {'platform_station_id': pvz_id}, 'source': {'platform_station_id': '01978d0f333b73d680d32e7d696090e3'},
@@ -27,9 +30,12 @@ def delivery_add(request):
             json=data,
         )
         cost_ = homework_statuses.json().get('pricing_total')
+        cost_not_price = Decimal('0')
         request.session['delivery_cost'] = homework_statuses.json().get('pricing_total').replace('RUB', "")
         request.session['delivery_address'] = form.cleaned_data['address_pvz']
-        return render(request, 'deliverys.html', {'cost': cost_})
+        if cart.get_total_price() <= Decimal('5000'):
+            return render(request, 'deliverys.html', {'cost': cost_})
+        return render(request, 'deliverys.html', {'cost': cost_not_price})
     else:
         form = DeliveryForm()
     return render(request, 'delivery.html', {'form': form, })

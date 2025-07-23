@@ -4,11 +4,66 @@
 
 {% block content %}
         <head>
-            <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@cdek-it/widget@3" charset="utf-8"></script>
-            <div id="cdek-map" style="width:800px;height:600px"></div>
-            <script type="text/javascript">
-  document.addEventListener('DOMContentLoaded', () => 
-  new window.CDEKWidget({ from: 'Химки', root: 'cdek-map', apiKey: '08505f2e-943d-4ed9-8195-1b5a2739c6a3', servicePath: 'https://kompressionnye-chulki24.ru/service.php', defaultLocation: 'Химки' }));
-</script>
+            <!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Пример работы виджета ПВЗ</title>
+  <script src="https://cdn.jsdelivr.net/npm/@cdek-it/widget@3" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@unocss/runtime" type="text/javascript"></script>
+  <link href="https://cdn.jsdelivr.net/npm/@unocss/reset/tailwind.min.css" rel="stylesheet">
+  <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', () => {
+          window.widget = new window.CDEKWidget({
+                                                    from: 'Новосибирск',
+                                                    root: 'cdek-map',
+                                                    apiKey: '08505f2e-943d-4ed9-8195-1b5a2739c6a3',
+                                                    canChoose: true,
+                                                    servicePath: 'https://kompressionnye-chulki24.ru/service.php',
+                                                    hideFilters: {
+                                                        have_cashless: false,
+                                                        have_cash: false,
+                                                        is_dressing_room: false,
+                                                        type: false,
+                                                    },
+                                                    hideDeliveryOptions: {
+                                                        office: false,
+                                                        door: true,
+                                                    },
+                                                    popup: true,
+                                                    debug: false,
+                                                    goods: [
+                                                        {
+                                                            width: 10,
+                                                            height: 10,
+                                                            length: 10,
+                                                            weight: 10,
+                                                        },
+                                                    ],
+                                                    defaultLocation: [82.9346, 55.0415],
+                                                    lang: 'rus',
+                                                    currency: 'RUB',
+                                                    tariffs: {
+                                                        office: [233, 137, 139],
+                                                        door: [234, 136, 138],
+                                                    },
+                                                    onReady() {
+                                                        alert('Виджет загружен');
+                                                    },
+                                                    onCalculate() {
+                                                        alert('Расчет стоимости доставки произведен');
+                                                    },
+                                                    onChoose() {
+                                                        alert('Доставка выбрана');
+                                                    },
+                                                });
+      });
+  </script>
+</head>
+<body class="ml-2">
+  <p class="my-2">Пример инициализации виджета с указанием всех параметров виджета</p>
+  <button onclick="window.widget.open()" class="p-1 my-2 border-stone-500 border-2 rounded-md">Показать ПВЗ</button>
+</body>
+</html>
     </head>
 {% endblock %}

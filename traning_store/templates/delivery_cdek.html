@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block title %}Заказ{% endblock %}
+
+{% block content %}
+        <head>
+            <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@cdek-it/widget@3" charset="utf-8"></script>
+            <div id="cdek-map" style="width:800px;height:600px"></div>
+            <script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', () => 
+  new window.CDEKWidget({ from: 'Химки', root: 'cdek-map', apiKey: '08505f2e-943d-4ed9-8195-1b5a2739c6a3', servicePath: 'https://kompressionnye-chulki24.ru/service.php', defaultLocation: 'Химки' }));
+</script>
+    </head>
+{% endblock %}

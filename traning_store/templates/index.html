@@ -21,8 +21,8 @@
 {% for post in text%} 
 <p style="font-size: 22px; font-family:Times New Roman">{{ post.title }}</p>          
 <p class="card-text">{{ post.text|truncatewords:25 }}</p>
-<p> Комментарии: ({{ post.comment_count }})</p>
 <a href="{{post.id}}" class="card-link">Читать полный текст</a>    
+<p> Комментарии: ({{ post.comment_count }})</p>
 {% endfor %}        
   </div>
   <div class="btn-group">

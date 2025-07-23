@@ -39,3 +39,7 @@ def delivery_add(request):
     else:
         form = DeliveryForm()
     return render(request, 'delivery.html', {'form': form, })
+
+
+def delivery_add_cdek(request):
+    return render(request, 'delivery_cdek.html')

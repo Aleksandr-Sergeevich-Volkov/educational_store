@@ -80,7 +80,8 @@
     </form>
     <p class="text-right">
         <a href="{% url "catalog:catalog" %}" class="btn btn-primary">Продолжить покупки</a>
-        <a href="{% url "delivery:delivery" %}" class="btn btn-primary">Доставка</a>
+        <a href="{% url "delivery:delivery" %}" class="btn btn-primary">Доставка Яндекс</a>
+        <a href="{% url "delivery:delivery_cdek" %}" class="btn btn-primary">Доставка Сдэк</a>
         <a href="{% url "orders:order_create" %}" class="btn btn-primary">
             Перейти к заказу
         </a>                             

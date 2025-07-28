@@ -15,5 +15,4 @@ urlpatterns = [
     path('<int:post_id>/delete_comment/<int:comment_id>/',
          views.delete_comment, name='delete_comment'),
     path('yandex_445ca9b51fd08dec.html/', TemplateView.as_view(template_name='yandex_445ca9b51fd08dec.html')),
-    path('service.php/', TemplateView.as_view(template_name='service.php')),
 ]

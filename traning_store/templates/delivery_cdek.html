@@ -14,7 +14,7 @@
   <script type="text/javascript">
       document.addEventListener('DOMContentLoaded', () => {
           window.widget = new window.CDEKWidget({
-                                                    from: 'Новосибирск',
+                                                    from: 'Химки',
                                                     root: 'cdek-map',
                                                     apiKey: '08505f2e-943d-4ed9-8195-1b5a2739c6a3',
                                                     canChoose: true,
@@ -52,8 +52,8 @@
                                                     onCalculate() {
                                                         alert('Расчет стоимости доставки произведен');
                                                     },
-                                                    onChoose() {
-                                                        alert('Доставка выбрана');
+                                                    onChoose(type, tariff, address) {
+                                                        document.getElementById("cdek_info")info.innerHTML = "<p>CDEK до пункта выдачи: " + tariff.delivery_sum + "&#8381;\n<br/>" + address.name + "</p>";
                                                     },
                                                 });
       });

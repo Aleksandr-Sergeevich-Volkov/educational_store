@@ -52,8 +52,8 @@
                                                     onCalculate() {
                                                         alert('Расчет стоимости доставки произведен');
                                                     },
-                                                    onChoose(type, tariff, address) {
-                                                        document.getElementById("cdek_info")info.innerHTML = "<p>CDEK до пункта выдачи: " + tariff.delivery_sum + "&#8381;\n<br/>" + address.name + "</p>";
+                                                    onChoose() {
+                                                        alert('Доставка выбрана');
                                                     },
                                                 });
       });

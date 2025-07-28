@@ -18,7 +18,6 @@ User = get_user_model()
 
 
 class ProductListView(FilterView):
-    # Указываем модель, с которой работает CBV...
     model = Product
     # ...сортировку, которая будет применена при выводе списка объектов:
     ordering = 'id'

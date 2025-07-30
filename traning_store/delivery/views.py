@@ -7,7 +7,7 @@ from cart.cart import Cart
 from django.shortcuts import render
 from dotenv import load_dotenv
 
-from .forms import DeliveryForm
+from .forms import Delivery_Cdek_Form, DeliveryForm
 
 load_dotenv()
 logger = logging.getLogger(__name__)
@@ -42,4 +42,11 @@ def delivery_add(request):
 
 
 def delivery_add_cdek(request):
-    return render(request, 'delivery_cdek.html')
+    form = Delivery_Cdek_Form(request.GET or None)
+    # cart = Cart(request)
+    if form.is_valid():
+        sum = form.cleaned_data['sum']
+        request.session['delivery_cost'] = sum
+        request.session['delivery_address'] = form.cleaned_data['address_pvz']
+
+    return render(request, 'delivery_cdek.html', {'form': form, })

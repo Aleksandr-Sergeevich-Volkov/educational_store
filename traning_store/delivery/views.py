@@ -48,5 +48,6 @@ def delivery_add_cdek(request):
         sum = form.cleaned_data['sum']
         request.session['delivery_cost'] = sum
         request.session['delivery_address'] = form.cleaned_data['address_pvz']
-
+        cost_not_price = Decimal('0')
+        return render(request, 'deliverys.html', {'cost': cost_not_price}) 
     return render(request, 'delivery_cdek.html', {'form': form, })

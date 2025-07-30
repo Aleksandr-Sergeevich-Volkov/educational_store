@@ -2,6 +2,7 @@
 {% load django_bootstrap5 %}
 {% block title %}Доставка{% endblock %}
 {% block content %}
+<form action="" method="get" class="order-form">
         <head>
             <!DOCTYPE html>
 <html lang="ru">
@@ -54,6 +55,8 @@
                                                     },
                                                     onChoose(type, tariff, address) {
                                                         console.log('Выбран метод доставки', type, tariff, address);
+                                                        document.getElementById('sum').value = tariff.delivery_sum;
+                                                        document.getElementById('pvz_id').value = address.name;
                                                         if (type === 'door') {
                                                             alert(
                                                             'Выбрана доставка курьером по адресу\n' +
@@ -81,4 +84,8 @@
 </body>
 </html>
     </head>
+    {{ form.as_table }}
+        <p><input type="submit" class="btn btn-primary" value="Подтвердить заказ"></p>
+        {% csrf_token %}
+    </form>
 {% endblock %}

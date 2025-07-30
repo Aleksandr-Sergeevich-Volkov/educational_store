@@ -62,13 +62,18 @@
                                                             '\n' +
                                                             'Цена ' + tariff.delivery_sum + '\n' +
                                                             'Срок ' + tariff.period_max + ' дн.',                                                            
-                                                            );} 
+                                                            );
+                                                        document.getElementById('sum').value = tariff.delivery_sum;
+                                                        document.getElementById('address_pvz').value = address.name;} 
+                                                            
                                                         else {
                                                             alert(
                                                             'Выбран пункт выдачи заказа ' + address.name + '\n' +
                                                             'Цена ' + tariff.delivery_sum + '\n' +
                                                             'Срок ' + tariff.period_max + ' дн.',
                                                             );
+                                                            document.getElementById('sum').value = tariff.delivery_sum;
+                                                            document.getElementById('address_pvz').value = address.name;
                                                             }
                                                     },
                                                 });

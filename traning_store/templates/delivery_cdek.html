@@ -56,7 +56,7 @@
                                                     onChoose(type, tariff, address) {
                                                         console.log('Выбран метод доставки', type, tariff, address);
                                                         document.getElementById('sum').value = tariff.delivery_sum;
-                                                        document.getElementById('pvz_id').value = address.name;
+                                                        document.getElementById('address_pvz').value = address.name;
                                                         if (type === 'door') {
                                                             alert(
                                                             'Выбрана доставка курьером по адресу\n' +

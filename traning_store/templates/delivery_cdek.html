@@ -55,20 +55,20 @@
                                                     onChoose(type, tariff, address) {
                                                         console.log('Выбран метод доставки', type, tariff, address);
                                                         if (type === 'door') {
-                                            alert(
-                                              'Выбрана доставка курьером по адресу\n' +
-                                              address.formatted +
-                                              '\n' +
-                                              'Цена ' + tariff.delivery_sum + '\n' +
-                                              'Срок ' + tariff.period_max + ' дн.',
-                                            );
-                                            } else {
-                                            alert(
-                                              'Выбран пункт выдачи заказа ' + address.name + '\n' +
-                                              'Цена ' + tariff.delivery_sum + '\n' +
-                                              'Срок ' + tariff.period_max + ' дн.',
-                                            );
-                                            }
+                                                            alert(
+                                                            'Выбрана доставка курьером по адресу\n' +
+                                                            address.formatted +
+                                                            '\n' +
+                                                            'Цена ' + tariff.delivery_sum + '\n' +
+                                                            'Срок ' + tariff.period_max + ' дн.',
+                                                            );} 
+                                                        else {
+                                                            alert(
+                                                            'Выбран пункт выдачи заказа ' + address.name + '\n' +
+                                                            'Цена ' + tariff.delivery_sum + '\n' +
+                                                            'Срок ' + tariff.period_max + ' дн.',
+                                                            );
+                                                            }
                                                     },
                                                 });
       });
@@ -77,6 +77,7 @@
 <body class="ml-2">
   <p class="my-2">Пример виджета</p>
   <p class="m-2">Выводим сообщение, что выбран пункт самовывоза</p>
+  <button onclick="window.widget.open()" class="p-1 my-2 border-stone-500 border-2 rounded-md">Показать ПВЗ</button>
 </body>
 </html>
     </head>

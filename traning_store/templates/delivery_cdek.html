@@ -2,7 +2,6 @@
 {% load django_bootstrap5 %}
 {% block title %}Доставка{% endblock %}
 {% block content %}
-        <head>
             <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -84,7 +83,6 @@
   <button onclick="window.widget.open()" class="p-1 my-2 border-stone-500 border-2 rounded-md">Показать ПВЗ</button>
 </body>
 </html>
-    </head>
     <form action="" method="get" class="order-form">
     {{ form.as_table }}
         <p><input type="submit" class="btn btn-primary" value="Подтвердить заказ"></p>

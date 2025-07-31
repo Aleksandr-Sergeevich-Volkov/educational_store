@@ -2,7 +2,6 @@
 {% load django_bootstrap5 %}
 {% block title %}Доставка{% endblock %}
 {% block content %}
-<form action="" method="get" class="order-form">
         <head>
             <!DOCTYPE html>
 <html lang="ru">
@@ -86,6 +85,7 @@
 </body>
 </html>
     </head>
+    <form action="" method="get" class="order-form">
     {{ form.as_table }}
         <p><input type="submit" class="btn btn-primary" value="Подтвердить заказ"></p>
         {% csrf_token %}

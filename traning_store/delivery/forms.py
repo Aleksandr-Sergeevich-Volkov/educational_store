@@ -15,9 +15,9 @@ class DeliveryForm(forms.Form):
 
 class Delivery_Cdek_Form(forms.Form):
     sum = forms.IntegerField(label='Сумма доставки ',
-                             required=True)
+                             required=False)
     address_pvz = forms.CharField(label='Адрес',
-                                  max_length=200, required=True)
+                                  max_length=200, required=False)
 
     # def __init__(self, *args, **kwargs):
     #    super().__init__(*args, **kwargs)

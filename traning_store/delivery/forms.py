@@ -19,7 +19,7 @@ class Delivery_Cdek_Form(forms.Form):
     address_pvz = forms.CharField(label='Адрес',
                                   max_length=200, required=True)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['sum'].widget.attrs['readonly'] = True
-        self.fields['address_pvz'].widget.attrs['readonly'] = True
+    # def __init__(self, *args, **kwargs):
+    #    super().__init__(*args, **kwargs)
+    #    self.fields['sum'].widget.attrs['readonly'] = True
+    #    self.fields['address_pvz'].widget.attrs['readonly'] = True

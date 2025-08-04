@@ -17,7 +17,6 @@
             <th>Модель</th>            
             <th>Цена</th>
             <th>Сумма</th>
-            <th>Очистить</th>
         </tr>
         </thead>
         <tbody>
@@ -78,12 +77,14 @@
         <input type="submit" class="btn btn-primary" value="Готово">
         {% csrf_token %}
     </form>
-    <p class="text-right">
-        <a href="{% url "catalog:catalog" %}" class="btn btn-primary">Продолжить покупки</a>
-        <a href="{% url "delivery:delivery" %}" class="btn btn-primary">Доставка Яндекс</a>
-        <a href="{% url "delivery:delivery_cdek" %}" class="btn btn-primary">Доставка Сдэк</a>
-        <a href="{% url "orders:order_create" %}" class="btn btn-primary">
-            Перейти к заказу
-        </a>                             
+    <p class="text-right">        
+        <div class="btn-group" role="group" aria-label="Basic outlined example">
+            <a href="{% url "catalog:catalog" %}" class="btn btn-primary">Продолжить покупки</a>
+              <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
+                  href="{% url "delivery:delivery" %}">Доставка Яндекс</a></button>
+              <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
+                  href="{% url "delivery:delivery_cdek" %}">Доставка Сдэк</a></button>
+                  <a href="{% url "orders:order_create" %}" class="btn btn-primary">Перейти к заказу</a> 
+                  </div>                                                   
     </p>
 {% endblock %}

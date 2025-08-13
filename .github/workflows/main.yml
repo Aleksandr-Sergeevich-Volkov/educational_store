@@ -63,7 +63,7 @@ jobs:
         DB_PORT: 5432
       run: |
         # cd traning_store/
-        pytest 
+        pytest -v
 
     # Добавляем новую задачу: деплой приложения
   build_and_push_to_docker_hub:

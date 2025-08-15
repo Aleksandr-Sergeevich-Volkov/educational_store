@@ -16,4 +16,3 @@ class TestRoutes(TestCase):
         url = reverse('catalog:catalog')
         response = self.client.get(url)
         self.assertEqual(response.status_code, HTTPStatus.OK)
-    

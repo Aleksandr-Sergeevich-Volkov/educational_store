@@ -11,3 +11,9 @@ class TestRoutes(TestCase):
         url = reverse('homepage:homepage')
         response = self.client.get(url)
         self.assertEqual(response.status_code, HTTPStatus.OK)
+
+    def test_catalog(self):
+        url = reverse('catalog:catalog')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+    

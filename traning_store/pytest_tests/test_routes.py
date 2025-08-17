@@ -1,6 +1,7 @@
 # news/tests/test_routes.py
 from http import HTTPStatus
 
+from catalog.models import Product
 from django.test import TestCase
 from django.urls import reverse
 
@@ -16,3 +17,7 @@ class TestRoutes(TestCase):
         url = reverse('catalog:catalog')
         response = self.client.get(url)
         self.assertEqual(response.status_code, HTTPStatus.OK)
+
+    def test_count_catalog(self):
+        catalog_count = Product.objects.count()
+        self.assertEqual(catalog_count, 4)

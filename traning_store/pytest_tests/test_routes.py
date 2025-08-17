@@ -2,11 +2,15 @@
 from http import HTTPStatus
 
 from catalog.models import Product
+from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
 
 
 class TestRoutes(TestCase):
+    def setUp(self):
+        # Load fixtures
+        call_command('loaddata', 'db.json', verbosity=0)
 
     def test_home_page(self):
         url = reverse('homepage:homepage')

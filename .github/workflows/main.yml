@@ -63,7 +63,10 @@ jobs:
         DB_PORT: 5432
         HEADERS: ${{ secrets.HEADERS }}  
       run: |
-        cd traning_store/        
+        cd traning_store/
+        python manage.py makemigrations
+        python manage.py migrate
+        python manage.py loaddata db.json
         python manage.py test -v 2
 
     # Добавляем новую задачу: деплой приложения

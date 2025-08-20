@@ -1,8 +1,10 @@
 # news/tests/test_routes.py
 from http import HTTPStatus
 
-from catalog.models import Product
+from cart.cart import Cart
+from catalog.models import Color, Gallery, Model_type, Product, Size
 from django.core.management import call_command
+from django.shortcuts import get_object_or_404
 from django.test import TestCase
 from django.urls import reverse
 
@@ -25,3 +27,18 @@ class TestRoutes(TestCase):
     def test_count_catalog(self):
         catalog_count = Product.objects.count()
         self.assertEqual(catalog_count, 4)
+
+    def test_add_cart(self):
+        cart = Cart(self.request.session)
+        product = get_object_or_404(Product, id=1)
+        color = get_object_or_404(Color, id=1)
+        size = get_object_or_404(Size, id=1)
+        model_type = get_object_or_404(Model_type, id=1)
+        images_m = Gallery.objects.filter(product=product)
+        cart.add(product=product,
+                 quantity=1,
+                 size=size,
+                 color=color,
+                 m_type=model_type,
+                 images_m=images_m,)
+        self.assertEqual(len(cart), 1)

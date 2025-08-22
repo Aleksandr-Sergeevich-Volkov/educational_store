@@ -11,14 +11,11 @@ from django.urls import reverse
 
 
 class TestRoutes(TestCase):
-    def __init__(self, get_response):
-        self.get_response = get_response
-
     def setUp(self):
         # Load fixtures
         call_command('loaddata', 'db.json', verbosity=0)
         self.request = RequestFactory().get('/')
-        middleware = SessionMiddleware()
+        middleware = SessionMiddleware(self)
         middleware.process_request(self.request)
         self.request.session.save()
 

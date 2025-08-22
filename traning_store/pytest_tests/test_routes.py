@@ -3,7 +3,9 @@ from http import HTTPStatus
 
 from cart.cart import Cart
 from catalog.models import Color, Gallery, Model_type, Product, Size
+from django.contrib.sessions.middleware import SessionMiddleware
 from django.core.management import call_command
+from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 from django.test import TestCase
 from django.urls import reverse
@@ -13,6 +15,19 @@ class TestRoutes(TestCase):
     def setUp(self):
         # Load fixtures
         call_command('loaddata', 'db.json', verbosity=0)
+        request = HttpRequest()
+        middleware = SessionMiddleware()
+        middleware.process_request(request)
+        request.session.save()
+
+    def test_initialize_cart_clean_session(self):
+        """
+        The cart is initialized with a session that contains no cart.
+        In the end it should have a variable cart which is an empty dict.
+        """
+        request = self.request
+        cart = Cart(request.session)
+        self.assertEqual(cart.cart, {})
 
     def test_home_page(self):
         url = reverse('homepage:homepage')

@@ -14,16 +14,16 @@ class TestRoutes(TestCase):
     def setUp(self):
         # Load fixtures
         call_command('loaddata', 'db.json', verbosity=0)
-        self.request = RequestFactory().get('/')
-        middleware = SessionMiddleware(lambda r: None)
-        middleware.process_request(self.request)
-        self.request.session.save()
 
     def test_initialize_cart_clean_session(self):
         """
         The cart is initialized with a session that contains no cart.
         In the end it should have a variable cart which is an empty dict.
         """
+        self.request = RequestFactory().get('/')
+        middleware = SessionMiddleware()
+        middleware.process_request(self.request)
+        self.request.session.save()
         request = self.request
         cart = Cart(request.session)
         self.assertEqual(cart.cart, {})

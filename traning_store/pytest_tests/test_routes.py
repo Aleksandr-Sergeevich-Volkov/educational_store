@@ -15,7 +15,7 @@ class TestRoutes(TestCase):
         # Load fixtures
         call_command('loaddata', 'db.json', verbosity=0)
         self.request = RequestFactory().get('/')
-        middleware = SessionMiddleware()
+        middleware = SessionMiddleware(lambda r: None)
         middleware.process_request(self.request)
         self.request.session.save()
 

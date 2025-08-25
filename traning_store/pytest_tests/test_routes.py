@@ -21,8 +21,6 @@ class TestRoutes(TestCase):
         self.request.session.save()
 
     def test_initialize_cart_clean_session(self):
-        # The cart is initialized with a session that contains no cart.
-        # In the end it should have a variable cart which is an empty dict.
         request = self.request
         cart = Cart(request.session)
         self.assertEqual(cart.cart, {})

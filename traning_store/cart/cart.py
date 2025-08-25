@@ -1,5 +1,5 @@
 import logging
-import pprint
+# import pprint
 from decimal import Decimal
 
 from catalog.models import Gallery, Product
@@ -19,7 +19,7 @@ class Cart(object):
         """
         # request.session = SessionStore()
         self.session = request.session
-        pprint.pprint(vars(request))
+        print(self.session.get(settings.CART_SESSION_ID))
         cart = self.session.get(settings.CART_SESSION_ID)
         if not cart:
             # save an empty cart in the session

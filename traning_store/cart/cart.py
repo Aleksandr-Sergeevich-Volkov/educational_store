@@ -19,7 +19,7 @@ class Cart(object):
         """
         # request.session = SessionStore()
         self.session = request.session
-        pprint.pprint(vars(request.session))
+        pprint.pprint(vars(request))
         cart = self.session.get(settings.CART_SESSION_ID)
         if not cart:
             # save an empty cart in the session

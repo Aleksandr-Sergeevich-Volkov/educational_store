@@ -1,4 +1,5 @@
 # news/tests/test_routes.py
+import pprint
 from http import HTTPStatus
 
 from cart.cart import Cart
@@ -53,5 +54,5 @@ class TestRoutes(TestCase):
                  color=color,
                  m_type=model_type,
                  images_m=images_m,)
-        print(cart)
+        pprint.pprint(vars(cart))
         self.assertEqual(len(cart), 1)

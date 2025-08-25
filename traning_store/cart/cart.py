@@ -18,9 +18,10 @@ class Cart(object):
         Инициализируем корзину
         """
         # request.session = SessionStore()
-        self.session = request.session
+        self.session = request.session.session_key
         print(self.session.session_key)
-        cart = self.session.get(settings.CART_SESSION_ID)
+        cart = self.session
+        # cart = self.session.get(settings.CART_SESSION_ID)
         # print(cart)
         if not cart:
             # save an empty cart in the session

@@ -13,7 +13,6 @@ from django.urls import reverse
 
 class TestRoutes(TestCase):
     def setUp(self):
-        # Load fixtures
         call_command('loaddata', 'db.json', verbosity=0)
         self.request = RequestFactory().get('/')
         middleware = SessionMiddleware(get_response=lambda r: r)

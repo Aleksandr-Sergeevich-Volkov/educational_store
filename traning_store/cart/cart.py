@@ -4,6 +4,7 @@ from decimal import Decimal
 from catalog.models import Gallery, Product
 from coupons.models import Coupon
 from django.conf import settings
+from django.contrib.sessions.backends.db import SessionStore
 
 logger = logging.getLogger(__name__)
 
@@ -14,6 +15,7 @@ class Cart(object):
         """
         Инициализируем корзину
         """
+        request.session = SessionStore()
         self.session = request.session
         cart = self.session.get(settings.CART_SESSION_ID)
         if not cart:

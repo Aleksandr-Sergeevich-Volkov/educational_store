@@ -21,7 +21,7 @@ class TestRoutes(TestCase):
         In the end it should have a variable cart which is an empty dict.
         """
         self.request = RequestFactory().get('/')
-        middleware = SessionMiddleware()
+        middleware = SessionMiddleware(get_response=lambda r: r)
         middleware.process_request(self.request)
         self.request.session.save()
         request = self.request

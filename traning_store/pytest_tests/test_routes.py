@@ -15,7 +15,7 @@ class TestRoutes(TestCase):
     def setUp(self):
         call_command('loaddata', 'db.json', verbosity=0)
         self.request = RequestFactory().get('/')
-        middleware = SessionMiddleware(get_response=lambda r: r)
+        middleware = SessionMiddleware(get_response=lambda r: None)
         middleware.process_request(self.request)
         self.request.session.save()
 

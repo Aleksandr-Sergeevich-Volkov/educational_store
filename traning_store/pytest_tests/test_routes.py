@@ -39,7 +39,7 @@ class TestRoutes(TestCase):
         self.assertEqual(catalog_count, 4)
 
     def test_add_cart(self):
-        cart = Cart(self.request.session)
+        cart = Cart(self.request)
         product = get_object_or_404(Product, id=1)
         color = get_object_or_404(Color, id=1)
         size = get_object_or_404(Size, id=1)

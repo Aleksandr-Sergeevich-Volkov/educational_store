@@ -21,7 +21,7 @@ class TestRoutes(TestCase):
 
     def test_initialize_cart_clean_session(self):
         request = self.request
-        cart = Cart(request.session)
+        cart = Cart(request)
         self.assertEqual(cart.cart, {})
 
     def test_home_page(self):

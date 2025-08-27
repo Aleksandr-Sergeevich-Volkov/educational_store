@@ -86,10 +86,10 @@ class TestRoutes(TestCase):
                                      'city': 'Город'})
         order_count = Order.objects.count()
         order = form.save()
+        order_item_count = OrderItem.objects.count()
         OrderItem.objects.create(order=order,
                                  product=get_object_or_404(Product, id=1),
                                  price=5000,
                                  quantity=1)
-        order_item_count = OrderItem.objects.count()
         self.assertEqual(Order.objects.count(), order_count + 1)
         self.assertEqual(OrderItem.objects.count(), order_item_count + 1)

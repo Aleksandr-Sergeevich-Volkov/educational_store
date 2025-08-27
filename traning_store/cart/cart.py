@@ -1,12 +1,9 @@
 import logging
-# import pprint
 from decimal import Decimal
 
 from catalog.models import Gallery, Product
 from coupons.models import Coupon
 from django.conf import settings
-
-# from django.contrib.sessions.backends.db import SessionStore
 
 logger = logging.getLogger(__name__)
 

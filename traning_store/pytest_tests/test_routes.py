@@ -93,3 +93,9 @@ class TestRoutes(TestCase):
                                  quantity=1)
         self.assertEqual(Order.objects.count(), order_count + 1)
         self.assertEqual(OrderItem.objects.count(), order_item_count + 1)
+
+    def test_catalog_detail(self):
+        product = get_object_or_404(Product, id=1)
+        url = reverse('catalog:detail')
+        response = self.client.get(url + product.slug)
+        self.assertEqual(response.status_code, HTTPStatus.OK)

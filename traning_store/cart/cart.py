@@ -19,9 +19,9 @@ class Cart(object):
         """
         # request.session = SessionStore()
         self.session = request.session
-        print(self.session.session_key)
-        cart = self.session.session_key
-        # cart = self.session.get(settings.CART_SESSION_ID)
+        # print(self.session.session_key)
+        # cart = self.session.session_key
+        cart = self.session.get(settings.CART_SESSION_ID)
         # print(cart)
         if not cart:
             # save an empty cart in the session

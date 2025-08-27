@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from orders.forms import OrderCreateForm
+from orders.models import Order
 
 
 class TestRoutes(TestCase):
@@ -83,5 +84,6 @@ class TestRoutes(TestCase):
                                      'email': 'volkovaleksandrsergeevich@yandex.ru', 'address': 'Адрес',
                                      'address_pvz': 'Адрес ПВЗ', 'postal_code': 'Индекс',
                                      'city': 'Город'})
-        self.assertTrue(form.is_valid())
+        form.save()
+        self.assertEqual(len(Order), 1)
         # self.assertEqual(form.cleaned_data['field1'], 'value1')

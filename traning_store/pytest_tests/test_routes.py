@@ -22,7 +22,7 @@ class TestRoutes(TestCase):
     def test_initialize_cart_clean_session(self):
         request = self.request
         cart = Cart(request)
-        self.assertNotEqual(cart.cart, {})
+        self.assertEqual(cart.cart, {})
 
     def test_home_page(self):
         url = reverse('homepage:homepage')

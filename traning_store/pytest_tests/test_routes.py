@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 from orders.forms import OrderCreateForm
-from orders.models import Order
+from orders.models import Order, OrderItem
 
 
 class TestRoutes(TestCase):
@@ -79,12 +79,15 @@ class TestRoutes(TestCase):
         cart.remove(product)
         self.assertEqual(cart.cart, {})
 
-    def test_valid_data(self):
+    def test_create_order(self):
         form = OrderCreateForm(data={'first_name': 'Имя', 'last_name': 'Фамилия',
                                      'email': 'volkovaleksandrsergeevich@yandex.ru', 'address': 'Адрес',
                                      'address_pvz': 'Адрес ПВЗ', 'postal_code': 'Индекс',
                                      'city': 'Город'})
         order_count = Order.objects.count()
         form.save()
+        OrderItem.objects.create(order=form,
+                                 product=get_object_or_404(Product, id=1),
+                                 price=5000,
+                                 quantity=1)
         self.assertEqual(Order.objects.count(), order_count + 1)
-        # self.assertEqual(form.cleaned_data['field1'], 'value1')

@@ -85,5 +85,5 @@ class TestRoutes(TestCase):
                                      'address_pvz': 'Адрес ПВЗ', 'postal_code': 'Индекс',
                                      'city': 'Город'})
         form.save()
-        self.assertEqual(len(Order), 1)
+        self.assertEqual(Order.objects.count(), 1)
         # self.assertEqual(form.cleaned_data['field1'], 'value1')

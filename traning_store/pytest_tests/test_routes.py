@@ -96,6 +96,6 @@ class TestRoutes(TestCase):
 
     def test_catalog_detail(self):
         product = get_object_or_404(Product, id=1)
-        url = reverse('catalog:detail',kwargs={'slug': product.slug})
+        url = reverse('catalog:detail', kwargs={'slug': product.slug})
         response = self.client.get(url)
         self.assertEqual(response.status_code, HTTPStatus.OK)

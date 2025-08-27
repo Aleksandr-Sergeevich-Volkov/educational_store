@@ -128,6 +128,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: 
+      - tests
+      - test_django_tests
       - build_and_push_to_docker_hub
       - build_gateway_and_push_to_docker_hub
     steps:

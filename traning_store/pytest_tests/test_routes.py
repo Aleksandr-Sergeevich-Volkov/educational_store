@@ -9,6 +9,7 @@ from django.core.management import call_command
 from django.shortcuts import get_object_or_404
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
+from orders.forms import OrderCreateForm
 
 
 class TestRoutes(TestCase):
@@ -76,3 +77,11 @@ class TestRoutes(TestCase):
                  images_m=images_m,)
         cart.remove(product)
         self.assertEqual(cart.cart, {})
+
+    def test_valid_data(self):
+        form = OrderCreateForm(data={'first_name': 'Имя', 'last_name': 'Фамилия',
+                                     'email': 'volkovaleksandrsergeevich@yandex.ru', 'address': 'Адрес',
+                                     'address_pvz': 'Адрес ПВЗ', 'postal_code': 'Индекс',
+                                     'city': 'Город'})
+        self.assertTrue(form.is_valid())
+        # self.assertEqual(form.cleaned_data['field1'], 'value1')

@@ -51,5 +51,5 @@ class TestRoutes(TestCase):
                  color=color,
                  m_type=model_type,
                  images_m=images_m,)
-        pprint.pprint(vars(cart)['1'])
+        pprint.pprint(vars(cart)['cart']['1'])
         self.assertEqual(len(cart), 1)

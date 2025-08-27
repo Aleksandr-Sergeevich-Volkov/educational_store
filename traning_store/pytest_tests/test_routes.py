@@ -85,8 +85,8 @@ class TestRoutes(TestCase):
                                      'address_pvz': 'Адрес ПВЗ', 'postal_code': 'Индекс',
                                      'city': 'Город'})
         order_count = Order.objects.count()
-        form.save()
-        OrderItem.objects.create(order=form,
+        order = form.save()
+        OrderItem.objects.create(order=order,
                                  product=get_object_or_404(Product, id=1),
                                  price=5000,
                                  quantity=1)

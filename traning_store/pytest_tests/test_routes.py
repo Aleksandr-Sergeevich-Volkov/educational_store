@@ -52,4 +52,11 @@ class TestRoutes(TestCase):
                  m_type=model_type,
                  images_m=images_m,)
         pprint.pprint(vars(cart)['cart']['1'])
-        self.assertEqual(len(cart), 1)
+        test_cart = {'color': 'Черный',
+                     'images_m': '<QuerySet [<Gallery: Gallery object (1)>, <Gallery: Gallery '
+                     'object (2)>]>',
+                     'm_type': 'Стандартная',
+                     'price': '5999.00',
+                     'quantity': 1,
+                     'size': '4'}
+        self.assertEqual(vars(cart)['cart']['1'], test_cart)

@@ -67,8 +67,6 @@ jobs:
         python manage.py makemigrations
         python manage.py migrate
         python manage.py test -v 2
-        cd ..
-        pytest
   
   test_django_pytests:
     runs-on: ubuntu-latest

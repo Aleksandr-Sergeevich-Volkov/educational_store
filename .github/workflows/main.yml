@@ -69,7 +69,45 @@ jobs:
         python manage.py test -v 2
         cd ..
         pytest
+  
+  test_django_pytests:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13.10        
+        env:
+          POSTGRES_USER: django_user
+          POSTGRES_PASSWORD: django_password
+          POSTGRES_DB: django_db
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+        cache: 'pip'
 
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip  
+        pip install -r ./traning_store/requirements.txt 
+    - name: Test django pytests
+      env:
+        POSTGRES_USER: django_user
+        POSTGRES_PASSWORD: django_password
+        POSTGRES_DB: django_db
+        DB_HOST: 127.0.0.1
+        DB_PORT: 5432
+        HEADERS: ${{ secrets.HEADERS }}  
+      run: |
+        cd traning_store/
+        python manage.py makemigrations
+        python manage.py migrate
+        cd ..
+        pytest      
     # Добавляем новую задачу: деплой приложения
   build_and_push_to_docker_hub:
     name: Push Docker image to DockerHub

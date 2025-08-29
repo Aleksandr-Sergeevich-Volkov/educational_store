@@ -10,7 +10,7 @@ from traning_store.catalog.models import Product
 
 @pytest.fixture
 def data():
-    return call_command('loaddata', 'db.json', verbosity=0)
+    call_command('loaddata', 'db.json', verbosity=0)
 
 
 @pytest.mark.django_db

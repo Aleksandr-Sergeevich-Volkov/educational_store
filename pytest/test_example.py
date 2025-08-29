@@ -10,3 +10,10 @@ def test_home_page(client):
     url = reverse('homepage:homepage')
     response = client.get(url)
     assert response.status_code, HTTPStatus.OK
+
+
+@pytest.mark.django_db
+def test_catalog(client):
+    url = reverse('catalog:catalog')
+    response = client.get(url)
+    assert response.status_code, HTTPStatus.OK

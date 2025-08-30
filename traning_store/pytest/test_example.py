@@ -1,11 +1,10 @@
 from http import HTTPStatus
 
+import pytest
+from catalog.models import Product
 from django.core.management import call_command
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-
-import pytest
-from traning_store.catalog.models import Product
 
 
 @pytest.fixture

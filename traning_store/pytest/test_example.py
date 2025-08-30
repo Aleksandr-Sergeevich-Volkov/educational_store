@@ -12,6 +12,12 @@ def data():
     call_command('loaddata', 'db.json', verbosity=0)
 
 
+@pytest.fixture(scope='session')
+def django_db_setup(django_db_setup, django_db_blocker):
+    with django_db_blocker.unblock():
+        call_command('loaddata', 'db.json')
+
+
 @pytest.mark.django_db
 def test_home_page(client):
     url = reverse('homepage:homepage')

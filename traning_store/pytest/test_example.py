@@ -25,7 +25,7 @@ def cart_session():
 
 @pytest.mark.django_db
 def test_initialize_cart_clean_session(client, cart_session):
-    request = client.request
+    request = cart_session.request
     cart = Cart(request)
     assert cart.cart == {}
 

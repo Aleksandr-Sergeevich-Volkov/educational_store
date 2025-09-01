@@ -20,7 +20,7 @@ def cart_session():
     request = RequestFactory().get('/')
     middleware = SessionMiddleware(get_response=lambda r: None)
     middleware.process_request(request)
-    request.session.save()
+    return request.session.save()
 
 
 def test_initialize_cart_clean_session(client, cart_session):

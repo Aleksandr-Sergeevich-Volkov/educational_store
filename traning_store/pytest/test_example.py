@@ -13,13 +13,17 @@ from django.urls import reverse
 @pytest.fixture
 def data():
     call_command('loaddata', 'db.json', verbosity=0)
+
+
+@pytest.fixture
+def cart_session():
     request = RequestFactory().get('/')
     middleware = SessionMiddleware(get_response=lambda r: None)
     middleware.process_request(request)
     request.session.save()
 
 
-def test_initialize_cart_clean_session(client, data):
+def test_initialize_cart_clean_session(client, cart_session):
     request = client.request
     cart = Cart(request)
     assert cart.cart == {}

@@ -36,7 +36,8 @@ class TestCart(TestCase):
         assert cart.cart == {}
 
     @pytest.mark.django_db
-    def test_add_cart(self, data):
+    @pytest.mark.usefixtures('data')
+    def test_add_cart(self):
         self.request = RequestFactory().get('/')
         middleware = SessionMiddleware(get_response=lambda r: None)
         middleware.process_request(self.request)

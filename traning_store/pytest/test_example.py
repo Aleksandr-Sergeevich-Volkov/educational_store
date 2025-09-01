@@ -16,14 +16,14 @@ def data():
 
 
 @pytest.fixture
-def cart_session(data):
+def cart_session():
     request = RequestFactory().get('/')
     middleware = SessionMiddleware(get_response=lambda r: None)
     middleware.process_request(request)
     request.session.save()
 
 
-def test_initialize_cart_clean_session(client, cart_session):
+def test_initialize_cart_clean_session(client, data, cart_session):
     request = client.request
     cart = Cart(request)
     assert cart.cart == {}

@@ -23,7 +23,7 @@ def cart_session():
     return request.session.save()
 
 
-class TestRoutes(TestCase):
+class TestCart(TestCase):
 
     @pytest.mark.django_db
     def test_initialize_cart_clean_session(self):

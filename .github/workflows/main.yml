@@ -105,7 +105,7 @@ jobs:
         python manage.py makemigrations
         python manage.py migrate
         cd ..
-        pytest      
+        pytest -vv      
     # Добавляем новую задачу: деплой приложения
   build_and_push_to_docker_hub:
     name: Push Docker image to DockerHub

@@ -16,7 +16,7 @@ def data():
 
 
 @pytest.fixture
-def cart_session():
+def cart_session(data):
     request = RequestFactory().get('/')
     middleware = SessionMiddleware(get_response=lambda r: None)
     middleware.process_request(request)

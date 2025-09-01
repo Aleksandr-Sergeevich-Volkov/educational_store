@@ -26,12 +26,12 @@ def cart_session():
 class TestRoutes(TestCase):
 
     @pytest.mark.django_db
-    def test_initialize_cart_clean_session(client):
-        request = RequestFactory().get('/')
+    def test_initialize_cart_clean_session(self, client):
+        self.request = RequestFactory().get('/')
         middleware = SessionMiddleware(get_response=lambda r: None)
-        middleware.process_request(request)
-        request.session.save()
-        request = client.request
+        middleware.process_request(self.request)
+        self.request.session.save()
+        request = self.request
         cart = Cart(request)
         assert cart.cart == {}
 

@@ -37,7 +37,12 @@ class TestCart(TestCase):
 
     @pytest.mark.django_db
     def test_add_cart(self):
-        cart = Cart(self.request)
+        self.request = RequestFactory().get('/')
+        middleware = SessionMiddleware(get_response=lambda r: None)
+        middleware.process_request(self.request)
+        self.request.session.save()
+        request = self.request
+        cart = Cart(request)
         product = get_object_or_404(Product, id=1)
         color = get_object_or_404(Color, id=1)
         size = get_object_or_404(Size, id=1)

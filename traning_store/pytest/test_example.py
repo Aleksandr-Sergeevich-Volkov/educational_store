@@ -23,7 +23,7 @@ def cart_session():
     request.session.save()
 
 
-def test_initialize_cart_clean_session(client, data, cart_session):
+def test_initialize_cart_clean_session(client, cart_session):
     request = client.request
     cart = Cart(request)
     assert cart.cart == {}

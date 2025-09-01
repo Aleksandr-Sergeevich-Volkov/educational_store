@@ -24,6 +24,10 @@ def cart_session():
 
 
 class TestCart(TestCase):
+    request = RequestFactory().get('/')
+    middleware = SessionMiddleware(get_response=lambda r: None)
+    middleware.process_request(request)
+    request.session.save()
 
     @pytest.mark.django_db
     def test_initialize_cart_clean_session(self):
@@ -36,7 +40,7 @@ class TestCart(TestCase):
         assert cart.cart == {}
 
     @pytest.mark.django_db
-    @pytest.mark.usefixtures('data', 'cart_session')
+    @pytest.mark.usefixtures('data')
     def test_add_cart(self):
         # self.request = RequestFactory().get('/')
         # middleware = SessionMiddleware(get_response=lambda r: None)

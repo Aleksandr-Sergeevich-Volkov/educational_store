@@ -1,21 +1,28 @@
 from http import HTTPStatus
 
 import pytest
+from cart.cart import Cart
 from catalog.models import Product
+from django.contrib.sessions.middleware import SessionMiddleware
 from django.core.management import call_command
 from django.shortcuts import get_object_or_404
+from django.test import RequestFactory
 from django.urls import reverse
 
 
 @pytest.fixture
 def data():
     call_command('loaddata', 'db.json', verbosity=0)
+    request = RequestFactory().get('/')
+    middleware = SessionMiddleware(get_response=lambda r: None)
+    middleware.process_request(request)
+    request.session.save()
 
 
-# @pytest.fixture(scope='session')
-# def django_db_setup(django_db_setup, django_db_blocker):
-#    with django_db_blocker.unblock():
-#        call_command('loaddata', 'db.json')
+def test_initialize_cart_clean_session(client, data):
+    request = client.request
+    cart = Cart(request)
+    assert cart.cart == {}
 
 
 @pytest.mark.django_db

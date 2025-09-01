@@ -26,7 +26,7 @@ def cart_session():
 class TestRoutes(TestCase):
 
     @pytest.mark.django_db
-    def test_initialize_cart_clean_session(self, client):
+    def test_initialize_cart_clean_session(self):
         self.request = RequestFactory().get('/')
         middleware = SessionMiddleware(get_response=lambda r: None)
         middleware.process_request(self.request)

@@ -16,7 +16,7 @@ def data():
 
 
 @pytest.fixture
-def cart_session():
+def cart_session_():
     request = RequestFactory().get('/')
     middleware = SessionMiddleware(get_response=lambda r: None)
     middleware.process_request(request)
@@ -43,7 +43,7 @@ class TestCart(TestCase):
         assert cart.cart == {}
 
     @pytest.mark.django_db
-    @pytest.mark.usefixtures('data')
+    @pytest.mark.usefixtures('data', 'cart_session')
     def test_add_cart(self):
         # self.request = RequestFactory().get('/')
         # middleware = SessionMiddleware(get_response=lambda r: None)

@@ -23,6 +23,7 @@ def cart_session():
     return request.session.save()
 
 
+@pytest.mark.django_db
 def test_initialize_cart_clean_session(client, cart_session):
     request = client.request
     cart = Cart(request)

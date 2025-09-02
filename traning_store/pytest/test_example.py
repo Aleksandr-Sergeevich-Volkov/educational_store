@@ -125,3 +125,9 @@ def test_create_order(data):
                              quantity=1)
     assert Order.objects.count() == order_count + 1
     assert OrderItem.objects.count(), order_item_count + 1
+
+
+@pytest.mark.django_db
+def test_count_catalog(data):
+    catalog_count = Product.objects.count()
+    assert catalog_count == 4

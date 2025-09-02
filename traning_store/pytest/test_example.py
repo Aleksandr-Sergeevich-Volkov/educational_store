@@ -111,8 +111,7 @@ def test_catalog_detail(data, client):
 
 
 @pytest.mark.django_db
-@pytest.mark.usefixtures('data')
-def test_create_order(self):
+def test_create_order(data):
     form = OrderCreateForm(data={'first_name': 'Имя', 'last_name': 'Фамилия',
                                  'email': 'volkovaleksandrsergeevich@yandex.ru', 'address': 'Адрес',
                                  'address_pvz': 'Адрес ПВЗ', 'postal_code': 'Индекс',

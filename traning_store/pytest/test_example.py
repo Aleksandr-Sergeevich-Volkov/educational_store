@@ -27,10 +27,10 @@ class TestCart(TestCase):
     @pytest.fixture
     @pytest.mark.django_db
     def cart_session(self):
-        request = RequestFactory().get('/')
+        self.request = RequestFactory().get('/')
         middleware = SessionMiddleware(get_response=lambda r: None)
-        middleware.process_request(request)
-        request.session.save()
+        middleware.process_request(self.request)
+        self.request.session.save()
 
     @pytest.mark.django_db
     def test_initialize_cart_clean_session(self):

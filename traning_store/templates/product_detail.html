@@ -13,7 +13,9 @@
       </ul>
       {% endfor %}  
     </div> 
-    <p class="price">₽{{ product.price }}</p>
+    <li class="price">₽{{ product.price }}</li>
+    <li>Артикул:{{product.articul }} </li>
+    <li>Код товара:{{ product.code}} </li>
 <form action="{% url "cart:cart_add" product.id %}" method="post">
     {{ cart_product_form }}
     {% csrf_token %}

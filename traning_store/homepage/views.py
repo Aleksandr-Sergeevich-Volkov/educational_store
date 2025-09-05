@@ -1,3 +1,5 @@
+import random
+
 from catalog.models import Product
 from django.contrib.auth.decorators import login_required
 from django.db import models
@@ -16,6 +18,10 @@ class HomePage(TemplateView):
         context = super().get_context_data(*args, **kwargs)
         context['text'] = Post.objects.all().annotate(comment_count=models.Count('comments')).order_by('id')
         context['prod_count'] = Product.objects.aggregate(Count('id'))
+        product_list = [x for x in range(context['prod_count']['id__count'])]
+        random_list = random.shuffle(product_list)
+        context['random_list'] = random_list
+        context['product'] = Product.objects.filter(id__in=product_list[:3])
         context['catalog'] = 'catalog/'
         return context
 

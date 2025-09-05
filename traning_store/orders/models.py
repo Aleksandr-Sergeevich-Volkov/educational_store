@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from catalog.models import Product
+from catalog.models import Color, Model_type, Product, Size
 from coupons.models import Coupon
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -49,6 +49,21 @@ class OrderItem(models.Model):
                                 on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField(default=1)
+    size = models.ForeignKey(Size,
+                             # default=Size.objects.get(id=4),
+                             default='4',
+                             related_name='order_items',
+                             on_delete=models.CASCADE)
+    color = models.ForeignKey(Color,
+                              # default=Color.objects.get(id=1),
+                              default='1',
+                              related_name='order_items',
+                              on_delete=models.CASCADE)
+    m_type = models.ForeignKey(Model_type,
+                               # default=Model_type.objects.get(id=1),
+                               default='1',
+                               related_name='order_items',
+                               on_delete=models.CASCADE)
 
     def __str__(self):
         return '{}'.format(self.id)

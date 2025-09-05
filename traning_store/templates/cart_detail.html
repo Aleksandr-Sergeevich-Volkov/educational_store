@@ -84,7 +84,11 @@
                   href="{% url "delivery:delivery" %}">Доставка Яндекс</a></button>
               <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
                   href="{% url "delivery:delivery_cdek" %}">Доставка Сдэк</a></button>
+                  {% if request.session.delivery_address is not None %}
                   <a href="{% url "orders:order_create" %}" class="btn btn-primary">Перейти к заказу</a> 
+                  {%else%}
+                  <a href="{% url "orders:order_create" %}" class="btn btn-primary disabled" >Перейти к заказу</a> 
+                  {% endif %}
                   </div>                                                   
     </p>
 {% endblock %}

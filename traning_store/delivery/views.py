@@ -31,7 +31,7 @@ def delivery_add(request):
         cost_ = homework_statuses.json().get('pricing_total')
         cost_not_price = Decimal('0')
         request.session['delivery_cost'] = homework_statuses.json().get('pricing_total').replace('RUB', "")
-        request.session['delivery_address'] = form.cleaned_data['address_pvz']
+        request.session['delivery_address'] = form.cleaned_data['address_pvz'] + ' (Яндекс)'
         if cart.get_total_price() <= Decimal('5000'):
             return render(request, 'deliverys.html', {'cost': cost_})
         return render(request, 'deliverys.html', {'cost': cost_not_price})
@@ -46,7 +46,7 @@ def delivery_add_cdek(request):
     if form.is_valid():
         sum = form.cleaned_data['sum']
         request.session['delivery_cost'] = sum
-        request.session['delivery_address'] = form.cleaned_data['address_pvz']
+        request.session['delivery_address'] = form.cleaned_data['address_pvz'] + ' (Сдек)'
         cost_not_price = Decimal('0')
         if cart.get_total_price() <= Decimal('5000'):
             return render(request, 'deliverys.html', {'cost': sum})

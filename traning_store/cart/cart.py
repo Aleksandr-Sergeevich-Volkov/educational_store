@@ -25,6 +25,7 @@ class Cart(object):
         self.cost = Decimal('5000.00')
         if self.session.get('delivery_cost'):
             self.delivery_cost = Decimal(self.session.get('delivery_cost'))
+        print('Укажите cначала доставку')
 
     def add(self, product, quantity=1, size='1', color='черный',
             m_type='Стандартный', images_m='1', update_quantity=False):
@@ -60,6 +61,9 @@ class Cart(object):
         if self.session.get('delivery_cost') is not None:
             del self.session['delivery_cost']
             self.save()
+        if self.session.get('delivery_address') is not None:
+            del self.session['delivery_address']
+            self.save()
 
     def __iter__(self):
         # Перебор элементов в корзине и получение продуктов из базы данных.
@@ -92,6 +96,9 @@ class Cart(object):
         self.session.modified = True
         if self.session.get('delivery_cost') is not None:
             del self.session['delivery_cost']
+            self.session.modified = True
+        if self.session.get('delivery_address') is not None:
+            del self.session['delivery_address']
             self.session.modified = True
 
     @property

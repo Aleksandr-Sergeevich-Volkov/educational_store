@@ -1,6 +1,6 @@
 from django.db import models
 
-from traning_store.constant import COLOR_LEN, TITLE_LEN
+from traning_store.constant import COLOR_LEN, MEASURE_LEN, TITLE_LEN
 
 
 class Country(models.Model):
@@ -177,7 +177,7 @@ class Product(models.Model):
     )
     Color = models.ForeignKey(
         Color,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
     )
     Class_compress = models.ForeignKey(
         Class_compress,
@@ -220,6 +220,8 @@ class Product(models.Model):
         verbose_name="URL",
     )
 
+    articul = models.CharField('Артикул', max_length=MEASURE_LEN, default='P280')
+    code = models.CharField('Код товара', max_length=MEASURE_LEN, default='51723')
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField()
     available = models.BooleanField(default=True)

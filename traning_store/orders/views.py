@@ -1,4 +1,5 @@
 from cart.cart import Cart
+from catalog.models import Color, Model_type, Size
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import get_object_or_404, render
 
@@ -34,7 +35,11 @@ def order_create(request):
                 OrderItem.objects.create(order=order,
                                          product=item['product'],
                                          price=item['price'],
-                                         quantity=item['quantity'])
+                                         quantity=item['quantity'],
+                                         size=Size.objects.get(name=item['size']),
+                                         color=Color.objects.get(name=item['color']),
+                                         m_type=Model_type.objects.get(name=item['m_type'])
+                                         )
             # очистка корзины
             cart.clear()
             # запуск асинхронной задачи
@@ -52,13 +57,22 @@ def order_create(request):
                        }
             return render(request, 'created.html', context)
     else:
-        if request.user.is_authenticated:
+        if request.user.is_authenticated and request.session['delivery_address']:
             email = request.user.email
             form = OrderCreateForm(initial={"email": email,
                                    "address_pvz": request.session['delivery_address'],
                                             "address": "-", "postal_code": "-", "city": "-"})
+        elif request.user.is_authenticated:
+            email = request.user.email
+            form = OrderCreateForm(initial={"email": email,
+                                   "address_pvz": "-",
+                                            "address": "-", "postal_code": "-", "city": "-"})
+        elif request.session.get('delivery_address') is not None:
+            form = OrderCreateForm(initial={"email": "-",
+                                   "address_pvz": request.session['delivery_address'],
+                                            "address": "-", "postal_code": "-", "city": "-"})
         else:
-            form = OrderCreateForm(initial={"address_pvz": request.session['delivery_address'],
+            form = OrderCreateForm(initial={"address_pvz": "-",
                                             "address": "-", "postal_code": "-", "city": "-"})
     return render(request, 'create.html',
-                  {'cart': cart, 'form': form})
+                  {'cart': cart, 'form': form, })

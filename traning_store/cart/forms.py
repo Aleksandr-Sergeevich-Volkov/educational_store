@@ -10,13 +10,16 @@ class CartAddProductForm(forms.Form):
     update = forms.BooleanField(required=False, initial=False,
                                 widget=forms.HiddenInput)
     size = forms.ModelChoiceField(label='Размер',
-                                  queryset=Size.objects.all(), required=False)
+                                  queryset=Size.objects.all(), required=False,
+                                  initial=Size.objects.get(id='4'))
     color = forms.ModelChoiceField(label='Цвет',
                                    queryset=Color.objects.all(),
-                                   required=False)
+                                   required=False,
+                                   initial=Color.objects.get(id='1'))
     m_type = forms.ModelChoiceField(label='Тип',
                                     queryset=Model_type.objects.all(),
-                                    required=False)
+                                    required=False,
+                                    initial=Model_type.objects.get(id='1'))
 
 
 class DeliveryForm(forms.Form):

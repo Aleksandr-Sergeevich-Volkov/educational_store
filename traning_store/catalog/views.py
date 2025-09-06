@@ -20,7 +20,6 @@ User = get_user_model()
 class ProductListView(FilterView):
     model = Product
     ordering = 'id'
-    # ...и даже настройки пагинации:
     paginate_by = 10
     template_name = 'product_list.html'
     filterset_class = ProductFilter

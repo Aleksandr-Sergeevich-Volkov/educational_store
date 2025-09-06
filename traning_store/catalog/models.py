@@ -23,7 +23,6 @@ class Brend(models.Model):
         Country,
         # Поведение при удалении:
         # если оригинальное имя будет удалено,
-        # то и сам фильм будет удалён.
         on_delete=models.CASCADE
     )
 

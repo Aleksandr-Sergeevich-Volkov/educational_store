@@ -19,7 +19,6 @@ User = get_user_model()
 
 class ProductListView(FilterView):
     model = Product
-    # ...сортировку, которая будет применена при выводе списка объектов:
     ordering = 'id'
     # ...и даже настройки пагинации:
     paginate_by = 10

@@ -60,7 +60,6 @@ class OrderItem(models.Model):
                               related_name='order_items',
                               on_delete=models.CASCADE)
     m_type = models.ForeignKey(Model_type,
-                               # default=Model_type.objects.get(id=1),
                                default='1',
                                related_name='order_items',
                                on_delete=models.CASCADE)

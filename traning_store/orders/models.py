@@ -55,7 +55,6 @@ class OrderItem(models.Model):
                              related_name='order_items',
                              on_delete=models.CASCADE)
     color = models.ForeignKey(Color,
-                              # default=Color.objects.get(id=1),
                               default='1',
                               related_name='order_items',
                               on_delete=models.CASCADE)

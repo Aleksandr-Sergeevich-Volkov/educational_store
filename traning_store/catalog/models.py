@@ -21,7 +21,6 @@ class Brend(models.Model):
     country_brand = models.ForeignKey(
         Country,
         # Поведение при удалении:
-        # если оригинальное имя будет удалено,
         on_delete=models.CASCADE
     )
 

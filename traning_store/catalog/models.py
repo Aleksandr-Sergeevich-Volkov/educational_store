@@ -19,7 +19,6 @@ class Country(models.Model):
 class Brend(models.Model):
     name = models.CharField('Название', max_length=TITLE_LEN)
     country_brand = models.ForeignKey(
-        # На какую модель ссылаемся
         Country,
         # Поведение при удалении:
         # если оригинальное имя будет удалено,

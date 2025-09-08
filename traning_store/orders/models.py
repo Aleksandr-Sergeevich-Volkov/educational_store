@@ -50,7 +50,6 @@ class OrderItem(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField(default=1)
     size = models.ForeignKey(Size,
-                             # default=Size.objects.get(id=4),
                              default='4',
                              related_name='order_items',
                              on_delete=models.CASCADE)

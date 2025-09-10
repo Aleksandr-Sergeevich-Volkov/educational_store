@@ -215,7 +215,7 @@ class Product(models.Model):
     )
 
     articul = models.CharField('Артикул', max_length=MEASURE_LEN, default='P280')
-    code = models.CharField('Код товара', max_length=MEASURE_LEN, code='51723')
+    code = models.CharField('Код товара', max_length=MEASURE_LEN, default='51723')
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField()
     available = models.BooleanField(default=True)

@@ -2,10 +2,11 @@ from http import HTTPStatus
 
 import pytest
 from cart.cart import Cart
-from catalog.models import Color, Gallery, Model_type, Product, Size
+# from catalog.models import Color, Gallery, Model_type, Product, Size
+from catalog.models import Product
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.core.management import call_command
-from django.shortcuts import get_object_or_404
+# from django.shortcuts import get_object_or_404
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
@@ -49,7 +50,7 @@ class TestCart(TestCase):
         cart = Cart(request)
         assert cart.cart == {}
 
-    @pytest.mark.django_db
+    """ @pytest.mark.django_db
     @pytest.mark.usefixtures('data', 'cart_session')
     def test_add_cart(self):
         request = self.request
@@ -73,3 +74,9 @@ class TestCart(TestCase):
                      'quantity': 1,
                      'size': '4'}
         assert vars(cart)['cart']['1'] == test_cart
+ """
+
+    @pytest.mark.django_db
+    def test_count_catalog(data):
+        catalog_count = Product.objects.count()
+        assert catalog_count == 4

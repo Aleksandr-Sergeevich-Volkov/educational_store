@@ -77,7 +77,7 @@ class TestCart(TestCase):
  """
 
     @pytest.mark.django_db
-    def test_count_catalog(data):
+    def test_count_catalog():
+        call_command('loaddata', 'db.json', verbosity=0)
         catalog_count = Product.objects.count()
-        print(len(Product))
         assert catalog_count == 4

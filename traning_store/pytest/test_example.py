@@ -8,6 +8,8 @@ from django.core.management import call_command
 from django.shortcuts import get_object_or_404
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
+from orders.forms import OrderCreateForm
+from orders.models import Order, OrderItem
 
 
 @pytest.fixture
@@ -98,3 +100,35 @@ def test_count_catalog(data):
     print(Product.objects.all())
     catalog_count = Product.objects.count()
     assert catalog_count == 4
+
+
+@pytest.mark.django_db
+def test_catalog(client):
+    url = reverse('catalog:catalog')
+    response = client.get(url)
+    assert response.status_code, HTTPStatus.OK
+
+
+@pytest.mark.django_db
+def test_catalog_detail(data, client):
+    product = get_object_or_404(Product, id=1)
+    url = reverse('catalog:detail', kwargs={'slug': product.slug})
+    response = client.get(url)
+    assert response.status_code, HTTPStatus.OK
+
+
+@pytest.mark.django_db
+def test_create_order(data):
+    form = OrderCreateForm(data={'first_name': 'Имя', 'last_name': 'Фамилия',
+                                 'email': 'volkovaleksandrsergeevich@yandex.ru', 'address': 'Адрес',
+                                 'address_pvz': 'Адрес ПВЗ', 'postal_code': 'Индекс',
+                                 'city': 'Город'})
+    order_count = Order.objects.count()
+    order = form.save()
+    order_item_count = OrderItem.objects.count()
+    OrderItem.objects.create(order=order,
+                             product=get_object_or_404(Product, id=1),
+                             price=5000,
+                             quantity=1)
+    assert Order.objects.count() == order_count + 1
+    assert OrderItem.objects.count(), order_item_count + 1

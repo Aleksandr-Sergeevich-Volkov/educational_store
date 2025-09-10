@@ -11,12 +11,3 @@ for item in query:
     key, value = item.split('=')
     params[key] = value
 print(params) """
-""" if cart.delivery:
-                order.delivery_sum = cart.delivery_cost
-
-
-
-delivery_sum = models.DecimalField(default=0,
-                                       max_digits=10,
-                                       decimal_places=2)
-+ self.delivery_sum """

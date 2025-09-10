@@ -74,6 +74,24 @@ class TestCart(TestCase):
                      'size': '4'}
         assert vars(cart)['cart']['1'] == test_cart
 
+    @pytest.mark.django_db
+    @pytest.mark.usefixtures('data', 'cart_session')
+    def test_del_cart(self):
+        cart = Cart(self.request)
+        product = get_object_or_404(Product, id=1)
+        color = get_object_or_404(Color, id=1)
+        size = get_object_or_404(Size, id=1)
+        model_type = get_object_or_404(Model_type, id=1)
+        images_m = Gallery.objects.filter(product=product)
+        cart.add(product=product,
+                 quantity=1,
+                 size=size,
+                 color=color,
+                 m_type=model_type,
+                 images_m=images_m,)
+        cart.remove(product)
+        assert cart.cart == {}
+
 
 @pytest.mark.django_db
 def test_count_catalog(data):

@@ -76,8 +76,9 @@ class TestCart(TestCase):
         assert vars(cart)['cart']['1'] == test_cart
  """
 
-    @pytest.mark.django_db
-    def test_count_catalog(data):
-        print(Product.objects.all())
-        catalog_count = Product.objects.count()
-        assert catalog_count == 4
+
+@pytest.mark.django_db
+def test_count_catalog(data):
+    print(Product.objects.all())
+    catalog_count = Product.objects.count()
+    assert catalog_count == 4

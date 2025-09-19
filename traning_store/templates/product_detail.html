@@ -2,9 +2,9 @@
 {% load django_bootstrap5 %}
 {% load static %}
 {% block content %}
-  <h1 class="pb-2 mb-0">{{ object.name }}</h1> 
+  <h2 class="pb-2 mb-0">{{ object.name }}</h2> 
   <div class="row mt-3">
-    <div class="col-12 col-md-6">
+    <div class="col-9 col-md-6">
       <h2>Описание</h2>
       <li>Производитель:{{ object.brand }} </li>
       {% for image in images_m %}
@@ -12,7 +12,6 @@
       <li><img src="{{image.image.url }}" height=150></li> 
       </ul>
       {% endfor %}  
-    </div> 
     <li class="price">₽{{ product.price }}</li>
     <li>Артикул:{{product.articul }} </li>
     <li>Код товара:{{ product.code}} </li>
@@ -20,6 +19,15 @@
     {{ cart_product_form }}
     {% csrf_token %}
     <input type="submit" class="btn btn-primary" value="Добавить в корзину">
-</form>    
-  </div>     
+</form>
+</div>     
+<div class="col-3">
+  <li>Инструкция по выбору размера </li>
+   {% if product.brand.name == 'ОРТО' %}
+   <img src="/static/orto_size.jpg" width="550">
+   {% elif product.brand.name == 'Venoteks' %}
+   <img src="/static/venoteks_size.jpg" width="550">
+   {% endif %}
+   </div>    
+    </div> 
 {% endblock %} 

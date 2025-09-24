@@ -1,14 +1,21 @@
 {% extends "base.html" %}
+{% load catalog_tags %}
 {% load django_bootstrap5 %}
 {% load static %}
  {% block content %}
-   <h1>Это страница со списком товаров!Всего:{{prod_count.id__count}}</h1>
+   <h3>Это страница со списком товаров!Всего:{{prod_count.id__count}}</h3>
    <form method="get">
-    {{ filter.form.as_p }}
+    {{ filter.form.as_table }}
     <button type="submit" class="btn btn-primary">Фильтр</button>
 </form>
 <ul>
+    <table>
+    {% get_product filter="ОРТО" as products%}
     {% for product in filter.qs %}
+    {% if forloop.counter0|divisibleby:"2" %}
+                <tr width=250>
+            {% endif %}
+     <td>        
     <a href="{% url 'catalog:detail' product.slug %}"> <class="card-link">{{ product.name }}</a>
          <li>Производитель:{{ product.brand }} </li>
          {% for image in images_m %}
@@ -16,9 +23,14 @@
         <li><img src="{{image.image.url }}" height=100></li> 
          {% endif %} 
          {% endfor %} 
-    <li>Цена:{{ product.price }} </li>     
-</ul>    
+    <li>Цена:{{ product.price }} </li>       
     {% empty %}
-        <li>Товары не найдены.</li>       
-   {% endfor %}  
- {% endblock %}
+        <li>Товары не найдены.</li>
+        </td> 
+        {% if forloop.counter|divisibleby:"2" %}
+           </tr>
+        {% endif %}           
+   {% endfor %} 
+   </ul>
+   </table>  
+{% endblock %}

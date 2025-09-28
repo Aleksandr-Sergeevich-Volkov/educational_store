@@ -18,7 +18,8 @@
      <td>
         <div itemscope itemtype="https://schema.org/Product">        
     <a href="{% url 'catalog:detail' product.slug %}"> <class="card-link"> <span itemprop="name">{{ product.name }}</span> </a>
-         <li>Производитель:{{ product.brand }} </li>
+         <li>Производитель:<span itemprop="brand">{{ product.brand }}а</span></li>
+         <span itemprop="description">Категория: компрессионный трикотаж</span>
          {% for image in images_m %}
          {% if  image.product_id == product.id and  image.main %}
         <li><img src="{{image.image.url }}" height=100 itemprop="image"> </li> 

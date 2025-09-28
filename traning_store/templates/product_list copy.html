@@ -9,26 +9,21 @@
     <button type="submit" class="btn btn-primary">Фильтр</button>
 </form>
 <ul>
-    <table>        
+    <table>
     {% get_product filter="ОРТО" as products%}
     {% for product in filter.qs %}
     {% if forloop.counter0|divisibleby:"2" %}
                 <tr width=250>
             {% endif %}
-     <td>
-        <div itemscope itemtype="https://schema.org/Product">        
-    <a href="{% url 'catalog:detail' product.slug %}"> <class="card-link"> <span itemprop="name">{{ product.name }}</span> </a>
+     <td>        
+    <a href="{% url 'catalog:detail' product.slug %}"> <class="card-link">{{ product.name }}</a>
          <li>Производитель:{{ product.brand }} </li>
          {% for image in images_m %}
          {% if  image.product_id == product.id and  image.main %}
-        <li><img src="{{image.image.url }}" height=100 itemprop="image"> </li> 
+        <li><img src="{{image.image.url }}" height=100></li> 
          {% endif %} 
-         {% endfor %}
-    <div itemprop="offers" itemscope itemtype="https://schema.org/Offer"> 
-    <li>Цена: {{ product.price }} ₽<meta itemprop="price" content={{ product.price }} ></li> 
-    <meta itemprop="priceCurrency" content="RUB"> 
-    <link itemprop="availability" href="http://schema.org/InStock">
-  </div>     
+         {% endfor %} 
+    <li>Цена:{{ product.price }} </li>       
     {% empty %}
         <li>Товары не найдены.</li>
         </td> 
@@ -37,6 +32,5 @@
         {% endif %}           
    {% endfor %} 
    </ul>
-   </div>
-   </table>     
+   </table>  
 {% endblock %}

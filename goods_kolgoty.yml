@@ -1,0 +1,51 @@
+<yml_catalog date="2023-04-10 06:00+0300">
+ <shop>
+  <name>Компрессионные_чулки24</name>
+  <company>ООО "Консалтинговый центр "Алгоритм"</company>
+  <url>https://kompressionnye-chulki24.ru</url>
+  <version>1.0</version>
+  <email>volkovaleksandrsergeevich@yandex.ru</email>
+  <currencies>
+   <currency id="RUB" rate="1"></currency>
+  </currencies>
+  <categories>
+   <category id="1">Компрессионный трикотаж</category>
+   <category id="30" parentId="1">Компрессионные колготки</category>
+  </categories>
+  <offers>
+   <offer id="16" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/kolgotki-svetlo-bezhevye-orto-115-zhenskie-i-klass-kompressiii/</url>
+    <price>3480</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>30</categoryId>
+    <name>Колготки ORTO 115 женские I класс компрессиии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/orto115.jpg</picture>
+    <description>
+     <![CDATA[<p>Колготки ORTO 115 женские I класс компрессиии</p>]]>
+    </description>
+   </offer>
+   <offer id="17" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/kolgotki-orto-4225-plotnye-ii-klass-kompressii/</url>
+    <price>3480</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>30</categoryId>
+    <name>Колготки ОРТО 4225 Плотные II класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/orto4125.jpg</picture>
+    <description>
+     <![CDATA[<p>Колготки ОРТО 4225 Плотные II класс компрессии</p>]]>
+    </description>
+   </offer>
+   <offer id="18" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/kolgotki-orto-125-ii-klass-kompressii/</url>
+    <price>3480</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>30</categoryId>
+    <name>Колготки ORTO 125 II класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/orto125.jpg</picture>
+    <description>
+     <![CDATA[<p>Колготки ORTO 125 II класс компрессии</p>]]>
+    </description>
+   </offer>   
+  </offers>
+ </shop>
+</yml_catalog>

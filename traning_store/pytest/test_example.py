@@ -103,7 +103,7 @@ def test_count_catalog(data):
 
 
 @pytest.mark.django_db
-def test_catalog(client):
+def test_catalog(client, data):
     url = reverse('catalog:catalog')
     response = client.get(url)
     assert response.status_code, HTTPStatus.OK

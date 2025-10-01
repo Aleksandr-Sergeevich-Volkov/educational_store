@@ -1,4 +1,5 @@
-<yml_catalog date="2023-04-10 06:00+0300">
+<?xml version="1.0" encoding="UTF-8"?>
+<yml_catalog date="2022-10-01T10:37+03:00">
  <shop>
   <name>Компрессионные_чулки24</name>
   <company>ООО "Консалтинговый центр "Алгоритм"</company>
@@ -13,7 +14,7 @@
    <category id="20" parentId="1">Компрессионные гольфы</category>
   </categories>
   <offers>
-   <offer id="9" available="true">
+   <offer id="201" available="true">
     <url>https://kompressionnye-chulki24.ru/catalog/golfy-2c154-venoteks-business-dlya-muzhchin-s-hlopkom-2-klassa/</url>
     <price>3490</price>
     <currencyId>RUB</currencyId>
@@ -24,7 +25,7 @@
      <![CDATA[<p>Гольфы 2C154 VENOTEKS BUSINESS для мужчин, с хлопком 2 класса</p>]]>
     </description>
    </offer>
-   <offer id="10" available="true">
+   <offer id="202" available="true">
     <url>https://kompressionnye-chulki24.ru/catalog/golfy-orto-322-zhenskie-s-zakrytym-noskom-2-klass-kompressii-poluprozrachnye/</url>
     <price>1778</price>
     <currencyId>RUB</currencyId>
@@ -35,7 +36,7 @@
      <![CDATA[<p>Гольфы ORTO 322 женские, с закрытым носком 2 класс компрессии полупрозрачные</p>]]>
     </description>
    </offer>
-   <offer id="11" available="true">
+   <offer id="203" available="true">
     <url>https://kompressionnye-chulki24.ru/catalog/golfy-orto-4322-zhenskie-c-zakrytym-noskom-2-klass-kompressii-plotnye-s-multifibroj/</url>
     <price>1778</price>
     <currencyId>RUB</currencyId>
@@ -46,7 +47,7 @@
      <![CDATA[<p>Гольфы ORTO 4322 женские c закрытым носком, 2 класс компрессии, плотные, с мультифиброй</p>]]>
     </description>
    </offer>
-   <offer id="12" available="true">
+   <offer id="204" available="true">
     <url>https://kompressionnye-chulki24.ru/catalog/golfy-orto-323-muzhskie-s-hlopkom-s-zakrytym-noskom-2-klass-kompressii/</url>
     <price>1725</price>
     <currencyId>RUB</currencyId>
@@ -57,7 +58,7 @@
      <![CDATA[<p>Гольфы ORTO 323 мужские с хлопком, с закрытым носком, 2 класс компрессии</p>]]>
     </description>
    </offer>
-   <offer id="13" available="true">
+   <offer id="205" available="true">
     <url>https://kompressionnye-chulki24.ru/catalog/golfy-orto-315-zhenskie-s-zakrytym-noskom-1-klass-kompressii-poluprozrachnye/</url>
     <price>1725</price>
     <currencyId>RUB</currencyId>
@@ -68,7 +69,7 @@
      <![CDATA[<p>Гольфы ORTO 315 женские, с закрытым носком 1 класс компрессии полупрозрачные</p>]]>
     </description>
    </offer>
-   <offer id="14" available="true">
+   <offer id="206" available="true">
     <url>https://kompressionnye-chulki24.ru/catalog/golfy-orto-4315-zhenskie-c-zakrytym-noskom-1-klass-kompressii-plotnye-s-multifibroj/</url>
     <price>1778</price>
     <currencyId>RUB</currencyId>
@@ -79,7 +80,7 @@
      <![CDATA[<p>Гольфы ORTO 4315 женские c закрытым носком, 1 класс компрессии, плотные, с мультифиброй</p>]]>
     </description>
    </offer>
-   <offer id="15" available="true">
+   <offer id="207" available="true">
     <url>https://kompressionnye-chulki24.ru/catalog/golfy-orto-316-muzhskie-s-hlopkom-s-zakrytym-noskom-1-klass-kompressii/</url>
     <price>1725</price>
     <currencyId>RUB</currencyId>

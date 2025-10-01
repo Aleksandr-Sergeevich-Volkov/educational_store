@@ -1,4 +1,5 @@
-<yml_catalog date="2023-04-10 06:00+0300">
+<?xml version="1.0" encoding="UTF-8"?>
+<yml_catalog date="2022-10-01T10:37+03:00">
  <shop>
   <name>Компрессионные_чулки24</name>
   <company>ООО "Консалтинговый центр "Алгоритм"</company>
@@ -13,7 +14,7 @@
    <category id="30" parentId="1">Компрессионные колготки</category>
   </categories>
   <offers>
-   <offer id="16" available="true">
+   <offer id="301" available="true">
     <url>https://kompressionnye-chulki24.ru/catalog/kolgotki-svetlo-bezhevye-orto-115-zhenskie-i-klass-kompressiii/</url>
     <price>3480</price>
     <currencyId>RUB</currencyId>
@@ -24,7 +25,7 @@
      <![CDATA[<p>Колготки ORTO 115 женские I класс компрессиии</p>]]>
     </description>
    </offer>
-   <offer id="17" available="true">
+   <offer id="302" available="true">
     <url>https://kompressionnye-chulki24.ru/catalog/kolgotki-orto-4225-plotnye-ii-klass-kompressii/</url>
     <price>3480</price>
     <currencyId>RUB</currencyId>
@@ -35,7 +36,7 @@
      <![CDATA[<p>Колготки ОРТО 4225 Плотные II класс компрессии</p>]]>
     </description>
    </offer>
-   <offer id="18" available="true">
+   <offer id="303" available="true">
     <url>https://kompressionnye-chulki24.ru/catalog/kolgotki-orto-125-ii-klass-kompressii/</url>
     <price>3480</price>
     <currencyId>RUB</currencyId>

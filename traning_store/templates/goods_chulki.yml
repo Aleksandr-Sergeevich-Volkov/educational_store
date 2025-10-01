@@ -1,4 +1,5 @@
-<yml_catalog date="2023-04-10 06:00+0300">
+<?xml version="1.0" encoding="UTF-8"?>
+<yml_catalog date="2022-10-01T10:37+03:00">
  <shop>
   <name>Компрессионные_чулки24</name>
   <company>ООО "Консалтинговый центр "Алгоритм"</company>
@@ -13,7 +14,7 @@
    <category id="10" parentId="1">Компрессионные чулки</category>
   </categories>
   <offers>
-   <offer id="1" available="true">
+   <offer id="101" available="true">
     <url>https://kompressionnye-chulki24.ru/catalog/chulki-2p280-venoteks-medical-s-otkrytym-noskom-2-klass-kompressii/</url>
     <price>5999</price>
     <currencyId>RUB</currencyId>
@@ -24,7 +25,7 @@
      <![CDATA[<p>Чулки 2P280 VENOTEKS MEDICAL с открытым носком 2 класс компрессии</p>]]>
     </description>
    </offer>
-   <offer id="2" available="true">
+   <offer id="102" available="true">
     <url>https://kompressionnye-chulki24.ru/catalog/chulki-2p281-venoteks-medical-s-zakrytom-noskom-2-klass-kompressii/</url>
     <price>5999</price>
     <currencyId>RUB</currencyId>
@@ -35,7 +36,7 @@
      <![CDATA[<p>Чулки 2P281 VENOTEKS MEDICAL с закрытом носком 2 класс компрессии</p>]]>
     </description>
    </offer>
-   <offer id="3" available="true">
+   <offer id="103" available="true">
     <url>https://kompressionnye-chulki24.ru/catalog/chulki-orto-4220-2-ogo-klassa-kompressii-dlya-muzhchin</url>
     <price>3143</price>
     <currencyId>RUB</currencyId>
@@ -46,7 +47,7 @@
      <![CDATA[<p>Чулки ORTO 4220 мужские с закрытым носком, 2 класс компрессии</p>]]>
     </description>
    </offer>
-   <offer id="4" available="true">
+   <offer id="104" available="true">
     <url>https://kompressionnye-chulki24.ru/catalog/chulki-muzhskie-s-hlopkom-i-multifibroj-zakrytyj-mysok-1-klass</url>
     <price>3143</price>
     <currencyId>RUB</currencyId>
@@ -57,7 +58,7 @@
      <![CDATA[<p>Чулки ORTO 4217 мужские с закрытым носком, 1 класс компрессии</p>]]>
     </description>
    </offer>
-   <offer id="5" available="true">
+   <offer id="105" available="true">
     <url>https://kompressionnye-chulki24.ru/catalog/chulki-orto-4216-zhenskie-c-zakrytym-noskom-plotnye-s-azhurnym-verhom-1-klass-kompressii/</url>
     <price>3143</price>
     <currencyId>RUB</currencyId>
@@ -68,7 +69,7 @@
      <![CDATA[<p>Чулки ORTO 4216 женские c закрытым носком, 1 класс компрессии, плотные с ажурным верхом</p>]]>
     </description>
    </offer>
-   <offer id="6" available="true">
+   <offer id="106" available="true">
     <url>https://kompressionnye-chulki24.ru/catalog/chulki-orto-223-zhenskie-s-zakrytym-noskom-2-klass-kompressii-poluprozrachnye-s-azhurnym-verhom/</url>
     <price>3143</price>
     <currencyId>RUB</currencyId>
@@ -79,7 +80,7 @@
      <![CDATA[<p>Чулки ORTO 223 женские, с закрытым носком, 2 класс компрессии, полупрозрачные, с ажурным верхом</p>]]>
     </description>
    </offer>
-   <offer id="7" available="true">
+   <offer id="107" available="true">
     <url>https://kompressionnye-chulki24.ru/catalog/chulki-orto-216-zhenskie-s-zakrytym-noskom-1-klass-kompressii-poluprozrachnye-s-azhurnym-verhom/</url>
     <price>3143</price>
     <currencyId>RUB</currencyId>
@@ -90,7 +91,7 @@
      <![CDATA[<p>Чулки ORTO 216 женские с закрытым носком, 1 класс компрессии, полупрозрачные, с ажурным верхом</p>]]>
     </description>
    </offer>
-   <offer id="8" available="true">
+   <offer id="108" available="true">
     <url>https://kompressionnye-chulki24.ru/catalog/chulki-orto-620-gospitalnye-protivoembolicheskie-chulki-dlya-rodov/</url>
     <price>915</price>
     <currencyId>RUB</currencyId>

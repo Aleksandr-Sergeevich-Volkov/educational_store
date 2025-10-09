@@ -3,10 +3,11 @@
 {% load django_bootstrap5 %}
 {% load static %}
  {% block content %}
-   <h3>Это страница со списком товаров!Всего:{{prod_count.id__count}}</h3>
-   <form method="get">
-    {{ filter.form.as_table }}
-    <button type="submit" class="btn btn-primary">Фильтр</button>
+   <h4>Всего товаров отобрано:{{prod_count.id__count}}</h4>
+   <form method="get" class="d-flex w-100 align-items-center">
+    {% bootstrap_form filter.form %}
+   {% comment %}  {{ filter.form.as_table }} {% endcomment %}
+    <button type="submit" class="btn btn-primary ms-2" style="height: calc(3.5em + 0.25rem);">Фильтр</button>
 </form>
 <ul>
     <table>        
@@ -20,10 +21,8 @@
     <a href="{% url 'catalog:detail' product.slug %}"> <class="card-link"> <span itemprop="name">{{ product.name }}</span> </a>
          <li>Производитель:<span itemprop="brand">{{ product.brand }}</span></li>
          <span itemprop="description">Категория: компрессионный трикотаж</span>
-         {% for image in images_m %}
-         {% if  image.product_id == product.id and  image.main %}
-        <li><img src="{{image.image.url }}" height=100 itemprop="image"> </li> 
-         {% endif %} 
+         {% for image in product.main_images %}
+        <li><img src="{{image.image.url}}" height=100 itemprop="image"> </li> 
          {% endfor %}
     <div itemprop="offers" itemscope itemtype="https://schema.org/Offer"> 
     <li>Цена: {{ product.price }} ₽<meta itemprop="price" content={{ product.price }} ></li> 

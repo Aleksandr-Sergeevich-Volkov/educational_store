@@ -2,12 +2,13 @@ import random
 
 from catalog.models import Product
 from django.contrib.auth.decorators import login_required
+from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.db import models
 from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import TemplateView
 
-from .forms import CommentForm
+from .forms import CommentForm, SearchForm
 from .models import Comment, Post
 
 
@@ -24,6 +25,20 @@ class HomePage(TemplateView):
         context['product'] = Product.objects.filter(id__in=product_list[:3])
         context['catalog'] = 'catalog/'
         return context
+
+
+def search(request):
+    form = SearchForm(request.GET)
+    results = None
+    query = ''
+    if form.is_valid():
+        query = form.cleaned_data['query']
+        if query:
+            results = Product.objects.annotate(search=SearchVector(
+                'name', 'Type_product', 'brand')).filter(search=SearchQuery(query))
+    else:
+        results = Product.objects.none()
+    return render(request, 'search.html', {'form': form, 'results': results, 'query': query})
 
 
 def detail_view(request, pk):

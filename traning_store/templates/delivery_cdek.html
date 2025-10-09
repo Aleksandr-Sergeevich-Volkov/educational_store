@@ -84,8 +84,10 @@
 </body>
 </html>
     <form action="" method="get" class="order-form">
-    {{ form.as_table }}
-        <p><input type="submit" class="btn btn-primary" value="Подтвердить: Выбор пункта самовывоза"></p>
+    <div class="d-flex align-items-center w-100">    
+    {% bootstrap_form form %}
+        <input type="submit" class="btn btn-primary ms-2" style="height: calc(3.5em + 0.55rem);" value="Подтвердить: Выбор пункта самовывоза">
         {% csrf_token %}
+     </div>    
     </form>
 {% endblock %}

@@ -4,7 +4,7 @@
 {% load static %}
  {% block content %}
    <h3>Это страница со списком товаров!Всего:{{prod_count.id__count}}</h3>
-   <form method="get">
+   <form method="get" class="filter-form">
     {{ filter.form.as_table }}
     <button type="submit" class="btn btn-primary">Фильтр</button>
 </form>

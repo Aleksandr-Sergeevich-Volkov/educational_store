@@ -1,6 +1,7 @@
 from cart.forms import CartAddProductForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.db import models
 from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView
@@ -25,10 +26,17 @@ class ProductListView(FilterView):
     filterset_class = ProductFilter
     slug_url_kwarg = 'slug'
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.prefetch_related(models.Prefetch(
+            'images',
+            queryset=Gallery.objects.filter(main=True),
+            to_attr='main_images'))
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['images_m'] = Gallery.objects.all()
-        context['prod_count'] = Product.objects.aggregate(Count('id'))
+        filtered_qs = self.filterset.qs
+        context['prod_count'] = filtered_qs.aggregate(Count('id'))
         return context
 
 

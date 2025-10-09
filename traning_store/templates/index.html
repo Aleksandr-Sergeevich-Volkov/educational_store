@@ -2,10 +2,11 @@
 {% load django_bootstrap5 %}
 {% block content %}
 <p>
- <h2 class="card-header font-family:sans-serif"> Проект kompressionnye-chulki24.ru</h2>
+ <h2 class="card-header font-family:sans-serif"> Магазин kompressionnye-chulki24.ru</h2>
 </p>
- <div class="btn-group">
-    <a href="{{catalog }}" class="btn btn-primary">Каталог всех товаров</a>      
+ <div class="btn-group d-grid gap-2 d-md-flex justify-content-md-end">
+    <a href="{{catalog }}" class="btn btn-primary w-200">Каталог всех товаров</a>
+     <a href="search/" class="btn btn-primary w-200" >Поиск товаров</a>            
    </div>        
 <div class="row">
   <div class="col-4">

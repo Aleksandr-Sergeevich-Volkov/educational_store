@@ -62,9 +62,11 @@
     //document.getElementById('id_address').value = console.log(data.detail.address.full_address);
     </script>       
     </head>
-        {{ form.as_table }}
-        <p><input type="submit" class="btn btn-primary" value="Подтвердить:Выбор пункта самовывоза"></p>
+    <div class="d-flex align-items-center w-100">
+        {% bootstrap_form form %}
+        <input type="submit" class="btn btn-primary ms-2" style="height: calc(3.5em + 0.55rem);" value="Подтвердить:Выбор пункта самовывоза">
         {% csrf_token %}
+        </div>
     </form>
     <b><i>Cтоимость: {{cost}}</b></i>
 {% endblock %}

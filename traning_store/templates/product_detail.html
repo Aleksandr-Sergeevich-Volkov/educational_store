@@ -21,10 +21,12 @@
   </div>    
     <li>Артикул:{{product.articul }} </li>
     <li>Код товара:{{ product.code}} </li>  
-<form action="{% url "cart:cart_add" product.id %}" method="post">
-    {{ cart_product_form }}
+<form action="{% url "cart:cart_add" product.id %}" class="d-flex w-100 " method="post">
+  <div class="d-flex align-items-center w-100">
+    {% bootstrap_form cart_product_form %}
     {% csrf_token %}
-    <input type="submit" class="btn btn-primary" value="Добавить в корзину">
+    <input type="submit" class="btn btn-primary ms-2" style="height: calc(3.5em + 0.25rem);"value="Добавить в корзину">
+     </div>
 </form>   
 </div>
 </div>

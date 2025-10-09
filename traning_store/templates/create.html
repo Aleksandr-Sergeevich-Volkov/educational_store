@@ -26,12 +26,9 @@
         <p>Итого: ₽{{ cart.get_total_price_after_discount|floatformat:"2" }}</p> 
          {% endif %}    
     </div>
-    <form action="." method="post" class="order-form">
-        <head>
-      
-    </head>
-        {{ form.as_table }}
-        <p><input type="submit" class="btn btn-primary" value="Подтвердить заказ"></p>
+    <form action="." method="post" class="d-flex w-100 align-items-center">
+        {% bootstrap_form form %}
+        <input type="submit" class="btn btn-primary ms-2 flex-shrink-0" style="height: calc(3.5em + 0.25rem);" value="Подтвердить заказ">
         {% csrf_token %}
     </form>
 {% endblock %}

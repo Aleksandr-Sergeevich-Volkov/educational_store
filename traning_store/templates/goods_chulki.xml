@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta http-equiv="Content-Type" content="application/xml; charset=UTF-8">
-</head>
 <yml_catalog date="2025-10-01T10:37+03:00">
  <shop>
   <name>Компрессионные_чулки24</name>
@@ -110,4 +105,3 @@
   </offers>
  </shop>
 </yml_catalog>
-</html>

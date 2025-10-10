@@ -21,7 +21,7 @@ User = get_user_model()
 class ProductListView(FilterView):
     model = Product
     ordering = 'id'
-    paginate_by = 5
+    paginate_by = 6
     template_name = 'product_list.html'
     filterset_class = ProductFilter
     slug_url_kwarg = 'slug'

@@ -1,6 +1,6 @@
 import random
 
-from catalog.models import Product
+from catalog.models import Product, Gallery
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.db import models
@@ -35,7 +35,12 @@ def search(request):
         query = form.cleaned_data['query']
         if query:
             results = Product.objects.annotate(search=SearchVector(
-                'name', 'Type_product', 'brand')).filter(search=SearchQuery(query))
+                'name', 'Type_product', 'brand')).filter(
+                search=SearchQuery(query)).prefetch_related(
+                models.Prefetch(
+                    'images',
+                    queryset=Gallery.objects.filter(main=True),
+                    to_attr='main_images'))
     else:
         results = Product.objects.none()
     return render(request, 'search.html', {'form': form, 'results': results, 'query': query})

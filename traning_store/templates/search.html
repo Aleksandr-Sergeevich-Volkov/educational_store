@@ -3,12 +3,6 @@
 {% load django_bootstrap5 %}
 {% load static %}
  {% block content %}
-{% comment %} <form method="get"  class="d-flex w-100 " action="">
-    <div class="d-flex align-items-center w-100">
-    {% bootstrap_form form %}
-    <button type="submit" class="btn btn-primary ms-2 h-100">Искать</button>
-    </div>
-</form> {% endcomment %}
 <form method="get" class="d-flex w-100 align-items-center" action="">
   {% bootstrap_form form %}
   <button type="submit" class="btn btn-primary ms-2" style="height: calc(2.5em + 0.75rem);">Искать</button>
@@ -17,8 +11,20 @@
 <h5>Вот что нашлось:</h5>
 <ul class="list-group">
     {% for item in results %}
-        <li class="list-group-item"><a href="{% url 'catalog:detail' item.slug %}" class="card-link">{{ item.name }} - {{ item.brand }} - {{item.price}}₽</a></li>
+    {% for image in item.main_images %}
+        {% comment %} <li class="list-group-item"><img src="{{image.image.url}}" height=100 itemprop="image"><a href="{% url 'catalog:detail' item.slug %}" class="card-link">{{ item.name }} - {{ item.brand }} - {{item.price}}₽</a></li> {% endcomment %}
+        <li class="list-group-item d-flex align-items-start">
+    <img src="{{image.image.url}}" height=100 itemprop="image" class="me-3">
+    <a href="{% url 'catalog:detail' item.slug %}" class="card-link align-self-start">
+        {{ item.name }} - {{ item.brand }} - {{item.price}}₽
+    </a>
+</li>
+        {% endfor %}
     {% endfor %}
+       {% for image in results_images.main_images %}
+       {{results_images.main_images}}
+        <li><img src="{{image.image.url}}" height=100 itemprop="image"> </li> 
+         {% endfor %}
     </ul>
         {% else %}
         <li>Нет результатов</li>    

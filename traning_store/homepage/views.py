@@ -1,6 +1,6 @@
 import random
 
-from catalog.models import Product, Gallery
+from catalog.models import Gallery, Product
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.db import models

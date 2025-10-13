@@ -1,5 +1,8 @@
 {% if user.is_authenticated %}
   {% load django_bootstrap5 %}
+   <head>
+ <title>Комментарии о статье об компрессионном трикотаже</title>
+ </head>
   <h5 class="mb-4">Оставить комментарий</h5>
   <form method="post" action="{% url 'homepage:add_comment' object.pk %}">
     {% csrf_token %}

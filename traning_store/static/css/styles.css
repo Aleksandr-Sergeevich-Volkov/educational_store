@@ -1,0 +1,114 @@
+/* Базовые стили */
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.min-vh-100 {
+    min-height: 100vh;
+}
+
+/* ЯРКИЕ ЦВЕТА как в оригинале */
+.header-bg {
+    background-color: #ADFF2F !important; /* Ярко-зеленый */
+    border-bottom: 3px solid #00FFFF;
+}
+
+.main-bg {
+    background-color: #E6E6FA !important; /* Лавандовый */
+    min-height: calc(100vh - 120px);
+}
+
+.footer-bg {
+    background-color: #00FFFF !important; /* Голубой */
+    border-top: 3px solid #ADFF2F;
+}
+
+/* Кнопки с яркими цветами */
+.cart-btn {
+    background: linear-gradient(45deg, #28a745, #20c997) !important;
+    color: white !important;
+    border: 2px solid #1e7e34 !important;
+    font-weight: bold;
+}
+
+.user-btn {
+    background: linear-gradient(45deg, #007bff, #0056b3) !important;
+    color: white !important;
+    border: 2px solid #0056b3 !important;
+    font-weight: bold;
+}
+
+.login-btn {
+    background: linear-gradient(45deg, #00FFFF, #00cccc) !important;
+    color: #333 !important;
+    border: 2px solid #00cccc !important;
+    font-weight: bold;
+}
+
+.register-btn {
+    background: linear-gradient(45deg, #ADFF2F, #99cc00) !important;
+    color: #333 !important;
+    border: 2px solid #99cc00 !important;
+    font-weight: bold;
+}
+
+.cart-empty {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* Валюта и погода */
+.currency-weather {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 2px solid #00FFFF;
+    font-weight: bold;
+}
+
+/* Навигация */
+.navbar-brand {
+    font-size: 1.4rem;
+    text-decoration: none;
+    background: linear-gradient(45deg, #00FFFF, #007bff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    padding: 5px 10px;
+    border-radius: 8px;
+}
+
+/* Контент на всю ширину */
+.container-fluid {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .header-bg .container-fluid {
+        padding: 0 15px;
+    }
+    
+    .row.align-items-center {
+        text-align: center;
+    }
+    
+    .col-md-6 {
+        margin-bottom: 10px;
+    }
+    
+    .d-flex.justify-content-end {
+        justify-content: center !important;
+    }
+    
+    .currency-weather {
+        font-size: 0.9rem;
+        padding: 6px 8px;
+    }
+    
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+}

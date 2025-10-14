@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=104157420', 'ym');
+
+    ym(104157420, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/104157420" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+    <style>
+    h2,select {background-color: #00FFFF;
+      background-size: cover;
+      display: inline-block; 
+      font-size: 18px; 
+      font-family:sans-serif;}
+    .container-fluid {background-color: #E6E6FA; 
+      background-size: cover;
+      display: inline-block; 
+      font-size: 18px; 
+      font-family:sans-serif;}  
+    .col-9 {background-color: #ADFF2F;
+        background-size:cover;
+        display: inline-block; 
+        font-size: 18px; 
+        font-family:sans-serif;}   
+    .col-4 {background-color:  #00FFFF;      
+        background-size:cover;
+        display: inline-block; 
+        font-size: 18px; 
+        font-family:sans-serif;}
+     nav {background-color:  #ADFF2F;
+        background-size:cover;
+        display: inline-block; 
+        font-size: 12px; 
+        font-family:sans-serif;}        
+    </style> 
+    <meta charset="UTF-8" name="descripton" content="Интернет-магазин компрессионного трикотажа"/>
+    <meta name="author" content="Александр Волков">
+    <meta name="copyright" content="2025, Algorithm Inc.">
+    <title>Компрессионный трикотаж</title>
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image">
+    {% load django_bootstrap5 %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" 
+    rel="stylesheet"
+    integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" 
+    crossorigin="anonymous">
+      {% bootstrap_css %}
+  </head>
+  <body> 
+    <header>
+    <nav>
+      <div class="row">
+    <div class="cart">
+      {% with total_items=cart|length %}
+          {% if cart|length > 0 %}
+              Ваша корзина:
+              <a href="{% url "cart:cart_detail" %}">
+                  {{ total_items }} шт. {{ total_items|pluralize }},
+                  ₽{{ cart.get_total_price_after_discount }}
+                  Доставка:{{cart.delivery}}
+              </a>
+          {% else %}
+              Ваша корзина пуста.
+          {% endif %}
+      {% endwith %}
+  </div>
+  <div class="user_context_processor">
+    Пользователь {{username}}
+    </div>
+    <div class="btn-group">
+      <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
+                  href="{% url 'homepage:homepage' %}">Главная страница</a></button> 
+  {% if user.is_authenticated %}
+            <div class="btn-group" role="group" aria-label="Basic outlined example">
+              <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
+                  href="{% url 'catalog:profile' user.username %}">Заказы покупателя {{ user.username }}</a></button>
+              <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
+                  href="{% url 'logout' %}">Выйти</a></button>
+            </div>
+          {% else %}
+            <div class="btn-group" role="group" aria-label="Basic outlined example">
+              <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
+                  href="{% url 'login' %}">Войти</a></button>
+              <button type="button" class="btn btn-outline-primary"><a class="text-decoration-none text-reset"
+                  href="{% url 'registration' %}">Регистрация</a></button>                  
+            </div>
+          {% endif %}
+  <div class="currency">        
+  <div class="btn-group" role="group" aria-label="Basic outlined example">  
+    <type="text" class="btn btn-outline-primary disabled"> 
+          <b><i>Курсы валют: {{EUR}} {{USD}} {{TRY}}</b></i>    
+           </div>  
+           </div>
+  <div class="weather">        
+  <div class="btn-group" role="group" aria-label="Basic outlined example">  
+    <type="text" class="btn btn-outline-primary disabled"> 
+          <b><i>☼ {{city_temp}}</b></i>    
+           </div>  
+           </div>         
+            </div>
+            </nav>
+      </header>
+    <div class="container-fluid pt-3">
+      {% block content %}{% endblock %}
+    </div>
+    <script type="application/ld+json">
+{
+	"@context": "http://schema.org",
+	"@type": "BreadcrumbList",
+	"itemListElement":
+	[
+		{"@type": "ListItem",
+		"position": 1,
+		"item":
+			{"@id": "https://kompressionnye-chulki24.ru/",
+			"name": "Интернет-магазин компрессионного трикотажа"}
+		},
+		{"@type": "ListItem",
+		"position": 2,
+		"item":
+			{"@id": "https://kompressionnye-chulki24.ru/catalog/",
+			"name": "Каталог компрессионного трикотажа"}
+		}
+	]
+}
+</script>
+  </body>
+   <footer>
+    <p>
+   <h7 class="card-header font-family:sans-serif"> <span style="color:green"> Algorithm Corporation: Skill and hard work will grind everything out</h7>
+  </p>
+    </footer>
+</html>

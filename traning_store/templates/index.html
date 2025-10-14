@@ -8,7 +8,7 @@
  <h2 class="card-header font-family:sans-serif"> Магазин kompressionnye-chulki24.ru</h2>
 </p>
  <div class="btn-group d-grid gap-2 d-md-flex justify-content-md-end">
-    <a href="{{catalog }}" class="btn btn-primary w-200">Каталог всех товаров</a>
+    <a href="catalog/" class="btn btn-primary w-200">Каталог всех товаров</a>
      <a href="search/" class="btn btn-primary w-200" >Поиск товаров</a>            
    </div>        
 <div class="row">
@@ -24,8 +24,6 @@
    {% endfor %} 
    </div>
    <div class="col-4">
-      <!-- Добавим колонку "col-9" и выведем значение переменной total_count.
-           С помощью стиля Bootstrap отобразим его очень крупным шрифтом  -->
 {% for post in text%} 
 <p style="font-size: 22px; font-family:Times New Roman">{{ post.title }}</p>          
 <p class="card-text">{{ post.text|truncatewords:25 }}</p>

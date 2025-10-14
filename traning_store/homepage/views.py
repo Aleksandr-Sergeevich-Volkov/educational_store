@@ -23,7 +23,7 @@ class HomePage(TemplateView):
         random_list = random.shuffle(product_list)
         context['random_list'] = random_list
         context['product'] = Product.objects.filter(id__in=product_list[:3])
-        context['catalog'] = 'catalog/'
+        # context['catalog'] = 'catalog/'
         return context
 
 

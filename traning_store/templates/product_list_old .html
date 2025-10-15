@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load catalog_tags %}
+{% load django_bootstrap5 %}
+{% load static %}
+ <head>
+ <title>Список компрессионного трикотажа</title>
+ </head>
+ {% block content %}
+   <h4>Всего товаров отобрано:{{prod_count.id__count}}</h4>
+   <form method="get" class="d-flex w-100 align-items-center">
+    {% bootstrap_form filter.form %}
+   {% comment %}  {{ filter.form.as_table }} {% endcomment %}
+    <button type="submit" class="btn btn-primary ms-2" style="height: calc(3.5em + 0.25rem);">Фильтр</button>
+</form>
+<ul>
+    <table>        
+    {% get_product filter="ОРТО" as products%}
+    {% for product in page_obj.object_list %}
+    {% if forloop.counter0|divisibleby:"2" %}
+                <tr width=250>
+            {% endif %}
+     <td>
+        <div itemscope itemtype="https://schema.org/Product">        
+    <a href="{% url 'catalog:detail' product.slug %}"> <class="card-link"> <span itemprop="name">{{ product.name }}</span> </a>
+         <li>Производитель:<span itemprop="brand">{{ product.brand }}</span></li>
+         <span itemprop="description">Категория: компрессионный трикотаж</span>
+         {% for image in product.main_images %}
+        <li><img src="{{image.image.url}}" height=100 itemprop="image"> </li> 
+         {% endfor %}
+    <div itemprop="offers" itemscope itemtype="https://schema.org/Offer"> 
+    <li>Цена: {{ product.price }} ₽<meta itemprop="price" content={{ product.price }} ></li> 
+    <meta itemprop="priceCurrency" content="RUB"> 
+    <link itemprop="availability" href="http://schema.org/InStock">
+  </div>     
+    {% empty %}
+        <li>Товары не найдены.</li>
+        </td> 
+        {% if forloop.counter|divisibleby:"2" %}
+           </tr>
+        {% endif %}           
+   {% endfor %} 
+   </ul>
+   </div>
+   </table>
+  {% include "includes/paginator.html" %}     
+{% endblock %}

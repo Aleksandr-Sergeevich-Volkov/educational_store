@@ -13,8 +13,8 @@
 
 <!-- Кнопки -->
 <div class="btn-group d-grid gap-2 d-md-flex justify-content-md-end mb-4 flex-column flex-md-row">
-    <a href="{% url 'catalog:product_list' %}" class="btn btn-primary mb-2 mb-md-0">Каталог всех товаров</a>
-    <a href="{% url 'search:search' %}" class="btn btn-primary">Поиск товаров</a>            
+    <a href="catalog/" class="btn btn-primary mb-2 mb-md-0">Каталог всех товаров</a>
+    <a href="search/" class="btn btn-primary">Поиск товаров</a>            
 </div>    
 <div class="row mb-4">
     <div class="col-12 col-md-4 text-center text-md-start">
@@ -39,8 +39,8 @@
         <div class="mb-3">
             <p class="h5 mb-1">{{ post.title }}</p>          
             <p class="card-text mb-1">{{ post.text|truncatewords:25 }}</p>
-            <a href="{% url 'blog:post_detail' post.id %}" class="card-link">Читать полный текст</a>    
-            <a href="{% url 'blog:post_detail' post.id %}" class="card-link">Комментарии: ({{ post.comment_count }})</a>
+            <a href="{{post.id}}" class="card-link">Читать полный текст</a>    
+            <a href="{{post.id}}" class="card-link">Комментарии: ({{ post.comment_count }})</a>
         </div>
         {% endfor %}        
     </div>

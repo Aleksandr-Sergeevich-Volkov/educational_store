@@ -83,64 +83,23 @@
                                 {% csrf_token %}
                                 
                                 <div class="row g-3">
-                                    <!-- Поля формы -->
-                                    <div class="col-12">
-                                        <label for="{{ form.first_name.id_for_label }}" class="form-label">Имя *</label>
-                                        {{ form.first_name }}
-                                        {% if form.first_name.errors %}
-                                        <div class="text-danger small">{{ form.first_name.errors }}</div>
-                                        {% endif %}
-                                    </div>
+                                    {% bootstrap_field form.first_name %}
+                                    {% bootstrap_field form.last_name %}
+                                    {% bootstrap_field form.email %}
+                                    {% bootstrap_field form.phone %}
+                                    {% bootstrap_field form.address %}
+                                    {% bootstrap_field form.postal_code %}
+                                    {% bootstrap_field form.city %}
                                     
-                                    <div class="col-12">
-                                        <label for="{{ form.last_name.id_for_label }}" class="form-label">Фамилия *</label>
-                                        {{ form.last_name }}
-                                        {% if form.last_name.errors %}
-                                        <div class="text-danger small">{{ form.last_name.errors }}</div>
-                                        {% endif %}
-                                    </div>
+                                    {% if form.delivery_method %}
+                                    {% bootstrap_field form.delivery_method %}
+                                    {% endif %}
                                     
-                                    <div class="col-12">
-                                        <label for="{{ form.email.id_for_label }}" class="form-label">Email *</label>
-                                        {{ form.email }}
-                                        {% if form.email.errors %}
-                                        <div class="text-danger small">{{ form.email.errors }}</div>
-                                        {% endif %}
-                                    </div>
+                                    {% if form.payment_method %}
+                                    {% bootstrap_field form.payment_method %}
+                                    {% endif %}
                                     
-                                    <div class="col-12">
-                                        <label for="{{ form.address.id_for_label }}" class="form-label">Адрес доставки *</label>
-                                        {{ form.address }}
-                                        {% if form.address.errors %}
-                                        <div class="text-danger small">{{ form.address.errors }}</div>
-                                        {% endif %}
-                                        <div class="form-text">Улица, дом, квартира</div>
-                                    </div>
-                                    
-                                    <div class="col-12">
-                                        <label for="{{ form.address_pvz.id_for_label }}" class="form-label">Адрес ПВЗ (если доставка в пункт выдачи)</label>
-                                        {{ form.address_pvz }}
-                                        {% if form.address_pvz.errors %}
-                                        <div class="text-danger small">{{ form.address_pvz.errors }}</div>
-                                        {% endif %}
-                                        <div class="form-text">Необязательно, если доставка на дом</div>
-                                    </div>
-                                    
-                                    <div class="col-12 col-md-6">
-                                        <label for="{{ form.postal_code.id_for_label }}" class="form-label">Почтовый индекс *</label>
-                                        {{ form.postal_code }}
-                                        {% if form.postal_code.errors %}
-                                        <div class="text-danger small">{{ form.postal_code.errors }}</div>
-                                        {% endif %}
-                                    </div>
-                                    
-                                    <div class="col-12 col-md-6">
-                                        <label for="{{ form.city.id_for_label }}" class="form-label">Город *</label>
-                                        {{ form.city }}
-                                        {% if form.city.errors %}
-                                        <div class="text-danger small">{{ form.city.errors }}</div>
-                                        {% endif %}
-                                    </div>
+                                    {% bootstrap_field form.notes %}
                                 </div>
 
                                 <div class="mt-4">
@@ -184,25 +143,6 @@
     background-color: #f8f9fa;
     border-radius: 0.375rem;
     padding: 1rem;
-}
-
-/* Стили для полей формы */
-.order-form input,
-.order-form select,
-.order-form textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #ced4da;
-    border-radius: 0.375rem;
-    font-size: 1rem;
-}
-
-.order-form input:focus,
-.order-form select:focus,
-.order-form textarea:focus {
-    border-color: #86b7fe;
-    outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
 @media (max-width: 768px) {

@@ -1,51 +1,70 @@
 {% extends "base.html" %}
+{% load static %}
 {% load django_bootstrap5 %}
- <head>
- <title>Главная страница магазина компрессионного трикотажа</title>
- </head>
+
+<head>
+    <title>Главная страница магазина компрессионного трикотажа</title>
+</head>
+
 {% block content %}
-<p>
- <h2 class="card-header font-family:sans-serif"> Магазин kompressionnye-chulki24.ru</h2>
-</p>
- <div class="btn-group d-grid gap-2 d-md-flex justify-content-md-end">
-    <a href="catalog/" class="btn btn-primary w-200">Каталог всех товаров</a>
-     <a href="search/" class="btn btn-primary w-200" >Поиск товаров</a>            
-   </div>        
-<div class="row">
-  <div class="col-4">
-  <img src="static/logo.jpeg" width="450">
-   <b><i>Всего товаров в нашем магазине: {{prod_count.id__count}}</b></i>
-   </div>
-   <div class="col-4">
-    <b><i>Самое популярное:</b></i>
-    {% for prod in product%} 
-    </p>
-   <a href="{% url 'catalog:detail' prod.slug %}" class="card-link">{{prod.name}}</a>
-   {% endfor %} 
-   </div>
-   <div class="col-4">
-{% for post in text%} 
-<p style="font-size: 22px; font-family:Times New Roman">{{ post.title }}</p>          
-<p class="card-text">{{ post.text|truncatewords:25 }}</p>
-<a href="{{post.id}}" class="card-link">Читать полный текст</a>    
-<a href="{{post.id}}" class="card-link"> Комментарии: ({{ post.comment_count }})</a>
-{% endfor %}        
-  </div>
-  <div class="btn-group">
-  <a href="static/oferta.pdf" class="btn btn-primary">Оферта</a> 
-  </div>
-      <div class="col-8">     
-      <ul style="display: inline-block; font-size: 12px; font-family:sans-serif;">        
-        <li>Контакты:</li>
-        <li>ООО "Консалтинговый Центр "Алгоритм"</li>
-        <li>Реквизиты:р/с 40702810200010000418 в АКБ "АБСОЛЮТ БАНК" (ПАО) к/с 30101810500000000976 бик 044525976</li>
-        <li>Адрес:141402, Московская область, город Химки, Союзная ул., д. 3, офис 15 </li>
-        <li>Телефон/Telegram/WhatsApp:8-906-717-48-77</li>
-        <li>e-mail:volkov_aleksandr_sergeevich@mail.ru</li>
-      </ul>
-      </div>
-      <div class="col-3"> 
-         <a title="Telegram" href="https://telegram.me/volkovaleksandrsergeevich" target="_blank"><img src='static/telegram_icon.jpg' width="75" alt='Написать в Telegram'/></a>
+<div class="mb-3">
+    <h2 class="card-header font-family:sans-serif">Магазин kompressionnye-chulki24.ru</h2>
+</div>
+
+<!-- Кнопки -->
+<div class="btn-group d-grid gap-2 d-md-flex justify-content-md-end mb-4 flex-column flex-md-row">
+    <a href="{% url 'catalog:product_list' %}" class="btn btn-primary mb-2 mb-md-0">Каталог всех товаров</a>
+    <a href="{% url 'search:search' %}" class="btn btn-primary">Поиск товаров</a>            
+</div>    
+<div class="row mb-4">
+    <div class="col-12 col-md-4 text-center text-md-start">
+        <img src="{% static 'logo.jpeg' %}" 
+             alt="Логотип магазина" 
+             class="mb-3 img-fluid"
+             style="max-width: 100%; height: auto;">
+        <div class="mt-2">
+            <b><i>Всего товаров в нашем магазине: {{prod_count.id__count}}</b></i>
         </div>
-  </div>
+    </div>
+    <div class="col-12 col-md-4 mt-3 mt-md-0">
+        <b><i>Самое популярное:</b></i>
+        {% for prod in product %} 
+        <p class="mb-2">
+            <a href="{% url 'catalog:detail' prod.slug %}" class="card-link">{{prod.name}}</a>
+        </p>
+        {% endfor %} 
+    </div>
+    <div class="col-12 col-md-4 mt-3 mt-md-0">
+        {% for post in text %} 
+        <div class="mb-3">
+            <p class="h5 mb-1">{{ post.title }}</p>          
+            <p class="card-text mb-1">{{ post.text|truncatewords:25 }}</p>
+            <a href="{% url 'blog:post_detail' post.id %}" class="card-link">Читать полный текст</a>    
+            <a href="{% url 'blog:post_detail' post.id %}" class="card-link">Комментарии: ({{ post.comment_count }})</a>
+        </div>
+        {% endfor %}        
+    </div>
+</div>
+
+<div class="btn-group mt-3 mb-4">
+    <a href="{% static 'oferta.pdf' %}" class="btn btn-primary">Оферта</a> 
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 col-md-8 mb-3 mb-md-0">     
+        <div class="text-center text-md-start" style="font-size: 12px; font-family:sans-serif;">
+            <strong>Контакты:</strong><br>
+            ООО "Консалтинговый Центр "Алгоритм"<br>
+            Реквизиты: р/с 40702810200010000418 в АКБ "АБСОЛЮТ БАНК" (ПАО) к/с 30101810500000000976 бик 044525976<br>
+            Адрес: 141402, Московская область, город Химки, Союзная ул., д. 3, офис 15<br>
+            Телефон/Telegram/WhatsApp: 8-906-717-48-77<br>
+            e-mail: volkov_aleksandr_sergeevich@mail.ru
+        </div>
+    </div>
+    <div class="col-12 col-md-3 text-center"> 
+        <a title="Telegram" href="https://telegram.me/volkovaleksandrsergeevich" target="_blank">
+            <img src="{% static 'telegram_icon.jpg' %}" class="img-fluid" style="max-width: 75px;" alt='Написать в Telegram'>
+        </a>
+    </div>
+</div>
 {% endblock %}

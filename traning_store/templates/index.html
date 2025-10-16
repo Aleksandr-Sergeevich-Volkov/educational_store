@@ -36,12 +36,204 @@
     </div>
     <div class="col-12 col-md-4 mt-3 mt-md-0">
         {% for post in text %} 
-        <div class="mb-3">
-            <p class="h5 mb-1">{{ post.title }}</p>          
-            <p class="card-text mb-1">{{ post.text|truncatewords:25 }}</p>
-            <a href="{{post.id}}" class="card-link">Читать полный текст</a>    
-            <a href="{{post.id}}" class="card-link">Комментарии: ({{ post.comment_count }})</a>
+   <div class="mb-3">
+    <p class="h5 mb-2">{{ post.title }}</p>          
+    
+    <div class="post-content">
+        <p class="card-text mb-2" id="text-{{ post.id }}">
+            {{ post.text|truncatewords:25 }}
+        </p>
+    </div>
+    
+    <div class="d-flex gap-2 flex-wrap">
+        <button class="btn btn-outline-primary btn-sm" 
+                onclick="toggleFullText({{ post.id }}, '{{ post.text|escapejs }}')">
+            📖 Читать полный текст
+        </button>
+        
+        <button class="btn btn-outline-secondary btn-sm comments-btn" 
+                data-post-id="{{ post.id }}"
+                data-comment-count="{{ post.comment_count }}"
+                onclick="toggleComments({{ post.id }})">
+            💬 Комментарии ({{ post.comment_count }})
+        </button>
+    </div>
+    
+    <!-- Блок комментариев (изначально скрыт) -->
+    <div id="comments-{{ post.id }}" class="comments-section mt-3" style="display: none;">
+        <div class="card">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                <h6 class="card-title mb-0">💬 Комментарии ({{ post.comment_count }})</h6>
+                <button class="btn btn-close btn-sm" onclick="toggleComments({{ post.id }})"></button>
+            </div>
+            <div class="card-body">
+                {% if post.comments.all %}
+                    {% for comment in post.comments.all %}
+                    <div class="comment mb-3 pb-3 border-bottom">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <strong class="text-primary">{{ comment.author.username }}</strong>
+                                <small class="text-muted ms-2">{{ comment.created_at|date:"d.m.Y H:i" }}</small>
+                                {% if comment.updated_at != comment.created_at %}
+                                <small class="text-muted ms-2">(изменено)</small>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Кнопки управления для автора комментария -->
+                            {% if user == comment.author %}
+                            <div class="btn-group btn-group-sm">
+                                <a href="{% url 'homepage:edit_comment' post.id comment.id %}" 
+                                   class="btn btn-outline-warning btn-sm"
+                                   title="Редактировать комментарий">
+                                    ✏️
+                                </a>
+                                <a href="{% url 'homepage:delete_comment' post.id comment.id %}" 
+                                   class="btn btn-outline-danger btn-sm"
+                                   title="Удалить комментарий"
+                                   onclick="return confirm('Вы уверены, что хотите удалить этот комментарий?');">
+                                    🗑️
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Текст комментария -->
+                        <p class="mb-0 comment-text">
+                            {{ comment.text }}
+                        </p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted mb-0">Пока нет комментариев. Будьте первым!</p>
+                {% endif %}
+                
+                <!-- Форма добавления комментария -->
+                {% if user.is_authenticated %}
+                <div class="add-comment mt-3 pt-3 border-top">
+                    <form method="post" action="{% url 'homepage:add_comment' post.id %}" class="comment-form">
+                        {% csrf_token %}
+                        <div class="mb-2">
+                            <textarea name="text" class="form-control form-control-sm" 
+                                      rows="2" placeholder="Напишите комментарий..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm">💬 Добавить комментарий</button>
+                    </form>
+                </div>
+                {% else %}
+                <div class="mt-3 pt-3 border-top">
+                    <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-outline-primary btn-sm">
+                        🔑 Войдите, чтобы комментировать
+                    </a>
+                </div>
+                {% endif %}
+            </div>
         </div>
+    </div>
+</div>
+
+<script>
+// Функция для раскрытия/скрытия текста поста
+function toggleFullText(postId, fullText) {
+    const textElement = document.getElementById(`text-${postId}`);
+    const button = event.target;
+    
+    if (button.textContent.includes('Читать')) {
+        textElement.textContent = fullText;
+        button.textContent = '📖 Свернуть текст';
+        button.classList.add('active');
+    } else {
+        const words = fullText.split(' ');
+        const shortText = words.length > 25 ? words.slice(0, 25).join(' ') + '...' : fullText;
+        textElement.textContent = shortText;
+        button.textContent = '📖 Читать полный текст';
+        button.classList.remove('active');
+    }
+}
+
+// Функция для раскрытия/скрытия комментариев
+function toggleComments(postId) {
+    const commentsSection = document.getElementById(`comments-${postId}`);
+    const button = document.querySelector(`[data-post-id="${postId}"]`);
+    const commentCount = button.getAttribute('data-comment-count');
+    
+    if (commentsSection.style.display === 'none') {
+        commentsSection.style.display = 'block';
+        button.textContent = '💬 Скрыть комментарии';
+        button.classList.add('active');
+        
+        commentsSection.style.opacity = '0';
+        commentsSection.style.transition = 'opacity 0.3s ease';
+        setTimeout(() => {
+            commentsSection.style.opacity = '1';
+        }, 10);
+    } else {
+        commentsSection.style.opacity = '0';
+        setTimeout(() => {
+            commentsSection.style.display = 'none';
+            button.textContent = `💬 Комментарии (${commentCount})`;
+            button.classList.remove('active');
+        }, 300);
+    }
+}
+
+// Обработка формы комментария (простая отправка)
+document.addEventListener('DOMContentLoaded', function() {
+    const commentForms = document.querySelectorAll('.comment-form');
+    commentForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            // Форма отправится обычным way, перезагрузит страницу
+            // Можно оставить так или добавить небольшую анимацию
+            const button = this.querySelector('button[type="submit"]');
+            button.innerHTML = '⏳ Отправка...';
+            button.disabled = true;
+        });
+    });
+});
+</script>
+
+<style>
+.comments-section {
+    transition: all 0.3s ease;
+}
+
+.btn.active {
+    background-color: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+}
+
+.comment:last-child {
+    border-bottom: none !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.add-comment {
+    background-color: #f8f9fa;
+    border-radius: 0.375rem;
+    padding: 1rem;
+}
+
+.comment-form textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.d-flex.gap-2 {
+    gap: 0.5rem;
+}
+
+.card {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border: 1px solid #e9ecef;
+}
+
+.btn-group-sm .btn {
+    padding: 0.125rem 0.25rem;
+    font-size: 0.75rem;
+    text-decoration: none;
+}
+</style>
         {% endfor %}        
     </div>
 </div>

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block title %}Доставка Яндекс{% endblock %}
+
+{% block content %}
+    <form action="" method="get" class="order-form">
+        <head>
+            <script async src="https://ndd-widget.landpro.site/widget.js"></script>
+    
+    <div id="delivery-widget"></div>
+    
+    <!-- Код виджета -->
+    <script>
+    (function(w) {
+        function startWidget() {
+            w.YaDelivery.createWidget({
+                containerId: 'delivery-widget',         // Идентификатор HTML-элемента (контейнера), в котором будет отображаться виджет
+                params: {
+                    city: "Химки",                     // Город, отображаемый на карте при запуске
+                    size:{                              // Размеры виджета
+                        "height": "450px",              // Высота
+                        "width": "100%"                 // Ширина
+                    },
+                    source_platform_station: "01978d0f333b73d680d32e7d696090e3",  // Станция отгрузки
+                    physical_dims_weight_gross: 10000,                    // Вес отправления
+                    delivery_price: (price) => price + " руб",            // Стоимость доставки
+                    delivery_term: 3,                                     // Срок доставки                    
+                    show_select_button: true,           // Отображение кнопки выбора ПВЗ (false — скрыть кнопку, true — показать кнопку)
+                    filter: {
+                        type: [                         // Тип способа доставки
+                            "pickup_point",             // Пункт выдачи заказа
+                            "terminal"                  // Постамат
+                        ],
+                        is_yandex_branded: false,       // Тип пункта выдачи заказа (false — Партнерские ПВЗ, true — ПВЗ Яндекса)
+                        payment_methods: [              // Способ оплаты
+                            "already_paid",             // Доступен для доставки предоплаченных заказов
+                            "card_on_receipt"           // Доступна оплата картой при получении
+                        ],
+                        payment_methods_filter: "or"    // Фильтр по типам оплаты
+                    }
+                },
+            });
+        }
+        w.YaDelivery
+            ? startWidget()
+            : document.addEventListener('YaNddWidgetLoad', startWidget);
+    })(window);
+                                                        // Подписка на событие
+    document.addEventListener('YaNddWidgetPointSelected', function (data){
+                                                        // Обработка выбранных данных
+                                                        // Данные о выбранной точке содержатся в параметре data
+        console.log(data.detail.id);
+        console.log(data.detail.address.full_address);
+        console.log(data.detail.address.country);
+        console.log(data.detail.address.locality);
+        console.log(data.detail.address.street);
+        console.log(data.detail.address.house);
+        console.log(data.detail.address.comment);
+        document.getElementById('id_address_pvz').value = data.detail.address.full_address;
+        document.getElementById('id_pvz_id').value = data.detail.id;
+    });
+    //document.getElementById('id_address').value = console.log(data.detail.address.full_address);
+    </script>       
+    </head>
+    <div class="d-flex align-items-center w-100">
+        {% bootstrap_form form %}
+        <input type="submit" class="btn btn-primary ms-2" style="height: calc(3.5em + 0.55rem);" value="Подтвердить:Выбор пункта самовывоза">
+        {% csrf_token %}
+        </div>
+    </form>
+    <b><i>Cтоимость: {{cost}}</b></i>
+{% endblock %}

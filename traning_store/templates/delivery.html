@@ -1,72 +1,146 @@
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
+{% load static %}
+
 {% block title %}Доставка Яндекс{% endblock %}
 
 {% block content %}
-    <form action="" method="get" class="order-form">
-        <head>
-            <script async src="https://ndd-widget.landpro.site/widget.js"></script>
+<div class="container-fluid">
+    <h1 class="mb-4">🚚 Доставка Яндекс</h1>
     
-    <div id="delivery-widget"></div>
-    
-    <!-- Код виджета -->
-    <script>
-    (function(w) {
-        function startWidget() {
-            w.YaDelivery.createWidget({
-                containerId: 'delivery-widget',         // Идентификатор HTML-элемента (контейнера), в котором будет отображаться виджет
-                params: {
-                    city: "Химки",                     // Город, отображаемый на карте при запуске
-                    size:{                              // Размеры виджета
-                        "height": "450px",              // Высота
-                        "width": "100%"                 // Ширина
-                    },
-                    source_platform_station: "01978d0f333b73d680d32e7d696090e3",  // Станция отгрузки
-                    physical_dims_weight_gross: 10000,                    // Вес отправления
-                    delivery_price: (price) => price + " руб",            // Стоимость доставки
-                    delivery_term: 3,                                     // Срок доставки                    
-                    show_select_button: true,           // Отображение кнопки выбора ПВЗ (false — скрыть кнопку, true — показать кнопку)
-                    filter: {
-                        type: [                         // Тип способа доставки
-                            "pickup_point",             // Пункт выдачи заказа
-                            "terminal"                  // Постамат
-                        ],
-                        is_yandex_branded: false,       // Тип пункта выдачи заказа (false — Партнерские ПВЗ, true — ПВЗ Яндекса)
-                        payment_methods: [              // Способ оплаты
-                            "already_paid",             // Доступен для доставки предоплаченных заказов
-                            "card_on_receipt"           // Доступна оплата картой при получении
-                        ],
-                        payment_methods_filter: "or"    // Фильтр по типам оплаты
-                    }
-                },
-            });
-        }
-        w.YaDelivery
-            ? startWidget()
-            : document.addEventListener('YaNddWidgetLoad', startWidget);
-    })(window);
-                                                        // Подписка на событие
-    document.addEventListener('YaNddWidgetPointSelected', function (data){
-                                                        // Обработка выбранных данных
-                                                        // Данные о выбранной точке содержатся в параметре data
-        console.log(data.detail.id);
-        console.log(data.detail.address.full_address);
-        console.log(data.detail.address.country);
-        console.log(data.detail.address.locality);
-        console.log(data.detail.address.street);
-        console.log(data.detail.address.house);
-        console.log(data.detail.address.comment);
-        document.getElementById('id_address_pvz').value = data.detail.address.full_address;
-        document.getElementById('id_pvz_id').value = data.detail.id;
-    });
-    //document.getElementById('id_address').value = console.log(data.detail.address.full_address);
-    </script>       
-    </head>
-    <div class="d-flex align-items-center w-100">
-        {% bootstrap_form form %}
-        <input type="submit" class="btn btn-primary ms-2" style="height: calc(3.5em + 0.55rem);" value="Подтвердить:Выбор пункта самовывоза">
-        {% csrf_token %}
+    <div class="row">
+        <div class="col-12 col-lg-8">
+            <!-- Виджет доставки -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">📍 Выберите пункт выдачи</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div id="delivery-widget"></div>
+                </div>
+            </div>
         </div>
-    </form>
-    <b><i>Cтоимость: {{cost}}</b></i>
+        
+        <div class="col-12 col-lg-4">
+            <!-- Форма выбора -->
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">✅ Подтверждение выбора</h5>
+                </div>
+                <div class="card-body">
+                    <form action="" method="get" class="order-form">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {% bootstrap_form form %}
+                        </div>
+                        <button type="submit" class="btn btn-success w-100 py-2">
+                            📍 Подтвердить пункт самовывоза
+                        </button>
+                    </form>
+                    
+                    {% if cost %}
+                    <div class="mt-3 p-3 bg-light rounded">
+                        <h6 class="mb-1">💰 Стоимость доставки:</h6>
+                        <span class="fw-bold text-primary fs-5">{{ cost }} руб</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Скрипт виджета доставки -->
+<script async src="https://ndd-widget.landpro.site/widget.js"></script>
+<script>
+(function(w) {
+    function startWidget() {
+        w.YaDelivery.createWidget({
+            containerId: 'delivery-widget',
+            params: {
+                city: "Химки",
+                size: {
+                    "height": "500px",
+                    "width": "105%"
+                },
+                source_platform_station: "01978d0f333b73d680d32e7d696090e3",
+                physical_dims_weight_gross: 10000,
+                delivery_price: (price) => price + " руб",
+                delivery_term: 3,
+                show_select_button: true,
+                filter: {
+                    type: [
+                        "pickup_point",
+                        "terminal"
+                    ],
+                    is_yandex_branded: false,
+                    payment_methods: [
+                        "already_paid",
+                        "card_on_receipt"
+                    ],
+                    payment_methods_filter: "or"
+                }
+            },
+        });
+    }
+    w.YaDelivery
+        ? startWidget()
+        : document.addEventListener('YaNddWidgetLoad', startWidget);
+})(window);
+
+// Обработка выбора пункта выдачи
+document.addEventListener('YaNddWidgetPointSelected', function (data){
+    console.log('Выбран ПВЗ:', data.detail.id);
+    console.log('Адрес:', data.detail.address.full_address);
+    
+    // Заполняем поля формы
+    document.getElementById('id_address_pvz').value = data.detail.address.full_address;
+    document.getElementById('id_pvz_id').value = data.detail.id;
+    
+    // Показываем уведомление
+    showNotification('Пункт выдачи выбран: ' + data.detail.address.full_address);
+});
+
+function showNotification(message) {
+    // Создаем уведомление
+    const notification = document.createElement('div');
+    notification.className = 'alert alert-success alert-dismissible fade show';
+    notification.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    // Добавляем уведомление в начало страницы
+    const container = document.querySelector('.container-fluid');
+    container.insertBefore(notification, container.firstChild);
+    
+    // Автоматически скрываем через 5 секунд
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.remove();
+        }
+    }, 5000);
+}
+</script>
+
+<style>
+#delivery-widget {
+    border-radius: 0.375rem;
+    overflow: hidden;
+}
+
+.card {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+    .container-fluid {
+        padding: 0 15px;
+    }
+    
+    #delivery-widget {
+        height: 400px !important;
+    }
+}
+</style>
 {% endblock %}

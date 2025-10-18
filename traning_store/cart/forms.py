@@ -32,6 +32,9 @@ class CartAddProductForm(forms.Form):
             self.fields['m_type'].queryset = Model_type.objects.filter(
                 brand=product.brand
             )
+            self.fields['size'].queryset = Size.objects.filter(
+                brand=product.brand
+            )
 
 
 class DeliveryForm(forms.Form):

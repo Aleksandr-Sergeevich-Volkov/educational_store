@@ -111,6 +111,11 @@ class Type_product(models.Model):
 
 class Size(models.Model):
     name = models.CharField('Название', max_length=TITLE_LEN)
+    brand = models.ForeignKey(
+        Brend,  # Связь с брендом
+        on_delete=models.CASCADE,
+        verbose_name='Бренд'
+    )
 
     class Meta:
         verbose_name = 'Размер'
@@ -118,7 +123,7 @@ class Size(models.Model):
         ordering = ('name',)
 
     def __str__(self):
-        return f'{self.name}'
+        return f'{self.brand.name} - {self.name}'
 
 
 class Model_type(models.Model):

@@ -21,7 +21,6 @@ class CartAddProductForm(forms.Form):
     m_type = forms.ModelChoiceField(label='Тип',
                                     queryset=Model_type.objects.none(),
                                     required=False,
-                                    # initial=Model_type.objects.get(id='1')
                                     )
 
     def __init__(self, *args, **kwargs):

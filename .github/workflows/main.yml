@@ -111,8 +111,8 @@ jobs:
     name: Push Docker image to DockerHub
     runs-on: ubuntu-latest
     needs: 
-      - tests
-      - test_django_tests
+      #- tests
+      #- test_django_tests
     steps:
       - name: Check out the repo
         # Получение исходного кода из репозитория

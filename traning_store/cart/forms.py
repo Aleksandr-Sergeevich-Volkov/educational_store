@@ -19,10 +19,19 @@ class CartAddProductForm(forms.Form):
                                    # initial=Color.objects.get(id='1')
                                    )
     m_type = forms.ModelChoiceField(label='Тип',
-                                    queryset=Model_type.objects.all(),
+                                    queryset=Model_type.objects.none(),
                                     required=False,
                                     # initial=Model_type.objects.get(id='1')
                                     )
+
+    def __init__(self, *args, **kwargs):
+        product = kwargs.pop('product', None)
+        super().__init__(*args, **kwargs)
+
+        if product.brand:
+            self.fields['m_type'].queryset = Model_type.objects.filter(
+                brand=product.brand
+            )
 
 
 class DeliveryForm(forms.Form):

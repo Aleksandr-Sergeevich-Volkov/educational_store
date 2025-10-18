@@ -123,6 +123,12 @@ class Size(models.Model):
 
 class Model_type(models.Model):
     name = models.CharField('Название', max_length=TITLE_LEN)
+    brand = models.ForeignKey(
+        Brend,  # Связь с брендом
+        on_delete=models.CASCADE,
+        verbose_name='Бренд'
+    )
+    description = models.TextField('Описание', blank=True)
 
     class Meta:
         verbose_name = 'Модель'
@@ -130,7 +136,7 @@ class Model_type(models.Model):
         ordering = ('name',)
 
     def __str__(self):
-        return f'{self.name}'
+        return f"{self.brand.name} - {self.name}"
 
 
 class Wide_hips(models.Model):

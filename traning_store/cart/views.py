@@ -16,7 +16,7 @@ def cart_add(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
     images_m = Gallery.objects.filter(product=product)
-    form = CartAddProductForm(request.POST)
+    form = CartAddProductForm(request.POST, product=product)
     if form.is_valid():
         cd = form.cleaned_data
         cart.add(product=product,
@@ -40,7 +40,8 @@ def cart_detail(request):
     cart = Cart(request)
     for item in cart:
         item['update_quantity_form'] = CartAddProductForm(
-            initial={'quantity': item['quantity'], 'update': True})
+            initial={'quantity': item['quantity'], 'update': True},
+            product=item['product'])
     coupon_apply_form = CouponApplyForm()
     images_m = Gallery.objects.all()
     return render(request, 'cart_detail.html',

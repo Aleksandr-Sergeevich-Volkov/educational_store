@@ -52,7 +52,7 @@ class ProductDetailView(DetailView):
         context['colors'] = Color.objects.all()
         context['sizes'] = Size.objects.all()
         context['model_t'] = Model_type.objects.all()
-        context['cart_product_form'] = CartAddProductForm()
+        context['cart_product_form'] = CartAddProductForm(product=self.object)
         return context
 
 

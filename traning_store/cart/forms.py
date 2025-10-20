@@ -10,7 +10,7 @@ class CartAddProductForm(forms.Form):
     update = forms.BooleanField(required=False, initial=False,
                                 widget=forms.HiddenInput)
     size = forms.ModelChoiceField(label='Размер',
-                                  queryset=Size.objects.all(), required=False,
+                                  queryset=Size.objects.none(), required=False,
                                   # initial=Size.objects.get(id='4')
                                   )
     color = forms.ModelChoiceField(label='Цвет',

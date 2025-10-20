@@ -24,7 +24,7 @@ class Command(BaseCommand):
         }
 
         # Генерируем XML
-        xml_content = render_to_string('catalog/yml_feed.xml', context)
+        xml_content = render_to_string('yml_feed.xml', context)
 
         # Сохраняем в файл для nginx
         file_path = os.path.join(settings.BASE_DIR, 'static', 'goods_chulki.xml')

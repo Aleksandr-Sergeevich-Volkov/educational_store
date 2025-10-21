@@ -1,4 +1,3 @@
-<!-- catalog/templates/catalog/yml_feed.xml -->
 <?xml version="1.0" encoding="UTF-8"?>
 <yml_catalog date="{{ current_date }}">
  <shop>
@@ -13,6 +12,8 @@
   <categories>
    <category id="1">Компрессионный трикотаж</category>
    <category id="10" parentId="1">Компрессионные чулки</category>
+   <category id="20" parentId="1">Компрессионные гольфы</category>
+   <category id="30" parentId="1">Компрессионные колготки</category>
   </categories>
   <offers>
    {% for product in products %}
@@ -20,9 +21,9 @@
     <url>https://kompressionnye-chulki24.ru{% url 'catalog:detail' product.slug %}</url>
     <price>{{ product.price|floatformat:0 }}</price>
     <currencyId>RUB</currencyId>
-    <categoryId>10</categoryId>
+    <categoryId>{{ product.category_id }}</categoryId>
     <name>{{ product.name }}</name>
-    <picture>https://kompressionnye-chulki24.ru{{ product.images.first.image.url }}</picture>
+    <picture>https://kompressionnye-chulki24.ru{{ product.main_image_url }}</picture>
     <description>
      <![CDATA[<p>{{ product.name }}</p>]]>
     </description>

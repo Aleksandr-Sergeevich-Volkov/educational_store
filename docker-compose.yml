@@ -8,6 +8,7 @@ volumes:
   pg_data:
   static:
   media:
+  nginx_html:
 
 # Перечень контейнеров
 services:
@@ -42,6 +43,7 @@ services:
     volumes:
       - static:/backend_static
       - media:/app/media
+      - nginx_html:/var/www/html
     # Какие контейнеры нужно запустить до старта этого контейнера:
     #command: celery -A traning_store worker -l info 
     depends_on:
@@ -84,6 +86,7 @@ services:
     volumes:
       - static:/staticfiles/
       - media:/media
+      - nginx_html:/usr/share/nginx/html
     ports:
       - 8000:80 
     depends_on:

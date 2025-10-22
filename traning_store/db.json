@@ -1,0 +1,4233 @@
+[
+{
+  "model": "catalog.country",
+  "pk": 1,
+  "fields": {
+    "name": "Германия",
+    "code": "276"
+  }
+},
+{
+  "model": "catalog.country",
+  "pk": 2,
+  "fields": {
+    "name": "Россия",
+    "code": "643"
+  }
+},
+{
+  "model": "catalog.brend",
+  "pk": 1,
+  "fields": {
+    "name": "Venoteks",
+    "country_brand": 1
+  }
+},
+{
+  "model": "catalog.brend",
+  "pk": 2,
+  "fields": {
+    "name": "ОРТО",
+    "country_brand": 2
+  }
+},
+{
+  "model": "catalog.appointment",
+  "pk": 1,
+  "fields": {
+    "name": "Варикоз"
+  }
+},
+{
+  "model": "catalog.male",
+  "pk": 1,
+  "fields": {
+    "name": "Мужские"
+  }
+},
+{
+  "model": "catalog.male",
+  "pk": 2,
+  "fields": {
+    "name": "Женские"
+  }
+},
+{
+  "model": "catalog.color",
+  "pk": 1,
+  "fields": {
+    "name": "Черный",
+    "color": "#00000"
+  }
+},
+{
+  "model": "catalog.color",
+  "pk": 2,
+  "fields": {
+    "name": "Бежевый",
+    "color": "#e6daa6"
+  }
+},
+{
+  "model": "catalog.class_compress",
+  "pk": 1,
+  "fields": {
+    "name": "1 класс"
+  }
+},
+{
+  "model": "catalog.class_compress",
+  "pk": 2,
+  "fields": {
+    "name": "2 класс"
+  }
+},
+{
+  "model": "catalog.soсk",
+  "pk": 1,
+  "fields": {
+    "name": "с открытым носком"
+  }
+},
+{
+  "model": "catalog.soсk",
+  "pk": 2,
+  "fields": {
+    "name": "с закрытым носком"
+  }
+},
+{
+  "model": "catalog.type_product",
+  "pk": 1,
+  "fields": {
+    "name": "Чулки"
+  }
+},
+{
+  "model": "catalog.type_product",
+  "pk": 2,
+  "fields": {
+    "name": "Гольфы"
+  }
+},
+{
+  "model": "catalog.size",
+  "pk": 1,
+  "fields": {
+    "name": "1",
+    "brand": 1
+  }
+},
+{
+  "model": "catalog.size",
+  "pk": 2,
+  "fields": {
+    "name": "2",
+    "brand": 1
+  }
+},
+{
+  "model": "catalog.size",
+  "pk": 3,
+  "fields": {
+    "name": "3",
+    "brand": 1
+  }
+},
+{
+  "model": "catalog.size",
+  "pk": 4,
+  "fields": {
+    "name": "4",
+    "brand": 1
+  }
+},
+{
+  "model": "catalog.size",
+  "pk": 5,
+  "fields": {
+    "name": "5",
+    "brand": 1
+  }
+},
+{
+  "model": "catalog.size",
+  "pk": 6,
+  "fields": {
+    "name": "XL",
+    "brand": 2
+  }
+},
+{
+  "model": "catalog.size",
+  "pk": 7,
+  "fields": {
+    "name": "L",
+    "brand": 2
+  }
+},
+{
+  "model": "catalog.size",
+  "pk": 8,
+  "fields": {
+    "name": "M",
+    "brand": 2
+  }
+},
+{
+  "model": "catalog.size",
+  "pk": 9,
+  "fields": {
+    "name": "S",
+    "brand": 2
+  }
+},
+{
+  "model": "catalog.model_type",
+  "pk": 1,
+  "fields": {
+    "name": "Стандартная",
+    "brand": 1,
+    "description": ""
+  }
+},
+{
+  "model": "catalog.model_type",
+  "pk": 2,
+  "fields": {
+    "name": "Короткая",
+    "brand": 1,
+    "description": ""
+  }
+},
+{
+  "model": "catalog.model_type",
+  "pk": 3,
+  "fields": {
+    "name": "Норм",
+    "brand": 2,
+    "description": ""
+  }
+},
+{
+  "model": "catalog.model_type",
+  "pk": 4,
+  "fields": {
+    "name": "Лонг",
+    "brand": 2,
+    "description": ""
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 1,
+  "fields": {
+    "name": "Чулки 2P280 VENOTEKS MEDICAL с открытым носком 2 класс компрессии",
+    "brand": 1,
+    "Appointment": 1,
+    "Male": 1,
+    "Color": 1,
+    "Class_compress": 2,
+    "Sock": 1,
+    "Type_product": 1,
+    "Size": 4,
+    "Model_type": 1,
+    "Wide_hips": null,
+    "Side": null,
+    "slug": "chulki-2p280-venoteks-medical-s-otkrytym-noskom-2-klass-kompressii",
+    "articul": "P280",
+    "code": "51723",
+    "price": "5999.00",
+    "stock": 5,
+    "available": true,
+    "created": "2025-04-03T20:47:51.266Z",
+    "updated": "2025-04-06T18:34:50.992Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 2,
+  "fields": {
+    "name": "Чулки 2P281 VENOTEKS MEDICAL с закрытом носком 2 класс компрессии",
+    "brand": 1,
+    "Appointment": 1,
+    "Male": 1,
+    "Color": 1,
+    "Class_compress": 2,
+    "Sock": 2,
+    "Type_product": 1,
+    "Size": 1,
+    "Model_type": 1,
+    "Wide_hips": null,
+    "Side": null,
+    "slug": "chulki-2p281-venoteks-medical-s-zakrytom-noskom-2-klass-kompressii",
+    "articul": "P281",
+    "code": "51724",
+    "price": "5999.00",
+    "stock": 5,
+    "available": true,
+    "created": "2025-04-03T20:49:34.477Z",
+    "updated": "2025-09-05T19:37:16.890Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 3,
+  "fields": {
+    "name": "Чулки ORTO 4220 2-ого класса компрессии для мужчин",
+    "brand": 2,
+    "Appointment": 1,
+    "Male": 1,
+    "Color": 1,
+    "Class_compress": 2,
+    "Sock": 2,
+    "Type_product": 1,
+    "Size": 4,
+    "Model_type": 4,
+    "Wide_hips": null,
+    "Side": null,
+    "slug": "chulki-orto-4220-2-ogo-klassa-kompressii-dlya-muzhchin",
+    "articul": "4220",
+    "code": "51725",
+    "price": "3143.00",
+    "stock": 5,
+    "available": true,
+    "created": "2025-04-30T09:14:06.405Z",
+    "updated": "2025-09-05T19:38:53.572Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 4,
+  "fields": {
+    "name": "Гольфы 2C154 VENOTEKS BUSINESS для мужчин, с хлопком 2 класса",
+    "brand": 1,
+    "Appointment": 1,
+    "Male": 1,
+    "Color": 1,
+    "Class_compress": 2,
+    "Sock": 2,
+    "Type_product": 2,
+    "Size": 6,
+    "Model_type": 1,
+    "Wide_hips": null,
+    "Side": null,
+    "slug": "golfy-2c154-venoteks-business-dlya-muzhchin-s-hlopkom-2-klassa",
+    "articul": "2C154",
+    "code": "51726",
+    "price": "3490.99",
+    "stock": 5,
+    "available": true,
+    "created": "2025-04-30T09:50:26.362Z",
+    "updated": "2025-09-05T19:39:17.760Z"
+  }
+},
+{
+  "model": "catalog.product",
+  "pk": 5,
+  "fields": {
+    "name": "Чулки мужские с хлопком и мультифиброй, закрытый мысок, 1 класс, Норм.",
+    "brand": 2,
+    "Appointment": 1,
+    "Male": 1,
+    "Color": 1,
+    "Class_compress": 1,
+    "Sock": 2,
+    "Type_product": 1,
+    "Size": 4,
+    "Model_type": 3,
+    "Wide_hips": null,
+    "Side": null,
+    "slug": "chulki-muzhskie-s-hlopkom-i-multifibroj-zakrytyj-mysok-1-klass-norm",
+    "articul": "4217",
+    "code": "51727",
+    "price": "3143.00",
+    "stock": 1,
+    "available": true,
+    "created": "2025-09-24T09:42:41.546Z",
+    "updated": "2025-09-24T09:42:41.546Z"
+  }
+},
+{
+  "model": "catalog.gallery",
+  "pk": 1,
+  "fields": {
+    "image": "images/tki6haxpn5r6s2zpmd19ryak7n97iysn_Xzx4oj3.jpg",
+    "main": true,
+    "product": 1
+  }
+},
+{
+  "model": "catalog.gallery",
+  "pk": 2,
+  "fields": {
+    "image": "images/4blg5fcz3vx2rkh5e28shymu8jo113yd_9vDG4z2.jpg",
+    "main": false,
+    "product": 1
+  }
+},
+{
+  "model": "catalog.gallery",
+  "pk": 3,
+  "fields": {
+    "image": "images/vqt6fyt47wsg4db8t3llcxi96r9ypylh_cJfhzPb.png",
+    "main": true,
+    "product": 2
+  }
+},
+{
+  "model": "catalog.gallery",
+  "pk": 4,
+  "fields": {
+    "image": "images/30c1nfgecm01hya1bgi1qr8b5ybndepx_y3Y2d8c.jpg",
+    "main": false,
+    "product": 2
+  }
+},
+{
+  "model": "catalog.gallery",
+  "pk": 6,
+  "fields": {
+    "image": "images/ts413aj6l5zx2qcmpxh1jbawn4w7cu1v.jpg",
+    "main": true,
+    "product": 3
+  }
+},
+{
+  "model": "catalog.gallery",
+  "pk": 7,
+  "fields": {
+    "image": "images/8b48687da030fc4ed77fcec45576cba5.jpg",
+    "main": true,
+    "product": 4
+  }
+},
+{
+  "model": "catalog.gallery",
+  "pk": 8,
+  "fields": {
+    "image": "images/e9ffc5c1ffb345bcf435a9b463fc3295.jpg",
+    "main": false,
+    "product": 4
+  }
+},
+{
+  "model": "catalog.gallery",
+  "pk": 9,
+  "fields": {
+    "image": "images/orto4217.jpg",
+    "main": true,
+    "product": 5
+  }
+},
+{
+  "model": "homepage.post",
+  "pk": 1,
+  "fields": {
+    "title": "Назначение компрессионных чулок.",
+    "text": "Рекомендовано ношение медицинских изделий в следующих случаях:\r\n\r\n        В целях профилактики и лечения варикозной болезни в период беременности. Рекомендуются чулки компрессионные для родов I класса в случае, если до беременности отсутствовал варикоз, II класса — только по назначению врача.\r\n        После родов. Ношение компрессионного трикотажа назначается для снижения нагрузки на позвоночник, фиксации в правильном положении органов малого таза и мышц брюшной полости.\r\n        Для уменьшения степени мышечной усталости, увеличения выносливости во время спортивных нагрузок и в период восстановления после травм.\r\n        До операции, в процессе хирургического вмешательства и после. Какие нужны компрессионные чулки после операции? Это чулки с распределённой компрессией, при которой стимулируется равномерное кровообращение по сосудам нижних конечностей.\r\n        Госпитальный трикотаж применяется для профилактики тромбоза глубоких вен и предупреждает появление венозного застоя.\r\n        При варикозном расширении вен. Компрессионные чулки поддерживают артерии и вены, восстанавливают кровоснабжение нижних конечностей и исключают заброс крови обратно в вены.\r\n        Для уменьшения усталости и боли в конечностях при стоячей работе. При длительном стоянии в ногах увеличивается давление на сосуды. При малой подвижности ног в венах нарушается функция оттока крови, в них скапливается кровь и происходит расширение вен ног. В этом случае трикотаж уменьшает дискомфорт в ногах, снимает отечность и обеспечивает профилактику болезней."
+  }
+},
+{
+  "model": "homepage.post",
+  "pk": 2,
+  "fields": {
+    "title": "Таблицы размеров компрессионных чулок",
+    "text": "Компрессионное белье подбирается индивидуально после консультации с лечащим врачом и корректный выбор размера и степени компрессии обеспечит не только комфортное ношение, но и высокую степень эффективности от его использования. Существует таблица размеров компрессионных чулок, воспользовавшись которой несложно подобрать медицинский трикотаж для профилактики варикоза, тромбоза и снижения отеков ног.\r\n\r\n\r\nВены получат необходимую поддержку, а клапанный аппарат сможет нормально функционировать лишь в том случае, когда компрессионный трикотаж плотно прилегает к телу, а его размер соответствует особенностям и пропорциям фигуры. Первый шаг при подборе белья – снятие мерок. Важно помнить, что все замеры лучше всего производить в первой половине дня, когда отеки ног наименее выражены.\r\nВооружившись сантиметровой лентой, аккуратно измерьте следующие показатели:\r\n\r\n\r\nОкружность бедра (g) на уровне 25-30 см выше середины коленной чашечки.\r\nОкружность голени (с) в самой широкой части икроножной мышцы.\r\nОкружность щиколотки (b) чуть выше косточки в самом тонком месте. Именно здесь находится точка максимальной компрессии.\r\n\r\nПолученные результаты предстоит сверить с данными, представленными в таблице, и таким образом определить необходимую именно вам маркировку лечебного трикотажа. Например, если окружность вашей щиколотки (b)составляет 23 см, бедра (g) – 55см, а икры (c) – 37 см, то необходимый вам размер – 2(М).\r\n\r\n\r\nВсе три результата измерений должны соответствовать одному размеру чулок в представленной таблице. Если ваши мерки не попадают в один и тот же размер, повторите замеры на следующий день или обратитесь за помощью к врачу.\r\n\r\n\r\n\r\nЧУЛКИ КОМПРЕССИОННЫЕ ЛЕЧЕБНЫЕ\r\n\r\nстандартная фигура\r\n\r\nРазмер изделия\r\n\r\n1(S)\r\n\r\n2(M)\r\n\r\n3(L)\r\n\r\n4(XL)\r\n\r\nДлина окружности щиколотки (b),см\r\n\r\n19-22\r\n\r\n22-25\r\n\r\n25-28\r\n\r\n29-32\r\n\r\nДлина окружности икры (с),см\r\n\r\n29-37\r\n\r\n34-42\r\n\r\n38-46\r\n\r\n41-51\r\n\r\nДлина окружности бедра (f),см\r\n\r\n44-52\r\n\r\n50-58\r\n\r\n56-64\r\n\r\n60-72"
+  }
+},
+{
+  "model": "homepage.comment",
+  "pk": 1,
+  "fields": {
+    "text": "Добрый день спасибо за публикацию очень помогла разобраться.",
+    "post": 1,
+    "created_at": "2025-07-21T11:31:07.419Z",
+    "author": 2
+  }
+},
+{
+  "model": "homepage.comment",
+  "pk": 2,
+  "fields": {
+    "text": "Спасибо теперь понятно очень интересная статья",
+    "post": 1,
+    "created_at": "2025-07-21T13:56:06.044Z",
+    "author": 1
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 1,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Лобня улица Дружбы 6",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-04-03T20:50:38.304Z",
+    "updated": "2025-04-03T20:50:38.304Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 2,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Лобня улица Дружбы 6",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-04-03T20:52:03.346Z",
+    "updated": "2025-04-03T20:52:03.346Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 3,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkov_aleksandr_sergeevich@mail.ru",
+    "address": "-",
+    "address_pvz": "Химки Ленинский проспект 22",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-04-07T12:57:55.458Z",
+    "updated": "2025-04-07T12:57:55.458Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 4,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Лобня улица Дружбы 6",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-04-21T14:32:03.841Z",
+    "updated": "2025-04-21T14:32:03.841Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 5,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Лобня улица Дружбы 6",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-04-21T20:01:29.978Z",
+    "updated": "2025-04-21T20:01:29.978Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 6,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkov_aleksandr_sergeevich@mail.ru",
+    "address": "-",
+    "address_pvz": "Москва улица Маршала Федоренко 2 к1",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-04-21T20:12:52.690Z",
+    "updated": "2025-04-21T20:12:52.690Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 7,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkov_aleksandr_sergeevich@mail.ru",
+    "address": "-",
+    "address_pvz": "Москва улица Маршала Федоренко 2 к1",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-04-22T10:37:43.619Z",
+    "updated": "2025-04-22T10:37:43.619Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 8,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Лобня улица Дружбы 6",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-04-25T09:35:36.490Z",
+    "updated": "2025-04-25T09:35:36.490Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 9,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Лобня улица Дружбы 6",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-04-29T20:09:14.498Z",
+    "updated": "2025-04-29T20:09:14.498Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 10,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Лобня Физкультурная улица 8",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-04-29T20:21:50.643Z",
+    "updated": "2025-04-29T20:21:50.643Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 11,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва улица Маршала Федоренко 2 к1",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-04-30T07:50:08.963Z",
+    "updated": "2025-04-30T07:50:08.963Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 12,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "поселение Рязановское Остафьевское шоссе 14 к3",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-05-07T12:16:40.734Z",
+    "updated": "2025-05-07T12:16:40.734Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 13,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Королёв Пионерская улица 30 к5",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-05-07T12:49:10.969Z",
+    "updated": "2025-05-07T12:49:10.969Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 14,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Лобня улица Дружбы 6",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-05-07T14:08:20.240Z",
+    "updated": "2025-05-07T14:08:20.240Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 15,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки улица Мичурина 15",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-05-19T20:49:56.184Z",
+    "updated": "2025-05-19T20:49:56.184Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 16,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-05-28T14:27:23.276Z",
+    "updated": "2025-05-28T14:27:23.276Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 17,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-05-28T14:28:48.881Z",
+    "updated": "2025-05-28T14:28:48.881Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 18,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-05-28T14:39:34.167Z",
+    "updated": "2025-05-28T14:39:34.167Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 19,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-05-28T14:40:13.847Z",
+    "updated": "2025-05-28T14:40:13.847Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 20,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-05-28T14:47:14.154Z",
+    "updated": "2025-05-28T14:47:14.154Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 21,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-05-28T20:25:29.248Z",
+    "updated": "2025-05-28T20:25:29.248Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 22,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-05-28T20:27:58.091Z",
+    "updated": "2025-05-28T20:27:58.091Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 23,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-05-28T20:29:06.435Z",
+    "updated": "2025-05-28T20:29:06.435Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 24,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-05-28T20:37:52.989Z",
+    "updated": "2025-05-28T20:37:52.989Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 25,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-05-30T07:30:30.589Z",
+    "updated": "2025-05-30T07:30:30.589Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 26,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-05-30T07:30:56.622Z",
+    "updated": "2025-05-30T07:30:56.622Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 27,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-05-30T07:31:05.356Z",
+    "updated": "2025-05-30T07:31:05.356Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 28,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-02T08:35:21.466Z",
+    "updated": "2025-06-02T08:35:21.466Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 29,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-02T09:21:26.521Z",
+    "updated": "2025-06-02T09:21:26.521Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 30,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-02T11:10:25.905Z",
+    "updated": "2025-06-02T11:10:25.905Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 31,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-02T11:49:47.221Z",
+    "updated": "2025-06-02T11:49:47.221Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 32,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-02T11:56:05.893Z",
+    "updated": "2025-06-02T11:56:05.893Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 33,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-02T12:10:36.032Z",
+    "updated": "2025-06-02T12:10:36.032Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 34,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-02T12:18:57.382Z",
+    "updated": "2025-06-02T12:18:57.382Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 35,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-02T12:19:16.813Z",
+    "updated": "2025-06-02T12:19:16.813Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 36,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-03T19:46:30.646Z",
+    "updated": "2025-06-03T19:46:30.646Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 37,
+  "fields": {
+    "first_name": "Александар",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Лобня улица Циолковского 6",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-04T13:58:59.865Z",
+    "updated": "2025-06-04T13:58:59.865Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 38,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-04T14:00:33.085Z",
+    "updated": "2025-06-04T14:00:33.085Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 39,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-04T14:02:55.706Z",
+    "updated": "2025-06-09T14:33:52.634Z",
+    "paid": true,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 40,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-05T20:40:09.136Z",
+    "updated": "2025-06-09T12:54:30.190Z",
+    "paid": true,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 41,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки Ленинский проспект 22",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-10T17:04:59.197Z",
+    "updated": "2025-06-10T17:04:59.197Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 42,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки Ленинский проспект 22",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-10T17:05:39.972Z",
+    "updated": "2025-06-10T17:05:39.972Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 43,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки улица Мичурина 15",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-10T17:09:28.175Z",
+    "updated": "2025-06-10T17:09:28.175Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 44,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-10T18:20:07.650Z",
+    "updated": "2025-06-10T18:20:07.650Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 45,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки улица Мичурина 15",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-10T18:31:43.070Z",
+    "updated": "2025-06-10T18:31:43.070Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 46,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-10T20:19:58.477Z",
+    "updated": "2025-06-10T20:19:58.478Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 47,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-11T09:18:03.091Z",
+    "updated": "2025-06-11T09:18:03.091Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 48,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-11T09:44:55.867Z",
+    "updated": "2025-06-11T09:44:55.867Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 49,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-13T17:49:59.367Z",
+    "updated": "2025-06-13T17:49:59.367Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 50,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки улица Мичурина 15",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-13T18:10:46.747Z",
+    "updated": "2025-06-13T18:10:46.747Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 51,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки улица Мичурина 15",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-13T19:24:40.180Z",
+    "updated": "2025-06-13T19:24:40.180Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 52,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки улица Мичурина 15",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-13T19:37:31.539Z",
+    "updated": "2025-06-13T19:37:31.539Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 53,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-13T21:18:46.090Z",
+    "updated": "2025-06-13T21:18:46.091Z",
+    "paid": false,
+    "coupon": 2,
+    "discount": 95,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 54,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки улица Мичурина 15",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-13T21:19:50.818Z",
+    "updated": "2025-06-14T18:38:39Z",
+    "paid": true,
+    "coupon": 2,
+    "discount": 95,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 55,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-06-17T19:08:15.162Z",
+    "updated": "2025-06-17T19:08:15.162Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 56,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "5aaeb4a9-119e-4891-82f2-4ca7f24d41fa",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-02T09:00:59.395Z",
+    "updated": "2025-07-02T09:00:59.395Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 57,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "5aaeb4a9-119e-4891-82f2-4ca7f24d41fa",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-03T18:30:52.188Z",
+    "updated": "2025-07-03T18:30:52.188Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 58,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkov_aleksandr_sergeevich@mail.ru",
+    "address": "5aaeb4a9-119e-4891-82f2-4ca7f24d41fa",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-04T20:25:02.447Z",
+    "updated": "2025-07-04T20:25:02.447Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 59,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "5aaeb4a9-119e-4891-82f2-4ca7f24d41fa",
+    "address_pvz": "Москва Онежская улица 18",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-06T12:16:13.152Z",
+    "updated": "2025-07-06T12:16:13.152Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 60,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "mugoh_himki@mail.ru",
+    "address": "-",
+    "address_pvz": "рабочий посёлок Нахабино Покровская улица 14",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-09T09:16:23.464Z",
+    "updated": "2025-07-09T09:16:23.464Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 61,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "mugoh_himki@mail.ru",
+    "address": "-",
+    "address_pvz": "рабочий посёлок Нахабино Покровская улица 14",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-09T10:01:32.707Z",
+    "updated": "2025-07-09T10:01:32.707Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 62,
+  "fields": {
+    "first_name": "ALEKSANDR",
+    "last_name": "VOLKOV",
+    "email": "volkov_aleksandr_sergeevich@mail.ru",
+    "address": "-",
+    "address_pvz": "рабочий посёлок Нахабино Покровская улица 14",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-09T12:03:10.338Z",
+    "updated": "2025-07-09T12:03:10.338Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 63,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки улица Академика Грушина 8",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-09T12:04:51.864Z",
+    "updated": "2025-07-09T12:04:51.864Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 64,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "рабочий посёлок Нахабино Покровская улица 14",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-09T13:29:57.774Z",
+    "updated": "2025-07-09T13:29:57.774Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 65,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Ангелов переулок 9",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-14T08:36:46.826Z",
+    "updated": "2025-07-14T08:36:46.826Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 66,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Ангелов переулок 9",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-14T20:37:21.677Z",
+    "updated": "2025-07-14T20:37:21.677Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "246.03"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 67,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Ангелов переулок 9",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-14T20:38:54.133Z",
+    "updated": "2025-07-14T20:38:54.133Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "246.03"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 68,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Ангелов переулок 9",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-14T20:54:57.285Z",
+    "updated": "2025-07-14T20:54:57.285Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "246.03"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 69,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Ангелов переулок 9",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-15T19:17:32.869Z",
+    "updated": "2025-07-15T19:17:32.869Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "246.03"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 70,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Ангелов переулок 9",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-15T19:44:07.785Z",
+    "updated": "2025-07-15T19:44:07.785Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 71,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Ангелов переулок 9",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-15T19:45:39.521Z",
+    "updated": "2025-07-15T19:45:39.521Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 72,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Ангелов переулок 9",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-15T20:37:09.116Z",
+    "updated": "2025-07-15T20:37:09.117Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 73,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Ангелов переулок 9",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-15T20:38:52.531Z",
+    "updated": "2025-07-15T20:38:52.531Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "246.03"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 74,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Ангелов переулок 9",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-16T07:53:01.554Z",
+    "updated": "2025-07-16T07:53:01.554Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 75,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Ангелов переулок 9",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-16T09:41:31.543Z",
+    "updated": "2025-07-16T09:41:31.543Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 76,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Ангелов переулок 9",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-16T09:42:01.163Z",
+    "updated": "2025-07-16T09:42:01.163Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 77,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Ангелов переулок 9",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-16T09:45:03.726Z",
+    "updated": "2025-07-16T09:45:03.726Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 78,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Ангелов переулок 9",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-16T09:48:33.402Z",
+    "updated": "2025-07-16T09:48:33.402Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 79,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва Ангелов переулок 9",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-07-16T11:15:22.607Z",
+    "updated": "2025-07-16T11:15:22.607Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 80,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки Совхозная улица 29",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-09-03T14:32:14.276Z",
+    "updated": "2025-09-03T14:32:14.276Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 81,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки Совхозная улица 29",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-09-03T14:37:29.932Z",
+    "updated": "2025-09-03T14:37:29.932Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 82,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки Совхозная улица 29",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-09-03T18:35:16.956Z",
+    "updated": "2025-09-03T18:35:16.956Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 83,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки Совхозная улица 29",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-09-03T18:39:08.261Z",
+    "updated": "2025-09-03T18:39:08.261Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 84,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки Совхозная улица 29",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-09-03T18:43:38.105Z",
+    "updated": "2025-09-03T18:43:38.105Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 85,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки Совхозная улица 29",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-09-03T18:50:47.565Z",
+    "updated": "2025-09-03T18:50:47.565Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 86,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки Совхозная улица 29",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-09-03T18:53:36.336Z",
+    "updated": "2025-09-03T18:53:36.336Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 87,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки Совхозная улица 29",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-09-03T18:58:45.540Z",
+    "updated": "2025-09-03T18:58:45.540Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 88,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки Совхозная улица 29",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-09-03T19:02:47.149Z",
+    "updated": "2025-09-03T19:02:47.149Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 89,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки Совхозная улица 29",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-09-03T19:07:53.233Z",
+    "updated": "2025-09-03T19:07:53.233Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 90,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки Совхозная улица 29",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-09-03T19:19:02.355Z",
+    "updated": "2025-09-03T19:19:02.355Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 91,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки Совхозная улица 29",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-09-03T19:34:40.114Z",
+    "updated": "2025-09-03T19:34:40.114Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 92,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки Совхозная улица 29",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-09-03T19:38:49.028Z",
+    "updated": "2025-09-03T19:38:49.028Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 93,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки Совхозная улица 29",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-09-03T19:56:01.046Z",
+    "updated": "2025-09-03T19:56:01.046Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 94,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки Совхозная улица 29",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-09-03T19:59:35.430Z",
+    "updated": "2025-09-03T19:59:35.430Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 95,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки Совхозная улица 29",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-09-03T20:42:10.971Z",
+    "updated": "2025-09-03T20:42:10.971Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 96,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки Совхозная улица 29",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-09-03T20:49:01.912Z",
+    "updated": "2025-09-03T20:49:01.912Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 97,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки Совхозная улица 29",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-09-03T21:21:05.421Z",
+    "updated": "2025-09-03T21:21:05.421Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 98,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Химки Совхозная улица 29",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-09-03T21:27:41.095Z",
+    "updated": "2025-09-03T21:27:41.095Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.order",
+  "pk": 99,
+  "fields": {
+    "first_name": "Александр",
+    "last_name": "Волков",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "address": "-",
+    "address_pvz": "Москва улица Римского-Корсакова 14 (Яндекс)",
+    "postal_code": "-",
+    "city": "-",
+    "created": "2025-10-15T20:56:15.240Z",
+    "updated": "2025-10-15T20:56:15.240Z",
+    "paid": false,
+    "coupon": null,
+    "discount": 0,
+    "delivery_sum": "0.00"
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 1,
+  "fields": {
+    "order": 1,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 2,
+  "fields": {
+    "order": 3,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 3,
+  "fields": {
+    "order": 4,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 4,
+  "fields": {
+    "order": 5,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 2,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 5,
+  "fields": {
+    "order": 6,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 6,
+  "fields": {
+    "order": 7,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 7,
+  "fields": {
+    "order": 8,
+    "product": 2,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 8,
+  "fields": {
+    "order": 9,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 9,
+  "fields": {
+    "order": 10,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 10,
+  "fields": {
+    "order": 11,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 11,
+  "fields": {
+    "order": 12,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 12,
+  "fields": {
+    "order": 13,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 13,
+  "fields": {
+    "order": 14,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 14,
+  "fields": {
+    "order": 15,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 15,
+  "fields": {
+    "order": 16,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 16,
+  "fields": {
+    "order": 17,
+    "product": 4,
+    "price": "3490.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 17,
+  "fields": {
+    "order": 18,
+    "product": 4,
+    "price": "3490.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 18,
+  "fields": {
+    "order": 19,
+    "product": 2,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 19,
+  "fields": {
+    "order": 20,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 20,
+  "fields": {
+    "order": 21,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 21,
+  "fields": {
+    "order": 22,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 22,
+  "fields": {
+    "order": 23,
+    "product": 3,
+    "price": "3143.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 23,
+  "fields": {
+    "order": 24,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 24,
+  "fields": {
+    "order": 25,
+    "product": 4,
+    "price": "3490.99",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 25,
+  "fields": {
+    "order": 28,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 26,
+  "fields": {
+    "order": 29,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 27,
+  "fields": {
+    "order": 30,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 28,
+  "fields": {
+    "order": 31,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 29,
+  "fields": {
+    "order": 32,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 30,
+  "fields": {
+    "order": 33,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 31,
+  "fields": {
+    "order": 35,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 32,
+  "fields": {
+    "order": 36,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 33,
+  "fields": {
+    "order": 37,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 34,
+  "fields": {
+    "order": 38,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 35,
+  "fields": {
+    "order": 39,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 36,
+  "fields": {
+    "order": 40,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 37,
+  "fields": {
+    "order": 41,
+    "product": 4,
+    "price": "3490.99",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 38,
+  "fields": {
+    "order": 43,
+    "product": 4,
+    "price": "3490.99",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 39,
+  "fields": {
+    "order": 44,
+    "product": 4,
+    "price": "3490.99",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 40,
+  "fields": {
+    "order": 45,
+    "product": 4,
+    "price": "3490.99",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 41,
+  "fields": {
+    "order": 46,
+    "product": 4,
+    "price": "3490.99",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 42,
+  "fields": {
+    "order": 47,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 43,
+  "fields": {
+    "order": 49,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 44,
+  "fields": {
+    "order": 50,
+    "product": 3,
+    "price": "3143.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 45,
+  "fields": {
+    "order": 51,
+    "product": 3,
+    "price": "3143.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 46,
+  "fields": {
+    "order": 52,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 47,
+  "fields": {
+    "order": 52,
+    "product": 2,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 48,
+  "fields": {
+    "order": 53,
+    "product": 3,
+    "price": "3143.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 49,
+  "fields": {
+    "order": 54,
+    "product": 3,
+    "price": "3143.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 50,
+  "fields": {
+    "order": 55,
+    "product": 4,
+    "price": "3490.99",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 51,
+  "fields": {
+    "order": 56,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 52,
+  "fields": {
+    "order": 57,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 53,
+  "fields": {
+    "order": 58,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 54,
+  "fields": {
+    "order": 59,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 55,
+  "fields": {
+    "order": 60,
+    "product": 4,
+    "price": "3490.99",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 56,
+  "fields": {
+    "order": 61,
+    "product": 4,
+    "price": "3490.99",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 57,
+  "fields": {
+    "order": 62,
+    "product": 4,
+    "price": "3490.99",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 58,
+  "fields": {
+    "order": 63,
+    "product": 4,
+    "price": "3490.99",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 59,
+  "fields": {
+    "order": 64,
+    "product": 4,
+    "price": "3490.99",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 60,
+  "fields": {
+    "order": 65,
+    "product": 4,
+    "price": "3490.99",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 61,
+  "fields": {
+    "order": 66,
+    "product": 4,
+    "price": "3490.99",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 62,
+  "fields": {
+    "order": 67,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 63,
+  "fields": {
+    "order": 68,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 64,
+  "fields": {
+    "order": 69,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 65,
+  "fields": {
+    "order": 70,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 66,
+  "fields": {
+    "order": 71,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 67,
+  "fields": {
+    "order": 72,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 68,
+  "fields": {
+    "order": 73,
+    "product": 4,
+    "price": "3490.99",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 69,
+  "fields": {
+    "order": 74,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 70,
+  "fields": {
+    "order": 76,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 71,
+  "fields": {
+    "order": 77,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 72,
+  "fields": {
+    "order": 78,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 73,
+  "fields": {
+    "order": 79,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 74,
+  "fields": {
+    "order": 98,
+    "product": 1,
+    "price": "5999.00",
+    "quantity": 1,
+    "size": 4,
+    "color": 1,
+    "m_type": 1
+  }
+},
+{
+  "model": "orders.orderitem",
+  "pk": 75,
+  "fields": {
+    "order": 99,
+    "product": 3,
+    "price": "3143.00",
+    "quantity": 2,
+    "size": 4,
+    "color": 1,
+    "m_type": 4
+  }
+},
+{
+  "model": "coupons.coupon",
+  "pk": 1,
+  "fields": {
+    "code": "F50EDF3E-BB6A-415F-AF51-6EBDFBC3FB52",
+    "valid_from": "2025-05-03T20:32:54Z",
+    "valid_to": "2025-05-10T20:33:09Z",
+    "discount": 15,
+    "active": false
+  }
+},
+{
+  "model": "coupons.coupon",
+  "pk": 2,
+  "fields": {
+    "code": "4714218-000047",
+    "valid_from": "2025-06-09T20:41:00Z",
+    "valid_to": "2025-06-18T20:33:09Z",
+    "discount": 95,
+    "active": true
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2025-04-03T20:40:47.698Z",
+    "user": 1,
+    "content_type": 5,
+    "object_id": "1",
+    "object_repr": "Германия, 276",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 2,
+  "fields": {
+    "action_time": "2025-04-03T20:41:16.194Z",
+    "user": 1,
+    "content_type": 2,
+    "object_id": "1",
+    "object_repr": "Venoteks, Германия, 276",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 3,
+  "fields": {
+    "action_time": "2025-04-03T20:41:32.527Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "1",
+    "object_repr": "Чулки",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 4,
+  "fields": {
+    "action_time": "2025-04-03T20:41:43.388Z",
+    "user": 1,
+    "content_type": 3,
+    "object_id": "1",
+    "object_repr": "1 класс",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 5,
+  "fields": {
+    "action_time": "2025-04-03T20:41:50.038Z",
+    "user": 1,
+    "content_type": 3,
+    "object_id": "2",
+    "object_repr": "2 класс",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 6,
+  "fields": {
+    "action_time": "2025-04-03T20:42:04.930Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "1",
+    "object_repr": "Стандартная",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 7,
+  "fields": {
+    "action_time": "2025-04-03T20:42:13.342Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "2",
+    "object_repr": "Короткая",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 8,
+  "fields": {
+    "action_time": "2025-04-03T20:42:23.408Z",
+    "user": 1,
+    "content_type": 1,
+    "object_id": "1",
+    "object_repr": "Варикоз",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 9,
+  "fields": {
+    "action_time": "2025-04-03T20:42:41.608Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "1",
+    "object_repr": "с открытым носком",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 10,
+  "fields": {
+    "action_time": "2025-04-03T20:42:49.022Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "2",
+    "object_repr": "с закрытым носком",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 11,
+  "fields": {
+    "action_time": "2025-04-03T20:42:59.678Z",
+    "user": 1,
+    "content_type": 6,
+    "object_id": "1",
+    "object_repr": "Мужские",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 12,
+  "fields": {
+    "action_time": "2025-04-03T20:43:06.376Z",
+    "user": 1,
+    "content_type": 6,
+    "object_id": "2",
+    "object_repr": "Женские",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 13,
+  "fields": {
+    "action_time": "2025-04-03T20:43:17.498Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "1",
+    "object_repr": "1",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 14,
+  "fields": {
+    "action_time": "2025-04-03T20:43:23.416Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "2",
+    "object_repr": "2",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 15,
+  "fields": {
+    "action_time": "2025-04-03T20:43:28.815Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "3",
+    "object_repr": "3",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 16,
+  "fields": {
+    "action_time": "2025-04-03T20:43:33.154Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "4",
+    "object_repr": "4",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 17,
+  "fields": {
+    "action_time": "2025-04-03T20:43:39.622Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "5",
+    "object_repr": "5",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 18,
+  "fields": {
+    "action_time": "2025-04-03T20:44:59.336Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "1",
+    "object_repr": "Черный",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 19,
+  "fields": {
+    "action_time": "2025-04-03T20:46:04.966Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "2",
+    "object_repr": "Бежевый",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 20,
+  "fields": {
+    "action_time": "2025-04-03T20:47:51.277Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "1",
+    "object_repr": "Чулки 2P280 VENOTEKS MEDICAL с открытым носком 2 класс компрессии, Venoteks, Германия, 276",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}, {\"added\": {\"name\": \"gallery\", \"object\": \"Gallery object (1)\"}}, {\"added\": {\"name\": \"gallery\", \"object\": \"Gallery object (2)\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 21,
+  "fields": {
+    "action_time": "2025-04-03T20:49:34.483Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "2",
+    "object_repr": "Чулки 2P281 VENOTEKS MEDICAL с закрытом носком 2 класс компрессии, Venoteks, Германия, 276",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}, {\"added\": {\"name\": \"gallery\", \"object\": \"Gallery object (3)\"}}, {\"added\": {\"name\": \"gallery\", \"object\": \"Gallery object (4)\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 22,
+  "fields": {
+    "action_time": "2025-04-05T21:33:49.257Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "2",
+    "object_repr": "Чулки 2P281 VENOTEKS MEDICAL с закрытом носком 2 класс компрессии, Venoteks, Германия, 276",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"name\": \"gallery\", \"object\": \"Gallery object (3)\", \"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 23,
+  "fields": {
+    "action_time": "2025-04-06T18:19:37.085Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "1",
+    "object_repr": "Чулки 2P280 VENOTEKS MEDICAL с открытым носком 2 класс компрессии, Venoteks, Германия, 276",
+    "action_flag": 2,
+    "change_message": "[{\"added\": {\"name\": \"gallery\", \"object\": \"Gallery object (5)\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 24,
+  "fields": {
+    "action_time": "2025-04-06T18:33:49.042Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "1",
+    "object_repr": "Чулки 2P280 VENOTEKS MEDICAL с открытым носком 2 класс компрессии, Venoteks, Германия, 276",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"name\": \"gallery\", \"object\": \"Gallery object (1)\", \"fields\": [\"Image\"]}}, {\"changed\": {\"name\": \"gallery\", \"object\": \"Gallery object (2)\", \"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 25,
+  "fields": {
+    "action_time": "2025-04-06T18:34:50.995Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "1",
+    "object_repr": "Чулки 2P280 VENOTEKS MEDICAL с открытым носком 2 класс компрессии, Venoteks, Германия, 276",
+    "action_flag": 2,
+    "change_message": "[{\"deleted\": {\"name\": \"gallery\", \"object\": \"Gallery object (None)\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 26,
+  "fields": {
+    "action_time": "2025-04-06T18:35:20.602Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "2",
+    "object_repr": "Чулки 2P281 VENOTEKS MEDICAL с закрытом носком 2 класс компрессии, Venoteks, Германия, 276",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"name\": \"gallery\", \"object\": \"Gallery object (3)\", \"fields\": [\"Image\"]}}, {\"changed\": {\"name\": \"gallery\", \"object\": \"Gallery object (4)\", \"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 27,
+  "fields": {
+    "action_time": "2025-04-30T09:11:33.360Z",
+    "user": 1,
+    "content_type": 5,
+    "object_id": "2",
+    "object_repr": "Россия, 643",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 28,
+  "fields": {
+    "action_time": "2025-04-30T09:11:39.940Z",
+    "user": 1,
+    "content_type": 2,
+    "object_id": "2",
+    "object_repr": "ОРТО, Россия, 643",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 29,
+  "fields": {
+    "action_time": "2025-04-30T09:12:36.829Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "3",
+    "object_repr": "Норм",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 30,
+  "fields": {
+    "action_time": "2025-04-30T09:12:47.319Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "4",
+    "object_repr": "Лонг",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 31,
+  "fields": {
+    "action_time": "2025-04-30T09:14:06.413Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "3",
+    "object_repr": "Чулки ORTO 4220 2-ого класса компрессии для мужчин, ОРТО, Россия, 643",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}, {\"added\": {\"name\": \"gallery\", \"object\": \"Gallery object (6)\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 32,
+  "fields": {
+    "action_time": "2025-04-30T09:47:03.649Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "2",
+    "object_repr": "Гольфы",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 33,
+  "fields": {
+    "action_time": "2025-04-30T09:48:32.781Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "6",
+    "object_repr": "XL",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 34,
+  "fields": {
+    "action_time": "2025-04-30T09:50:26.368Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "4",
+    "object_repr": "Гольфы 2C154 VENOTEKS BUSINESS для мужчин, с хлопком 2 класса, Venoteks, Германия, 276",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}, {\"added\": {\"name\": \"gallery\", \"object\": \"Gallery object (7)\"}}, {\"added\": {\"name\": \"gallery\", \"object\": \"Gallery object (8)\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 35,
+  "fields": {
+    "action_time": "2025-05-03T20:33:18.470Z",
+    "user": 1,
+    "content_type": 17,
+    "object_id": "1",
+    "object_repr": "F50EDF3E-BB6A-415F-AF51-6EBDFBC3FB52",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 36,
+  "fields": {
+    "action_time": "2025-05-13T18:31:20.767Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "4",
+    "object_repr": "Гольфы 2C154 VENOTEKS BUSINESS для мужчин, с хлопком 2 класса, Venoteks, Германия, 276",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Sock\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 37,
+  "fields": {
+    "action_time": "2025-05-30T07:29:50.541Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "4",
+    "object_repr": "Гольфы 2C154 VENOTEKS BUSINESS для мужчин, с хлопком 2 класса, Venoteks, Германия, 276",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Price\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 38,
+  "fields": {
+    "action_time": "2025-06-10T17:02:12.999Z",
+    "user": 1,
+    "content_type": 17,
+    "object_id": "2",
+    "object_repr": "4714218-000047",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 39,
+  "fields": {
+    "action_time": "2025-06-10T17:02:40.300Z",
+    "user": 1,
+    "content_type": 17,
+    "object_id": "2",
+    "object_repr": "4714218-000047",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Active\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 40,
+  "fields": {
+    "action_time": "2025-06-10T17:02:50.944Z",
+    "user": 1,
+    "content_type": 17,
+    "object_id": "1",
+    "object_repr": "F50EDF3E-BB6A-415F-AF51-6EBDFBC3FB52",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Active\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 41,
+  "fields": {
+    "action_time": "2025-06-10T20:45:04.723Z",
+    "user": 1,
+    "content_type": 17,
+    "object_id": "2",
+    "object_repr": "4714218-000047",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Valid from\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 42,
+  "fields": {
+    "action_time": "2025-06-10T20:51:59.086Z",
+    "user": 1,
+    "content_type": 17,
+    "object_id": "2",
+    "object_repr": "4714218-000047",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Valid from\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 43,
+  "fields": {
+    "action_time": "2025-06-11T09:17:13.698Z",
+    "user": 1,
+    "content_type": 17,
+    "object_id": "2",
+    "object_repr": "4714218-000047",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Valid to\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 44,
+  "fields": {
+    "action_time": "2025-06-19T20:32:13.233Z",
+    "user": 1,
+    "content_type": 25,
+    "object_id": "1",
+    "object_repr": "Назначение компрессионных чулок.",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 45,
+  "fields": {
+    "action_time": "2025-06-19T20:32:53.356Z",
+    "user": 1,
+    "content_type": 25,
+    "object_id": "2",
+    "object_repr": "Таблицы размеров компрессионных чулок",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 46,
+  "fields": {
+    "action_time": "2025-06-21T20:02:40.807Z",
+    "user": 1,
+    "content_type": 25,
+    "object_id": "2",
+    "object_repr": "Таблицы размеров компрессионных чулок",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u0422\\u0435\\u043a\\u0441\\u0442\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 47,
+  "fields": {
+    "action_time": "2025-07-15T20:42:06.378Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "4",
+    "object_repr": "Гольфы 2C154 VENOTEKS BUSINESS для мужчин, с хлопком 2 класса, Venoteks, Германия, 276",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"name\": \"gallery\", \"object\": \"Gallery object (8)\", \"fields\": [\"Image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 48,
+  "fields": {
+    "action_time": "2025-07-21T11:31:07.425Z",
+    "user": 1,
+    "content_type": 26,
+    "object_id": "1",
+    "object_repr": "Comment object (1)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 49,
+  "fields": {
+    "action_time": "2025-07-21T12:40:47.153Z",
+    "user": 1,
+    "content_type": 26,
+    "object_id": "1",
+    "object_repr": "Comment object (1)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u0422\\u0435\\u043a\\u0441\\u0442 \\u043a\\u043e\\u043c\\u043c\\u0435\\u043d\\u0442\\u0430\\u0440\\u0438\\u044f\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 50,
+  "fields": {
+    "action_time": "2025-09-05T19:37:16.894Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "2",
+    "object_repr": "Чулки 2P281 VENOTEKS MEDICAL с закрытом носком 2 класс компрессии, Venoteks, Германия, 276",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u0410\\u0440\\u0442\\u0438\\u043a\\u0443\\u043b\", \"\\u041a\\u043e\\u0434 \\u0442\\u043e\\u0432\\u0430\\u0440\\u0430\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 51,
+  "fields": {
+    "action_time": "2025-09-05T19:38:53.574Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "3",
+    "object_repr": "Чулки ORTO 4220 2-ого класса компрессии для мужчин, ОРТО, Россия, 643",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u0410\\u0440\\u0442\\u0438\\u043a\\u0443\\u043b\", \"\\u041a\\u043e\\u0434 \\u0442\\u043e\\u0432\\u0430\\u0440\\u0430\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 52,
+  "fields": {
+    "action_time": "2025-09-05T19:39:17.762Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "4",
+    "object_repr": "Гольфы 2C154 VENOTEKS BUSINESS для мужчин, с хлопком 2 класса, Venoteks, Германия, 276",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u0410\\u0440\\u0442\\u0438\\u043a\\u0443\\u043b\", \"\\u041a\\u043e\\u0434 \\u0442\\u043e\\u0432\\u0430\\u0440\\u0430\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 53,
+  "fields": {
+    "action_time": "2025-09-24T09:42:41.572Z",
+    "user": 1,
+    "content_type": 11,
+    "object_id": "5",
+    "object_repr": "Чулки мужские с хлопком и мультифиброй, закрытый мысок, 1 класс, Норм., ОРТО, Россия, 643",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}, {\"added\": {\"name\": \"gallery\", \"object\": \"Gallery object (9)\"}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 54,
+  "fields": {
+    "action_time": "2025-10-17T19:56:05.424Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "2",
+    "object_repr": "ОРТО - Короткая",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u0411\\u0440\\u0435\\u043d\\u0434\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 55,
+  "fields": {
+    "action_time": "2025-10-17T19:56:14.978Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "4",
+    "object_repr": "ОРТО - Лонг",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u0411\\u0440\\u0435\\u043d\\u0434\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 56,
+  "fields": {
+    "action_time": "2025-10-17T19:57:26.945Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "2",
+    "object_repr": "Venoteks - Короткая",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u0411\\u0440\\u0435\\u043d\\u0434\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 57,
+  "fields": {
+    "action_time": "2025-10-17T19:57:35.569Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "3",
+    "object_repr": "ОРТО - Норм",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u0411\\u0440\\u0435\\u043d\\u0434\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 58,
+  "fields": {
+    "action_time": "2025-10-18T17:55:40.702Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "6",
+    "object_repr": "ОРТО - XL",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"\\u0411\\u0440\\u0435\\u043d\\u0434\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 59,
+  "fields": {
+    "action_time": "2025-10-18T17:56:49.143Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "6",
+    "object_repr": "ОРТО - XL",
+    "action_flag": 2,
+    "change_message": "[]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 60,
+  "fields": {
+    "action_time": "2025-10-18T17:57:14.563Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "7",
+    "object_repr": "ОРТО - L",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 61,
+  "fields": {
+    "action_time": "2025-10-18T17:57:33.372Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "8",
+    "object_repr": "ОРТО - M",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 62,
+  "fields": {
+    "action_time": "2025-10-18T17:57:44.738Z",
+    "user": 1,
+    "content_type": 13,
+    "object_id": "9",
+    "object_repr": "ОРТО - S",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$nnq9KlR5AzzCJg5udTcgFV$nqCP1LpMCmbps/xBbSDcAktmSG6Twh0ulxvQnzDkdHY=",
+    "last_login": "2025-10-22T18:51:02.193Z",
+    "is_superuser": true,
+    "username": "root",
+    "first_name": "",
+    "last_name": "",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-04-03T20:37:58.189Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$KmTI85h6goNNHW7Mt9rhGH$BOzjKsg0laZ1oj27anF21zmq2Y5NC853ALQl6HVpVeU=",
+    "last_login": "2025-09-12T08:26:46.968Z",
+    "is_superuser": false,
+    "username": "Alex",
+    "first_name": "",
+    "last_name": "",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-05-19T09:37:52.242Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$jUjaickY3fLTrFBnYApbA9$YZlUZpDhYEVk2uBY60FBxJGDfeb20mHgsobt60rqZV8=",
+    "last_login": "2025-06-25T12:28:34.354Z",
+    "is_superuser": true,
+    "username": "Ustas",
+    "first_name": "",
+    "last_name": "",
+    "email": "volkovaleksandrsergeevich@yandex.ru",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-06-25T12:28:16.667Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$BUrzw4nRgCGXK1XErv0Lkw$fZB21HO53CUG3Q79GTaZfRiEmDg+4ZBsIe/t2iuy6UA=",
+    "last_login": "2025-09-17T19:34:39.738Z",
+    "is_superuser": false,
+    "username": "Chipolino",
+    "first_name": "Chi",
+    "last_name": "Polino",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-17T19:27:01.226Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$MTKaHsQEDqeUQSlEnFGw4b$r9DGIkybANyYnUU04kO0TWNzmtOo2zG7V/R9l5+xl0Y=",
+    "last_login": "2025-09-17T19:34:18.272Z",
+    "is_superuser": false,
+    "username": "Buratino",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2025-09-17T19:33:56.800Z",
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]

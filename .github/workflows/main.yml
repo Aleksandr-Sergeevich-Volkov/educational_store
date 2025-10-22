@@ -187,6 +187,18 @@ jobs:
           # 8. Перезапускаем все сервисы
           sudo docker compose up -d
 
+          # 9. Ждем полного запуска всех сервисов
+          sleep 10
+      
+          # 10. Генерируем XML файл в контейнере
+          sudo docker compose exec -T traning_store python manage.py generate_yml_feed
+      
+          # 11. Копируем ИЗ контейнера НА хост
+          sudo docker cp educational_store-traning_store-1:/var/www/html/goods_chulki.xml /var/www/html/goods_chulki.xml
+      
+          # 12. Проверяем что файл создался
+          ls -la /var/www/html/goods_chulki.xml
+
   send_message:
     runs-on: ubuntu-latest
     needs: deploy

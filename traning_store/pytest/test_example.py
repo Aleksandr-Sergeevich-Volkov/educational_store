@@ -2,20 +2,22 @@ from http import HTTPStatus
 
 import pytest
 from cart.cart import Cart
-from catalog.models import Color, Gallery, Model_type, Product, Size
+# from catalog.models import Color, Gallery, Model_type, Product, Size
 from django.contrib.sessions.middleware import SessionMiddleware
-from django.core.management import call_command
-from django.shortcuts import get_object_or_404
-from django.test import RequestFactory, TestCase
+# from django.core.management import call_command
+# from django.shortcuts import get_object_or_404
+from django.test import RequestFactory
+# TestCase
 from django.urls import reverse
-from orders.forms import OrderCreateForm
-from orders.models import Order, OrderItem
+# from orders.forms import OrderCreateForm
+# from orders.models import Order, OrderItem
 
 
 """ @pytest.fixture
 def data():
     call_command('loaddata', 'db.json', verbosity=0)
  """
+
 
 @pytest.fixture
 def cart_session_():
@@ -42,15 +44,16 @@ def test_home_page(client):
         self.request.session.save()
  """
 
-    @pytest.mark.django_db
-    def test_initialize_cart_clean_session(self):
-        self.request = RequestFactory().get('/')
-        middleware = SessionMiddleware(get_response=lambda r: None)
-        middleware.process_request(self.request)
-        self.request.session.save()
-        request = self.request
-        cart = Cart(request)
-        assert cart.cart == {}
+
+@pytest.mark.django_db
+def test_initialize_cart_clean_session(self):
+    self.request = RequestFactory().get('/')
+    middleware = SessionMiddleware(get_response=lambda r: None)
+    middleware.process_request(self.request)
+    self.request.session.save()
+    request = self.request
+    cart = Cart(request)
+    assert cart.cart == {}
 
     """ @pytest.mark.django_db
     @pytest.mark.usefixtures('data', 'cart_session')

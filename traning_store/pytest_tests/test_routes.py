@@ -1,5 +1,5 @@
 # news/tests/test_routes.py
-import pprint
+# import pprint
 from http import HTTPStatus
 
 from cart.cart import Cart

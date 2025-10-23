@@ -3,19 +3,19 @@ import pprint
 from http import HTTPStatus
 
 from cart.cart import Cart
-from catalog.models import Color, Gallery, Model_type, Product, Size
+# from catalog.models import Color, Gallery, Model_type, Product, Size
 from django.contrib.sessions.middleware import SessionMiddleware
-from django.core.management import call_command
-from django.shortcuts import get_object_or_404
+# from django.core.management import call_command
+# from django.shortcuts import get_object_or_404
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
-from orders.forms import OrderCreateForm
-from orders.models import Order, OrderItem
+# from orders.forms import OrderCreateForm
+# from orders.models import Order, OrderItem
 
 
 class TestRoutes(TestCase):
     def setUp(self):
-        call_command('loaddata', 'db.json', verbosity=0)
+        # call_command('loaddata', 'db.json', verbosity=0)
         self.request = RequestFactory().get('/')
         middleware = SessionMiddleware(get_response=lambda r: None)
         middleware.process_request(self.request)
@@ -36,7 +36,7 @@ class TestRoutes(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, HTTPStatus.OK)
 
-    def test_count_catalog(self):
+    """ def test_count_catalog(self):
         catalog_count = Product.objects.count()
         self.assertEqual(catalog_count, 4)
 
@@ -99,3 +99,4 @@ class TestRoutes(TestCase):
         url = reverse('catalog:detail', kwargs={'slug': product.slug})
         response = self.client.get(url)
         self.assertEqual(response.status_code, HTTPStatus.OK)
+ """

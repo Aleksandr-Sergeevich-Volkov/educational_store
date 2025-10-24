@@ -34,7 +34,7 @@ def create_missing_columns_for_tests(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('catalog', '0009_gallery_main'),
+        ('catalog', '0011_model_type_brand_model_type_description_and_more'),
     ]
     
     operations = [

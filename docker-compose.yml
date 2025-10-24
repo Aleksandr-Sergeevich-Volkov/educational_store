@@ -43,6 +43,7 @@ services:
     volumes:
       - static:/backend_static
       - media:/app/media
+      - .:/app
       - nginx_html:/var/www/html
     # Какие контейнеры нужно запустить до старта этого контейнера:
     #command: celery -A traning_store worker -l info 

@@ -88,7 +88,8 @@ jobs:
         POSTGRES_DB: django_db
         DB_HOST: 127.0.0.1
         DB_PORT: 5432
-        HEADERS: ${{ secrets.HEADERS }}  
+        HEADERS: ${{ secrets.HEADERS }}
+        TESTING: 'true'  
       run: |
         cd traning_store/
         python manage.py migrate

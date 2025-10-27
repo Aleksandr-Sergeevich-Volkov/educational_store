@@ -1,7 +1,7 @@
 from http import HTTPStatus
 
 import pytest
-from cart.cart import Cart
+# from cart.cart import Cart
 # from catalog.models import Color, Gallery, Model_type, Product, Size
 from django.contrib.sessions.middleware import SessionMiddleware
 # from django.core.management import call_command
@@ -9,6 +9,7 @@ from django.contrib.sessions.middleware import SessionMiddleware
 from django.test import RequestFactory
 # TestCase
 from django.urls import reverse
+
 # from orders.forms import OrderCreateForm
 # from orders.models import Order, OrderItem
 
@@ -17,16 +18,18 @@ from django.urls import reverse
 def data():
     call_command('loaddata', 'db.json', verbosity=0)
  """
+
+
 @pytest.fixture(autouse=True)
 def create_test_data(db):
     """Создает минимальные тестовые данные для всех тестов"""
-    from catalog.models import Country, Brend
+    from catalog.models import Brend, Country
     from homepage.models import Post
-    
+
     # Создаем обязательные данные
     country = Country.objects.create(name="Test Country")
-    brand = Brend.objects.create(name="Test Brand", country_brand_id=country.id)
-    
+    Brend.objects.create(name="Test Brand", country_brand_id=country.id)
+
     # Создаем пост для homepage если нужно
     Post.objects.create(title="Test Post", text="Test content")
 

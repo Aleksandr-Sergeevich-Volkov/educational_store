@@ -19,7 +19,8 @@ def enable_db_access_for_all_tests(db):
 @pytest.fixture(autouse=True)
 def create_test_data(db):
     """Создаем тестовые данные для всех тестов"""
-    from catalog.models import Brend, Size, Model_type
+    from catalog.models import Brend, Model_type, Size
+
     # Создаем данные только если их нет
     if not Brend.objects.exists():
         brand = Brend.objects.create(name="Test Brand")

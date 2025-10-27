@@ -20,7 +20,8 @@ class Brend(models.Model):
     name = models.CharField('Название', max_length=TITLE_LEN)
     country_brand = models.ForeignKey(
         Country,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        default=1,
     )
 
     class Meta:

@@ -1,4 +1,3 @@
-# catalog/migrations/0014_add_country_brand_id.py
 from django.db import migrations
 import os
 

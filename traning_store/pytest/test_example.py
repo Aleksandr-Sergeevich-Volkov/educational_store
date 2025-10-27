@@ -17,6 +17,18 @@ from django.urls import reverse
 def data():
     call_command('loaddata', 'db.json', verbosity=0)
  """
+@pytest.fixture(autouse=True)
+def create_test_data(db):
+    """Создает минимальные тестовые данные для всех тестов"""
+    from catalog.models import Country, Brend
+    from homepage.models import Post
+    
+    # Создаем обязательные данные
+    country = Country.objects.create(name="Test Country")
+    brand = Brend.objects.create(name="Test Brand", country_brand_id=country.id)
+    
+    # Создаем пост для homepage если нужно
+    Post.objects.create(title="Test Post", text="Test content")
 
 
 @pytest.fixture

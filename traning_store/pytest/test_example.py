@@ -55,7 +55,7 @@ def test_initialize_cart_clean_session(self):
     cart = Cart(request)
     assert cart.cart == {} """
 
-    """ @pytest.mark.django_db
+""" @pytest.mark.django_db
     @pytest.mark.usefixtures('data', 'cart_session')
     def test_add_cart(self):
         request = self.request

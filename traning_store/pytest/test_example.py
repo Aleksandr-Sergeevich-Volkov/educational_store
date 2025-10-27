@@ -80,7 +80,7 @@ def test_initialize_cart_clean_session(self):
                      'size': '4'}
         assert vars(cart)['cart']['1'] == test_cart """
 
-    """ @pytest.mark.django_db
+""" @pytest.mark.django_db
     @pytest.mark.usefixtures('data', 'cart_session')
     def test_del_cart(self):
         cart = Cart(self.request)

@@ -21,7 +21,6 @@ class Brend(models.Model):
     country_brand = models.ForeignKey(
         Country,
         on_delete=models.CASCADE,
-        default=1,
     )
 
     class Meta:

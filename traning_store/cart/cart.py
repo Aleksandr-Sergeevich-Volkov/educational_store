@@ -34,9 +34,9 @@ class Cart(object):
         if product_id not in self.cart:
             self.cart[product_id] = {'quantity': 0,
                                      'price': str(product.price),
-                                     'size': str(product.Size),
+                                     'size': str(product.Size.name),
                                      'color': str(product.Color),
-                                     'm_type': str(product.Model_type),
+                                     'm_type': str(product.Model_type.name),
                                      'images_m': str(Gallery.objects.filter(
                                                      product=product))
                                      }

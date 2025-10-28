@@ -4,7 +4,8 @@ from decimal import Decimal
 
 import requests
 from cart.cart import Cart
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import redirect, render
 from dotenv import load_dotenv
 
 from .forms import Delivery_Cdek_Form, DeliveryForm
@@ -29,12 +30,14 @@ def delivery_add(request):
             json=data,
         )
         cost_ = homework_statuses.json().get('pricing_total')
-        cost_not_price = Decimal('0')
+        # cost_not_price = Decimal('0')
         request.session['delivery_cost'] = homework_statuses.json().get('pricing_total').replace('RUB', "")
         request.session['delivery_address'] = form.cleaned_data['address_pvz'] + ' (Яндекс)'
-        if cart.get_total_price() <= Decimal('5000'):
-            return render(request, 'deliverys.html', {'cost': cost_})
-        return render(request, 'deliverys.html', {'cost': cost_not_price})
+        if cart.get_total_price() >= Decimal('5000'):
+            messages.success(request, 'Поздравляем! Доставка бесплатна!')
+        else:
+            messages.info(request, f'Доставка:{cost_} ₽')
+        return redirect('cart:cart_detail')
     else:
         form = DeliveryForm()
     return render(request, 'delivery.html', {'form': form, })

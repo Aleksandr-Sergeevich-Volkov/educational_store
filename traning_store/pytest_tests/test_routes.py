@@ -41,6 +41,7 @@ class TestRoutes(TestCase):
             Type_product=self.type_product,
             Model_type=self.model_type,
             Size=self.size,
+            stock=1,
             price=5999.00,
             available=True
         )
@@ -57,6 +58,7 @@ class TestRoutes(TestCase):
             Size=self.size,
             Type_product=self.type_product,
             Model_type=self.model_type,
+            stock=1,
             available=True
         )
         # Добавьте еще продукты если нужно для test_count_catalog
@@ -73,6 +75,7 @@ class TestRoutes(TestCase):
             Model_type=self.model_type,
             Size=self.size,
             price=7999.00,
+            stock=1,
             available=True
         )
         self.product4 = Product.objects.create(
@@ -88,6 +91,7 @@ class TestRoutes(TestCase):
             Model_type=self.model_type,
             Size=self.size,
             price=8999.00,
+            stock=1,
             available=True
         )
 

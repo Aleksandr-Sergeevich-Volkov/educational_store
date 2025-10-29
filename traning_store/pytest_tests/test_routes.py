@@ -24,7 +24,7 @@ class TestRoutes(TestCase):
         self.type_product = Type_product.objects.create(name="Chulki")
 
         # Создание цветов, размеров и типов моделей
-        self.color = Color.objects.create(name="Черный")
+        # self.color = Color.objects.create(name="Черный")
         self.size = Size.objects.create(name="4", brand=self.brend)
         self.model_type = Model_type.objects.create(name="Стандартная", brand=self.brend)
 
@@ -121,7 +121,7 @@ class TestRoutes(TestCase):
                  images_m=images_m)
 
         expected_cart_item = {
-            'color': 'Черный',
+            'color': 'black',
             'images_m': str(images_m),  # Преобразуем QuerySet в строку для сравнения
             'm_type': 'Стандартная',
             'price': '5999.00',

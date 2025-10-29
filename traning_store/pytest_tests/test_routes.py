@@ -20,8 +20,8 @@ class TestRoutes(TestCase):
 
         # Создание цветов, размеров и типов моделей
         self.color = Color.objects.create(name="Черный")
-        self.size = Size.objects.create(name="4", brand_size=self.brend)
-        self.model_type = Model_type.objects.create(name="Стандартная", brand_size=self.brend)
+        self.size = Size.objects.create(name="4", brand_size_id=self.brend_id)
+        self.model_type = Model_type.objects.create(name="Стандартная", brand_size_id=self.brend_id)
 
         # Создание тестовых продуктов
         self.product1 = Product.objects.create(

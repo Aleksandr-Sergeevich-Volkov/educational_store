@@ -124,7 +124,7 @@ class TestRoutes(TestCase):
             'color': 'black',
             'images_m': str(images_m),  # Преобразуем QuerySet в строку для сравнения
             'm_type': 'Стандартная',
-            'price': '5999.00',
+            'price': '5999.0',
             'quantity': 1,
             'size': '4'
         }

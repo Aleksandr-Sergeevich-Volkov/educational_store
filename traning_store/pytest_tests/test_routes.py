@@ -162,7 +162,10 @@ class TestRoutes(TestCase):
             order=order,
             product=self.product1,
             price=5000,
-            quantity=1
+            quantity=1,
+            size=self.size,
+            color=self.color,
+            m_type=self.model_type
         )
         self.assertEqual(Order.objects.count(), initial_order_count + 1)
         self.assertEqual(OrderItem.objects.count(), initial_order_item_count + 1)

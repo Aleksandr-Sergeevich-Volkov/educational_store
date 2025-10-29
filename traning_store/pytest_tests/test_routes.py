@@ -27,9 +27,9 @@ class TestRoutes(TestCase):
         self.product1 = Product.objects.create(
             name="Test Product 1",
             slug="test-product-1",
-            brend=self.brend,
-            appointment=self.appointment,
-            male=self.male,
+            brand=self.brend,
+            Appointment=self.appointment,
+            Male=self.male,
             price=5999.00,
             available=True
         )

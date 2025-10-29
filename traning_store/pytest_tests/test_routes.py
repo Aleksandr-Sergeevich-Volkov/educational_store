@@ -48,7 +48,7 @@ class TestRoutes(TestCase):
         self.product2 = Product.objects.create(
             name="Test Product 2",
             slug="test-product-2",
-            brend=self.brend,
+            brand=self.brend,
             Appointment=self.appointment,
             Class_compress=self.class_compress,
             Color=self.color,
@@ -65,7 +65,7 @@ class TestRoutes(TestCase):
         self.product3 = Product.objects.create(
             name="Test Product 3",
             slug="test-product-3",
-            brend=self.brend,
+            brand=self.brend,
             Appointment=self.appointment,
             Class_compress=self.class_compress,
             Color=self.color,
@@ -81,7 +81,7 @@ class TestRoutes(TestCase):
         self.product4 = Product.objects.create(
             name="Test Product 4",
             slug="test-product-4",
-            brend=self.brend,
+            brand=self.brend,
             Appointment=self.appointment,
             Class_compress=self.class_compress,
             Color=self.color,

@@ -18,6 +18,7 @@ class TestRoutes(TestCase):
         self.appointment = Appointment.objects.create(name="Test Appointment")
         self.male = Male.objects.create(name="Test Male")
         self.class_compress = Class_compress.objects.create(name="2 class")
+        self.color = Color.objects.create(name="black", color='000000')
 
         # Создание цветов, размеров и типов моделей
         self.color = Color.objects.create(name="Черный")
@@ -31,6 +32,7 @@ class TestRoutes(TestCase):
             brand=self.brend,
             Appointment=self.appointment,
             Class_compress=self.class_compress,
+            Color=self.color,
             Male=self.male,
             price=5999.00,
             available=True
@@ -41,6 +43,7 @@ class TestRoutes(TestCase):
             brend=self.brend,
             Appointment=self.appointment,
             Class_compress=self.class_compress,
+            Color=self.color,
             Male=self.male,
             price=6999.00,
             available=True
@@ -52,6 +55,7 @@ class TestRoutes(TestCase):
             brend=self.brend,
             Appointment=self.appointment,
             Class_compress=self.class_compress,
+            Color=self.color,
             Male=self.male,
             price=7999.00,
             available=True
@@ -62,6 +66,7 @@ class TestRoutes(TestCase):
             brend=self.brend,
             Appointment=self.appointment,
             Class_compress=self.class_compress,
+            Color=self.color,
             Male=self.male,
             price=8999.00,
             available=True

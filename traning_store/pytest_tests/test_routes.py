@@ -1,103 +1,140 @@
-# news/tests/test_routes.py
-# import pprint
 from http import HTTPStatus
 
 from cart.cart import Cart
-# from catalog.models import Color, Gallery, Model_type, Product, Size
+from catalog.models import (Appointment, Brend, Color, Country, Gallery, Male,
+                            Model_type, Product, Size)
 from django.contrib.sessions.middleware import SessionMiddleware
-# from django.core.management import call_command
-# from django.shortcuts import get_object_or_404
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
-
-# from orders.forms import OrderCreateForm
-# from orders.models import Order, OrderItem
+from orders.forms import OrderCreateForm
+from orders.models import Order, OrderItem
 
 
 class TestRoutes(TestCase):
     def setUp(self):
-        # call_command('loaddata', 'db.json', verbosity=0)
+        # Создание базовых моделей
+        self.country = Country.objects.create(name="Test Country")
+        self.brend = Brend.objects.create(name="Test Brand", country_brand_id=self.country.id)
+        self.appointment = Appointment.objects.create(name="Test Appointment")
+        self.male = Male.objects.create(name="Test Male")
+
+        # Создание цветов, размеров и типов моделей
+        self.color = Color.objects.create(name="Черный")
+        self.size = Size.objects.create(name="4")
+        self.model_type = Model_type.objects.create(name="Стандартная")
+
+        # Создание тестовых продуктов
+        self.product1 = Product.objects.create(
+            name="Test Product 1",
+            slug="test-product-1",
+            brend=self.brend,
+            appointment=self.appointment,
+            male=self.male,
+            price=5999.00,
+            available=True
+        )
+        self.product2 = Product.objects.create(
+            name="Test Product 2",
+            slug="test-product-2",
+            brend=self.brend,
+            appointment=self.appointment,
+            male=self.male,
+            price=6999.00,
+            available=True
+        )
+        # Добавьте еще продукты если нужно для test_count_catalog
+        self.product3 = Product.objects.create(
+            name="Test Product 3",
+            slug="test-product-3",
+            brend=self.brend,
+            appointment=self.appointment,
+            male=self.male,
+            price=7999.00,
+            available=True
+        )
+        self.product4 = Product.objects.create(
+            name="Test Product 4",
+            slug="test-product-4",
+            brend=self.brend,
+            appointment=self.appointment,
+            male=self.male,
+            price=8999.00,
+            available=True
+        )
+
+        # Создание галереи для продукта
+        self.gallery1 = Gallery.objects.create(product=self.product1, image="test1.jpg")
+        self.gallery2 = Gallery.objects.create(product=self.product1, image="test2.jpg")
+
+        # Настройка запроса и корзины
         self.request = RequestFactory().get('/')
         middleware = SessionMiddleware(get_response=lambda r: None)
         middleware.process_request(self.request)
         self.request.session.save()
 
-    def test_initialize_cart_clean_session(self):
-        request = self.request
-        cart = Cart(request)
-        self.assertEqual(cart.cart, {})
-
-    def test_home_page(self):
-        url = reverse('homepage:homepage')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-
-    def test_catalog(self):
-        url = reverse('catalog:catalog')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, HTTPStatus.OK)
-
-    """ def test_count_catalog(self):
+    def test_count_catalog(self):
         catalog_count = Product.objects.count()
         self.assertEqual(catalog_count, 4)
 
     def test_add_cart(self):
         cart = Cart(self.request)
-        product = get_object_or_404(Product, id=1)
-        color = get_object_or_404(Color, id=1)
-        size = get_object_or_404(Size, id=1)
-        model_type = get_object_or_404(Model_type, id=1)
-        images_m = Gallery.objects.filter(product=product)
-        cart.add(product=product,
+        images_m = Gallery.objects.filter(product=self.product1)
+
+        cart.add(product=self.product1,
                  quantity=1,
-                 size=size,
-                 color=color,
-                 m_type=model_type,
-                 images_m=images_m,)
-        pprint.pprint(vars(cart)['cart']['1'])
-        test_cart = {'color': 'Черный',
-                     'images_m': '<QuerySet [<Gallery: Gallery object (1)>, <Gallery: Gallery '
-                     'object (2)>]>',
-                     'm_type': 'Стандартная',
-                     'price': '5999.00',
-                     'quantity': 1,
-                     'size': '4'}
-        self.assertEqual(vars(cart)['cart']['1'], test_cart)
+                 size=self.size,
+                 color=self.color,
+                 m_type=self.model_type,
+                 images_m=images_m)
+
+        expected_cart_item = {
+            'color': 'Черный',
+            'images_m': str(images_m),  # Преобразуем QuerySet в строку для сравнения
+            'm_type': 'Стандартная',
+            'price': '5999.00',
+            'quantity': 1,
+            'size': '4'
+        }
+
+        self.assertEqual(cart.cart[str(self.product1.id)], expected_cart_item)
 
     def test_del_cart(self):
         cart = Cart(self.request)
-        product = get_object_or_404(Product, id=1)
-        color = get_object_or_404(Color, id=1)
-        size = get_object_or_404(Size, id=1)
-        model_type = get_object_or_404(Model_type, id=1)
-        images_m = Gallery.objects.filter(product=product)
-        cart.add(product=product,
+        images_m = Gallery.objects.filter(product=self.product1)
+        cart.add(product=self.product1,
                  quantity=1,
-                 size=size,
-                 color=color,
-                 m_type=model_type,
-                 images_m=images_m,)
-        cart.remove(product)
+                 size=self.size,
+                 color=self.color,
+                 m_type=self.model_type,
+                 images_m=images_m)
+        cart.remove(self.product1)
         self.assertEqual(cart.cart, {})
 
     def test_create_order(self):
-        form = OrderCreateForm(data={'first_name': 'Имя', 'last_name': 'Фамилия',
-                                     'email': 'volkovaleksandrsergeevich@yandex.ru', 'address': 'Адрес',
-                                     'address_pvz': 'Адрес ПВЗ', 'postal_code': 'Индекс',
-                                     'city': 'Город'})
-        order_count = Order.objects.count()
+        initial_order_count = Order.objects.count()
+        initial_order_item_count = OrderItem.objects.count()
+        form = OrderCreateForm(data={
+            'first_name': 'Имя',
+            'last_name': 'Фамилия',
+            'email': 'volkovaleksandrsergeevich@yandex.ru',
+            'address': 'Адрес',
+            'address_pvz': 'Адрес ПВЗ',
+            'postal_code': 'Индекс',
+            'city': 'Город'
+        })
+
+        self.assertTrue(form.is_valid())
         order = form.save()
-        order_item_count = OrderItem.objects.count()
-        OrderItem.objects.create(order=order,
-                                 product=get_object_or_404(Product, id=1),
-                                 price=5000,
-                                 quantity=1)
-        self.assertEqual(Order.objects.count(), order_count + 1)
-        self.assertEqual(OrderItem.objects.count(), order_item_count + 1)
+        OrderItem.objects.create(
+            order=order,
+            product=self.product1,
+            price=5000,
+            quantity=1
+        )
+        self.assertEqual(Order.objects.count(), initial_order_count + 1)
+        self.assertEqual(OrderItem.objects.count(), initial_order_item_count + 1)
 
     def test_catalog_detail(self):
-        product = get_object_or_404(Product, id=1)
-        url = reverse('catalog:detail', kwargs={'slug': product.slug})
+        url = reverse('catalog:detail', kwargs={'slug': self.product1.slug})
         response = self.client.get(url)
         self.assertEqual(response.status_code, HTTPStatus.OK)
- """

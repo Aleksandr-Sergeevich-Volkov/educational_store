@@ -14,14 +14,14 @@ class TestRoutes(TestCase):
     def setUp(self):
         # Создание базовых моделей
         self.country = Country.objects.create(name="Test Country")
-        self.brend = Brend.objects.create(name="Test Brand", country_brand_id=self.country.id)
+        self.brend = Brend.objects.create(name="Test Brand", country_brand=self.country)
         self.appointment = Appointment.objects.create(name="Test Appointment")
         self.male = Male.objects.create(name="Test Male")
 
         # Создание цветов, размеров и типов моделей
         self.color = Color.objects.create(name="Черный")
-        self.size = Size.objects.create(name="4")
-        self.model_type = Model_type.objects.create(name="Стандартная")
+        self.size = Size.objects.create(name="4", brand_size=self.brend)
+        self.model_type = Model_type.objects.create(name="Стандартная", brand_size=self.brend)
 
         # Создание тестовых продуктов
         self.product1 = Product.objects.create(

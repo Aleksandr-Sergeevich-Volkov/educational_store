@@ -37,7 +37,7 @@ class TestRoutes(TestCase):
             Class_compress=self.class_compress,
             Color=self.color,
             Male=self.male,
-            Soсk=self.sock,
+            Sock=self.sock,
             price=5999.00,
             available=True
         )
@@ -49,7 +49,7 @@ class TestRoutes(TestCase):
             Class_compress=self.class_compress,
             Color=self.color,
             Male=self.male,
-            Soсk=self.sock,
+            Sock=self.sock,
             price=6999.00,
             available=True
         )
@@ -62,7 +62,7 @@ class TestRoutes(TestCase):
             Class_compress=self.class_compress,
             Color=self.color,
             Male=self.male,
-            Soсk=self.sock,
+            Sock=self.sock,
             price=7999.00,
             available=True
         )
@@ -74,7 +74,7 @@ class TestRoutes(TestCase):
             Class_compress=self.class_compress,
             Color=self.color,
             Male=self.male,
-            Soсk=self.sock,
+            Sock=self.sock,
             price=8999.00,
             available=True
         )

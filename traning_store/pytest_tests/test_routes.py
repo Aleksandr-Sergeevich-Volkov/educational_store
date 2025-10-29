@@ -40,6 +40,7 @@ class TestRoutes(TestCase):
             Sock=self.sock,
             Type_product=self.type_product,
             Model_type=self.model_type,
+            Size=self.size,
             price=5999.00,
             available=True
         )
@@ -53,6 +54,7 @@ class TestRoutes(TestCase):
             Male=self.male,
             Sock=self.sock,
             price=6999.00,
+            Size=self.size,
             Type_product=self.type_product,
             Model_type=self.model_type,
             available=True
@@ -69,6 +71,7 @@ class TestRoutes(TestCase):
             Sock=self.sock,
             Type_product=self.type_product,
             Model_type=self.model_type,
+            Size=self.size,
             price=7999.00,
             available=True
         )
@@ -83,6 +86,7 @@ class TestRoutes(TestCase):
             Sock=self.sock,
             Type_product=self.type_product,
             Model_type=self.model_type,
+            Size=self.size,
             price=8999.00,
             available=True
         )

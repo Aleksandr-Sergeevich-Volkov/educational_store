@@ -2,7 +2,8 @@ from http import HTTPStatus
 
 from cart.cart import Cart
 from catalog.models import (Appointment, Brend, Class_compress, Color, Country,
-                            Gallery, Male, Model_type, Product, Size)
+                            Gallery, Male, Model_type, Product, Size, Sock,
+                            Type_product)
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
@@ -19,6 +20,8 @@ class TestRoutes(TestCase):
         self.male = Male.objects.create(name="Test Male")
         self.class_compress = Class_compress.objects.create(name="2 class")
         self.color = Color.objects.create(name="black", color='000000')
+        self.sock = Sock.objects.create(name="Closed")
+        self.type_product = Type_product.objects.create(name="Chulki")
 
         # Создание цветов, размеров и типов моделей
         self.color = Color.objects.create(name="Черный")
@@ -34,6 +37,7 @@ class TestRoutes(TestCase):
             Class_compress=self.class_compress,
             Color=self.color,
             Male=self.male,
+            Sock=self.sock,
             price=5999.00,
             available=True
         )
@@ -45,6 +49,7 @@ class TestRoutes(TestCase):
             Class_compress=self.class_compress,
             Color=self.color,
             Male=self.male,
+            Sock=self.sock,
             price=6999.00,
             available=True
         )
@@ -57,6 +62,7 @@ class TestRoutes(TestCase):
             Class_compress=self.class_compress,
             Color=self.color,
             Male=self.male,
+            Sock=self.sock,
             price=7999.00,
             available=True
         )
@@ -68,6 +74,7 @@ class TestRoutes(TestCase):
             Class_compress=self.class_compress,
             Color=self.color,
             Male=self.male,
+            Sock=self.sock,
             price=8999.00,
             available=True
         )

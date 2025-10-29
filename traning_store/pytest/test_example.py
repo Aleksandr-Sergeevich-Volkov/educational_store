@@ -1,153 +1,239 @@
 from http import HTTPStatus
 
 import pytest
-# from cart.cart import Cart
-# from catalog.models import Color, Gallery, Model_type, Product, Size
+from cart.cart import Cart
+from catalog.models import (Appointment, Brend, Class_compress, Color, Country,
+                            Gallery, Male, Model_type, Product, Size, Soсk,
+                            Type_product)
 from django.contrib.sessions.middleware import SessionMiddleware
-# from django.core.management import call_command
-# from django.shortcuts import get_object_or_404
 from django.test import RequestFactory
-# TestCase
 from django.urls import reverse
-
-# from orders.forms import OrderCreateForm
-# from orders.models import Order, OrderItem
-
-
-""" @pytest.fixture
-def data():
-    call_command('loaddata', 'db.json', verbosity=0)
- """
-
-
-@pytest.fixture(autouse=True)
-def create_test_data(db):
-    """Создает минимальные тестовые данные для всех тестов"""
-    from catalog.models import Brend, Country
-    from homepage.models import Post
-
-    # Создаем обязательные данные
-    country = Country.objects.create(name="Test Country")
-    Brend.objects.create(name="Test Brand", country_brand_id=country.id)
-
-    # Создаем пост для homepage если нужно
-    Post.objects.create(title="Test Post", text="Test content")
+from orders.forms import OrderCreateForm
+from orders.models import Order, OrderItem
 
 
 @pytest.fixture
-def cart_session_():
+def test_data(db):
+    """Создает полные тестовые данные для всех тестов"""
+    # Создание базовых моделей
+    country = Country.objects.create(name="Test Country")
+    brend = Brend.objects.create(name="Test Brand", country_brand=country)
+    appointment = Appointment.objects.create(name="Test Appointment")
+    male = Male.objects.create(name="Test Male")
+    class_compress = Class_compress.objects.create(name="2 class")
+    color = Color.objects.create(name="black", color='000000')
+    sock = Soсk.objects.create(name="Closed")
+    type_product = Type_product.objects.create(name="Chulki")
+
+    # Создание размеров и типов моделей
+    size = Size.objects.create(name="4", brand=brend)
+    model_type = Model_type.objects.create(name="Стандартная", brand=brend)
+
+    # Создание тестовых продуктов
+    product1 = Product.objects.create(
+        name="Test Product 1",
+        slug="test-product-1",
+        brand=brend,
+        Appointment=appointment,
+        Class_compress=class_compress,
+        Color=color,
+        Male=male,
+        Sock=sock,
+        Type_product=type_product,
+        Model_type=model_type,
+        Size=size,
+        stock=1,
+        price=5999.00,
+        available=True
+    )
+    product2 = Product.objects.create(
+        name="Test Product 2",
+        slug="test-product-2",
+        brand=brend,
+        Appointment=appointment,
+        Class_compress=class_compress,
+        Color=color,
+        Male=male,
+        Sock=sock,
+        Type_product=type_product,
+        Model_type=model_type,
+        Size=size,
+        price=6999.00,
+        stock=1,
+        available=True
+    )
+    product3 = Product.objects.create(
+        name="Test Product 3",
+        slug="test-product-3",
+        brand=brend,
+        Appointment=appointment,
+        Class_compress=class_compress,
+        Color=color,
+        Male=male,
+        Sock=sock,
+        Type_product=type_product,
+        Model_type=model_type,
+        Size=size,
+        price=7999.00,
+        stock=1,
+        available=True
+    )
+    product4 = Product.objects.create(
+        name="Test Product 4",
+        slug="test-product-4",
+        brand=brend,
+        Appointment=appointment,
+        Class_compress=class_compress,
+        Color=color,
+        Male=male,
+        Sock=sock,
+        Type_product=type_product,
+        Model_type=model_type,
+        Size=size,
+        price=8999.00,
+        stock=1,
+        available=True
+    )
+
+    # Создание галереи для продукта
+    gallery1 = Gallery.objects.create(product=product1, image="test1.jpg")
+    gallery2 = Gallery.objects.create(product=product1, image="test2.jpg")
+
+    return {
+        'country': country,
+        'brend': brend,
+        'appointment': appointment,
+        'male': male,
+        'class_compress': class_compress,
+        'color': color,
+        'sock': sock,
+        'type_product': type_product,
+        'size': size,
+        'model_type': model_type,
+        'products': [product1, product2, product3, product4],
+        'galleries': [gallery1, gallery2]
+    }
+
+
+@pytest.fixture
+def cart_request():
+    """Создает запрос с сессией для тестов корзины"""
     request = RequestFactory().get('/')
     middleware = SessionMiddleware(get_response=lambda r: None)
     middleware.process_request(request)
-    return request.session.save()
+    request.session.save()
+    return request
 
 
+@pytest.fixture
+def cart_session(cart_request):
+    """Фикстура для сессии корзины"""
+    return cart_request.session
+
+
+# Тесты
 @pytest.mark.django_db
 def test_home_page(client):
     url = reverse('homepage:homepage')
     response = client.get(url)
-    assert response.status_code, HTTPStatus.OK
+    assert response.status_code == HTTPStatus.OK
 
 
-""" class TestCart(TestCase):
-    @pytest.fixture
-    @pytest.mark.django_db
-    def cart_session(self):
-        self.request = RequestFactory().get('/')
-        middleware = SessionMiddleware(get_response=lambda r: None)
-        middleware.process_request(self.request)
-        self.request.session.save()
- """
+@pytest.mark.django_db
+def test_initialize_cart_clean_session(cart_request):
+    cart = Cart(cart_request)
+    assert cart.cart == {}
 
 
-""" @pytest.mark.django_db
-def test_initialize_cart_clean_session(self):
-    self.request = RequestFactory().get('/')
-    middleware = SessionMiddleware(get_response=lambda r: None)
-    middleware.process_request(self.request)
-    self.request.session.save()
-    request = self.request
-    cart = Cart(request)
-    assert cart.cart == {} """
-
-""" @pytest.mark.django_db
-    @pytest.mark.usefixtures('data', 'cart_session')
-    def test_add_cart(self):
-        request = self.request
-        cart = Cart(request)
-        product = get_object_or_404(Product, id=1)
-        color = get_object_or_404(Color, id=1)
-        size = get_object_or_404(Size, id=1)
-        model_type = get_object_or_404(Model_type, id=1)
-        images_m = Gallery.objects.filter(product=product)
-        cart.add(product=product,
-                 quantity=1,
-                 size=size,
-                 color=color,
-                 m_type=model_type,
-                 images_m=images_m,)
-        test_cart = {'color': 'Черный',
-                     'images_m': '<QuerySet [<Gallery: Gallery object (1)>, <Gallery: Gallery '
-                     'object (2)>]>',
-                     'm_type': 'Стандартная',
-                     'price': '5999.00',
-                     'quantity': 1,
-                     'size': '4'}
-        assert vars(cart)['cart']['1'] == test_cart """
-
-""" @pytest.mark.django_db
-    @pytest.mark.usefixtures('data', 'cart_session')
-    def test_del_cart(self):
-        cart = Cart(self.request)
-        product = get_object_or_404(Product, id=1)
-        color = get_object_or_404(Color, id=1)
-        size = get_object_or_404(Size, id=1)
-        model_type = get_object_or_404(Model_type, id=1)
-        images_m = Gallery.objects.filter(product=product)
-        cart.add(product=product,
-                 quantity=1,
-                 size=size,
-                 color=color,
-                 m_type=model_type,
-                 images_m=images_m,)
-        cart.remove(product)
-        assert cart.cart == {} """
+@pytest.mark.django_db
+def test_add_cart(test_data, cart_request):
+    cart = Cart(cart_request)
+    product = test_data['products'][0]
+    color = test_data['color']
+    size = test_data['size']
+    model_type = test_data['model_type']
+    images_m = Gallery.objects.filter(product=product)
+    cart.add(
+        product=product,
+        quantity=1,
+        size=size,
+        color=color,
+        m_type=model_type,
+        images_m=images_m
+    )
+    expected_cart_item = {
+        'color': 'black',
+        'images_m': str(images_m),
+        'm_type': 'Стандартная',
+        'price': '5999.00',
+        'quantity': 1,
+        'size': '4'
+    }
+    assert cart.cart[str(product.id)] == expected_cart_item
 
 
-""" @pytest.mark.django_db
-def test_count_catalog(data):
-    print(Product.objects.all())
+@pytest.mark.django_db
+def test_del_cart(test_data, cart_request):
+    cart = Cart(cart_request)
+    product = test_data['products'][0]
+    color = test_data['color']
+    size = test_data['size']
+    model_type = test_data['model_type']
+    images_m = Gallery.objects.filter(product=product)
+    cart.add(
+        product=product,
+        quantity=1,
+        size=size,
+        color=color,
+        m_type=model_type,
+        images_m=images_m
+    )
+    cart.remove(product)
+    assert cart.cart == {}
+
+
+@pytest.mark.django_db
+def test_count_catalog(test_data):
     catalog_count = Product.objects.count()
-    assert catalog_count == 4 """
+    assert catalog_count == 4
 
 
-""" @pytest.mark.django_db
-def test_catalog(client, data):
+@pytest.mark.django_db
+def test_catalog(client):
     url = reverse('catalog:catalog')
     response = client.get(url)
-    assert response.status_code, HTTPStatus.OK """
+    assert response.status_code == HTTPStatus.OK
 
 
-""" @pytest.mark.django_db
-def test_catalog_detail(data, client):
-    product = get_object_or_404(Product, id=1)
+@pytest.mark.django_db
+def test_catalog_detail(test_data, client):
+    product = test_data['products'][0]
     url = reverse('catalog:detail', kwargs={'slug': product.slug})
     response = client.get(url)
-    assert response.status_code, HTTPStatus.OK
- """
+    assert response.status_code == HTTPStatus.OK
 
-""" @pytest.mark.django_db
-def test_create_order(data):
-    form = OrderCreateForm(data={'first_name': 'Имя', 'last_name': 'Фамилия',
-                                 'email': 'volkovaleksandrsergeevich@yandex.ru', 'address': 'Адрес',
-                                 'address_pvz': 'Адрес ПВЗ', 'postal_code': 'Индекс',
-                                 'city': 'Город'})
-    order_count = Order.objects.count()
+
+@pytest.mark.django_db
+def test_create_order(test_data):
+    initial_order_count = Order.objects.count()
+    initial_order_item_count = OrderItem.objects.count()
+    form = OrderCreateForm(data={
+        'first_name': 'Имя',
+        'last_name': 'Фамилия',
+        'email': 'volkovaleksandrsergeevich@yandex.ru',
+        'address': 'Адрес',
+        'address_pvz': 'Адрес ПВЗ',
+        'postal_code': 'Индекс',
+        'city': 'Город'
+    })
+
+    assert form.is_valid()
     order = form.save()
-    order_item_count = OrderItem.objects.count()
-    OrderItem.objects.create(order=order,
-                             product=get_object_or_404(Product, id=1),
-                             price=5000,
-                             quantity=1)
-    assert Order.objects.count() == order_count + 1
-    assert OrderItem.objects.count(), order_item_count + 1 """
+    OrderItem.objects.create(
+        order=order,
+        product=test_data['products'][0],
+        price=5000,
+        quantity=1
+    )
+    assert Order.objects.count() == initial_order_count + 1
+    assert OrderItem.objects.count() == initial_order_item_count + 1

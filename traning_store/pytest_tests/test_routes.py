@@ -39,6 +39,7 @@ class TestRoutes(TestCase):
             Male=self.male,
             Sock=self.sock,
             Type_product=self.type_product,
+            Model_type=self.model_type,
             price=5999.00,
             available=True
         )
@@ -53,6 +54,7 @@ class TestRoutes(TestCase):
             Sock=self.sock,
             price=6999.00,
             Type_product=self.type_product,
+            Model_type=self.model_type,
             available=True
         )
         # Добавьте еще продукты если нужно для test_count_catalog
@@ -66,6 +68,7 @@ class TestRoutes(TestCase):
             Male=self.male,
             Sock=self.sock,
             Type_product=self.type_product,
+            Model_type=self.model_type,
             price=7999.00,
             available=True
         )
@@ -79,6 +82,7 @@ class TestRoutes(TestCase):
             Male=self.male,
             Sock=self.sock,
             Type_product=self.type_product,
+            Model_type=self.model_type,
             price=8999.00,
             available=True
         )

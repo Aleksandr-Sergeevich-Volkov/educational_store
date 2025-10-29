@@ -165,7 +165,7 @@ def test_add_cart(test_data, cart_request):
         'color': 'black',
         'images_m': str(images_m),
         'm_type': 'Стандартная',
-        'price': '5999.00',
+        'price': '5999.0',
         'quantity': 1,
         'size': '4'
     }
@@ -215,6 +215,9 @@ def test_catalog_detail(test_data, client):
 
 @pytest.mark.django_db
 def test_create_order(test_data):
+    color = test_data['color']
+    size = test_data['size']
+    model_type = test_data['model_type']
     initial_order_count = Order.objects.count()
     initial_order_item_count = OrderItem.objects.count()
     form = OrderCreateForm(data={
@@ -233,7 +236,10 @@ def test_create_order(test_data):
         order=order,
         product=test_data['products'][0],
         price=5000,
-        quantity=1
+        quantity=1,
+        size=size,
+        color=color,
+        m_type=model_type,
     )
     assert Order.objects.count() == initial_order_count + 1
     assert OrderItem.objects.count() == initial_order_item_count + 1

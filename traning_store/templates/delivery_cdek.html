@@ -18,12 +18,14 @@
                 <div class="card-body">
                     <p class="mb-3">Нажмите кнопку ниже, чтобы открыть карту с пунктами выдачи заказов СДЭК</p>
                     
-                    <!-- Измененная кнопка -->
-                    <button id="open-cdek-widget" class="btn btn-warning btn-lg w-100 py-3">
+                    <!-- Рабочая кнопка -->
+                    <button onclick="window.widget.open()" class="btn btn-warning btn-lg w-100 py-3">
                         🗺️ Открыть карту ПВЗ СДЭК
                     </button>
                     
-                    <div id="cdek-map" class="mt-3" style="min-height: 500px;"></div>
+                    <div class="alert alert-info mt-3 mb-0">
+                        <strong>ℹ️ Инструкция:</strong> После выбора пункта на карте данные автоматически заполнятся в форме справа
+                    </div>
                 </div>
             </div>
         </div>
@@ -35,14 +37,14 @@
                     <h5 class="card-title mb-0">✅ Подтверждение выбора</h5>
                 </div>
                 <div class="card-body">
-                    <form action="" method="post" class="order-form">
+                    <form action="" method="get" class="order-form">
                         {% csrf_token %}
                         <div class="mb-3">
                             {% bootstrap_form form %}
                         </div>
                         
-                        <div class="alert alert-info small mb-3">
-                            <strong>ℹ️ Информация:</strong> После выбора пункта на карте данные автоматически заполнятся в форме
+                        <div class="alert alert-success small mb-3" style="display: none;" id="success-alert">
+                            <strong>✅ Успешно!</strong> Пункт выдачи выбран и данные заполнены
                         </div>
                         
                         <button type="submit" class="btn btn-success w-100 py-3">
@@ -73,115 +75,78 @@
 <link href="https://cdn.jsdelivr.net/npm/@unocss/reset/tailwind.min.css" rel="stylesheet">
 
 <script type="text/javascript">
-    let widget;
-
     document.addEventListener('DOMContentLoaded', () => {
-        // Инициализация виджета
-        initializeWidget();
-        
-        // Обработчик для кнопки открытия виджета
-        document.getElementById('open-cdek-widget').addEventListener('click', function() {
-            openWidget();
+        window.widget = new window.CDEKWidget({
+            from: 'Химки',
+            root: 'cdek-map',
+            apiKey: '08505f2e-943d-4ed9-8195-1b5a2739c6a3',
+            canChoose: true,
+            servicePath: 'https://kompressionnye-chulki24.ru/service.php',
+            hideFilters: {
+                have_cashless: false,
+                have_cash: false,
+                is_dressing_room: false,
+                type: false,
+            },
+            hideDeliveryOptions: {
+                office: false,
+                door: true,
+            },
+            popup: true,
+            debug: true,
+            goods: [
+                {
+                    width: 10,
+                    height: 10,
+                    length: 10,
+                    weight: 10,
+                },
+            ],
+            defaultLocation: [37.4297, 55.897],
+            lang: 'rus',
+            currency: 'RUB',
+            tariffs: {
+                office: [234, 136],
+                door: [234, 136, 138],
+            },
+            onReady() {
+                console.log('✅ Виджет СДЭК загружен');
+                updateStatus('Виджет готов к работе - нажмите кнопку "Открыть карту ПВЗ СДЭК"');
+            },
+            onCalculate() {
+                console.log('💰 Расчет стоимости доставки произведен');
+            },
+            onChoose(type, tariff, address) {
+                console.log('📍 Выбран метод доставки', type, tariff, address);
+                
+                let message = '';
+                if (type === 'door') {
+                    message = 'Выбрана доставка курьером по адресу: ' + address.formatted +
+                            '\nЦена: ' + tariff.delivery_sum + ' руб.' +
+                            '\nСрок: ' + tariff.period_max + ' дн.';
+                } else {
+                    message = 'Выбран пункт выдачи заказа: ' + address.name +
+                            '\nЦена: ' + tariff.delivery_sum + ' руб.' +
+                            '\nСрок: ' + tariff.period_max + ' дн.';
+                }
+                
+                // Заполняем форму
+                document.getElementById('id_sum').value = tariff.delivery_sum;
+                document.getElementById('id_address_pvz').value = address.name;
+                
+                // Показываем уведомление
+                showSuccessNotification();
+                updateStatus('✅ Пункт выбран: ' + address.name);
+                
+                // Показываем alert (как в рабочей версии)
+                alert(message);
+            },
+            onError(error) {
+                console.error('❌ Ошибка виджета СДЭК:', error);
+                updateStatus('❌ Ошибка загрузки виджета');
+            }
         });
     });
-
-    function initializeWidget() {
-        try {
-            widget = new window.CDEKWidget({
-                from: 'Химки',
-                root: 'cdek-map',
-                apiKey: '08505f2e-943d-4ed9-8195-1b5a2739c6a3',
-                canChoose: true,
-                servicePath: 'https://kompressionnye-chulki24.ru/service.php',
-                hideFilters: {
-                    have_cashless: false,
-                    have_cash: false,
-                    is_dressing_room: false,
-                    type: false,
-                },
-                hideDeliveryOptions: {
-                    office: false,
-                    door: true,
-                },
-                popup: false, // Изменили на false для встраивания в страницу
-                debug: true,
-                goods: [
-                    {
-                        width: 10,
-                        height: 10,
-                        length: 10,
-                        weight: 10,
-                    },
-                ],
-                defaultLocation: [37.4297, 55.897],
-                lang: 'rus',
-                currency: 'RUB',
-                tariffs: {
-                    office: [234, 136],
-                    door: [234, 136, 138],
-                },
-                onReady() {
-                    console.log('✅ Виджет СДЭК загружен и готов к работе');
-                    updateStatus('Виджет готов к работе');
-                    
-                    // Показываем карту сразу после загрузки
-                    document.getElementById('cdek-map').style.display = 'block';
-                },
-                onCalculate() {
-                    console.log('💰 Расчет стоимости доставки произведен');
-                },
-                onChoose(type, tariff, address) {
-                    console.log('📍 Выбран метод доставки', type, tariff, address);
-                    
-                    let message = '';
-                    if (type === 'door') {
-                        message = 'Выбрана доставка курьером по адресу: ' + address.formatted +
-                                '\nЦена: ' + tariff.delivery_sum + ' руб.' +
-                                '\nСрок: ' + tariff.period_max + ' дн.';
-                    } else {
-                        message = 'Выбран пункт выдачи заказа: ' + address.name +
-                                '\nЦена: ' + tariff.delivery_sum + ' руб.' +
-                                '\nСрок: ' + tariff.period_max + ' дн.';
-                    }
-                    
-                    // Заполняем форму
-                    if (document.getElementById('id_sum')) {
-                        document.getElementById('id_sum').value = tariff.delivery_sum;
-                    }
-                    if (document.getElementById('id_address_pvz')) {
-                        document.getElementById('id_address_pvz').value = address.name;
-                    }
-                    
-                    showSuccessMessage(message);
-                    updateStatus('✅ Пункт выбран: ' + address.name);
-                },
-                onError(error) {
-                    console.error('❌ Ошибка виджета СДЭК:', error);
-                    updateStatus('❌ Ошибка загрузки виджета');
-                }
-            });
-        } catch (error) {
-            console.error('❌ Ошибка инициализации виджета:', error);
-            updateStatus('❌ Ошибка инициализации виджета');
-        }
-    }
-
-    function openWidget() {
-        try {
-            if (widget && typeof widget.open === 'function') {
-                widget.open();
-            } else {
-                // Альтернативный способ - прокрутка к карте
-                document.getElementById('cdek-map').scrollIntoView({ 
-                    behavior: 'smooth' 
-                });
-                updateStatus('Карта загружена. Выберите пункт выдачи на карте ниже.');
-            }
-        } catch (error) {
-            console.error('❌ Ошибка открытия виджета:', error);
-            updateStatus('❌ Не удалось открыть виджет');
-        }
-    }
 
     function updateStatus(message) {
         const statusElement = document.getElementById('selection-status');
@@ -197,33 +162,25 @@
         }
     }
 
-    function showSuccessMessage(message) {
-        // Удаляем предыдущие уведомления
-        const existingAlerts = document.querySelectorAll('.alert-success');
-        existingAlerts.forEach(alert => alert.remove());
-        
-        // Создаем новое уведомление
-        const notification = document.createElement('div');
-        notification.className = 'alert alert-success alert-dismissible fade show mt-3';
-        notification.innerHTML = `
-            <strong>✅ Выбор сохранен!</strong><br>
-            ${message.replace(/\n/g, '<br>')}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        `;
-        
-        // Добавляем уведомление перед формой
-        const form = document.querySelector('.order-form');
-        if (form && form.parentNode) {
-            form.parentNode.insertBefore(notification, form);
+    function showSuccessNotification() {
+        const alertElement = document.getElementById('success-alert');
+        if (alertElement) {
+            alertElement.style.display = 'block';
+            
+            // Автоматически скрываем через 5 секунд
+            setTimeout(() => {
+                alertElement.style.display = 'none';
+            }, 5000);
         }
-        
-        // Автоматически скрываем через 7 секунд
-        setTimeout(() => {
-            if (notification.parentNode) {
-                const bsAlert = new bootstrap.Alert(notification);
-                bsAlert.close();
-            }
-        }, 7000);
+    }
+
+    // Альтернативный способ открытия виджета (для надежности)
+    function openCdekWidget() {
+        if (window.widget && typeof window.widget.open === 'function') {
+            window.widget.open();
+        } else {
+            alert('Виджет еще загружается. Подождите немного.');
+        }
     }
 </script>
 
@@ -237,29 +194,8 @@
     border-bottom: 2px solid rgba(255,255,255,0.2);
 }
 
-#cdek-map {
-    min-height: 500px;
-    border: 1px solid #dee2e6;
-    border-radius: 0.375rem;
-    background-color: #f8f9fa;
-    display: block; /* Изменили на block */
-}
-
-/* Стили для загрузки */
-.loading-spinner {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #3498db;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin-right: 10px;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+.btn-lg {
+    font-weight: 600;
 }
 
 @media (max-width: 768px) {
@@ -270,10 +206,6 @@
     .btn-lg {
         padding: 0.75rem 1.5rem;
         font-size: 1.1rem;
-    }
-    
-    #cdek-map {
-        min-height: 400px;
     }
 }
 </style>

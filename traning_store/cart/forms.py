@@ -11,7 +11,6 @@ class CartAddProductForm(forms.Form):
                                 widget=forms.HiddenInput)
     size = forms.ModelChoiceField(label='Размер',
                                   queryset=Size.objects.none(), required=False,
-                                  # initial=Size.objects.get(id='4')
                                   )
     color = forms.ModelChoiceField(label='Цвет',
                                    queryset=Color.objects.none(),

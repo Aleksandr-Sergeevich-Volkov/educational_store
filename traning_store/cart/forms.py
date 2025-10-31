@@ -16,7 +16,6 @@ class CartAddProductForm(forms.Form):
     color = forms.ModelChoiceField(label='Цвет',
                                    queryset=Color.objects.none(),
                                    required=False,
-                                   # initial=Color.objects.get(id='1')
                                    )
     m_type = forms.ModelChoiceField(label='Тип',
                                     queryset=Model_type.objects.none(),

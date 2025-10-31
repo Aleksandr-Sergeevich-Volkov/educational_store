@@ -14,7 +14,7 @@ class CartAddProductForm(forms.Form):
                                   # initial=Size.objects.get(id='4')
                                   )
     color = forms.ModelChoiceField(label='Цвет',
-                                   queryset=Color.objects.all(),
+                                   queryset=Color.objects.none(),
                                    required=False,
                                    # initial=Color.objects.get(id='1')
                                    )
@@ -26,6 +26,25 @@ class CartAddProductForm(forms.Form):
     def __init__(self, *args, **kwargs):
         product = kwargs.pop('product', None)
         super().__init__(*args, **kwargs)
+
+        if product:
+            # Получаем доступные цвета для этого продукта
+            available_colors = product.Color.all()
+
+            # Настраиваем поле цвета в зависимости от количества доступных цветов
+            if available_colors.exists():
+                self.fields['color'].queryset = available_colors
+                if available_colors.count() == 1:
+                    single_color = available_colors.first()
+                    self.fields['color'].initial = single_color
+                    self.fields['color'].widget = forms.HiddenInput()
+                else:
+                    # Если несколько цветов - показываем выбор
+                    self.fields['color'].queryset = available_colors
+                    self.fields['color'].empty_label = "Выберите цвет"
+            else:
+                # Если нет доступных цветов - скрываем поле
+                self.fields['color'].widget = forms.HiddenInput()
 
         if product.brand:
             self.fields['m_type'].queryset = Model_type.objects.filter(

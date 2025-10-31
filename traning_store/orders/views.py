@@ -57,7 +57,8 @@ def order_create(request):
                        }
             return render(request, 'created.html', context)
     else:
-        if request.user.is_authenticated and request.session['delivery_address']:
+        delivery_address = request.session.get('delivery_address')
+        if request.user.is_authenticated and delivery_address:
             email = request.user.email
             form = OrderCreateForm(initial={"email": email,
                                    "address_pvz": request.session['delivery_address'],

@@ -182,9 +182,9 @@ class Product(models.Model):
         Male,
         on_delete=models.CASCADE
     )
-    Color = models.ForeignKey(
+    Color = models.ManyToManyField(  # Изменили имя на множественное число
         Color,
-        on_delete=models.CASCADE,
+        verbose_name='Цвета'
     )
     Class_compress = models.ForeignKey(
         Class_compress,

@@ -136,7 +136,7 @@ class TestRoutes(TestCase):
                  images_m=images_m)
 
         expected_cart_item = {
-            'color': 'black',
+            'color': self.product1.Color,
             'images_m': str(images_m),  # Преобразуем QuerySet в строку для сравнения
             'm_type': 'Стандартная',
             'price': '5999.0',

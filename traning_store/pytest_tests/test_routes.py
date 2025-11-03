@@ -131,7 +131,7 @@ class TestRoutes(TestCase):
         cart.add(product=self.product1,
                  quantity=1,
                  size=self.size,
-                 color=self.product1.Color.add(self.color_black),
+                 color=self.product1.Color,
                  m_type=self.model_type,
                  images_m=images_m)
 

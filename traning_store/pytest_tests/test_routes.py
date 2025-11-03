@@ -131,12 +131,12 @@ class TestRoutes(TestCase):
         cart.add(product=self.product1,
                  quantity=1,
                  size=self.size,
-                 color=self.product1.Color,
+                 color= self.color_black,
                  m_type=self.model_type,
                  images_m=images_m)
 
         expected_cart_item = {
-            'color': self.product1.Color,
+            'color':  self.color_black,
             'images_m': str(images_m),  # Преобразуем QuerySet в строку для сравнения
             'm_type': 'Стандартная',
             'price': '5999.0',
@@ -152,7 +152,7 @@ class TestRoutes(TestCase):
         cart.add(product=self.product1,
                  quantity=1,
                  size=self.size,
-                 color=self.product1.Color.add(self.color_black),
+                 color= self.color_black,
                  m_type=self.model_type,
                  images_m=images_m)
         cart.remove(self.product1)
@@ -179,7 +179,7 @@ class TestRoutes(TestCase):
             price=5000,
             quantity=1,
             size=self.size,
-            color=self.product1.Color,
+            color= self.color_black,
             m_type=self.model_type
         )
         self.assertEqual(Order.objects.count(), initial_order_count + 1)

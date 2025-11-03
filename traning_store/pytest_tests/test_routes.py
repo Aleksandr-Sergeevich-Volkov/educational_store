@@ -19,9 +19,13 @@ class TestRoutes(TestCase):
         self.appointment = Appointment.objects.create(name="Test Appointment")
         self.male = Male.objects.create(name="Test Male")
         self.class_compress = Class_compress.objects.create(name="2 class")
-        self.color = Color.objects.create(name="black", color='000000')
+        # self.color = Color.objects.create(name="black", color='000000')
         self.sock = Soсk.objects.create(name="Closed")
         self.type_product = Type_product.objects.create(name="Chulki")
+        # Создаем несколько цветов для ManyToMany
+        self.color_black = Color.objects.create(name="black", color='000000')
+        self.color_white = Color.objects.create(name="white", color='FFFFFF')
+        self.color_red = Color.objects.create(name="red", color='FF0000')
 
         # Создание цветов, размеров и типов моделей
         # self.color = Color.objects.create(name="Черный")
@@ -35,7 +39,7 @@ class TestRoutes(TestCase):
             brand=self.brend,
             Appointment=self.appointment,
             Class_compress=self.class_compress,
-            Color=self.color,
+            # Color=self.color,
             Male=self.male,
             Sock=self.sock,
             Type_product=self.type_product,
@@ -45,13 +49,16 @@ class TestRoutes(TestCase):
             price=5999.00,
             available=True
         )
+        # Добавляем один цвет
+        self.product_single_color.Color.add(self.color_black)
+
         self.product2 = Product.objects.create(
             name="Test Product 2",
             slug="test-product-2",
             brand=self.brend,
             Appointment=self.appointment,
             Class_compress=self.class_compress,
-            Color=self.color,
+            # Color=self.color,
             Male=self.male,
             Sock=self.sock,
             price=6999.00,
@@ -61,6 +68,9 @@ class TestRoutes(TestCase):
             stock=1,
             available=True
         )
+        # Добавляем несколько цветов
+        self.product_multi_color.Color.add(self.color_black, self.color_white, self.color_red)
+
         # Добавьте еще продукты если нужно для test_count_catalog
         self.product3 = Product.objects.create(
             name="Test Product 3",
@@ -68,7 +78,7 @@ class TestRoutes(TestCase):
             brand=self.brend,
             Appointment=self.appointment,
             Class_compress=self.class_compress,
-            Color=self.color,
+            # Color=self.color,
             Male=self.male,
             Sock=self.sock,
             Type_product=self.type_product,
@@ -78,13 +88,16 @@ class TestRoutes(TestCase):
             stock=1,
             available=True
         )
+        # Добавляем несколько цветов
+        self.product_multi_color.Color.add(self.color_black, self.color_white, self.color_red)
+
         self.product4 = Product.objects.create(
             name="Test Product 4",
             slug="test-product-4",
             brand=self.brend,
             Appointment=self.appointment,
             Class_compress=self.class_compress,
-            Color=self.color,
+            # Color=self.color,
             Male=self.male,
             Sock=self.sock,
             Type_product=self.type_product,
@@ -94,6 +107,8 @@ class TestRoutes(TestCase):
             stock=1,
             available=True
         )
+        # Добавляем несколько цветов
+        self.product_multi_color.Color.add(self.color_black, self.color_white, self.color_red)
 
         # Создание галереи для продукта
         self.gallery1 = Gallery.objects.create(product=self.product1, image="test1.jpg")
@@ -116,7 +131,7 @@ class TestRoutes(TestCase):
         cart.add(product=self.product1,
                  quantity=1,
                  size=self.size,
-                 color=self.color,
+                 color=self.product_single_color,
                  m_type=self.model_type,
                  images_m=images_m)
 
@@ -137,7 +152,7 @@ class TestRoutes(TestCase):
         cart.add(product=self.product1,
                  quantity=1,
                  size=self.size,
-                 color=self.color,
+                 color=self.product_single_color,
                  m_type=self.model_type,
                  images_m=images_m)
         cart.remove(self.product1)
@@ -164,7 +179,7 @@ class TestRoutes(TestCase):
             price=5000,
             quantity=1,
             size=self.size,
-            color=self.color,
+            color=self.product_single_color,
             m_type=self.model_type
         )
         self.assertEqual(Order.objects.count(), initial_order_count + 1)

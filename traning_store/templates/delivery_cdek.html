@@ -10,28 +10,23 @@
     
     <div class="row">
         <div class="col-12 col-lg-8">
-            <!-- Виджет СДЭК -->
             <div class="card mb-4">
                 <div class="card-header bg-warning text-dark">
                     <h5 class="card-title mb-0">📍 Выберите пункт выдачи СДЭК</h5>
                 </div>
                 <div class="card-body">
-                    <p class="mb-3">Нажмите кнопку ниже, чтобы открыть карту с пунктами выдачи заказов СДЭК</p>
-                    
-                    <!-- Рабочая кнопка -->
-                    <button onclick="window.widget.open()" class="btn btn-warning btn-lg w-100 py-3">
+                    <button onclick="openCdekWidget()" class="btn btn-warning btn-lg w-100 py-3 mb-3">
                         🗺️ Открыть карту ПВЗ СДЭК
                     </button>
                     
-                    <div class="alert alert-info mt-3 mb-0">
-                        <strong>ℹ️ Инструкция:</strong> После выбора пункта на карте данные автоматически заполнятся в форме справа
+                    <div class="alert alert-info">
+                        <strong>Инструкция:</strong> Нажмите кнопку выше чтобы выбрать пункт выдачи на карте
                     </div>
                 </div>
             </div>
         </div>
         
         <div class="col-12 col-lg-4">
-            <!-- Форма подтверждения -->
             <div class="card">
                 <div class="card-header bg-success text-white">
                     <h5 class="card-title mb-0">✅ Подтверждение выбора</h5>
@@ -43,10 +38,6 @@
                             {% bootstrap_form form %}
                         </div>
                         
-                        <div class="alert alert-success small mb-3" style="display: none;" id="success-alert">
-                            <strong>✅ Успешно!</strong> Пункт выдачи выбран и данные заполнены
-                        </div>
-                        
                         <button type="submit" class="btn btn-success w-100 py-3">
                             ✅ Подтвердить пункт самовывоза
                         </button>
@@ -54,14 +45,13 @@
                 </div>
             </div>
             
-            <!-- Информация о выборе -->
             <div class="card mt-3">
                 <div class="card-header bg-primary text-white">
-                    <h6 class="card-title mb-0">📋 Статус выбора</h6>
+                    <h6 class="card-title mb-0">📋 Статус</h6>
                 </div>
                 <div class="card-body">
-                    <div id="selection-status" class="text-muted small">
-                        Пункт выдачи еще не выбран
+                    <div id="status" class="text-muted small">
+                        Ожидание выбора пункта...
                     </div>
                 </div>
             </div>
@@ -69,144 +59,75 @@
     </div>
 </div>
 
-<!-- Подключение скриптов СДЭК -->
-<script src="https://cdn.jsdelivr.net/npm/@cdek-it/widget@3" type="text/javascript"></script>
-<script src="https://cdn.jsdelivr.net/npm/@unocss/runtime" type="text/javascript"></script>
-<link href="https://cdn.jsdelivr.net/npm/@unocss/reset/tailwind.min.css" rel="stylesheet">
+<!-- CDN для виджета -->
+<script src="https://cdn.jsdelivr.net/npm/@cdek-it/widget@3"></script>
 
-<script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', () => {
-        window.widget = new window.CDEKWidget({
-            from: 'Химки',
-            root: 'cdek-map',
+<script>
+let cdekWidget = null;
+
+function initWidget() {
+    try {
+        cdekWidget = new CDEKWidget({
+            from: 'Москва',
+            root: 'widget-container',
             apiKey: '08505f2e-943d-4ed9-8195-1b5a2739c6a3',
             canChoose: true,
             servicePath: 'https://kompressionnye-chulki24.ru/service.php',
-            hideFilters: {
-                have_cashless: false,
-                have_cash: false,
-                is_dressing_room: false,
-                type: false,
-            },
-            hideDeliveryOptions: {
-                office: false,
-                door: true,
-            },
             popup: true,
-            debug: true,
-            goods: [
-                {
-                    width: 10,
-                    height: 10,
-                    length: 10,
-                    weight: 10,
-                },
-            ],
-            defaultLocation: [37.4297, 55.897],
+            goods: [{
+                width: 10,
+                height: 10,
+                length: 10,
+                weight: 1
+            }],
+            defaultLocation: [37.6176, 55.7558],
             lang: 'rus',
             currency: 'RUB',
-            tariffs: {
-                office: [234, 136],
-                door: [234, 136, 138],
+            onReady: function() {
+                console.log('Виджет готов');
+                document.getElementById('status').innerHTML = '✅ Виджет загружен';
             },
-            onReady() {
-                console.log('✅ Виджет СДЭК загружен');
-                updateStatus('Виджет готов к работе - нажмите кнопку "Открыть карту ПВЗ СДЭК"');
-            },
-            onCalculate() {
-                console.log('💰 Расчет стоимости доставки произведен');
-            },
-            onChoose(type, tariff, address) {
-                console.log('📍 Выбран метод доставки', type, tariff, address);
-                
-                let message = '';
-                if (type === 'door') {
-                    message = 'Выбрана доставка курьером по адресу: ' + address.formatted +
-                            '\nЦена: ' + tariff.delivery_sum + ' руб.' +
-                            '\nСрок: ' + tariff.period_max + ' дн.';
-                } else {
-                    message = 'Выбран пункт выдачи заказа: ' + address.name +
-                            '\nЦена: ' + tariff.delivery_sum + ' руб.' +
-                            '\nСрок: ' + tariff.period_max + ' дн.';
-                }
+            onChoose: function(type, tariff, address) {
+                console.log('Выбран пункт:', address);
                 
                 // Заполняем форму
                 document.getElementById('id_sum').value = tariff.delivery_sum;
                 document.getElementById('id_address_pvz').value = address.name;
                 
-                // Показываем уведомление
-                showSuccessNotification();
-                updateStatus('✅ Пункт выбран: ' + address.name);
+                document.getElementById('status').innerHTML = 
+                    '✅ Выбран: ' + address.name + '<br>' +
+                    '💵 Стоимость: ' + tariff.delivery_sum + ' руб.<br>' +
+                    '📅 Срок: ' + tariff.period_max + ' дн.';
                 
-                // Показываем alert (как в рабочей версии)
-                alert(message);
+                alert('Пункт выбран: ' + address.name + '\nСтоимость: ' + tariff.delivery_sum + ' руб.');
             },
-            onError(error) {
-                console.error('❌ Ошибка виджета СДЭК:', error);
-                updateStatus('❌ Ошибка загрузки виджета');
+            onError: function(error) {
+                console.error('Ошибка:', error);
+                document.getElementById('status').innerHTML = '❌ Ошибка загрузки виджета';
             }
         });
-    });
+    } catch (error) {
+        console.error('Ошибка инициализации:', error);
+        document.getElementById('status').innerHTML = '❌ Ошибка инициализации';
+    }
+}
 
-    function updateStatus(message) {
-        const statusElement = document.getElementById('selection-status');
-        if (statusElement) {
-            statusElement.innerHTML = message;
-            if (message.includes('❌')) {
-                statusElement.className = 'text-danger small fw-bold';
-            } else if (message.includes('✅')) {
-                statusElement.className = 'text-success small fw-bold';
-            } else {
-                statusElement.className = 'text-info small fw-bold';
+function openCdekWidget() {
+    if (!cdekWidget) {
+        initWidget();
+        setTimeout(() => {
+            if (cdekWidget && cdekWidget.open) {
+                cdekWidget.open();
             }
-        }
+        }, 1000);
+    } else {
+        cdekWidget.open();
     }
+}
 
-    function showSuccessNotification() {
-        const alertElement = document.getElementById('success-alert');
-        if (alertElement) {
-            alertElement.style.display = 'block';
-            
-            // Автоматически скрываем через 5 секунд
-            setTimeout(() => {
-                alertElement.style.display = 'none';
-            }, 5000);
-        }
-    }
-
-    // Альтернативный способ открытия виджета (для надежности)
-    function openCdekWidget() {
-        if (window.widget && typeof window.widget.open === 'function') {
-            window.widget.open();
-        } else {
-            alert('Виджет еще загружается. Подождите немного.');
-        }
-    }
+// Инициализируем при загрузке
+document.addEventListener('DOMContentLoaded', function() {
+    initWidget();
+});
 </script>
-
-<style>
-.card {
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    border: none;
-}
-
-.card-header {
-    border-bottom: 2px solid rgba(255,255,255,0.2);
-}
-
-.btn-lg {
-    font-weight: 600;
-}
-
-@media (max-width: 768px) {
-    .container-fluid {
-        padding: 0 15px;
-    }
-    
-    .btn-lg {
-        padding: 0.75rem 1.5rem;
-        font-size: 1.1rem;
-    }
-}
-</style>
 {% endblock %}

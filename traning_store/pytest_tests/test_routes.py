@@ -152,7 +152,7 @@ class TestRoutes(TestCase):
         cart.add(product=self.product1,
                  quantity=1,
                  size=self.size,
-                 color= self.color_black,
+                 color=self.color_black,
                  m_type=self.model_type,
                  images_m=images_m)
         cart.remove(self.product1)
@@ -179,7 +179,7 @@ class TestRoutes(TestCase):
             price=5000,
             quantity=1,
             size=self.size,
-            color= self.color_black,
+            color=self.color_black,
             m_type=self.model_type
         )
         self.assertEqual(Order.objects.count(), initial_order_count + 1)

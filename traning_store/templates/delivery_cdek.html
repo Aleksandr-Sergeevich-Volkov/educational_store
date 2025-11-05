@@ -130,4 +130,24 @@ document.addEventListener('DOMContentLoaded', function() {
     initWidget();
 });
 </script>
+<div id="debug-info" class="container mt-3 p-3 bg-light border rounded" style="display: none;">
+    <h6>Отладочная информация:</h6>
+    <div id="debug-content"></div>
+</div>
+
+<script>
+function debug(msg) {
+    console.log(msg);
+    const debugDiv = document.getElementById('debug-info');
+    const content = document.getElementById('debug-content');
+    if (debugDiv && content) {
+        debugDiv.style.display = 'block';
+        content.innerHTML += '<div>' + new Date().toLocaleTimeString() + ': ' + msg + '</div>';
+    }
+}
+
+// Проверка окружения
+debug('Проверка CDEKWidget: ' + (typeof CDEKWidget !== 'undefined' ? 'доступен' : 'не доступен'));
+debug('Проверка window.CDEKWidget: ' + (typeof window.CDEKWidget !== 'undefined' ? 'доступен' : 'не доступен'));
+</script>
 {% endblock %}

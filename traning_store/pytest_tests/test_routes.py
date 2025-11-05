@@ -55,7 +55,6 @@ class TestRoutes(TestCase):
             brand=self.brend,
             Appointment=self.appointment,
             Class_compress=self.class_compress,
-            # Color=self.color,
             Male=self.male,
             Sock=self.sock,
             price=6999.00,

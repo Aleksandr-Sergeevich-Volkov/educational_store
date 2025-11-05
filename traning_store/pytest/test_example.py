@@ -22,6 +22,9 @@ def test_data(db):
     male = Male.objects.create(name="Test Male")
     class_compress = Class_compress.objects.create(name="2 class")
     color = Color.objects.create(name="black", color='000000')
+    color_black = Color.objects.create(name="black", color='000000')
+    color_white = Color.objects.create(name="white", color='FFFFFF')
+    color_red = Color.objects.create(name="red", color='FF0000')
     sock = Soсk.objects.create(name="Closed")
     type_product = Type_product.objects.create(name="Chulki")
 
@@ -36,7 +39,7 @@ def test_data(db):
         brand=brend,
         Appointment=appointment,
         Class_compress=class_compress,
-        Color=color,
+        Color=Color.add(color_black),
         Male=male,
         Sock=sock,
         Type_product=type_product,
@@ -52,7 +55,7 @@ def test_data(db):
         brand=brend,
         Appointment=appointment,
         Class_compress=class_compress,
-        Color=color,
+        Color=Color.add(color_white),
         Male=male,
         Sock=sock,
         Type_product=type_product,
@@ -68,7 +71,7 @@ def test_data(db):
         brand=brend,
         Appointment=appointment,
         Class_compress=class_compress,
-        Color=color,
+        Color=Color.add(color_red),
         Male=male,
         Sock=sock,
         Type_product=type_product,
@@ -84,7 +87,7 @@ def test_data(db):
         brand=brend,
         Appointment=appointment,
         Class_compress=class_compress,
-        Color=color,
+        Color=Color.add(color_black),
         Male=male,
         Sock=sock,
         Type_product=type_product,
@@ -105,7 +108,7 @@ def test_data(db):
         'appointment': appointment,
         'male': male,
         'class_compress': class_compress,
-        'color': color,
+        'color': Color.add(color_black),
         'sock': sock,
         'type_product': type_product,
         'size': size,

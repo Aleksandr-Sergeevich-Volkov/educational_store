@@ -1,153 +1,93 @@
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
-{% load static %}
-
-{% block title %}Доставка СДЭК{% endblock %}
-
+{% block title %}Доставка Сдэк{% endblock %}
 {% block content %}
-<div class="container-fluid">
-    <h1 class="mb-4">📦 Доставка СДЭК</h1>
-    
-    <div class="row">
-        <div class="col-12 col-lg-8">
-            <div class="card mb-4">
-                <div class="card-header bg-warning text-dark">
-                    <h5 class="card-title mb-0">📍 Выберите пункт выдачи СДЭК</h5>
-                </div>
-                <div class="card-body">
-                    <button onclick="openCdekWidget()" class="btn btn-warning btn-lg w-100 py-3 mb-3">
-                        🗺️ Открыть карту ПВЗ СДЭК
-                    </button>
-                    
-                    <div class="alert alert-info">
-                        <strong>Инструкция:</strong> Нажмите кнопку выше чтобы выбрать пункт выдачи на карте
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-12 col-lg-4">
-            <div class="card">
-                <div class="card-header bg-success text-white">
-                    <h5 class="card-title mb-0">✅ Подтверждение выбора</h5>
-                </div>
-                <div class="card-body">
-                    <form action="" method="get" class="order-form">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            {% bootstrap_form form %}
-                        </div>
-                        
-                        <button type="submit" class="btn btn-success w-100 py-3">
-                            ✅ Подтвердить пункт самовывоза
-                        </button>
-                    </form>
-                </div>
-            </div>
-            
-            <div class="card mt-3">
-                <div class="card-header bg-primary text-white">
-                    <h6 class="card-title mb-0">📋 Статус</h6>
-                </div>
-                <div class="card-body">
-                    <div id="status" class="text-muted small">
-                        Ожидание выбора пункта...
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- CDN для виджета -->
-<script src="https://cdn.jsdelivr.net/npm/@cdek-it/widget@3"></script>
-
-<script>
-let cdekWidget = null;
-
-function initWidget() {
-    try {
-        cdekWidget = new CDEKWidget({
-            from: 'Москва',
-            root: 'widget-container',
-            apiKey: '08505f2e-943d-4ed9-8195-1b5a2739c6a3',
-            canChoose: true,
-            servicePath: 'https://kompressionnye-chulki24.ru/service.php',
-            popup: true,
-            goods: [{
-                width: 10,
-                height: 10,
-                length: 10,
-                weight: 1
-            }],
-            defaultLocation: [37.6176, 55.7558],
-            lang: 'rus',
-            currency: 'RUB',
-            onReady: function() {
-                console.log('Виджет готов');
-                document.getElementById('status').innerHTML = '✅ Виджет загружен';
-            },
-            onChoose: function(type, tariff, address) {
-                console.log('Выбран пункт:', address);
-                
-                // Заполняем форму
-                document.getElementById('id_sum').value = tariff.delivery_sum;
-                document.getElementById('id_address_pvz').value = address.name;
-                
-                document.getElementById('status').innerHTML = 
-                    '✅ Выбран: ' + address.name + '<br>' +
-                    '💵 Стоимость: ' + tariff.delivery_sum + ' руб.<br>' +
-                    '📅 Срок: ' + tariff.period_max + ' дн.';
-                
-                alert('Пункт выбран: ' + address.name + '\nСтоимость: ' + tariff.delivery_sum + ' руб.');
-            },
-            onError: function(error) {
-                console.error('Ошибка:', error);
-                document.getElementById('status').innerHTML = '❌ Ошибка загрузки виджета';
-            }
-        });
-    } catch (error) {
-        console.error('Ошибка инициализации:', error);
-        document.getElementById('status').innerHTML = '❌ Ошибка инициализации';
-    }
-}
-
-function openCdekWidget() {
-    if (!cdekWidget) {
-        initWidget();
-        setTimeout(() => {
-            if (cdekWidget && cdekWidget.open) {
-                cdekWidget.open();
-            }
-        }, 1000);
-    } else {
-        cdekWidget.open();
-    }
-}
-
-// Инициализируем при загрузке
-document.addEventListener('DOMContentLoaded', function() {
-    initWidget();
-});
-</script>
-<div id="debug-info" class="container mt-3 p-3 bg-light border rounded" style="display: none;">
-    <h6>Отладочная информация:</h6>
-    <div id="debug-content"></div>
-</div>
-
-<script>
-function debug(msg) {
-    console.log(msg);
-    const debugDiv = document.getElementById('debug-info');
-    const content = document.getElementById('debug-content');
-    if (debugDiv && content) {
-        debugDiv.style.display = 'block';
-        content.innerHTML += '<div>' + new Date().toLocaleTimeString() + ': ' + msg + '</div>';
-    }
-}
-
-// Проверка окружения
-debug('Проверка CDEKWidget: ' + (typeof CDEKWidget !== 'undefined' ? 'доступен' : 'не доступен'));
-debug('Проверка window.CDEKWidget: ' + (typeof window.CDEKWidget !== 'undefined' ? 'доступен' : 'не доступен'));
-</script>
+            <!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" name="referrer" content="origin">
+  <title>Пример работы виджета ПВЗ</title>
+  <script src="https://cdn.jsdelivr.net/npm/@cdek-it/widget@3" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@unocss/runtime" type="text/javascript"></script>
+  <link href="https://cdn.jsdelivr.net/npm/@unocss/reset/tailwind.min.css" rel="stylesheet">
+  <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', () => {
+          window.widget = new window.CDEKWidget({
+                                                    from: 'Химки',
+                                                    root: 'cdek-map',
+                                                    apiKey: '08505f2e-943d-4ed9-8195-1b5a2739c6a3',
+                                                    canChoose: true,
+                                                    servicePath: 'https://kompressionnye-chulki24.ru/service.php',
+                                                    hideFilters: {
+                                                        have_cashless: false,
+                                                        have_cash: false,
+                                                        is_dressing_room: false,
+                                                        type: false,
+                                                    },
+                                                    hideDeliveryOptions: {
+                                                        office: false,
+                                                        door: true,
+                                                    },
+                                                    popup: true,
+                                                    debug: true,
+                                                    goods: [
+                                                        {
+                                                            width: 10,
+                                                            height: 10,
+                                                            length: 10,
+                                                            weight: 10,
+                                                        },
+                                                    ],
+                                                    defaultLocation: [37.4297, 55.897],
+                                                    lang: 'rus',
+                                                    currency: 'RUB',
+                                                    tariffs: {
+                                                        office: [234, 136],
+                                                        door: [234, 136, 138],
+                                                    },
+                                                    onReady() {
+                                                        alert('Виджет загружен');
+                                                    },
+                                                    onCalculate() {
+                                                        alert('Расчет стоимости доставки произведен');
+                                                    },
+                                                    onChoose(type, tariff, address) {
+                                                        console.log('Выбран метод доставки', type, tariff, address);                                                        
+                                                        if (type === 'door') {
+                                                            alert(
+                                                            'Выбрана доставка курьером по адресу\n' +
+                                                            address.formatted +
+                                                            '\n' +
+                                                            'Цена ' + tariff.delivery_sum + '\n' +
+                                                            'Срок ' + tariff.period_max + ' дн.',                                                            
+                                                            );
+                                                        document.getElementById('id_sum').value = tariff.delivery_sum;
+                                                        document.getElementById('id_address_pvz').value = address.name;} 
+                                                            
+                                                        else {
+                                                            alert(
+                                                            'Выбран пункт выдачи заказа ' + address.name + '\n' +
+                                                            'Цена ' + tariff.delivery_sum + '\n' +
+                                                            'Срок ' + tariff.period_max + ' дн.',
+                                                            );
+                                                            document.getElementById('id_sum').value = tariff.delivery_sum;
+                                                            document.getElementById('id_address_pvz').value = address.name;
+                                                            }
+                                                    },
+                                                });
+      });
+  </script>
+</head>
+<body class="ml-2">
+  <p class="m-2">Выводим сообщение,что выбран пункт самовывоза</p>
+  <button onclick="window.widget.open()" class="p-1 my-2 border-stone-500 border-2 rounded-md">Показать ПВЗ</button>
+</body>
+</html>
+    <form action="" method="get" class="order-form">
+    <div class="d-flex align-items-center w-100">    
+    {% bootstrap_form form %}
+        <input type="submit" class="btn btn-primary ms-2" style="height: calc(3.5em + 0.55rem);" value="Подтвердить: Выбор пункта самовывоза">
+        {% csrf_token %}
+     </div>    
+    </form>
 {% endblock %}

@@ -19,7 +19,6 @@ class TestRoutes(TestCase):
         self.appointment = Appointment.objects.create(name="Test Appointment")
         self.male = Male.objects.create(name="Test Male")
         self.class_compress = Class_compress.objects.create(name="2 class")
-        # self.color = Color.objects.create(name="black", color='000000')
         self.sock = Soсk.objects.create(name="Closed")
         self.type_product = Type_product.objects.create(name="Chulki")
         # Создаем несколько цветов для ManyToMany

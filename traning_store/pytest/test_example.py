@@ -21,7 +21,6 @@ def test_data(db):
     appointment = Appointment.objects.create(name="Test Appointment")
     male = Male.objects.create(name="Test Male")
     class_compress = Class_compress.objects.create(name="2 class")
-    # color = Color.objects.create(name="black", color='000000')
     color_black = Color.objects.create(name="black", color='000000')
     color_white = Color.objects.create(name="white", color='FFFFFF')
     color_red = Color.objects.create(name="red", color='FF0000')

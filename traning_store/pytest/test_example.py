@@ -39,7 +39,6 @@ def test_data(db):
         brand=brend,
         Appointment=appointment,
         Class_compress=class_compress,
-        Color=Color.add(color_black),
         Male=male,
         Sock=sock,
         Type_product=type_product,
@@ -49,13 +48,14 @@ def test_data(db):
         price=5999.00,
         available=True
     )
+    product1.Color.add(color_black)
+
     product2 = Product.objects.create(
         name="Test Product 2",
         slug="test-product-2",
         brand=brend,
         Appointment=appointment,
         Class_compress=class_compress,
-        Color=Color.add(color_white),
         Male=male,
         Sock=sock,
         Type_product=type_product,
@@ -65,13 +65,14 @@ def test_data(db):
         stock=1,
         available=True
     )
+    product2.Color.add(color_white)
+
     product3 = Product.objects.create(
         name="Test Product 3",
         slug="test-product-3",
         brand=brend,
         Appointment=appointment,
         Class_compress=class_compress,
-        Color=Color.add(color_red),
         Male=male,
         Sock=sock,
         Type_product=type_product,
@@ -81,13 +82,14 @@ def test_data(db):
         stock=1,
         available=True
     )
+    product3.Color.add(color_red)
+
     product4 = Product.objects.create(
         name="Test Product 4",
         slug="test-product-4",
         brand=brend,
         Appointment=appointment,
         Class_compress=class_compress,
-        Color=Color.add(color_black),
         Male=male,
         Sock=sock,
         Type_product=type_product,
@@ -97,6 +99,7 @@ def test_data(db):
         stock=1,
         available=True
     )
+    product4.Color.add(color_black)
 
     # Создание галереи для продукта
     gallery1 = Gallery.objects.create(product=product1, image="test1.jpg")
@@ -108,7 +111,7 @@ def test_data(db):
         'appointment': appointment,
         'male': male,
         'class_compress': class_compress,
-        'color': Color.add(color_black),
+        'color': color_black,
         'sock': sock,
         'type_product': type_product,
         'size': size,

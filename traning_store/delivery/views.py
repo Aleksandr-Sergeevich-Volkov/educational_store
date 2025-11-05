@@ -50,7 +50,6 @@ def delivery_add_cdek(request):
         sum = form.cleaned_data['sum']
         request.session['delivery_cost'] = sum
         request.session['delivery_address'] = form.cleaned_data['address_pvz'] + ' (Сдек)'
-        # cost_not_price = Decimal('0')
         if cart.get_total_price() >= Decimal('5000'):
             messages.success(request, 'Поздравляем! Доставка бесплатна!')
             # return render(request, 'deliverys.html', {'cost': sum})

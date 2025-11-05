@@ -53,13 +53,19 @@
               },
               onChoose(type, tariff, address) {
                   console.log('Выбран метод доставки', type, tariff, address);                                                        
+                  
+                  // Закрываем виджет сразу после выбора
+                  if (window.widget && typeof window.widget.close === 'function') {
+                      window.widget.close();
+                  }
+                                                        
                   if (type === 'door') {
                       alert(
                       'Выбрана доставка курьером по адресу\n' +
                       address.formatted +
                       '\n' +
-                      'Цена ' + tariff.delivery_sum + '\n' +
-                      'Срок ' + tariff.period_max + ' дн.',                                                            
+                      'Цена ' + tariff.delivery_sum + ' руб.\n' +
+                      'Срок ' + tariff.period_max + ' дн.'                                                            
                       );
                   document.getElementById('id_sum').value = tariff.delivery_sum;
                   document.getElementById('id_address_pvz').value = address.name;} 
@@ -67,8 +73,8 @@
                   else {
                       alert(
                       'Выбран пункт выдачи заказа ' + address.name + '\n' +
-                      'Цена ' + tariff.delivery_sum + '\n' +
-                      'Срок ' + tariff.period_max + ' дн.',
+                      'Цена ' + tariff.delivery_sum + ' руб.\n' +
+                      'Срок ' + tariff.period_max + ' дн.'
                       );
                       document.getElementById('id_sum').value = tariff.delivery_sum;
                       document.getElementById('id_address_pvz').value = address.name;
@@ -93,7 +99,7 @@
                 </div>
                 <div class="card-body">
                     <div class="alert alert-info mb-3">
-                        <strong>📋 Инструкция:</strong> Нажмите кнопку ниже чтобы открыть карту с пунктами выдачи СДЭК
+                        <strong>📋 Инструкция:</strong> Нажмите кнопку ниже чтобы открыть карту с пунктами выдачи СДЭК. После выбора пункта виджет закроется автоматически.
                     </div>
                     
                     <button onclick="window.widget.open()" class="btn btn-warning btn-lg w-100 py-3 mb-3">
@@ -120,7 +126,7 @@
                         </div>
                         
                         <div class="alert alert-warning mt-3">
-                            <strong>💡 Важно:</strong> После выбора пункта на карте данные автоматически заполнятся в форме выше
+                            <strong>💡 Важно:</strong> После выбора пункта на карте данные автоматически заполнятся в форме выше, а виджет закроется.
                         </div>
                         
                         <div class="d-grid gap-2">

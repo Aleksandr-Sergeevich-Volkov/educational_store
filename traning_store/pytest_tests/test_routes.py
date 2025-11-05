@@ -26,7 +26,7 @@ class TestRoutes(TestCase):
         self.color_white = Color.objects.create(name="white", color='FFFFFF')
         self.color_red = Color.objects.create(name="red", color='FF0000')
 
-        # Создание цветов, размеров и типов моделей
+        # Создание размеров и типов моделей
         self.size = Size.objects.create(name="4", brand=self.brend)
         self.model_type = Model_type.objects.create(name="Стандартная", brand=self.brend)
 

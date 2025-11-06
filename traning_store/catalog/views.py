@@ -13,7 +13,7 @@ from traning_store.views import generate_payment_link
 
 from .filters import ProductFilter
 from .forms import UserForm
-from .models import Color, Gallery, Model_type, Product, Size
+from .models import Brend, Color, Gallery, Model_type, Product, Size
 
 User = get_user_model()
 
@@ -33,10 +33,71 @@ class ProductListView(FilterView):
             queryset=Gallery.objects.filter(main=True),
             to_attr='main_images'))
 
+    def get_seo_context(self):
+        """Генерирует SEO-данные в зависимости от примененных фильтров"""
+        context = {}
+
+        # Базовые значения по умолчанию
+        base_title = "Компрессионный трикотаж - купить в интернет-магазине"
+        base_description = "Широкий выбор компрессионного трикотажа: гольфы, чулки, колготки. Все классы компрессии. Доставка по РФ."
+        base_h1 = "Компрессионный трикотаж"
+
+        # Проверяем, применены ли фильтры
+        filters_applied = False
+        filter_parts = []
+
+        # Анализируем параметры фильтрации
+        if hasattr(self, 'filterset') and self.filterset:
+            filters = self.filterset.data
+
+            # Бренд
+            if filters.get('brand'):
+                try:
+                    brand = Brend.objects.get(id=filters['brand'])
+                    filter_parts.append(f"бренда {brand.name}")
+                    filters_applied = True
+                except Brend.DoesNotExist:
+                    pass
+
+            # Класс компрессии
+            if filters.get('Class_compress'):
+                class_compress = filters['Class_compress']
+                filter_parts.append(f"{class_compress} класс компрессии")
+                filters_applied = True
+
+            # Тип изделия
+            if filters.get('Type_product'):
+                type_product = filters['Type_product']
+                filter_parts.append(f"{type_product}")
+                filters_applied = True
+
+            # Пол
+            if filters.get('Male'):
+                male = filters['Male']
+                gender_map = {'M': 'мужские', 'F': 'женские', 'U': 'унисекс'}
+                filter_parts.append(gender_map.get(male, male))
+                filters_applied = True
+
+        # Формируем SEO-данные в зависимости от фильтров
+        if filters_applied:
+            filter_text = " ".join(filter_parts)
+            context['seo_title'] = f"Компрессионный трикотаж {filter_text} - купить в Москве"
+            context['seo_h1'] = f"Компрессионный трикотаж {filter_text}"
+            context['seo_description'] = f"Качественный компрессионный трикотаж {filter_text}. Большой выбор, низкие цены, доставка по России."
+        else:
+            # SEO для главной страницы каталога
+            context['seo_title'] = base_title
+            context['seo_h1'] = base_h1
+            context['seo_description'] = base_description
+
+        return context
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         filtered_qs = self.filterset.qs
         context['prod_count'] = filtered_qs.aggregate(Count('id'))
+        # Добавляем SEO-данные
+        context.update(self.get_seo_context())
         return context
 
 

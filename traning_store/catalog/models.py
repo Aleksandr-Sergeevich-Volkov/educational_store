@@ -232,6 +232,28 @@ class Product(models.Model):
     available = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    # новые SEO-поля
+    seo_title = models.CharField(max_length=255, blank=True)
+    seo_description = models.TextField(blank=True)
+    seo_alt = models.CharField(max_length=255, blank=True)  # alt для изображений
+
+    def save(self, *args, **kwargs):
+        if not self.seo_title:
+            self.seo_title = f"{self.name} артикул: {self.articul} - купить в Москве"
+        if not self.seo_description:
+            self.seo_description = f"Купить {self.name} артикул: {self.articul} по выгодной цене. Компрессионный трикотаж с доставкой."
+        if not self.seo_alt:
+            self.seo_alt = f"{self.name} артикул: {self.articul} - компрессионный трикотаж"
+        super().save(*args, **kwargs)
+
+    def get_features(self):
+        """Генерация описания характеристик для SEO"""
+        features = []
+        if hasattr(self, 'compression_class'):
+            features.append(f"{self.Class_compress} класс компрессии")
+        if hasattr(self, 'sock_type'):
+            features.append(f"{self.Sock} носок")
+        return ". ".join(features)
 
     class Meta:
         verbose_name = 'Товар'

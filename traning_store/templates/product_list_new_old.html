@@ -4,8 +4,7 @@
 {% load static %}
 
 <head>
-    <title>{% block title %}{{ seo_title }}{% endblock %}</title>
-    <meta name="description" content="{{ seo_description }}">
+    <title>Список компрессионного трикотажа</title>
 </head>
 
 {% block content %}
@@ -13,13 +12,12 @@
     <!-- Заголовок и счетчик -->
     <div class="row mb-4">
         <div class="col-12">
-            <h1 class="h4 mb-3">{{ seo_h1 }}</h1>
-            <div class="text-muted">Всего товаров: {{ prod_count.id__count }}</div>
+            <h4 class="mb-3">Всего товаров отобрано: {{prod_count.id__count}}</h4>
         </div>
     </div>
 
-    <!-- Форма фильтрации -->
-     <div class="row mb-4">
+    <!-- Форма фильтрации - показываем ВСЕ поля -->
+    <div class="row mb-4">
         <div class="col-12">
             <form method="get" class="filter-form">
                 <div class="row g-3 align-items-end">
@@ -63,26 +61,18 @@
             </form>
         </div>
     </div>
-    <!-- ... ваш существующий код фильтров ... -->
 
-    <!-- Список товаров с ПОЛНОЙ микроразметкой -->
-    <div class="row" itemscope itemtype="https://schema.org/ItemList">
-        <meta itemprop="name" content="{{ seo_title|default:'Каталог компрессионного трикотажа' }}">
-        <meta itemprop="description" content="{{ seo_description|default:'Широкий выбор компрессионного трикотажа' }}">
-        <meta itemprop="numberOfItems" content="{{ prod_count.id__count }}">
-        
+    <!-- Список товаров -->
+    <div class="row">
         {% for product in page_obj.object_list %}
-        <div class="col-12 col-sm-6 col-lg-4 col-xl-3 mb-4" 
-             itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
-            <meta itemprop="position" content="{{ forloop.counter }}">
-            
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3 mb-4">
             <div class="card h-100" itemscope itemtype="https://schema.org/Product">
                 <!-- Изображение товара -->
                 <div class="text-center p-3">
                     {% for image in product.main_images %}
                     <a href="{% url 'catalog:detail' product.slug %}">
                         <img src="{{ image.image.url }}" 
-                             alt="{{ product.seo_alt|default:product.name }}" 
+                             alt="{{ product.name }}" 
                              class="card-img-top img-fluid" 
                              style="max-height: 200px; width: auto; object-fit: contain;"
                              itemprop="image">
@@ -97,31 +87,20 @@
 
                 <!-- Информация о товаре -->
                 <div class="card-body d-flex flex-column">
-                    <h2 class="h5 card-title">
-                        <a href="{% url 'catalog:detail' product.slug %}" class="text-decoration-none" itemprop="url">
-                            <span itemprop="name">{{ product.seo_title|default:product.name }}</span>
+                    <h5 class="card-title">
+                        <a href="{% url 'catalog:detail' product.slug %}" class="text-decoration-none" itemprop="name">
+                            {{ product.name }}
                         </a>
-                    </h2>
-                    
-                    <!-- Артикул товара -->
-                    {% if product.articul %}
-                    <div class="mb-2">
-                        <small class="text-muted">Артикул:</small>
-                        <span class="fw-bold" itemprop="sku">{{ product.articul }}</span>
-                        <meta itemprop="productID" content="{{ product.articul }}">
-                    </div>
-                    {% endif %}
+                    </h5>
                     
                     <div class="mb-2">
                         <small class="text-muted">Производитель:</small>
-                        <span class="fw-bold" itemprop="brand" itemscope itemtype="https://schema.org/Brand">
-                            <span itemprop="name">{{ product.brand.name }}</span>
-                        </span>
+                        <span class="fw-bold" itemprop="brand">{{ product.brand }}</span>
                     </div>
                     
                     <div class="mb-2">
                         <small class="text-muted">Категория:</small>
-                        <span itemprop="category">{{ product.Type_product }}</span>
+                        <span itemprop="description">компрессионный трикотаж</span>
                     </div>
 
                     <!-- Цена -->
@@ -132,8 +111,7 @@
                                 <meta itemprop="price" content="{{ product.price }}">
                                 <meta itemprop="priceCurrency" content="RUB">
                             </span>
-                            <meta itemprop="availability" content="https://schema.org/InStock">
-                            <link itemprop="url" href="{{ request.scheme }}://{{ request.get_host }}{% url 'catalog:detail' product.slug %}">
+                            <meta itemprop="availability" href="http://schema.org/InStock">
                         </div>
                     </div>
 
@@ -164,47 +142,6 @@
     </div>
 </div>
 
-<!-- Дублирующая JSON-LD разметка для лучшего понимания поисковиками -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  "name": "{{ seo_title|default:'Каталог компрессионного трикотажа'|escapejs }}",
-  "description": "{{ seo_description|default:'Широкий выбор компрессионного трикотажа'|escapejs }}",
-  "numberOfItems": {{ prod_count.id__count }},
-  "itemListElement": [
-    {% for product in page_obj.object_list %}
-    {
-      "@type": "ListItem",
-      "position": {{ forloop.counter }},
-      "item": {
-        "@type": "Product",
-        "name": "{{ product.seo_title|default:product.name|escapejs }}",
-        "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'catalog:detail' product.slug %}",
-        {% if product.article %}
-        "sku": "{{ product.article|escapejs }}",
-        {% endif %}
-        "brand": {
-          "@type": "Brand",
-          "name": "{{ product.brand.name|escapejs }}"
-        },
-        "offers": {
-          "@type": "Offer",
-          "price": "{{ product.price }}",
-          "priceCurrency": "RUB",
-          "availability": "https://schema.org/InStock",
-          "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'catalog:detail' product.slug %}"
-        }
-        {% if product.main_images.first %},
-        "image": "{{ product.main_images.first.image.url }}"
-        {% endif %}
-      }
-    }{% if not forloop.last %},{% endif %}
-    {% endfor %}
-  ]
-}
-</script>
-
 <style>
 .filter-form .form-label {
     font-size: 0.875rem;
@@ -227,6 +164,7 @@
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
+/* На мобильных - больше отступов между полями */
 @media (max-width: 768px) {
     .filter-form .col-12 {
         margin-bottom: 0.5rem;

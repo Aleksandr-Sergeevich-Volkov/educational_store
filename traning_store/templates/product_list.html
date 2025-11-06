@@ -180,8 +180,9 @@
       "item": {
         "@type": "Product",
         "name": "{{ product.seo_title|default:product.name|escapejs }}",
+        "description": "{{ product.seo_description|default:product.name|escapejs }} - компрессионный трикотаж {{ product.brand.name }}",  {# ✅ ДОБАВЛЕНО description #}
         "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'catalog:detail' product.slug %}",
-        {% if product.article %}
+        {% if product.articul %}
         "sku": "{{ product.article|escapejs }}",
         {% endif %}
         "brand": {
@@ -190,13 +191,45 @@
         },
         "offers": {
           "@type": "Offer",
-          "price": "{{ product.price }}",
+          "price": "{{ product.price|stringformat:'d' }}",
           "priceCurrency": "RUB",
           "availability": "https://schema.org/InStock",
-          "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'catalog:detail' product.slug %}"
+          "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'catalog:detail' product.slug %}",
+          "hasMerchantReturnPolicy": {  {# ✅ ДОБАВЛЕНО политика возврата #}
+            "@type": "MerchantReturnPolicy",
+            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+            "merchantReturnDays": 14
+          },
+          "shippingDetails": {  {# ✅ ДОБАВЛЕНО условия доставки #}
+            "@type": "OfferShippingDetails",
+            "shippingRate": {
+              "@type": "MonetaryAmount",
+              "value": "0",
+              "currency": "RUB"
+            },
+            "shippingDestination": {
+              "@type": "DefinedRegion",
+              "addressCountry": "RU"
+            },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": {
+                "@type": "QuantitativeValue",
+                "minValue": "1",
+                "maxValue": "2"
+              },
+              "transitTime": {
+                "@type": "QuantitativeValue", 
+                "minValue": "1",
+                "maxValue": "3"
+              }
+            }
+          }
         }
-        {% if product.main_images.first %},
-        "image": "{{ product.main_images.first.image.url }}"
+        {% if product.main_images %},
+        {% for image in product.main_images %}
+        "image": "{{ image.image.url }}"
+        {% endfor %}
         {% endif %}
       }
     }{% if not forloop.last %},{% endif %}

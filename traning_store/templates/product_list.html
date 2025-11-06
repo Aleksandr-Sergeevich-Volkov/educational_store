@@ -123,20 +123,49 @@
                         <small class="text-muted">Категория:</small>
                         <span itemprop="category">{{ product.Type_product }}</span>
                     </div>
+                     <div style="display: none;" itemprop="description">
+            {{ product.seo_description|default:product.name }} - компрессионный трикотаж {{ product.brand.name }}. {{ product.Type_product }} {{ product.article }}.
+        </div>
 
                     <!-- Цена -->
                     <div class="mt-auto" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="h5 text-primary mb-0">
-                                {{ product.price }} ₽
-                                <meta itemprop="price" content="{{ product.price }}">
-                                <meta itemprop="priceCurrency" content="RUB">
-                            </span>
-                            <meta itemprop="availability" content="https://schema.org/InStock">
-                            <link itemprop="url" href="{{ request.scheme }}://{{ request.get_host }}{% url 'catalog:detail' product.slug %}">
-                        </div>
-                    </div>
-
+    <div class="d-flex justify-content-between align-items-center">
+        <span class="h5 text-primary mb-0">
+            {{ product.price }} ₽
+            <meta itemprop="price" content="{{ product.price|floatformat:'2u' }}">
+            <meta itemprop="priceCurrency" content="RUB">
+        </span>
+        <meta itemprop="availability" content="https://schema.org/InStock">
+        <link itemprop="url" href="{{ request.scheme }}://{{ request.get_host }}{% url 'catalog:detail' product.slug %}">
+        
+        <!-- ДОБАВЛЯЕМ ПОЛИТИКУ ВОЗВРАТА -->
+        <div itemprop="hasMerchantReturnPolicy" itemscope itemtype="https://schema.org/MerchantReturnPolicy">
+            <meta itemprop="returnPolicyCategory" content="https://schema.org/MerchantReturnFiniteReturnWindow">
+            <meta itemprop="merchantReturnDays" content="14">
+        </div>
+        
+        <!-- ДОБАВЛЯЕМ УСЛОВИЯ ДОСТАВКИ -->
+        <div itemprop="shippingDetails" itemscope itemtype="https://schema.org/OfferShippingDetails">
+            <div itemprop="shippingRate" itemscope itemtype="https://schema.org/MonetaryAmount">
+                <meta itemprop="value" content="0">
+                <meta itemprop="currency" content="RUB">
+            </div>
+            <div itemprop="shippingDestination" itemscope itemtype="https://schema.org/DefinedRegion">
+                <meta itemprop="addressCountry" content="RU">
+            </div>
+            <div itemprop="deliveryTime" itemscope itemtype="https://schema.org/ShippingDeliveryTime">
+                <div itemprop="handlingTime" itemscope itemtype="https://schema.org/QuantitativeValue">
+                    <meta itemprop="minValue" content="1">
+                    <meta itemprop="maxValue" content="2">
+                </div>
+                <div itemprop="transitTime" itemscope itemtype="https://schema.org/QuantitativeValue">
+                    <meta itemprop="minValue" content="1">
+                    <meta itemprop="maxValue" content="3">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
                     <!-- Кнопка подробнее -->
                     <a href="{% url 'catalog:detail' product.slug %}" 
                        class="btn btn-outline-primary mt-2 w-100">
@@ -191,7 +220,7 @@
         },
         "offers": {
           "@type": "Offer",
-          "price": "{{ product.price|stringformat:'d' }}",
+          "price": "{{ product.price|floatformat:"2u" }}",
           "priceCurrency": "RUB",
           "availability": "https://schema.org/InStock",
           "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'catalog:detail' product.slug %}",

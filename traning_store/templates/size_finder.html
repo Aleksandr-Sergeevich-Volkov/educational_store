@@ -1,0 +1,98 @@
+<!-- size_finder.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Подбор размера</h1>
+    
+    <form method="post" id="sizeFinderForm">
+        {% csrf_token %}
+        
+        <!-- Выбор бренда -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Шаг 1: Выберите бренд</h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    {{ brand_form.brand.label_tag }}
+                    {{ brand_form.brand }}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Поля измерений -->
+        {% if measurement_form %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Шаг 2: Введите ваши измерения (в см)</h5>
+            </div>
+            <div class="card-body">
+                {% for field in measurement_form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary">Подобрать размер</button>
+            </div>
+        </div>
+        {% endif %}
+    </form>
+    
+    <!-- Результаты -->
+    {% if results %}
+    <div class="card">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">
+                Найдено подходящих размеров: {{ results|length }}
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Бренд</th>
+                            <th>Размер</th>
+                            <th>Обхват щиколотки</th>
+                            <th>Обхват икры</th>
+                            {% if selected_brand and 'venoteks' in selected_brand.name.lower %}
+                            <th>Обхват середины бедра</th>
+                            {% elif selected_brand and 'orto' in selected_brand.name.lower %}
+                            <th>Обхват под коленом</th>
+                            <th>Обхват середины бедра</th>
+                            <th>Обхват бедра верхний</th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for result in results %}
+                        <tr>
+                            <td>{{ result.size.brand.name }}</td>
+                            <td><strong>{{ result.size.name }}</strong></td>
+                            <td>{{ result.ankle_circumference.lower }}-{{ result.ankle_circumference.upper }} см</td>
+                            <td>{{ result.calf_circumference.lower }}-{{ result.calf_circumference.upper }} см</td>
+                            {% if selected_brand and 'venoteks' in selected_brand.name.lower %}
+                            <td>{{ result.mid_thigh_circumference.lower }}-{{ result.mid_thigh_circumference.upper }} см</td>
+                            {% elif selected_brand and 'orto' in selected_brand.name.lower %}
+                            <td>{{ result.circumference_under_knee.lower }}-{{ result.circumference_under_knee.upper }} см</td>
+                            <td>{{ result.mid_thigh_circumference.lower }}-{{ result.mid_thigh_circumference.upper }} см</td>
+                            <td>{{ result.Upper_thigh_circumference.lower }}-{{ result.Upper_thigh_circumference.upper }} см</td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function updateMeasurementFields() {
+    document.getElementById('sizeFinderForm').submit();
+}
+</script>
+{% endblock %}

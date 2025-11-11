@@ -15,6 +15,7 @@ urlpatterns = [
     path('<int:post_id>/delete_comment/<int:comment_id>/',
          views.delete_comment, name='delete_comment'),
     path('search/', views.search, name='search'),
+    path('size_finder/', views.size_finder, name='size_finder'),
     path('yandex_445ca9b51fd08dec.html/', TemplateView.as_view
          (template_name='yandex_445ca9b51fd08dec.html')),
     path('robots.txt/', TemplateView.as_view(template_name='robots.txt')),

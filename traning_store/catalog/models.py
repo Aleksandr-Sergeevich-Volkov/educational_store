@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import IntegerRangeField
 from django.db import models
 
 from traning_store.constant import COLOR_LEN, MEASURE_LEN, TITLE_LEN
@@ -124,6 +125,54 @@ class Size(models.Model):
 
     def __str__(self):
         return f'{self.brand.name} - {self.name}'
+
+
+class SizeDetail(models.Model):
+    size = models.ForeignKey(
+        Size,  # Связь с размером
+        on_delete=models.CASCADE,
+        verbose_name='Детали размера'
+    )
+    ankle_circumference = IntegerRangeField(
+        verbose_name='Обхват щиколотки (см)'
+    )
+
+    calf_circumference = IntegerRangeField(
+        verbose_name='Обхват икры (см)'
+    )
+
+    circumference_under_knee = IntegerRangeField(
+        verbose_name='Обхват под коленом (см)'
+    )
+
+    mid_thigh_circumference = IntegerRangeField(
+        verbose_name='Обхват середины бедра (см)'
+    )
+
+    Upper_thigh_circumference = IntegerRangeField(
+        verbose_name='Обхват бедра верхний (см)'
+    )
+
+    class Meta:
+        verbose_name = 'Детали размера'
+        verbose_name_plural = 'Детали размеров'
+
+    def is_measurement_in_range(self, field_name, value):
+        """Проверяет, входит ли измерение в диапазон"""
+        range_value = getattr(self, field_name)
+        if range_value:
+            return range_value.lower <= value <= range_value.upper
+        return False
+
+    def get_range_display(self, field_name):
+        """Возвращает диапазон в формате '18-20'"""
+        range_value = getattr(self, field_name)
+        if range_value:
+            return f"{range_value.lower}-{range_value.upper}"
+        return "-"
+
+    def __str__(self):
+        return f"Детали для {self.size}"
 
 
 class Model_type(models.Model):

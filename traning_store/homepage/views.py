@@ -1,6 +1,6 @@
 import random
 
-from catalog.models import Gallery, Product
+from catalog.models import Gallery, Product, SizeDetail
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.db import models
@@ -8,7 +8,8 @@ from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import TemplateView
 
-from .forms import CommentForm, SearchForm
+from .forms import (CommentForm, ORTOMeasurementForm, SearchForm,
+                    SizeFinderForm, VenoteksMeasurementForm)
 from .models import Comment, Post
 
 
@@ -99,3 +100,69 @@ def delete_comment(request, post_id, comment_id):
         comment.delete()
         return redirect('homepage:detail', pk=post_id)
     return render(request, 'blog/comment.html', context)
+
+
+def size_finder(request):
+    brand_form = SizeFinderForm(request.POST or None)
+    measurement_form = None
+    results = []
+    selected_brand = None
+
+    if request.method == 'POST':
+        if brand_form.is_valid():
+            selected_brand = brand_form.cleaned_data['brand']
+
+            # Определяем какая форма измерений нужна по названию бренда
+            brand_name = selected_brand.name.lower()
+
+            if 'venoteks' in brand_name:
+                measurement_form = VenoteksMeasurementForm(request.POST)
+            elif 'orto' in brand_name:
+                measurement_form = ORTOMeasurementForm(request.POST)
+            else:
+                # Форма по умолчанию, если бренд не распознан
+                measurement_form = VenoteksMeasurementForm(request.POST)
+
+            if measurement_form and measurement_form.is_valid():
+                measurements = measurement_form.cleaned_data
+                results = find_matching_sizes(selected_brand, measurements, brand_name)
+                print(results)
+
+    return render(request, 'size_finder.html', {
+        'brand_form': brand_form,
+        'measurement_form': measurement_form,
+        'results': results,
+        'selected_brand': selected_brand,
+    })
+
+
+def find_matching_sizes(brand, measurements, brand_name):
+    """Находит подходящие размеры по измерениям"""
+    suitable_sizes = []
+
+    # Получаем все размеры для выбранного бренда
+    size_details = SizeDetail.objects.filter(size__brand=brand)
+
+    for size_detail in size_details:
+        if is_size_match(size_detail, brand_name, measurements):
+            suitable_sizes.append(size_detail)
+
+    return suitable_sizes
+
+
+def is_size_match(size_detail, brand_name, measurements):
+    """Проверяет, подходит ли размер по всем измерениям"""
+    if 'venoteks' in brand_name:
+        return (
+            size_detail.is_measurement_in_range('ankle_circumference', measurements['ankle_circumference'])
+            and size_detail.is_measurement_in_range('calf_circumference', measurements['calf_circumference'])
+            and size_detail.is_measurement_in_range('mid_thigh_circumference', measurements['mid_thigh_circumference'])
+        )
+    elif 'orto' in brand_name:
+        return (
+            size_detail.is_measurement_in_range('ankle_circumference', measurements['ankle_circumference'])
+            and size_detail.is_measurement_in_range('calf_circumference', measurements['calf_circumference'])
+            and size_detail.is_measurement_in_range('circumference_under_knee', measurements['circumference_under_knee'])
+            and size_detail.is_measurement_in_range('Upper_thigh_circumference', measurements['upper_thigh_circumference'])
+        )
+    return False

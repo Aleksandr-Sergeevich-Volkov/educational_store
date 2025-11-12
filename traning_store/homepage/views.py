@@ -24,7 +24,6 @@ class HomePage(TemplateView):
         random_list = random.shuffle(product_list)
         context['random_list'] = random_list
         context['product'] = Product.objects.filter(id__in=product_list[:3])
-        # context['catalog'] = 'catalog/'
         return context
 
 
@@ -126,7 +125,6 @@ def size_finder(request):
             if measurement_form and measurement_form.is_valid():
                 measurements = measurement_form.cleaned_data
                 results = find_matching_sizes(selected_brand, measurements, brand_name)
-                print(results)
 
     return render(request, 'size_finder.html', {
         'brand_form': brand_form,

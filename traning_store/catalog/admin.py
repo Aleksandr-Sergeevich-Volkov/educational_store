@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
 
 from .models import (Appointment, Brend, Class_compress, Color, Country,
                      Gallery, Male, Model_type, Product, Side, Size,
@@ -99,6 +100,16 @@ class SizeDetailAdmin(admin.ModelAdmin):
 class GalleryInline(admin.TabularInline):
     fk_name = 'product'
     model = Gallery
+    extra = 1  # Показывать только 1 пустую строку
+    classes = ['collapse']  # Сворачиваем по умолчанию
+    fields = ['image', 'image_preview']  # Показываем превью
+    readonly_fields = ['image_preview']
+
+    def image_preview(self, obj):
+        if obj.image:
+            return mark_safe(f'<img src="{obj.image.url}" style="max-height: 50px;" />')
+        return "Нет изображения"
+    image_preview.short_description = 'Превью'
 
 
 @admin.register(Product)

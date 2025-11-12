@@ -108,32 +108,40 @@
         </div>
 
         <!-- Боковая панель с инструкцией - 1/3 экрана -->
-<div class="col-12 col-lg-4 col-md-5">
-    <div class="card sticky-top" style="top: 20px;">
-        <div class="card-body">
-            <h4 class="card-title mb-3">Инструкция по выбору размера</h4>            
-            <div class="size-table-container text-center">
-                {% if product.brand.size_table_image %}
-                <a href="{{ product.brand.size_table_image.url }}" target="_blank" class="zoomable-image">
-                    <img src="{{ product.brand.size_table_image.url }}" 
-                         alt="Таблица размеров {{ product.brand.name }}" 
-                         class="size-table-image img-fluid">
-                    <div class="zoom-hint mt-2">🔍 Нажмите для увеличения</div>
-                </a>
-                {% else %}
-                <p class="text-muted">Инструкция по выбору размера для {{ product.brand.name }}</p>
-                <small class="text-muted">(Таблица размеров временно недоступна)</small>
-                {% endif %}
-            </div>
-            
-            <!-- Блок с предупреждением -->
-            <div class="mt-4">
-                <div class="alert alert-info">
-                    <small>
-                        <strong>Важно:</strong> Для точного подбора размера рекомендуем 
-                        проконсультироваться с врачом. Неправильно подобранный размер 
-                        может снизить эффективность компрессии.
-                    </small>
+        <div class="col-12 col-lg-4 col-md-5">
+            <div class="card sticky-top" style="top: 20px;">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">Инструкция по выбору размера</h4>
+                    
+                    <div class="size-table-container text-center">
+                        {% if product.brand.name == 'ORTO' %}
+                        <a href="{% static 'orto_size.jpg' %}" target="_blank" class="zoomable-image">
+                            <img src="{% static 'orto_size.jpg' %}" 
+                                 alt="Таблица размеров ОРТО" 
+                                 class="size-table-image img-fluid">
+                            <div class="zoom-hint mt-2">🔍 Нажмите для увеличения</div>
+                        </a>
+                        {% elif product.brand.name == 'Venoteks' %}
+                        <a href="{% static 'venoteks_size.jpg' %}" target="_blank" class="zoomable-image">
+                            <img src="{% static 'venoteks_size.jpg' %}" 
+                                 alt="Таблица размеров Venoteks" 
+                                 class="size-table-image img-fluid">
+                            <div class="zoom-hint mt-2">🔍 Нажмите для увеличения</div>
+                        </a>
+                        {% else %}
+                        <p class="text-muted">Инструкция по выбору размера для данного производителя</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mt-4">
+                        <div class="alert alert-info">
+                            <small>
+                                <strong>Важно:</strong> Для точного подбора размера рекомендуем 
+                                проконсультироваться с врачом. Неправильно подобранный размер 
+                                может снизить эффективность компрессии.
+                            </small>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -23,6 +23,13 @@ class Brend(models.Model):
         Country,
         on_delete=models.CASCADE,
     )
+    size_table_image = models.ImageField(
+        'Изображение таблицы размеров',
+        upload_to='brands/size_tables/',
+        blank=True,
+        null=True,
+        help_text='Загрузите изображение с таблицей размеров для этого бренда'
+    )
 
     class Meta:
         verbose_name = 'Бренд'

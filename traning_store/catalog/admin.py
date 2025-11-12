@@ -21,7 +21,24 @@ admin.site.register(Gallery)
 
 @admin.register(Brend)
 class BrendAdmin(admin.ModelAdmin):
-    list_display = ['name']
+    list_display = ['name', 'country_brand', 'has_size_table']
+    list_filter = ['country_brand']
+    search_fields = ['name']
+
+    def has_size_table(self, obj):
+        return bool(obj.size_table_image)
+    has_size_table.boolean = True
+    has_size_table.short_description = 'Есть таблица размеров'
+
+    fieldsets = (
+        ('Основная информация', {
+            'fields': ('name', 'country_brand')
+        }),
+        ('Таблица размеров', {
+            'fields': ('size_table_image',),
+            'classes': ('collapse',)
+        }),
+    )
 
 
 @admin.register(Size)

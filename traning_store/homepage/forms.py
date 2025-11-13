@@ -106,3 +106,43 @@ class ORTOMeasurementForm(forms.Form):
             'placeholder': 'Введите см'
         })
     )
+
+
+class TrivesMeasurementForm(forms.Form):
+    ankle_circumference = forms.IntegerField(
+        label='Обхват щиколотки (см)',
+        min_value=10,
+        max_value=100,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Введите см'
+        })
+    )
+    calf_circumference = forms.IntegerField(
+        label='Обхват икры (см)',
+        min_value=10,
+        max_value=100,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Введите см'
+        })
+    )
+    circumference_under_knee = forms.IntegerField(
+        label='Обхват под коленом (см)',
+        min_value=10,
+        max_value=100,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Введите см'
+        })
+    )
+
+    upper_thigh_circumference = forms.IntegerField(
+        label='Обхват бедра верхний (см)',
+        min_value=10,
+        max_value=100,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Введите см'
+        })
+    )

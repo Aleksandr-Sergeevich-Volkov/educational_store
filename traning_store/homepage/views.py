@@ -9,7 +9,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import TemplateView
 
 from .forms import (CommentForm, ORTOMeasurementForm, SearchForm,
-                    SizeFinderForm, VenoteksMeasurementForm)
+                    SizeFinderForm, TrivesMeasurementForm,
+                    VenoteksMeasurementForm)
 from .models import Comment, Post
 
 
@@ -118,6 +119,8 @@ def size_finder(request):
                 measurement_form = VenoteksMeasurementForm(request.POST)
             elif 'orto' in brand_name:
                 measurement_form = ORTOMeasurementForm(request.POST)
+            elif 'trives' in brand_name:
+                measurement_form = TrivesMeasurementForm(request.POST)
             else:
                 # Форма по умолчанию, если бренд не распознан
                 measurement_form = VenoteksMeasurementForm(request.POST)
@@ -157,6 +160,14 @@ def is_size_match(size_detail, brand_name, measurements):
             and size_detail.is_measurement_in_range('mid_thigh_circumference', measurements['mid_thigh_circumference'])
         )
     elif 'orto' in brand_name:
+        return (
+            size_detail.is_measurement_in_range('ankle_circumference', measurements['ankle_circumference'])
+            and size_detail.is_measurement_in_range('calf_circumference', measurements['calf_circumference'])
+            and size_detail.is_measurement_in_range('circumference_under_knee', measurements['circumference_under_knee'])
+            and size_detail.is_measurement_in_range('mid_thigh_circumference', measurements['mid_thigh_circumference'])
+            and size_detail.is_measurement_in_range('Upper_thigh_circumference', measurements['upper_thigh_circumference'])
+        )
+    elif 'trives' in brand_name:
         return (
             size_detail.is_measurement_in_range('ankle_circumference', measurements['ankle_circumference'])
             and size_detail.is_measurement_in_range('calf_circumference', measurements['calf_circumference'])

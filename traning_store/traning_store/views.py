@@ -4,7 +4,10 @@ from urllib import parse
 from urllib.parse import urlparse
 
 from catalog.forms import SignUpForm
-from django.contrib.auth import login, logout
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
@@ -141,3 +144,47 @@ def check_success_payment(request: str, merchant_password_1: str = ROBOKASSA_PAS
         order.save()
         return HttpResponse('Thank you for using our service')
     return HttpResponse('bad sign')
+
+
+def staff_required(function=None):
+    """
+    Декоратор для проверки, что пользователь является staff
+    """
+    actual_decorator = user_passes_test(
+        lambda u: u.is_active and u.is_staff,
+        login_url='/admin-login/'
+    )
+    if function:
+        return actual_decorator(function)
+    return actual_decorator
+
+
+def admin_login(request):
+    """
+    Кастомная страница входа ТОЛЬКО для админки
+    """
+    # Если пользователь уже авторизован и является staff, перенаправляем в админку
+    if request.user.is_authenticated and request.user.is_staff:
+        return redirect(settings.ADMIN_URL)
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            if user.is_staff:  # Проверяем, что пользователь является staff
+                login(request, user)
+                messages.success(request, f'Добро пожаловать в админку, {username}!')
+                next_page = request.GET.get('next', settings.ADMIN_URL)
+                return redirect(next_page)
+            else:
+                messages.error(request, 'У вас нет доступа к админке')
+        else:
+            messages.error(request, 'Неверное имя пользователя или пароль')
+
+    return render(request, 'registration/admin_login.html')
+
+
+def home(request):
+    return render(request, 'home.html')

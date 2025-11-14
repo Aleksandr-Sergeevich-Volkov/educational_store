@@ -25,7 +25,7 @@ class Cart(object):
         self.cost = Decimal('5000.00')
         if self.session.get('delivery_cost'):
             self.delivery_cost = Decimal(self.session.get('delivery_cost'))
-        print('Укажите cначала доставку')
+        # print('Укажите cначала доставку')
 
     def add(self, product, quantity=1, size='1', color='черный',
             m_type='Стандартный', images_m='1', update_quantity=False):

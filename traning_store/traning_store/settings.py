@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 
+from django.urls import reverse_lazy
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -26,14 +27,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-4#xre@vo3c)grje)5kj3rrwt6@1=' \
              '8dvyc!@6m-6nzl!kkb9dvm'
-CSRF_TRUSTED_ORIGINS = ['https://4505485-volkovaleksandr.twc1.net','https://kompressionnye-chulki24.ru']
+CSRF_TRUSTED_ORIGINS = ['https://4505485-volkovaleksandr.twc1.net', 'https://kompressionnye-chulki24.ru']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0','62.113.36.63','4505485-volkovaleksandr.twc1.net','kompressionnye-chulki24.ru' 
-]
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0', '62.113.36.63', '4505485-volkovaleksandr.twc1.net', 'kompressionnye-chulki24.ru']
 INTERNAL_IPS = ['127.0.0.1']
+
+# Динамический URL для админки
+ADMIN_URL = os.environ.get('DJANGO_ADMIN_URL', 'admin/')
+
+# Настройки аутентификации
+LOGIN_URL = reverse_lazy('custom_login')
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 
 # Application definition
@@ -86,6 +94,7 @@ TEMPLATES = [
                 'cart.context_processors.user_context_processor',
                 'cart.context_processors.currency',
                 'cart.context_processors.weather',
+                'cart.context_processors.admin_url',  # Добавить эту строку
             ],
         },
     },
@@ -101,12 +110,12 @@ DATABASES = {
     # Меняем настройку Django: теперь для работы будет использоваться
     # бэкенд postgresql
     'default': {
-                'ENGINE': 'django.db.backends.postgresql',
-                'NAME': os.getenv('POSTGRES_DB', ''),
-                'USER': os.getenv('POSTGRES_USER', ''),
-                'PASSWORD': os.getenv('POSTGRES_PASSWORD', ''),
-                'HOST': os.getenv('DB_HOST', ''),
-                'PORT': os.getenv('DB_PORT', 5432)
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('POSTGRES_DB', ''),
+        'USER': os.getenv('POSTGRES_USER', ''),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', ''),
+        'HOST': os.getenv('DB_HOST', ''),
+        'PORT': os.getenv('DB_PORT', 5432)
     }
 }
 

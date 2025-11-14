@@ -94,7 +94,6 @@ TEMPLATES = [
                 'cart.context_processors.user_context_processor',
                 'cart.context_processors.currency',
                 'cart.context_processors.weather',
-                'cart.context_processors.admin_url',  # Добавить эту строку
             ],
         },
     },

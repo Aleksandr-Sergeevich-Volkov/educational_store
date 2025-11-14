@@ -36,9 +36,6 @@ urlpatterns = [
     # КАСТОМНЫЙ ВХОД ТОЛЬКО ДЛЯ АДМИНКИ
     path(f'{settings.ADMIN_URL}login/', views.admin_login, name='admin_login'),
     path(settings.ADMIN_URL, admin.site.urls),
-    # path('admin-login/', views.admin_login, name='admin_login'),
-    # Динамический адрес админки с защитой
-    # path(settings.ADMIN_URL, admin.site.urls),
     path('', views.home, name='home'),
 ]
 # Подключаем дебаг-панель:

@@ -166,10 +166,13 @@ class SizeDetail(models.Model):
 
     def is_measurement_in_range(self, field_name, value):
         """Проверяет, входит ли измерение в диапазон"""
-        range_value = getattr(self, field_name)
-        if range_value:
-            return range_value.lower <= value <= range_value.upper
-        return False
+        try:
+            range_value = getattr(self, field_name)
+            if range_value:
+                return range_value.lower <= value <= range_value.upper
+            return False
+        except AttributeError:
+            return False
 
     def get_range_display(self, field_name):
         """Возвращает диапазон в формате '18-20'"""

@@ -8,9 +8,8 @@ from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import TemplateView
 
-from .forms import (CommentForm, ORTOMeasurementForm, SearchForm,
-                    SizeFinderForm, TrivesMeasurementForm,
-                    VenoteksMeasurementForm)
+from .forms import (CommentForm, SearchForm, SizeFinderForm,
+                    SmartMeasurementForm)
 from .models import Comment, Post
 
 
@@ -112,22 +111,15 @@ def size_finder(request):
         if brand_form.is_valid():
             selected_brand = brand_form.cleaned_data['brand']
 
-            # Определяем какая форма измерений нужна по названию бренда
-            brand_name = selected_brand.name.lower()
-
-            if 'venoteks' in brand_name:
-                measurement_form = VenoteksMeasurementForm(request.POST)
-            elif 'orto' in brand_name:
-                measurement_form = ORTOMeasurementForm(request.POST)
-            elif 'trives' in brand_name:
-                measurement_form = TrivesMeasurementForm(request.POST)
-            else:
-                # Форма по умолчанию, если бренд не распознан
-                measurement_form = VenoteksMeasurementForm(request.POST)
+            # Используем динамическую форму
+            measurement_form = SmartMeasurementForm(
+                request.POST,
+                brand=selected_brand
+            )
 
             if measurement_form and measurement_form.is_valid():
                 measurements = measurement_form.cleaned_data
-                results = find_matching_sizes(selected_brand, measurements, brand_name)
+                results = find_matching_sizes(selected_brand, measurements)
 
     return render(request, 'size_finder.html', {
         'brand_form': brand_form,
@@ -137,41 +129,21 @@ def size_finder(request):
     })
 
 
-def find_matching_sizes(brand, measurements, brand_name):
+def find_matching_sizes(brand, measurements):
     """Находит подходящие размеры по измерениям"""
     suitable_sizes = []
-
-    # Получаем все размеры для выбранного бренда
     size_details = SizeDetail.objects.filter(size__brand=brand)
 
     for size_detail in size_details:
-        if is_size_match(size_detail, brand_name, measurements):
+        if is_size_match(size_detail, measurements):
             suitable_sizes.append(size_detail)
 
     return suitable_sizes
 
 
-def is_size_match(size_detail, brand_name, measurements):
-    """Проверяет, подходит ли размер по всем измерениям"""
-    if 'venoteks' in brand_name:
-        return (
-            size_detail.is_measurement_in_range('ankle_circumference', measurements['ankle_circumference'])
-            and size_detail.is_measurement_in_range('calf_circumference', measurements['calf_circumference'])
-            and size_detail.is_measurement_in_range('mid_thigh_circumference', measurements['mid_thigh_circumference'])
-        )
-    elif 'orto' in brand_name:
-        return (
-            size_detail.is_measurement_in_range('ankle_circumference', measurements['ankle_circumference'])
-            and size_detail.is_measurement_in_range('calf_circumference', measurements['calf_circumference'])
-            and size_detail.is_measurement_in_range('circumference_under_knee', measurements['circumference_under_knee'])
-            and size_detail.is_measurement_in_range('mid_thigh_circumference', measurements['mid_thigh_circumference'])
-            and size_detail.is_measurement_in_range('Upper_thigh_circumference', measurements['upper_thigh_circumference'])
-        )
-    elif 'trives' in brand_name:
-        return (
-            size_detail.is_measurement_in_range('ankle_circumference', measurements['ankle_circumference'])
-            and size_detail.is_measurement_in_range('calf_circumference', measurements['calf_circumference'])
-            and size_detail.is_measurement_in_range('circumference_under_knee', measurements['circumference_under_knee'])
-            and size_detail.is_measurement_in_range('Upper_thigh_circumference', measurements['upper_thigh_circumference'])
-        )
-    return False
+def is_size_match(size_detail, measurements):
+    """Проверяет, подходит ли размер по ВСЕМ введенным измерениям"""
+    for field_name, user_value in measurements.items():
+        if not size_detail.is_measurement_in_range(field_name, user_value):
+            return False
+    return True

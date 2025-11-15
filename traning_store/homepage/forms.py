@@ -65,7 +65,6 @@ class SmartMeasurementForm(forms.Form):
             if (field_value and hasattr(field_value, 'lower') and hasattr(field_value, 'upper') and field_value.lower is not None and field_value.upper is not None):
 
                 field = SizeDetail._meta.get_field(field_name)
-
                 self.fields[field_name] = forms.IntegerField(
                     label=field.verbose_name,
                     min_value=10,

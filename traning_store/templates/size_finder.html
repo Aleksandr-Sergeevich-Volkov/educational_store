@@ -42,59 +42,71 @@
     
     <!-- Результаты -->
     {% if results %}
-    <div class="card">
-        <div class="card-header bg-success text-white">
-            <h5 class="mb-0">
-                Найдено подходящих размеров: {{ results|length }}
-            </h5>
+<div class="card">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0">
+            Найдено подходящих размеров: {{ results|length }}
+        </h5>
+    </div>
+    <div class="card-body">
+        
+        <!-- Динамические инструкции по брендам -->
+        <div class="alert alert-info mb-4">
+            <h6>Инструкция по замерам:</h6>
+            {% if selected_brand and 'venoteks' in selected_brand.name.lower %}
+            <p class="mb-1">• Изделие имеет два варианта длины: Короткий (62-70) или Стандартный (71-82)</p>
+            <p class="mb-0">• Для определения варианта измерьте по внутренней стороне ноги длину от пятки до паховой складки</p>
+            {% elif selected_brand and 'orto' in selected_brand.name.lower %}
+            <p class="mb-1">• Величина измерения от ступни до обхвата под коленом для гольфов длины Norm составляет 38,0 ± 2см, для изделий длины Long 42,0 ± 2см</p>
+            <p class="mb-0">• Величина измерения от ступни до обхвата верхней части бедра для чулок и колготок длины Norm составляет 66,0 ± 4см, для изделий длины Long 76,0 ± 6см</p>
+            {% elif selected_brand and 'trives' in selected_brand.name.lower %}
+            <p class="mb-0">• Для точного подбора следуйте инструкции по замерам производителя</p>
+            {% else %}
+            <p class="mb-0">• Для точного подбора следуйте инструкции по замерам производителя</p>
+            {% endif %}
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>Бренд</th>
-                            <th>Размер</th>
-                            <th>Обхват щиколотки</th>
-                            <th>Обхват икры</th>
-                            {% if selected_brand and 'venoteks' in selected_brand.name.lower %}
-                            <th>Обхват середины бедра</th>
-                            <h6>Изделие имеет два варианта длины: Короткий (62-70) или Стандартный (71-82). </h6>
-                            <h6> Для определения варианта измерьте по внутренней стороне ноги длину от пятки до паховой складки</h6>
-                            {% elif selected_brand and 'orto' in selected_brand.name.lower %}
-                            <th>Обхват под коленом</th>
-                            <th>Обхват середины бедра</th>
-                            <th>Обхват бедра верхний</th>
-                            <h6>Величина измерения от ступни до обхвата под коленом для гольфов длины Norm составляет 38,0 ± 2см, для изделий длины Long 42,0 ± 2см </h6>
-                            <h6>Величина измерения от ступни до обхвата верхней части бедра для чулок и колготок длины Norm составляет 66,0 ± 4см, для изделий длины Long 76,0 ± 6см </h6>
-                            {% elif selected_brand and 'trives' in selected_brand.name.lower %}
-                            <th>Обхват под коленом</th>                    
-                            <th>Обхват бедра верхний</th>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Бренд</th>
+                        <th>Размер</th>
+                        <!-- Динамические заголовки колонок -->
+                        {% for field_name, field_config in measurement_fields.items %}
+                            {% if field_config.show_in_results %}
+                            <th>{{ field_config.verbose_name }}</th>
                             {% endif %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for result in results %}
-                        <tr>
-                            <td>{{ result.size.brand.name }}</td>
-                            <td><strong>{{ result.size.name }}</strong></td>
-                            <td>{{ result.ankle_circumference.lower }}-{{ result.ankle_circumference.upper }} см</td>
-                            <td>{{ result.calf_circumference.lower }}-{{ result.calf_circumference.upper }} см</td>
-                            {% if selected_brand and 'venoteks' in selected_brand.name.lower %}
-                            <td>{{ result.mid_thigh_circumference.lower }}-{{ result.mid_thigh_circumference.upper }} см</td>
-                            {% elif selected_brand and 'orto' in selected_brand.name.lower %}
-                            <td>{{ result.circumference_under_knee.lower }}-{{ result.circumference_under_knee.upper }} см</td>
-                            <td>{{ result.mid_thigh_circumference.lower }}-{{ result.mid_thigh_circumference.upper }} см</td>
-                            <td>{{ result.Upper_thigh_circumference.lower }}-{{ result.Upper_thigh_circumference.upper }} см</td>
-                            {% endif %}
-                        </tr>
                         {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in results %}
+                    <tr>
+                        <td>{{ result.size.brand.name }}</td>
+                        <td><strong>{{ result.size.name }}</strong></td>
+                        <!-- Динамические данные -->
+                        {% for field_name, field_config in measurement_fields.items %}
+                            {% if field_config.show_in_results %}
+                            <td>
+                                {% with field_value=result|get_attribute:field_name %}
+                                    {% if field_value %}
+                                        {{ field_value.lower }}-{{ field_value.upper }} см
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                {% endwith %}
+                            </td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
-    {% endif %}
+</div>
+{% endif %}
 </div>
 
 <script>

@@ -11,6 +11,7 @@ from django.views.generic import TemplateView
 from .forms import (CommentForm, SearchForm, SizeFinderForm,
                     SmartMeasurementForm)
 from .models import Comment, Post
+from django.template.defaulttags import register
 
 
 class HomePage(TemplateView):
@@ -101,11 +102,51 @@ def delete_comment(request, post_id, comment_id):
     return render(request, 'blog/comment.html', context)
 
 
+@register.filter
+def get_attribute(obj, attr_name):
+    """Шаблонный фильтр для получения атрибута по имени"""
+    return getattr(obj, attr_name, None)
+
+
+def get_measurement_fields_config(brand):
+    """Возвращает конфигурацию полей для отображения в результатах"""
+    # Получаем пример размера для бренда
+    sample_size = SizeDetail.objects.filter(size__brand=brand).first()
+    if not sample_size:
+        return {}
+
+    fields_config = {
+        'ankle_circumference': {
+            'verbose_name': 'Обхват щиколотки',
+            'show_in_results': True
+        },
+        'calf_circumference': {
+            'verbose_name': 'Обхват икры',
+            'show_in_results': True
+        },
+        'mid_thigh_circumference': {
+            'verbose_name': 'Обхват середины бедра',
+            'show_in_results': bool(getattr(sample_size, 'mid_thigh_circumference', None))
+        },
+        'circumference_under_knee': {
+            'verbose_name': 'Обхват под коленом',
+            'show_in_results': bool(getattr(sample_size, 'circumference_under_knee', None))
+        },
+        'Upper_thigh_circumference': {
+            'verbose_name': 'Обхват бедра верхний',
+            'show_in_results': bool(getattr(sample_size, 'Upper_thigh_circumference', None))
+        }
+    }
+
+    return fields_config
+
+
 def size_finder(request):
     brand_form = SizeFinderForm(request.POST or None)
     measurement_form = None
     results = []
     selected_brand = None
+    measurement_fields = {}  # Инициализируем пустым словарем
 
     if request.method == 'POST':
         if brand_form.is_valid():
@@ -121,11 +162,15 @@ def size_finder(request):
                 measurements = measurement_form.cleaned_data
                 results = find_matching_sizes(selected_brand, measurements)
 
+                # Определяем какие поля показывать в результатах
+                measurement_fields = get_measurement_fields_config(selected_brand)
+
     return render(request, 'size_finder.html', {
         'brand_form': brand_form,
         'measurement_form': measurement_form,
         'results': results,
         'selected_brand': selected_brand,
+        'measurement_fields': measurement_fields,
     })
 
 

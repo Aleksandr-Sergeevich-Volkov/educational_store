@@ -6,12 +6,12 @@ from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.db import models
 from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.defaulttags import register
 from django.views.generic import TemplateView
 
 from .forms import (CommentForm, SearchForm, SizeFinderForm,
                     SmartMeasurementForm)
 from .models import Comment, Post
-from django.template.defaulttags import register
 
 
 class HomePage(TemplateView):

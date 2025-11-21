@@ -70,22 +70,46 @@
                                         </span>
                                         <meta itemprop="availability" href="http://schema.org/InStock">
                                     </div>
-                                </div>
-
-                                <!-- Форма добавления в корзину -->
-                                <form action="{% url 'cart:cart_add' product.id %}" method="post" class="mb-3">
-                                    <div class="row g-2 align-items-center">
-                                        <div class="col-12">
-                                            {% bootstrap_form cart_product_form %}
-                                        </div>
-                                        <div class="col-12">
-                                            {% csrf_token %}
-                                            <button type="submit" class="btn btn-primary w-100 py-3 fs-5">
-                                                🛒 Добавить в корзину
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
+                                </div>           
+            <!-- Форма добавления в корзину -->
+<form action="{% url 'cart:cart_add' product.id %}" method="post" class="mb-3">
+    <div class="row g-2 align-items-center">
+        <div class="col-12">
+            <!-- Рендерим все поля кроме цвета -->
+            {% for field in cart_product_form %}
+                {% if field.name != 'color' %}
+                    {% bootstrap_field field %}
+                {% endif %}
+            {% endfor %}
+            
+            <!-- АЛЬТЕРНАТИВНЫЙ СПОСОБ РЕНДЕРИНГА ЦВЕТОВ -->
+            {% if cart_product_form.color.field.queryset.exists %}
+                <div class="mb-3">
+                    <label class="form-label">{{ cart_product_form.color.label }}</label>
+                    <div class="color-tags-container">
+                        {% for color_obj in cart_product_form.color.field.queryset %}
+                            <label class="color-tag-label">
+                                <input type="radio" name="color" value="{{ color_obj.id }}" 
+                                       {% if cart_product_form.color.value == color_obj.id %}checked{% endif %}
+                                       class="color-radio-input">
+                                <span class="color-tag" style="background-color: {{ color_obj.color }};" 
+                                      title="{{ color_obj.name }} ({{ color_obj.color }})"></span>
+                                <span class="color-name">{{ color_obj.name }}</span>
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-12">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary w-100 py-3 fs-5">
+                🛒 Добавить в корзину
+            </button>
+        </div>
+    </div>
+</form>
                             </div>
                         </div>
                     </div>
@@ -141,6 +165,80 @@
 </div>
 
 <style>
+.color-tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 10px 0;
+}
+
+.color-tag-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 8px;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.color-tag-label:hover {
+    border-color: #e0e0e0;
+    background-color: #f8f9fa;
+}
+
+.color-radio-input:checked + .color-tag {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 2px #007bff, 0 0 0 4px white;
+}
+
+.color-radio-input:checked ~ .color-name {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.color-radio-input {
+    display: none;
+}
+
+.color-tag {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #e0e0e0;
+    margin-bottom: 5px;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+}
+
+/* Для светлых цветов */
+.color-tag[style*="#fff"],
+.color-tag[style*="#ffffff"],
+.color-tag[style*="#FFF"],
+.color-tag[style*="#FFFFFF"],
+.color-tag[style*="white"],
+.color-tag[style*="#F5F5DC"] {
+    border: 2px solid #ccc;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.2);
+}
+
+.color-name {
+    font-size: 12px;
+    text-align: center;
+    max-width: 60px;
+    word-wrap: break-word;
+    line-height: 1.2;
+}
+
+/* Стили для Bootstrap */
+.form-select {
+    border-radius: 8px;
+}
+
+.form-control {
+    border-radius: 8px;
+}    
 .size-table-image {
     width: 100%;
     height: auto;

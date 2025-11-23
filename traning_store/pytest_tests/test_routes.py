@@ -137,7 +137,7 @@ class TestRoutes(TestCase):
             'quantity': 1,
             'size': '4'
         }
-        print(cart['product_key'])
+        print(cart.cart['product_key'])
         print(expected_cart_item)
         self.assertEqual(cart.cart[str(self.product1.id)], expected_cart_item)
 

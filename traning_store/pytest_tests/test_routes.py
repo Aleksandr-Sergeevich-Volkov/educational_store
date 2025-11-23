@@ -141,7 +141,7 @@ class TestRoutes(TestCase):
         size = self.size
         color = self.color_black
         m_type = self.model_type
-        product_key = self._generate_product_key(product, size, color, m_type)
+        product_key = cart._generate_product_key(product, size, color, m_type)
         print(cart.cart[product_key])
         print(expected_cart_item)
         self.assertEqual(cart.cart[str(self.product1.id)], expected_cart_item)

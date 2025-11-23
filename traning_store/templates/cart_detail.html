@@ -43,45 +43,68 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for item in cart %}
-                        {% with product=item.product %}
-                        <tr>
-                            <td>
-                                <a href="{{ product.get_absolute_url }}">
-                                    {% for image in images_m %}
-                                    {% if image.product_id == product.id and image.main %}
-                                    <img src="{{ image.image.url }}" 
-                                         alt="{{ product.name }}" 
-                                         class="img-thumbnail" 
-                                         style="height: 80px; width: auto; object-fit: cover;">
-                                    {% endif %} 
-                                    {% endfor %} 
-                                </a>
-                            </td>
-                            <td>
-                                <a href="{{ product.get_absolute_url }}" class="text-decoration-none">
-                                    {{ product.name }}
-                                </a>
-                            </td>
-                            <td>
-                                <span class="badge bg-primary fs-6">{{ item.quantity }}</span>
-                            </td>
-                            <td>{{ item.size|default:"-" }}</td>
-                            <td>{{ item.color|default:"-" }}</td>
-                            <td>{{ item.m_type|default:"-" }}</td>
-                            <td class="fw-bold">₽{{ item.price }}</td>
-                            <td class="fw-bold text-success">₽{{ item.total_price }}</td>
-                            <td>
-                                <a href="{% url 'cart:cart_remove' product.id %}" 
-                                   class="btn btn-outline-danger btn-sm"
-                                   onclick="return confirm('Удалить товар из корзины?')">
-                                    ❌ Удалить
-                                </a>
-                            </td>
-                        </tr>
-                        {% endwith %}
-                        {% endfor %}
-                    </tbody>
+    {% for item in cart %}
+    {% with product=item.product %}
+    <tr>
+        <td>
+            <a href="{{ product.get_absolute_url }}">
+                {% for image in images_m %}
+                {% if image.product_id == product.id and image.main %}
+                <img src="{{ image.image.url }}" 
+                     alt="{{ product.name }}" 
+                     class="img-thumbnail" 
+                     style="height: 80px; width: auto; object-fit: cover;">
+                {% endif %} 
+                {% endfor %} 
+            </a>
+        </td>
+        <td>
+            <a href="{{ product.get_absolute_url }}" class="text-decoration-none">
+                {{ product.name }}
+            </a>
+        </td>
+        <td>
+    <div class="d-flex align-items-center">
+        <form action="{% url 'cart:update_quantity' %}" method="post" class="d-inline">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+            <input type="hidden" name="size" value="{{ item.size }}">
+            <input type="hidden" name="color" value="{{ item.color }}">
+            <input type="hidden" name="m_type" value="{{ item.m_type }}">
+            <input type="hidden" name="quantity" value="{{ item.quantity|add:'-1' }}">
+            <button type="submit" class="btn btn-sm btn-outline-secondary" 
+                    {% if item.quantity <= 1 %}disabled{% endif %}>−</button>
+        </form>
+        
+        <span class="mx-2 fw-bold">{{ item.quantity }}</span>
+        
+        <form action="{% url 'cart:update_quantity' %}" method="post" class="d-inline">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+            <input type="hidden" name="size" value="{{ item.size }}">
+            <input type="hidden" name="color" value="{{ item.color }}">
+            <input type="hidden" name="m_type" value="{{ item.m_type }}">
+            <input type="hidden" name="quantity" value="{{ item.quantity|add:'1' }}">
+            <button type="submit" class="btn btn-sm btn-outline-secondary">+</button>
+        </form>
+    </div>
+</td>
+        <td>{{ item.size|default:"-" }}</td>
+        <td>{{ item.color|default:"-" }}</td>
+        <td>{{ item.m_type|default:"-" }}</td>
+        <td class="fw-bold">₽{{ item.price }}</td>
+        <td class="fw-bold text-success">₽{{ item.total_price }}</td>
+        <td>
+            <a href="{% url 'cart:cart_remove' product.id item.size item.color item.m_type %}" 
+               class="btn btn-outline-danger btn-sm"
+               onclick="return confirm('Удалить товар из корзины?')">
+                ❌ Удалить
+            </a>
+        </td>
+    </tr>
+    {% endwith %}
+    {% endfor %}
+</tbody>
                 </table>
             </div>
         </div>

@@ -29,11 +29,59 @@ def cart_add(request, product_id):
     return redirect('cart:cart_detail')
 
 
-def cart_remove(request, product_id):
+def cart_remove(request, product_id, size, color, m_type):
+    cart = Cart(request)
+    product = get_object_or_404(Product, id=product_id)
+    # Получаем объекты характеристик (если нужно)
+    # Если size, color, m_type - это строки, то используем их как есть
+    size_obj = size  # или получите объект Size если нужно
+    color_obj = color
+    m_type_obj = m_type
+    cart.remove(product, size_obj, color_obj, m_type_obj)
+    return redirect('cart:cart_detail')
+
+
+def update_quantity(request):
+    if request.method == 'POST':
+        cart = Cart(request)
+        product_id = request.POST.get('product_id')
+        size = request.POST.get('size')
+        color = request.POST.get('color')
+        m_type = request.POST.get('m_type')
+        action = request.POST.get('action')
+
+        product = get_object_or_404(Product, id=product_id)
+
+        # Получаем текущее количество
+        current_quantity = cart.get_product_quantity(product, size, color, m_type)
+
+        # Определяем новое количество в зависимости от действия
+        if action == 'increase':
+            new_quantity = current_quantity + 1
+        elif action == 'decrease':
+            new_quantity = max(1, current_quantity - 1)
+        else:
+            # Если изменено вручную в поле input
+            new_quantity = int(request.POST.get('quantity', 1))
+
+        # Обновляем количество
+        cart.add(
+            product=product,
+            quantity=new_quantity,
+            size=size,
+            color=color,
+            m_type=m_type,
+            update_quantity=True  # Заменяем количество
+        )
+
+        return redirect('cart:cart_detail')
+
+
+""" def cart_remove(request, product_id):
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
     cart.remove(product)
-    return redirect('cart:cart_detail')
+    return redirect('cart:cart_detail') """
 
 
 def cart_detail(request):

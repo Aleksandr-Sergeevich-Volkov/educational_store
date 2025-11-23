@@ -27,23 +27,55 @@ class Cart(object):
             self.delivery_cost = Decimal(self.session.get('delivery_cost'))
         # print('Укажите cначала доставку')
 
+    def _generate_product_key(self, product, size, color, m_type):
+        """Генерирует одинаковый ключ для add и remove"""
+        product_id = str(product.id)
+
+        # Обработка size
+        if hasattr(size, 'name') and size.name:
+            size_str = str(size.name)
+        else:
+            size_str = str(size)
+
+        # Обработка color (просто строка)
+        color_str = str(color)
+
+        # Обработка m_type
+        if hasattr(m_type, 'name') and m_type.name:
+            m_type_str = str(m_type.name)
+        else:
+            m_type_str = str(m_type)
+
+        return f"{product_id}_{size_str}_{color_str}_{m_type_str}"
+
+    def get_product_quantity(self, product, size, color, m_type):
+        """Получает текущее количество товара с конкретными характеристиками"""
+        product_key = self._generate_product_key(product, size, color, m_type)
+        if product_key in self.cart:
+            return self.cart[product_key]['quantity']
+        return 0
+
     def add(self, product, quantity=1, size='1', color='черный',
             m_type='Стандартный', images_m='1', update_quantity=False):
         # Добавить продукт в корзину или обновить его количество.
-        product_id = str(product.id)
-        if product_id not in self.cart:
-            self.cart[product_id] = {'quantity': 0,
-                                     'price': str(product.price),
-                                     'size': str(size.name) if size else str(product.Size.name),
-                                     'color': str(color) if color else str(product.Color),
-                                     'm_type': str(m_type.name) if m_type else str(product.Model_type.name),
-                                     'images_m': str(Gallery.objects.filter(
-                                                     product=product))
-                                     }
+        # Создаем уникальный ключ на основе ID товара и его характеристик
+        product_key = self._generate_product_key(product, size, color, m_type)
+        print(f'Key add {product_key}')
+        if product_key not in self.cart:
+            self.cart[product_key] = {
+                'product_id': str(product.id),
+                'quantity': 0,
+                'price': str(product.price),
+                'size': str(size.name) if size else str(product.Size.name),
+                'color': str(color) if color else str(product.Color),
+                'm_type': str(m_type.name) if m_type else str(product.Model_type.name),
+                'images_m': str(Gallery.objects.filter(product=product))
+            }
+
         if update_quantity:
-            self.cart[product_id]['quantity'] = quantity
+            self.cart[product_key]['quantity'] = quantity
         else:
-            self.cart[product_id]['quantity'] += quantity
+            self.cart[product_key]['quantity'] += quantity
         self.save()
 
     def save(self):
@@ -52,7 +84,21 @@ class Cart(object):
         # Отметить сеанс как "измененный", чтобы убедиться, что он сохранен
         self.session.modified = True
 
-    def remove(self, product):
+    def remove(self, product, size, color, m_type):
+        """Удаляет товар с конкретными характеристиками из корзины"""
+        product_key = self._generate_product_key(product, size, color, m_type)
+        print(f'Key remove {product_key}')
+        if product_key in self.cart:
+            del self.cart[product_key]
+            self.save()
+        if self.session.get('delivery_cost') is not None:
+            del self.session['delivery_cost']
+            self.save()
+        if self.session.get('delivery_address') is not None:
+            del self.session['delivery_address']
+            self.save()
+
+    """ def remove(self, product):
         # Удаление товара из корзины.
         product_id = str(product.id)
         if product_id in self.cart :
@@ -64,8 +110,35 @@ class Cart(object):
         if self.session.get('delivery_address') is not None:
             del self.session['delivery_address']
             self.save()
-
+ """
     def __iter__(self):
+        # Собираем настоящие ID товаров из сложных ключей
+        product_ids = []
+
+    # Извлекаем ID товаров из ключей (первая часть до первого '_')
+        for key in self.cart.keys():
+            product_id = key.split('_')[0]  # Берем только ID товара
+            product_ids.append(product_id)
+
+    # Получаем объекты продуктов
+        products = Product.objects.filter(id__in=product_ids)
+
+    # Создаем словарь для быстрого доступа к продуктам по ID
+        product_dict = {str(product.id): product for product in products}
+
+    # Обогащаем данные корзины информацией о продуктах
+        for item_key, item in self.cart.items():
+            # Получаем ID продукта из ключа
+            product_id = item_key.split('_')[0]
+
+            if product_id in product_dict:
+                item['product'] = product_dict[product_id]
+                item['price'] = Decimal(item['price'])
+                item['total_price'] = item['price'] * item['quantity']
+                item['item_key'] = item_key  # Сохраняем ключ для использования в шаблонах
+                yield item
+
+    """ def __iter__(self):
         # Перебор элементов в корзине и получение продуктов из базы данных.
         product_ids = self.cart.keys()
         # получение объектов product и добавление их в корзину
@@ -75,7 +148,7 @@ class Cart(object):
         for item in self.cart.values():
             item['price'] = Decimal(item['price'])
             item['total_price'] = item['price'] * item['quantity']
-            yield item
+            yield item """
 
     def __len__(self):
         # Подсчет всех товаров в корзине.

@@ -174,7 +174,6 @@ def test_add_cart(test_data, cart_request):
         'quantity': 1,
         'size': '4'
     }
-    print(cart)
     assert cart.cart[str(product.id)] == expected_cart_item
 
 

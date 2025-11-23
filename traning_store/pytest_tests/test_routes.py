@@ -144,7 +144,7 @@ class TestRoutes(TestCase):
         product_key = cart._generate_product_key(product, size, color, m_type)
         print(cart.cart[product_key])
         print(expected_cart_item)
-        self.assertEqual(cart.cart[str(self.product1.id)], expected_cart_item)
+        self.assertEqual(cart.cart[product_key], expected_cart_item)
 
     def test_del_cart(self):
         cart = Cart(self.request)

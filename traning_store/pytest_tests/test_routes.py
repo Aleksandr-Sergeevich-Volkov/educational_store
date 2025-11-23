@@ -130,6 +130,7 @@ class TestRoutes(TestCase):
                  images_m=images_m)
 
         expected_cart_item = {
+            'product_id': '1',
             'color': self.color_black.name,
             'images_m': str(images_m),  # Преобразуем QuerySet в строку для сравнения
             'm_type': 'Стандартная',

@@ -138,6 +138,7 @@ class TestRoutes(TestCase):
             'size': '4'
         }
         print(cart)
+        print(expected_cart_item)
         self.assertEqual(cart.cart[str(self.product1.id)], expected_cart_item)
 
     def test_del_cart(self):

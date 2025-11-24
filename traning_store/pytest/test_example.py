@@ -175,7 +175,8 @@ def test_add_cart(test_data, cart_request):
         'quantity': 1,
         'size': '4'
     }
-    assert cart.cart[str(product.id)] == expected_cart_item
+    product_key = cart._generate_product_key(product, size, color, model_type)
+    assert cart.cart[product_key] == expected_cart_item
 
 
 @pytest.mark.django_db

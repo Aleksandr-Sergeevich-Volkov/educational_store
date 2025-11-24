@@ -196,7 +196,7 @@ def test_del_cart(test_data, cart_request):
         m_type=model_type,
         images_m=images_m
     )
-    cart.remove(product)
+    cart.remove(product, size, color, model_type)
     assert cart.cart == {}
 
 

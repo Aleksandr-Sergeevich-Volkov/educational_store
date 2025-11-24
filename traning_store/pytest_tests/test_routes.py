@@ -156,7 +156,7 @@ class TestRoutes(TestCase):
                  color=self.color_black,
                  m_type=self.model_type,
                  images_m=images_m)
-        cart.remove(self.product1)
+        cart.remove(self.product1, self.size, self.color_black, self.model_type)
         self.assertEqual(cart.cart, {})
 
     def test_create_order(self):

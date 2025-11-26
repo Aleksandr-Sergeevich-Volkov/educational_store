@@ -97,11 +97,11 @@
 
                 <!-- Информация о товаре -->
                 <div class="card-body d-flex flex-column">
-    <h2 class="h5 card-title" itemprop="name">
-        <a href="{% url 'catalog:detail' product.slug %}" class="text-decoration-none" itemprop="url">
-            {{ product.seo_title|default:product.name }}
-        </a>
-    </h2>
+    <h2 class="h5 card-title">
+    <a href="{% url 'catalog:detail' product.slug %}" class="text-decoration-none" itemprop="url">
+        {{ product.seo_title|default:product.name }}
+    </a>
+</h2>
                     
                     <!-- Артикул товара -->
                     {% if product.articul %}

@@ -101,8 +101,7 @@
         <a href="{% url 'catalog:detail' product.slug %}" class="text-decoration-none" itemprop="url">
             {{ product.seo_title|default:product.name }}
         </a>
-    </h2>
-                    
+    </h2>                    
                     <!-- Артикул товара -->
                     {% if product.articul %}
                     <div class="mb-2">

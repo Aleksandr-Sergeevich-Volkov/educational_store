@@ -98,19 +98,6 @@ class Cart(object):
             del self.session['delivery_address']
             self.save()
 
-    """ def remove(self, product):
-        # Удаление товара из корзины.
-        product_id = str(product.id)
-        if product_id in self.cart :
-            del self.cart[product_id]
-            self.save()
-        if self.session.get('delivery_cost') is not None:
-            del self.session['delivery_cost']
-            self.save()
-        if self.session.get('delivery_address') is not None:
-            del self.session['delivery_address']
-            self.save()
- """
     def __iter__(self):
         # Собираем настоящие ID товаров из сложных ключей
         product_ids = []

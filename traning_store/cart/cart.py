@@ -125,18 +125,6 @@ class Cart(object):
                 item['item_key'] = item_key  # Сохраняем ключ для использования в шаблонах
                 yield item
 
-    """ def __iter__(self):
-        # Перебор элементов в корзине и получение продуктов из базы данных.
-        product_ids = self.cart.keys()
-        # получение объектов product и добавление их в корзину
-        products = Product.objects.filter(id__in=product_ids)
-        for product in products:
-            self.cart[str(product.id)]['product'] = product
-        for item in self.cart.values():
-            item['price'] = Decimal(item['price'])
-            item['total_price'] = item['price'] * item['quantity']
-            yield item """
-
     def __len__(self):
         # Подсчет всех товаров в корзине.
         return sum(item['quantity'] for item in self.cart.values())

@@ -167,7 +167,6 @@ def test_add_cart(test_data, cart_request):
         images_m=images_m
     )
     expected_cart_item = {
-        # 'product': test_data['products'][0],
         'product_id': '1',
         'color': 'black',
         'images_m': str(images_m),

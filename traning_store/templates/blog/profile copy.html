@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}
+  Страница покупателя {{ profile.get_full_name }}
+{% endblock %}
+{% block content %}
+  <h1 class="mb-5 text-center ">Страница покупателя {{ profile.get_full_name }}</h1>
+  <small>
+    <ul class="list-group list-group-horizontal justify-content-center mb-3">
+      <li class="list-group-item text-muted">Имя покупателя: {% if profile.get_full_name %}{{ profile.get_full_name }}{% else %}не указано{% endif %}</li>
+      <li class="list-group-item text-muted">Регистрация: {{ profile.date_joined }}</li>
+      <li class="list-group-item text-muted">Роль: {% if profile.is_staff %}Админ{% else %}Покупатель{% endif %}</li>
+    </ul>
+    <ul class="list-group list-group-horizontal justify-content-center">       
+    </ul>
+  </small>
+  <br>
+  <h3 class="mb-5 text-center">Заказы покупателя</h3>
+  {% for order in orders %}
+    <article class="mb-5">
+      {% include "includes/post_card.html" %}
+    </article>
+  {% endfor %}
+{% endblock %}

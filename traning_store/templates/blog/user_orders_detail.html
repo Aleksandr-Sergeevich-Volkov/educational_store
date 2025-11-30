@@ -1,18 +1,115 @@
- <head>
- <title>Детали заказа компрессионного трикотажа</title>
- </head>
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
 {% load static %}
+
+{% block title %}Детали заказа #{{ order.id }}{% endblock %}
+
 {% block content %}
-<div>
-      {% for item in order_item %}
-      <ul>
-      <li>{{item.product }}</li> 
-      <li>{{item.quantity }}</li>
-      </ul>
-      {% endfor %}
-      <p class="text">Сумма заказа: {{order.get_total_cost|floatformat:"2"}}</p> 
-      <p class="card-text">{% if order.paid == False %} <a href= {{pay_link}} class="btn btn-primary">Оплата заказа</a>{% else %} <span style="color:green"> заказ оплачен {% endif %} </p>         
-    </div>          
-{% endblock %} 
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Заголовок и статус -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0">Заказ #{{ order.id }}</h1>
+                <span class="badge {% if order.paid %}bg-success{% else %}bg-warning{% endif %} fs-6">
+                    {% if order.paid %}Оплачен{% else %}Ожидает оплаты{% endif %}
+                </span>
+            </div>
+
+            <!-- Список товаров -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Товары в заказе</h5>
+                </div>
+                <div class="card-body">
+                    {% for item in order_item %}
+                    <div class="order-item border-bottom pb-3 mb-3 {% if not forloop.last %}border-bottom{% endif %}">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h6 class="mb-1">{{ item.product.name }}</h6>
+                                
+                                <div class="row mt-2">
+                                    {% if item.m_type %}
+                                    <div class="col-auto">
+                                        <small class="text-muted">Тип:</small>
+                                        <br><strong>{{ item.m_type }}</strong>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    {% if item.size %}
+                                    <div class="col-auto">
+                                        <small class="text-muted">Размер:</small>
+                                        <br><strong>{{ item.size }}</strong>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    {% if item.color %}
+                                    <div class="col-auto">
+                                        <small class="text-muted">Цвет:</small>
+                                        <br>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <span class="color-dot" style="background-color: {{ item.color.code }}; width: 16px; height: 16px; border-radius: 50%; border: 1px solid #ddd;"></span>
+                                            <strong>{{ item.color.name }}</strong>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    <div class="col-auto">
+                                        <small class="text-muted">Кол-во:</small>
+                                        <br><strong>{{ item.quantity }} шт.</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4 text-end">
+                                <div class="h6 mb-1">{{ item.price|floatformat:"2" }} ₽/шт.</div>
+                                <div class="h5 text-primary">{{ item.get_cost|floatformat:"2" }} ₽</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    <!-- Итоговая сумма с доставкой -->
+                                {% if order.delivery_sum %}
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Доставка:</span>
+                                    <span>{{ order.delivery_sum|floatformat:"2" }} ₽</span>
+                                </div>
+                                {% endif %}
+                                
+                                <div class="d-flex justify-content-between fw-bold fs-5 mt-2 pt-2 border-top">
+                                    <span>Общая сумма:</span>
+                                    <span class="text-primary">
+                                        {% if order.delivery_sum %}
+                                            {{ order.get_total_cost|floatformat:"2" }}
+                                        {% else %}
+                                            {{ order.get_total_cost|floatformat:"2" }}
+                                        {% endif %} ₽
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Кнопка оплаты -->
+            {% if not order.paid %}
+            <div class="text-center">
+                <a href="{{ pay_link }}" class="btn btn-primary btn-lg px-5">
+                    <i class="bi bi-credit-card"></i> Оплатить заказ
+                </a>
+                <p class="text-muted mt-2 small">
+                    Сумма к оплате: 
+                    {% if order.delivery_cost %}
+                        {{ order.get_total_cost_with_delivery|floatformat:"2" }}
+                    {% else %}
+                        {{ order.get_total_cost|floatformat:"2" }}
+                    {% endif %} ₽
+                </p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

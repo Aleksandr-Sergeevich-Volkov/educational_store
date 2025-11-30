@@ -1,6 +1,7 @@
 from cart.forms import CartAddProductForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.db import models
 from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
@@ -121,13 +122,18 @@ def user_profile(request, username):
     profile = get_object_or_404(User, username=username)
     if request.user == profile and request.user.is_authenticated:
         orders = Order.objects.values('id', 'created', 'address_pvz', 'paid').filter(email=request.user.email).order_by('-id')
-        context = {'orders': orders,
+        paginator = Paginator(orders, 7)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context = {'orders': page_obj,
                    'profile': profile,
+                   'page_obj': page_obj,
                    }
         return render(request, 'blog/profile.html', context)
     else:
-        context = {'orders': orders,
-                   'profile': profile, }
+        context = {'orders': page_obj,
+                   'profile': profile,
+                   'page_obj': page_obj, }
         return render(request, 'blog/profile.html', context)
 
 

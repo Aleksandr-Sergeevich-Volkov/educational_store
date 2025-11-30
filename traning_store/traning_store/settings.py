@@ -39,6 +39,7 @@ INTERNAL_IPS = ['127.0.0.1']
 ADMIN_URL = os.environ.get('DJANGO_ADMIN_URL', 'admin/')
 
 # Настройки аутентификации
+# LOGIN_URL = '/admin-login/'
 LOGIN_URL = reverse_lazy('custom_login')
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'

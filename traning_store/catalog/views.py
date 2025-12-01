@@ -120,21 +120,26 @@ class ProductDetailView(DetailView):
 
 def user_profile(request, username):
     profile = get_object_or_404(User, username=username)
-    if request.user == profile and request.user.is_authenticated:
-        orders = Order.objects.values('id', 'created', 'address_pvz', 'paid').filter(email=request.user.email).order_by('-id')
-        paginator = Paginator(orders, 7)
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        context = {'orders': page_obj,
-                   'profile': profile,
-                   'page_obj': page_obj,
-                   }
-        return render(request, 'blog/profile.html', context)
-    else:
+    # if request.user == profile and request.user.is_authenticated:
+    if request.user != profile:
+        # Можно сделать редирект на свой профиль или показать ошибку
+        from django.http import HttpResponseForbidden
+        return HttpResponseForbidden("Вы можете просматривать только свой профиль")
+        # orders = Order.objects.values('id', 'created', 'address_pvz', 'paid').filter(email=request.user.email).order_by('-id')
+    orders = Order.objects.filter(email=request.user.email).order_by('-id')
+    paginator = Paginator(orders, 7)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context = {'orders': page_obj,
+               'profile': profile,
+               'page_obj': page_obj,
+               }
+    return render(request, 'blog/profile.html', context)
+    """ else:
         context = {'orders': page_obj,
                    'profile': profile,
                    'page_obj': page_obj, }
-        return render(request, 'blog/profile.html', context)
+        return render(request, 'blog/profile.html', context) """
 
 
 def user_order_detail(request, order_id):

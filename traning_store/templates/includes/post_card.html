@@ -1,17 +1,37 @@
- <head>
- <title>Заказы компрессионного трикотажа</title>
- </head>
-<div class="col d-flex justify-content-center">
-  <div class="card" style="width: 40rem;">
-    <div class="card-body">
-      <h5 class="card-title">Заказ №{{ order.id }} от {{order.created|date:"d.m.Y"}}</h5>
-      <ul>
-       <li>Пункт выдачи:{{ order.address_pvz }} </li>  
-</ul> 
-      <h6 class="card-subtitle mb-2 text-muted">
+<!-- post_card.html - карточка заказа в списке -->
+<div class="card mb-4 border-0 shadow-sm">
+  <div class="card-header bg-light">
+    <div class="d-flex justify-content-between align-items-center">
+      <h5 class="card-title mb-0">Заказ #{{ order.id }}</h5>
+      <span class="badge {% if order.paid %}bg-success{% else %}bg-warning{% endif %}">
+        {% if order.paid %}Оплачен{% else %}Ожидает оплаты{% endif %}
+      </span>
+    </div>
+    <small class="text-muted">от {{ order.created|date:"d.m.Y H:i" }}</small>
+  </div>
+  
+  <div class="card-body">
+    <!-- Пункт выдачи -->
+    <div class="mb-3">
+      <h6 class="text-muted mb-1">
+        <i class="bi bi-geo-alt me-1"></i>Пункт выдачи:
       </h6>
-      <p class="card-text">{% if order.paid == True %} <span style="color:green"> заказ оплачен{% else %} <span style="color:Fuchsia">не оплачен{% endif %} </p>
-      <a href="{% url 'catalog:user_order_detail' order.id  %}"> <class="card-link">Детали заказа</a>
+      <p class="mb-0">{{ order.address_pvz|default:"Не указан" }}</p>
+    </div>
+    <!-- Итоговая сумма -->
+    <div class="border-top pt-2">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <small class="text-muted">Общая сумма заказа:</small>
+          <h4 class="text-primary mb-0">{{ order.get_total_cost|floatformat:"2" }} ₽</h4>
+          {% if order.delivery_sum %}
+          <small class="text-muted">включая доставку {{ order.delivery_sum|floatformat:"2" }} ₽</small>
+          {% endif %}
+        </div>
+        <a href="{% url 'catalog:user_order_detail' order.id %}" class="btn btn-primary">
+          <i class="bi bi-eye me-1"></i>Подробнее
+        </a>
+      </div>
     </div>
   </div>
 </div>

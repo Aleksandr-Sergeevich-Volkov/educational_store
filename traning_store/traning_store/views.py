@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
-from django.urls import is_valid_path, reverse_lazy
+from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
 from orders.models import Order
 
@@ -24,7 +24,7 @@ class SomeEntityCreateView(CreateView):
     success_url = reverse_lazy('homepage:homepage')
 
 
-def login_view(request):
+""" def login_view(request):
     next_url = request.META.get('HTTP_REFERER')
 
     if request.method == 'POST':
@@ -42,6 +42,49 @@ def login_view(request):
         form = AuthenticationForm()
 
     return render(request, 'registration/login.html', {'form': form, 'next': next_url})
+ """
+
+
+def login_view(request):
+    # Получаем next из GET параметров или из POST
+    next_url = request.GET.get('next') or request.POST.get('next')
+
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+
+            # Проверяем next URL
+            next_url = request.POST.get('next', '')
+
+            # Безопасная проверка URL
+            if next_url and next_url != 'None':
+                # Убедимся, что next_url не содержит 'None'
+                if 'None' not in next_url:
+                    # Проверяем, что URL принадлежит нашему домену
+                    from urllib.parse import urlparse
+                    parsed = urlparse(next_url)
+
+                    # Разрешаем редирект если:
+                    # 1. Нет домена (относительный URL) ИЛИ
+                    # 2. Домен совпадает с нашим
+                    if not parsed.netloc or parsed.netloc == request.get_host():
+                        return HttpResponseRedirect(next_url)
+
+            # По умолчанию редирект на главную
+            return redirect('home')
+    else:
+        form = AuthenticationForm()
+
+    # Очищаем next_url если он 'None'
+    if next_url == 'None':
+        next_url = ''
+
+    return render(request, 'registration/login.html', {
+        'form': form,
+        'next': next_url or ''
+    })
 
 
 def logout_view(request):

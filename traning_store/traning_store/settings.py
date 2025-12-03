@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-4#xre@vo3c)grje)5kj3rrwt6@1=' \
 CSRF_TRUSTED_ORIGINS = ['https://4505485-volkovaleksandr.twc1.net', 'https://kompressionnye-chulki24.ru']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0', '62.113.36.63', '4505485-volkovaleksandr.twc1.net', 'kompressionnye-chulki24.ru']
 INTERNAL_IPS = ['127.0.0.1']
@@ -165,7 +165,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 CART_SESSION_ID = 'cart'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = "smtp.yandex.ru"
+EMAIL_HOST = "smtp.mail.ru"
 EMAIL_PORT = 465
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')

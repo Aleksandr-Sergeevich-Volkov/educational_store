@@ -9,8 +9,5 @@ urlpatterns = [
             views.cart_add,
             name='cart_add'),
     path('update/', views.update_quantity, name='update_quantity'),
-    # re_path(r'^remove/(?P<product_id>\d+)/$',
-    #        views.cart_remove,
-    #        name='cart_remove'),
     path('remove/<int:product_id>/<str:size>/<str:color>/<str:m_type>/', views.cart_remove, name='cart_remove'),
 ]

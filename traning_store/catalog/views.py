@@ -125,7 +125,6 @@ def user_profile(request, username):
         # Можно сделать редирект на свой профиль или показать ошибку
         from django.http import HttpResponseForbidden
         return HttpResponseForbidden("Вы можете просматривать только свой профиль")
-        # orders = Order.objects.values('id', 'created', 'address_pvz', 'paid').filter(email=request.user.email).order_by('-id')
     orders = Order.objects.filter(email=request.user.email).order_by('-id')
     paginator = Paginator(orders, 7)
     page_number = request.GET.get('page')
@@ -135,11 +134,6 @@ def user_profile(request, username):
                'page_obj': page_obj,
                }
     return render(request, 'blog/profile.html', context)
-    """ else:
-        context = {'orders': page_obj,
-                   'profile': profile,
-                   'page_obj': page_obj, }
-        return render(request, 'blog/profile.html', context) """
 
 
 def user_order_detail(request, order_id):

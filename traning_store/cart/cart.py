@@ -25,7 +25,6 @@ class Cart(object):
         self.cost = Decimal('5000.00')
         if self.session.get('delivery_cost'):
             self.delivery_cost = Decimal(self.session.get('delivery_cost'))
-        # print('Укажите cначала доставку')
 
     def _generate_product_key(self, product, size, color, m_type):
         """Генерирует одинаковый ключ для add и remove"""

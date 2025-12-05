@@ -32,7 +32,7 @@ def order_create(request):
                 order.delivery_sum = cart.delivery()
             order.save()
             for item in cart:
-                print(item['m_type'])
+                print(item['m_type'], item['size'])
                 OrderItem.objects.create(order=order,
                                          product=item['product'],
                                          price=item['price'],

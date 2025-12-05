@@ -65,7 +65,8 @@ class Cart(object):
                 'product_id': str(product.id),
                 'quantity': 0,
                 'price': str(product.price),
-                'size': str(size.name) if size else str(product.Size.name),
+                # 'size': str(size.name) if size else str(product.Size.name),
+                'size': str(size.name),
                 'color': str(color) if color else str(product.Color),
                 'm_type': str(m_type.name) if m_type else str(product.Model_type.name),
                 'images_m': str(Gallery.objects.filter(product=product))

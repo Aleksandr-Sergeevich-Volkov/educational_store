@@ -59,19 +59,17 @@ class Cart(object):
         # Добавить продукт в корзину или обновить его количество.
         # Создаем уникальный ключ на основе ID товара и его характеристик
         product_key = self._generate_product_key(product, size, color, m_type)
-        print(f'Key add {product_key}')
         if product_key not in self.cart:
             self.cart[product_key] = {
                 'product_id': str(product.id),
                 'quantity': 0,
                 'price': str(product.price),
-                # 'size': str(size.name) if size else str(product.Size.name),
-                'size': str(size.name),
+                'size': str(size.name) if size else str(product.Size.name),
                 'color': str(color) if color else str(product.Color),
                 'm_type': str(m_type.name) if m_type else str(product.Model_type.name),
                 'images_m': str(Gallery.objects.filter(product=product))
             }
-
+            print(f'add {self.cart[product_key]}')
         if update_quantity:
             self.cart[product_key]['quantity'] = quantity
         else:

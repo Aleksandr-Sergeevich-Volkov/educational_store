@@ -37,9 +37,11 @@ def order_create(request):
                                          product=item['product'],
                                          price=item['price'],
                                          quantity=item['quantity'],
-                                         size=Size.objects.get(name=item['size']),
+                                         size=Size.objects.filter(name=item['size']).first(),
+                                         # size=Size.objects.get(name=item['size']),
                                          color=Color.objects.get(name=item['color']),
-                                         m_type=Model_type.objects.get(name=item['m_type'])
+                                         m_type=Model_type.objects.filter(name=item['m_type']).first(),
+                                         # m_type=Model_type.objects.get(name=item['m_type'])
                                          )
             # очистка корзины
             cart.clear()

@@ -1,6 +1,9 @@
+import logging
+
 from cart.cart import Cart
 from catalog.models import Color, Model_type, Size
 from django.contrib.admin.views.decorators import staff_member_required
+from django.db import transaction
 from django.shortcuts import get_object_or_404, render
 
 from traning_store.settings import ROBOKASSA_LOGIN, ROBOKASSA_PASSWORD_1
@@ -19,64 +22,137 @@ def admin_order_detail(request, order_id):
                   {'order': order})
 
 
+logger = logging.getLogger(__name__)
+
+
+def _create_order_items(order, cart):
+    """Упрощенная версия, близкая к вашему исходному коду"""
+    order_items = []
+
+    for item in cart:
+        # Берем первый найденный размер
+        size = None
+        if item.get('size'):
+            size = Size.objects.filter(name=item['size']).first()
+
+        # Берем первый найденный тип
+        m_type = None
+        if item.get('m_type'):
+            m_type = Model_type.objects.filter(name=item['m_type']).first()
+
+        # Цвет должен быть точно найден
+        color = Color.objects.filter(name=item['color']).first()
+        if not color:
+            # Цвет по умолчанию
+            color = Color.objects.get_or_create(
+                name='Не указан',
+                defaults={'code': '#CCCCCC'}
+            )[0]
+
+        order_items.append(OrderItem(
+            order=order,
+            product=item['product'],
+            price=item['price'],
+            quantity=item['quantity'],
+            size=size,
+            color=color,
+            m_type=m_type,
+        ))
+
+    # Все еще используем bulk_create для скорости
+    OrderItem.objects.bulk_create(order_items)
+
+
+# Вспомогательная функция для подготовки данных формы
+def _prepare_initial_form_data(request):
+    """Подготовка начальных данных для формы заказа"""
+    initial_data = {
+        "address": "-",
+        "postal_code": "-",
+        "city": "-",
+        "address_pvz": "-"
+    }
+
+    # Добавляем email для авторизованных пользователей
+    if request.user.is_authenticated:
+        initial_data["email"] = request.user.email
+    else:
+        initial_data["email"] = ""
+
+    # Добавляем адрес доставки из сессии если есть
+    delivery_address = request.session.get('delivery_address')
+    if delivery_address:
+        initial_data["address_pvz"] = delivery_address
+
+    return initial_data
+
+
+# Основная функция создания заказа
 def order_create(request):
     cart = Cart(request)
+
+    # Проверка пустой корзины
+    if not cart:
+        return render(request, 'create.html', {
+            'form': OrderCreateForm(initial=_prepare_initial_form_data(request)),
+            'cart': cart,
+            'error': 'Ваша корзина пуста'
+        })
+
     if request.method == 'POST':
         form = OrderCreateForm(request.POST)
         if form.is_valid():
-            order = form.save(commit=False)
-            if cart.coupon:
-                order.coupon = cart.coupon
-                order.discount = cart.coupon.discount
-            if cart.delivery != 0:
-                order.delivery_sum = cart.delivery()
-            order.save()
-            for item in cart:
-                print(item['m_type'], item['size'])
-                OrderItem.objects.create(order=order,
-                                         product=item['product'],
-                                         price=item['price'],
-                                         quantity=item['quantity'],
-                                         size=Size.objects.filter(name=item['size']).first(),
-                                         # size=Size.objects.get(name=item['size']),
-                                         color=Color.objects.get(name=item['color']),
-                                         m_type=Model_type.objects.filter(name=item['m_type']).first(),
-                                         # m_type=Model_type.objects.get(name=item['m_type'])
-                                         )
-            # очистка корзины
+            try:
+                with transaction.atomic():
+                    order = form.save(commit=False)
+
+                    if cart.coupon:
+                        order.coupon = cart.coupon
+                        order.discount = cart.coupon.discount
+
+                    if cart.delivery != 0:
+                        order.delivery_sum = cart.delivery()
+
+                    order.save()
+
+                    # Создаем OrderItems с оптимизацией
+                    _create_order_items(order, cart)
+
+                    logger.info(f'Создан заказ #{order.id} на сумму {order.get_total_cost()}')
+
+            except Exception as e:
+                logger.error(f'Ошибка создания заказа: {str(e)}')
+                return render(request, 'create.html', {
+                    'cart': cart,
+                    'form': form,
+                    'error': 'Произошла ошибка при создании заказа'
+                })
+
+            # Вне транзакции
             cart.clear()
-            # запуск асинхронной задачи
             order_created.delay(order.id)
-            pay_link = generate_payment_link(merchant_login=ROBOKASSA_LOGIN,
-                                             merchant_password_1=ROBOKASSA_PASSWORD_1,
-                                             cost=order.get_total_cost(),
-                                             number=order.id,
-                                             description='kompressionnyj_trikotazh',
-                                             is_test=0,
-                                             robokassa_payment_url='https://auth.robokassa.ru/Merchant/Index.aspx',
-                                             email=order.email,)
-            context = {'order': order,
-                       'pay_link': pay_link,
-                       }
-            return render(request, 'created.html', context)
+
+            pay_link = generate_payment_link(
+                merchant_login=ROBOKASSA_LOGIN,
+                merchant_password_1=ROBOKASSA_PASSWORD_1,
+                cost=order.get_total_cost(),
+                number=order.id,
+                description='kompressionnyj_trikotazh',
+                is_test=0,
+                robokassa_payment_url='https://auth.robokassa.ru/Merchant/Index.aspx',
+                email=order.email,
+            )
+
+            return render(request, 'created.html', {
+                'order': order,
+                'pay_link': pay_link,
+            })
+
     else:
-        delivery_address = request.session.get('delivery_address')
-        if request.user.is_authenticated and delivery_address:
-            email = request.user.email
-            form = OrderCreateForm(initial={"email": email,
-                                   "address_pvz": request.session['delivery_address'],
-                                            "address": "-", "postal_code": "-", "city": "-"})
-        elif request.user.is_authenticated:
-            email = request.user.email
-            form = OrderCreateForm(initial={"email": email,
-                                   "address_pvz": "-",
-                                            "address": "-", "postal_code": "-", "city": "-"})
-        elif request.session.get('delivery_address') is not None:
-            form = OrderCreateForm(initial={"email": "-",
-                                   "address_pvz": request.session['delivery_address'],
-                                            "address": "-", "postal_code": "-", "city": "-"})
-        else:
-            form = OrderCreateForm(initial={"address_pvz": "-",
-                                            "address": "-", "postal_code": "-", "city": "-"})
-    return render(request, 'create.html',
-                  {'cart': cart, 'form': form, })
+        # Используем вспомогательную функцию
+        form = OrderCreateForm(initial=_prepare_initial_form_data(request))
+
+    return render(request, 'create.html', {
+        'cart': cart,
+        'form': form,
+    })

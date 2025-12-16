@@ -1,3 +1,5 @@
+from urllib.parse import urlencode
+
 from cart.forms import CartAddProductForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -14,7 +16,8 @@ from traning_store.views import generate_payment_link
 
 from .filters import ProductFilter
 from .forms import UserForm
-from .models import Brend, Color, Gallery, Model_type, Product, Size
+from .models import (Appointment, Brend, Color, Gallery, Model_type, Product,
+                     Size, Type_product)
 
 User = get_user_model()
 
@@ -42,10 +45,14 @@ class ProductListView(FilterView):
         base_title = "Компрессионный трикотаж - купить в интернет-магазине"
         base_description = "Широкий выбор компрессионного трикотажа: гольфы, чулки, колготки. Все классы компрессии. Доставка по РФ."
         base_h1 = "Компрессионный трикотаж"
+        base_keywords = "компрессионный трикотаж, купить компрессионные чулки, гольфы, колготки, варикоз, медицинский трикотаж"
 
         # Проверяем, применены ли фильтры
         filters_applied = False
         filter_parts = []
+
+        # Собираем данные для ключевых слов
+        keywords_parts = set()
 
         # Анализируем параметры фильтрации
         if hasattr(self, 'filterset') and self.filterset:
@@ -56,27 +63,39 @@ class ProductListView(FilterView):
                 try:
                     brand = Brend.objects.get(id=filters['brand'])
                     filter_parts.append(f"бренда {brand.name}")
+                    keywords_parts.add(brand.name.lower())
                     filters_applied = True
                 except Brend.DoesNotExist:
+                    pass
+            # Назначение
+            if filters.get('Appointment'):
+                try:
+                    appointment = Appointment.objects.get(id=filters['Appointment'])
+                    keywords_parts.add(appointment.name.lower())
+                except Appointment.DoesNotExist:
                     pass
 
             # Класс компрессии
             if filters.get('Class_compress'):
                 class_compress = filters['Class_compress']
                 filter_parts.append(f"{class_compress} класс компрессии")
+                keywords_parts.add(f"{class_compress} класс компрессии")
                 filters_applied = True
 
             # Тип изделия
             if filters.get('Type_product'):
-                type_product = filters['Type_product']
+                type_product = Type_product.objects.get(id=filters['Type_product'])
                 filter_parts.append(f"{type_product}")
+                keywords_parts.add(type_product.name.lower())
                 filters_applied = True
 
             # Пол
             if filters.get('Male'):
                 male = filters['Male']
-                gender_map = {'M': 'мужские', 'F': 'женские', 'U': 'унисекс'}
-                filter_parts.append(gender_map.get(male, male))
+                gender_map = {'1': 'мужские', '2': 'женские', 'U': 'унисекс'}
+                gender_text = gender_map.get(male, male)
+                filter_parts.append(gender_text)
+                keywords_parts.add(gender_text)
                 filters_applied = True
 
         # Формируем SEO-данные в зависимости от фильтров
@@ -85,20 +104,41 @@ class ProductListView(FilterView):
             context['seo_title'] = f"Компрессионный трикотаж {filter_text} - купить в Москве"
             context['seo_h1'] = f"Компрессионный трикотаж {filter_text}"
             context['seo_description'] = f"Качественный компрессионный трикотаж {filter_text}. Большой выбор, низкие цены, доставка по России."
+            context['seo_keywords'] = base_keywords
+            # Генерируем ключевые слова на основе фильтров
+            if keywords_parts:
+                base_keywords_list = base_keywords.split(", ")
+                all_keywords = base_keywords_list + list(keywords_parts)
+                context['seo_keywords'] = ", ".join(all_keywords)
+            else:
+                context['seo_keywords'] = base_keywords
         else:
             # SEO для главной страницы каталога
             context['seo_title'] = base_title
             context['seo_h1'] = base_h1
             context['seo_description'] = base_description
+            context['seo_keywords'] = base_keywords
 
         return context
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        # 1. SEO данные
+        context.update(self.get_seo_context())
+
+        # 2. cleaned_query_string для пагинации
+        cleaned_get = {}
+        for key, value in self.request.GET.items():
+            if value and str(value).strip() and key != 'page':
+                cleaned_get[key] = value
+
+        context['cleaned_query_string'] = urlencode(cleaned_get) if cleaned_get else ''
+
+        # 3. Счетчик товаров
         filtered_qs = self.filterset.qs
         context['prod_count'] = filtered_qs.aggregate(Count('id'))
-        # Добавляем SEO-данные
-        context.update(self.get_seo_context())
+
         return context
 
 

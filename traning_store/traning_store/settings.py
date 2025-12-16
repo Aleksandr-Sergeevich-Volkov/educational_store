@@ -74,6 +74,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'catalog.middleware.CleanURLMiddleware',
 ]
 
 ROOT_URLCONF = 'traning_store.urls'

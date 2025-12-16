@@ -4,9 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Интернет-магазин компрессионного трикотажа">
     <meta name="author" content="Александр Волков">
-    <title>Компрессионный трикотаж</title>
+    <!-- Блоки для переопределения в дочерних шаблонах -->
+    <title>{% block title %}Компрессионный трикотаж{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Интернет-магазин компрессионного трикотажа{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}компрессионный трикотаж, медицинский трикотаж{% endblock %}">
+    
+    {% block extra_meta %}{% endblock %}
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">

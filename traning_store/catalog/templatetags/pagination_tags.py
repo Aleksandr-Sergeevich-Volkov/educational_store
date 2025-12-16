@@ -1,3 +1,5 @@
+from urllib.parse import urlencode
+
 from django import template
 
 register = template.Library()
@@ -5,10 +7,20 @@ register = template.Library()
 
 @register.simple_tag(takes_context=True)
 def url_replace(context, **kwargs):
-    query = context['request'].GET.copy()
+    request = context['request']
+    params = {}
+
+    # Копируем текущие параметры
+    for key, value in request.GET.items():
+        if value and str(value).strip():
+            params[key] = value
+
+    # Обновляем переданными значениями
     for key, value in kwargs.items():
         if value:
-            query[key] = value
-        else:
-            query.pop(key, None)
-    return query.urlencode()
+            params[key] = value
+        elif key in params:
+            del params[key]
+
+    # Возвращаем query string
+    return urlencode(params) if params else ''

@@ -214,7 +214,9 @@ class ProductAdmin(admin.ModelAdmin):
             'fields': (
                 'seo_title',
                 'seo_description',
-                'seo_alt'
+                'seo_alt',
+                'seo_h1',
+                'seo_keywords'
             ),
             'classes': ('collapse',)
         }),

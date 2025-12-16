@@ -1,45 +1,12 @@
 {% extends "base.html" %}
 {% load catalog_tags %}
-{% load filter_helpers %}
 {% load django_bootstrap5 %}
 {% load static %}
 
-{% block title %}{{ seo_title|default:"Компрессионный трикотаж" }}{% endblock %}
-
-{% block meta_description %}{{ seo_description|default:"Интернет-магазин компрессионного трикотажа" }}{% endblock %}
-
-{% block meta_keywords %}{{ seo_keywords|default:"компрессионный трикотаж, медицинский трикотаж" }}{% endblock %}
-
-{% block extra_meta %}
-    <!-- Дополнительные мета-теги для этой страницы -->
-    <meta property="og:title" content="{{ seo_title|default:'Компрессионный трикотаж' }}">
-    <meta property="og:description" content="{{ seo_description|default:'Интернет-магазин компрессионного трикотажа' }}">
-    
-    <!-- Каноническая ссылка -->
-    {% if request.GET %}
-        <link rel="canonical" href="{{ request.build_absolute_uri }}">
-    {% else %}
-        <link rel="canonical" href="{% url 'catalog:catalog' %}">
-    {% endif %}
-    
-    <!-- Prev/Next для пагинации (SEO) -->
-    {% if page_obj.has_previous %}
-        <link rel="prev" 
-              href="?{% if cleaned_query_string %}{{ cleaned_query_string }}&{% endif %}page={{ page_obj.previous_page_number }}">
-    {% endif %}
-    
-    {% if page_obj.has_next %}
-        <link rel="next" 
-              href="?{% if cleaned_query_string %}{{ cleaned_query_string }}&{% endif %}page={{ page_obj.next_page_number }}">
-    {% endif %}
-    
-    <!-- Meta robots -->
-    {% if page_obj.number > 1 %}
-        <meta name="robots" content="noindex, follow">
-    {% else %}
-        <meta name="robots" content="index, follow">
-    {% endif %}
-    {% endblock %}
+<head>
+    <title>{% block title %}{{ seo_title }}{% endblock %}</title>
+    <meta name="description" content="{{ seo_description }}">
+</head>
 
 {% block content %}
 <div class="container-fluid">
@@ -50,49 +17,6 @@
             <div class="text-muted">Всего товаров: {{ prod_count.id__count }}</div>
         </div>
     </div>
-
-    <!-- Активные фильтры с кнопками удаления -->
-    {% if request.GET %}
-    <div class="row mb-3">
-        <div class="col-12">
-            <div class="active-filters alert alert-light border">
-                <small class="text-muted d-block mb-1">Активные фильтры:</small>
-                <div class="d-flex flex-wrap gap-2">
-                    {% for key, value in request.GET.items %}
-                        {% if value and key != 'page' %}
-                            {% with filter_display=value|get_filter_display:key %}
-                        <a href="{% remove_query_param request key %}" 
-                           class="btn btn-sm btn-outline-secondary d-flex align-items-center">
-                            {% if key == 'brand' %}
-                                Бренд: {{ filter_display|default:value }}
-                            {% elif key == 'Class_compress' %}
-                                Класс компрессии: {{ filter_display|default:value }}
-                            {% elif key == 'Type_product' %}
-                                Тип изделия: {{ filter_display|default:value }}
-                            {% elif key == 'Appointment' %}
-                                Назначение: {{ filter_display|default:value }}
-                            {% elif key == 'Male' %}
-                                Пол: {{ filter_display|default:value }}
-                            {% elif key == 'Sock' %}
-                                Тип носка: {{ filter_display|default:value }}
-                            {% else %}
-                                {{ key }}: {{ filter_display|default:value }}
-                            {% endif %}
-                            <span class="ms-1">&times;</span>
-                        </a>
-                        {% endwith %}
-                        {% endif %}
-                    {% endfor %}
-                    
-                    <!-- Кнопка сброса всех фильтров -->
-                    <a href="?" class="btn btn-sm btn-outline-danger">
-                        Сбросить все фильтры
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% endif %}
 
     <!-- Форма фильтрации -->
      <div class="row mb-4">
@@ -129,19 +53,19 @@
                         <label for="{{ filter.form.Male.id_for_label }}" class="form-label">Пол</label>
                         {{ filter.form.Male }}
                     </div>
-                    <script>
-document.querySelectorAll('.filter-form select').forEach(select => {
-    select.addEventListener('change', function() {
-        this.form.submit();
-    });
-});
-</script>                    
+                    
+                    <!-- Кнопки фильтра -->
+                    <div class="col-12 mt-2">
+                        <button type="submit" class="btn btn-primary">Применить фильтр</button>
+                        <a href="?" class="btn btn-outline-secondary ms-2">Сбросить</a>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
+    <!-- ... ваш существующий код фильтров ... -->
 
-    <!-- Список товаров с микроразметкой -->
+    <!-- Список товаров с ПОЛНОЙ микроразметкой -->
     <div class="row" itemscope itemtype="https://schema.org/ItemList">
         <meta itemprop="name" content="{{ seo_title|default:'Каталог компрессионного трикотажа' }}">
         <meta itemprop="description" content="{{ seo_description|default:'Широкий выбор компрессионного трикотажа' }}">
@@ -199,24 +123,49 @@ document.querySelectorAll('.filter-form select').forEach(select => {
                         <small class="text-muted">Категория:</small>
                         <span itemprop="category">{{ product.Type_product }}</span>
                     </div>
-                     
-                    <div style="display: none;" itemprop="description">
-                        {{ product.seo_description|default:product.name }} - компрессионный трикотаж {{ product.brand.name }}. {{ product.Type_product }} {{ product.articul }}.
-                    </div>
+                     <div style="display: none;" itemprop="description">
+            {{ product.seo_description|default:product.name }} - компрессионный трикотаж {{ product.brand.name }}. {{ product.Type_product }} {{ product.article }}.
+        </div>
 
                     <!-- Цена -->
                     <div class="mt-auto" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="h5 text-primary mb-0">
-                                {{ product.price }} ₽
-                                <meta itemprop="price" content="{{ product.price|floatformat:'2u' }}">
-                                <meta itemprop="priceCurrency" content="RUB">
-                            </span>
-                            <meta itemprop="availability" content="https://schema.org/InStock">
-                            <link itemprop="url" href="{{ request.scheme }}://{{ request.get_host }}{% url 'catalog:detail' product.slug %}">
-                        </div>
-                    </div>
-                    
+    <div class="d-flex justify-content-between align-items-center">
+        <span class="h5 text-primary mb-0">
+            {{ product.price }} ₽
+            <meta itemprop="price" content="{{ product.price|floatformat:'2u' }}">
+            <meta itemprop="priceCurrency" content="RUB">
+        </span>
+        <meta itemprop="availability" content="https://schema.org/InStock">
+        <link itemprop="url" href="{{ request.scheme }}://{{ request.get_host }}{% url 'catalog:detail' product.slug %}">
+        
+        <!-- ДОБАВЛЯЕМ ПОЛИТИКУ ВОЗВРАТА -->
+        <div itemprop="hasMerchantReturnPolicy" itemscope itemtype="https://schema.org/MerchantReturnPolicy">
+            <meta itemprop="returnPolicyCategory" content="https://schema.org/MerchantReturnFiniteReturnWindow">
+            <meta itemprop="merchantReturnDays" content="14">
+        </div>
+        
+        <!-- ДОБАВЛЯЕМ УСЛОВИЯ ДОСТАВКИ -->
+        <div itemprop="shippingDetails" itemscope itemtype="https://schema.org/OfferShippingDetails">
+            <div itemprop="shippingRate" itemscope itemtype="https://schema.org/MonetaryAmount">
+                <meta itemprop="value" content="0">
+                <meta itemprop="currency" content="RUB">
+            </div>
+            <div itemprop="shippingDestination" itemscope itemtype="https://schema.org/DefinedRegion">
+                <meta itemprop="addressCountry" content="RU">
+            </div>
+            <div itemprop="deliveryTime" itemscope itemtype="https://schema.org/ShippingDeliveryTime">
+                <div itemprop="handlingTime" itemscope itemtype="https://schema.org/QuantitativeValue">
+                    <meta itemprop="minValue" content="1">
+                    <meta itemprop="maxValue" content="2">
+                </div>
+                <div itemprop="transitTime" itemscope itemtype="https://schema.org/QuantitativeValue">
+                    <meta itemprop="minValue" content="1">
+                    <meta itemprop="maxValue" content="3">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
                     <!-- Кнопка подробнее -->
                     <a href="{% url 'catalog:detail' product.slug %}" 
                        class="btn btn-outline-primary mt-2 w-100">
@@ -236,65 +185,85 @@ document.querySelectorAll('.filter-form select').forEach(select => {
         {% endfor %}
     </div>
 
-    <!-- Пагинация (внешний файл) -->
-    {% if page_obj.has_other_pages %}
+    <!-- Пагинация -->
     <div class="row mt-4">
         <div class="col-12">
             {% include "includes/paginator.html" %}
         </div>
     </div>
-    {% endif %}
 </div>
 
-<!-- JSON-LD разметка для SEO -->
+<!-- Дублирующая JSON-LD разметка для лучшего понимания поисковиками -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "CollectionPage",
+  "@type": "ItemList",
   "name": "{{ seo_title|default:'Каталог компрессионного трикотажа'|escapejs }}",
   "description": "{{ seo_description|default:'Широкий выбор компрессионного трикотажа'|escapejs }}",
-  "url": "{{ request.build_absolute_uri }}",
-  "mainEntity": {
-    "@type": "ItemList",
-    "numberOfItems": {{ prod_count.id__count }},
-    "itemListElement": [
-      {% for product in page_obj.object_list|slice:":5" %}
-      {
-        "@type": "ListItem",
-        "position": {{ forloop.counter }},
-        "item": {
-          "@type": "Product",
-          "name": "{{ product.seo_title|default:product.name|escapejs }}",
-          "description": "{{ product.seo_description|default:product.name|escapejs }} - компрессионный трикотаж {{ product.brand.name|escapejs }}",
+  "numberOfItems": {{ prod_count.id__count }},
+  "itemListElement": [
+    {% for product in page_obj.object_list %}
+    {
+      "@type": "ListItem",
+      "position": {{ forloop.counter }},
+      "item": {
+        "@type": "Product",
+        "name": "{{ product.seo_title|default:product.name|escapejs }}",
+        "description": "{{ product.seo_description|default:product.name|escapejs }} - компрессионный трикотаж {{ product.brand.name }}",  {# ✅ ДОБАВЛЕНО description #}
+        "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'catalog:detail' product.slug %}",
+        {% if product.articul %}
+        "sku": "{{ product.article|escapejs }}",
+        {% endif %}
+        "brand": {
+          "@type": "Brand",
+          "name": "{{ product.brand.name|escapejs }}"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "{{ product.price|floatformat:"2u" }}",
+          "priceCurrency": "RUB",
+          "availability": "https://schema.org/InStock",
           "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'catalog:detail' product.slug %}",
-          {% if product.articul %}
-          "sku": "{{ product.articul|escapejs }}",
-          {% endif %}
-          "brand": {
-            "@type": "Brand",
-            "name": "{{ product.brand.name|escapejs }}"
+          "hasMerchantReturnPolicy": {  {# ✅ ДОБАВЛЕНО политика возврата #}
+            "@type": "MerchantReturnPolicy",
+            "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+            "merchantReturnDays": 14
           },
-          "offers": {
-            "@type": "Offer",
-            "price": "{{ product.price|floatformat:"2u" }}",
-            "priceCurrency": "RUB",
-            "availability": "https://schema.org/InStock",
-            "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'catalog:detail' product.slug %}"
+          "shippingDetails": {  {# ✅ ДОБАВЛЕНО условия доставки #}
+            "@type": "OfferShippingDetails",
+            "shippingRate": {
+              "@type": "MonetaryAmount",
+              "value": "0",
+              "currency": "RUB"
+            },
+            "shippingDestination": {
+              "@type": "DefinedRegion",
+              "addressCountry": "RU"
+            },
+            "deliveryTime": {
+              "@type": "ShippingDeliveryTime",
+              "handlingTime": {
+                "@type": "QuantitativeValue",
+                "minValue": "1",
+                "maxValue": "2"
+              },
+              "transitTime": {
+                "@type": "QuantitativeValue", 
+                "minValue": "1",
+                "maxValue": "3"
+              }
+            }
           }
-          {% if product.main_images %},
-          "image": "{{ request.scheme }}://{{ request.get_host }}{{ product.main_images.0.image.url }}"
-          {% endif %}
         }
-      }{% if not forloop.last %},{% endif %}
-      {% endfor %}
-    ]
-  }
-  {% if page_obj.has_previous %}
-  ,"previousPage": "{{ request.scheme }}://{{ request.get_host }}{% url 'catalog:catalog' %}?{% if cleaned_query_string %}{{ cleaned_query_string }}&{% endif %}page={{ page_obj.previous_page_number }}"
-  {% endif %}
-  {% if page_obj.has_next %}
-  ,"nextPage": "{{ request.scheme }}://{{ request.get_host }}{% url 'catalog:catalog' %}?{% if cleaned_query_string %}{{ cleaned_query_string }}&{% endif %}page={{ page_obj.next_page_number }}"
-  {% endif %}
+        {% if product.main_images %},
+        {% for image in product.main_images %}
+        "image": "{{ image.image.url }}"
+        {% endfor %}
+        {% endif %}
+      }
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ]
 }
 </script>
 
@@ -320,18 +289,9 @@ document.querySelectorAll('.filter-form select').forEach(select => {
     box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
 }
 
-.active-filters .btn {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
-}
-
 @media (max-width: 768px) {
     .filter-form .col-12 {
         margin-bottom: 0.5rem;
-    }
-    .active-filters .btn {
-        font-size: 0.7rem;
-        padding: 0.2rem 0.4rem;
     }
 }
 </style>

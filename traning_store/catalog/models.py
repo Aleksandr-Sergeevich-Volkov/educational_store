@@ -650,6 +650,10 @@ class Product(models.Model):
 
     def get_features_dict(self):
         """Полный словарь характеристик для SEO"""
+        if self.pk:  # или self.id
+            colors = ', '.join([str(c) for c in self.Color.all()]) if self.Color.exists() else ''
+        else:
+            colors = ''
         return {
             'Бренд': str(self.brand) if self.brand else '',
             'Артикул': self.articul,
@@ -660,7 +664,7 @@ class Product(models.Model):
             'Размер': str(self.Size) if self.Size else '',
             'Модель': str(self.Model_type) if self.Model_type else '',
             'Пол': str(self.Male) if self.Male else '',
-            'Цвета': ', '.join([str(c) for c in self.Color.all()]) if self.Color.exists() else '',
+            'Цвета': colors
         }
 
 

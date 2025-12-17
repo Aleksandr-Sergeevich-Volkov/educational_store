@@ -6,7 +6,6 @@ from .models import (Appointment, Brend, Class_compress, Color, Country,
                      SizeDetail, Soсk, Type_product, Wide_hips)
 
 admin.site.register(Country)
-# admin.site.register(Brend)
 admin.site.register(Appointment)
 admin.site.register(Male)
 admin.site.register(Color)
@@ -15,7 +14,6 @@ admin.site.register(Soсk)
 admin.site.register(Type_product)
 admin.site.register(Wide_hips)
 admin.site.register(Side)
-# admin.site.register(Size)
 admin.site.register(Model_type)
 admin.site.register(Gallery)
 

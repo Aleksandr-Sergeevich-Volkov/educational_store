@@ -48,6 +48,7 @@ class TestRoutes(TestCase):
         )
         # Добавляем один цвет
         self.product1.Color.add(self.color_black)
+        print(self.product1)
 
         self.product2 = Product.objects.create(
             name="Test Product 2",

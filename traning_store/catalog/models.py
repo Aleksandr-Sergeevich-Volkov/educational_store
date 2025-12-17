@@ -553,7 +553,7 @@ class Product(models.Model):
                     keywords.add(f"{brand_name} {full_type} арт {articul_clean}")
 
         # 7. ЦВЕТА (если указаны и это важно)
-        if hasattr(self, 'Color') and self.Color.exists():
+        if self.pk and hasattr(self, 'Color') and self.Color.exists():
             # Берем только основные цвета
             main_colors = ['черный', 'телесный', 'бежевый', 'белый']
             for color in self.Color.all()[:2]:  # Максимум 2 цвета

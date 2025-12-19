@@ -2,12 +2,14 @@ from django.contrib.sitemaps.views import sitemap
 from django.urls import path
 
 from . import views
-from .sitemaps import ProductSitemap
+from .sitemaps import ArticleSitemap, ProductSitemap, StaticViewSitemap
 
 app_name = 'catalog'
 
 sitemaps = {
+    'static': StaticViewSitemap,
     'products': ProductSitemap,
+    'articles': ArticleSitemap,  # Добавляем статьи
 }
 
 urlpatterns = [

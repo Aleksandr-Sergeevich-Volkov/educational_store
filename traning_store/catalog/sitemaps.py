@@ -33,7 +33,7 @@ class ProductSitemap(Sitemap):
         return obj.updated
 
     def location(self, obj):
-        return reverse('catalog:detail', kwargs={'slug': obj.slug})  # ✅ Товары используют slug
+        return reverse('catalog:detail', kwargs={'slug': obj.slug})
 
 
 # НОВЫЙ КЛАСС ДЛЯ СТАТЕЙ

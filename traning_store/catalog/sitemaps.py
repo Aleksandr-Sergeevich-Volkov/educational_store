@@ -3,7 +3,7 @@ from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
 from homepage.models import Post
 
-from .models import Product  # ✅ Только модель Product
+from .models import Product
 
 
 class StaticViewSitemap(Sitemap):

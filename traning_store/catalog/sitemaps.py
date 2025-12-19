@@ -9,7 +9,7 @@ from .models import Product  # ✅ Только модель Product
 class StaticViewSitemap(Sitemap):
     priority = 1.0
     changefreq = 'daily'
-    protocol = 'https'  # Не забываем про HTTPS
+    protocol = 'https'
 
     # Список имен URL-путей (name из urls.py)
     def items(self):

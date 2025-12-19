@@ -9,7 +9,7 @@ app_name = 'catalog'
 sitemaps = {
     'static': StaticViewSitemap,
     'products': ProductSitemap,
-    'articles': ArticleSitemap,  # Добавляем статьи
+    'articles': ArticleSitemap,
 }
 
 urlpatterns = [

@@ -8,6 +8,7 @@ from .models import Product  # ✅ Только модель Product
 class ProductSitemap(Sitemap):
     changefreq = "weekly"
     priority = 0.8
+    protocol = 'https'
 
     def items(self):
         return Product.objects.filter(available=True)

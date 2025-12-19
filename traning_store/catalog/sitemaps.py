@@ -52,4 +52,4 @@ class ArticleSitemap(Sitemap):
 
     def location(self, obj):
         # Генерируем URL с параметром pk
-        return reverse('homepage:detail_view', kwargs={'pk': obj.pk})
+        return reverse('homepage:detail', kwargs={'pk': obj.pk})

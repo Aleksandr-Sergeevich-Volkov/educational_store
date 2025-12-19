@@ -46,10 +46,6 @@ class ArticleSitemap(Sitemap):
         # Возвращаем QuerySet опубликованных статей
         return Post.objects.all()
 
-    def lastmod(self, obj):
-        # Используем дату последнего изменения
-        return obj.text or obj.title
-
     def location(self, obj):
         # Генерируем URL с параметром pk
         return reverse('homepage:detail', kwargs={'pk': obj.pk})

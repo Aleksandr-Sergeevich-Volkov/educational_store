@@ -7,6 +7,7 @@ from django.db import models
 from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.defaulttags import register
+from django.urls import reverse
 from django.views.generic import TemplateView
 
 from .forms import (CommentForm, SearchForm, SizeFinderForm,
@@ -66,7 +67,9 @@ def add_comment(request, post_id):
         comment.author = request.user
         comment.post = post
         comment.save()
-    return redirect('homepage:detail', pk=post_id)
+    # return redirect('homepage:detail', pk=post_id)
+    # Возвращаем на главную с параметром, какой блок открыть
+    return redirect(f'{reverse("homepage:homepage")}?open_comments={post_id}')
 
 
 @login_required
@@ -86,7 +89,8 @@ def edit_comment(request, post_id, comment_id):
                            )
         if form.is_valid():
             form.save()
-        return redirect('homepage:detail', pk=post_id)
+        return redirect(f'{reverse("homepage:homepage")}?open_comments={post_id}')
+        # return redirect('homepage:detail', pk=post_id)
     return render(request, 'blog/comment.html', context)
 
 
@@ -98,7 +102,8 @@ def delete_comment(request, post_id, comment_id):
     context = {'comment': comment, }
     if request.method == 'POST':
         comment.delete()
-        return redirect('homepage:detail', pk=post_id)
+        return redirect(f'{reverse("homepage:homepage")}?open_comments={post_id}')
+        # return redirect('homepage:detail', pk=post_id)
     return render(request, 'blog/comment.html', context)
 
 

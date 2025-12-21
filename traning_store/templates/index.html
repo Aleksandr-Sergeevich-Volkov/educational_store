@@ -61,7 +61,7 @@
     </div>
     
     <!-- Блок комментариев (изначально скрыт) -->
-    <div id="comments-{{ post.id }}" class="comments-section mt-3" style="display: none;">
+    <div id="comments-{{ post.id }}" class="comments-section mt-3" style="display: {% if request.GET.open_comments == post.id|stringformat:'i' %}block{% else %}none{% endif %};">
         <div class="card">
             <div class="card-header bg-light d-flex justify-content-between align-items-center">
                 <h6 class="card-title mb-0">💬 Комментарии ({{ post.comment_count }})</h6>
@@ -189,6 +189,42 @@ document.addEventListener('DOMContentLoaded', function() {
             button.disabled = true;
         });
     });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Получаем ID поста из URL параметра
+    const urlParams = new URLSearchParams(window.location.search);
+    const postIdToOpen = urlParams.get('open_comments');
+    
+    if (postIdToOpen) {
+        // Находим блок комментариев
+        const commentsDiv = document.getElementById(`comments-${postIdToOpen}`);
+        
+        if (commentsDiv) {
+            // Открываем блок (если он еще не открыт)
+            commentsDiv.style.display = 'block';
+            
+            // Обновляем текст кнопки
+            const button = document.querySelector(`[onclick*="${postIdToOpen}"]`);
+            if (button && button.textContent.includes('Комментарии')) {
+                button.textContent = button.textContent.replace('Комментарии', 'Скрыть комментарии');
+            }
+            
+            // Прокручиваем к комментариям
+            setTimeout(() => {
+                commentsDiv.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+                
+                // Фокусируем поле ввода
+                const textarea = commentsDiv.querySelector('textarea[name="text"]');
+                if (textarea) {
+                    textarea.focus();
+                }
+            }, 100);
+        }
+    }
 });
 </script>
 

@@ -56,7 +56,7 @@
             {% if selected_brand and 'venoteks' in selected_brand.name.lower %}
             <p class="mb-1">• Изделие имеет два варианта длины: Короткий (62-70) или Стандартный (71-82)</p>
             <p class="mb-0">• Для определения варианта измерьте по внутренней стороне ноги длину от пятки до паховой складки</p>
-            {% elif selected_brand and 'orto' in selected_brand.name.lower %}
+            {% elif selected_brand and 'ORTO' in selected_brand.name.lower %}
             <p class="mb-1">• Величина измерения от ступни до обхвата под коленом для гольфов длины Norm составляет 38,0 ± 2см, для изделий длины Long 42,0 ± 2см</p>
             <p class="mb-0">• Величина измерения от ступни до обхвата верхней части бедра для чулок и колготок длины Norm составляет 66,0 ± 4см, для изделий длины Long 76,0 ± 6см</p>
             {% elif selected_brand and 'trives' in selected_brand.name.lower %}
@@ -111,6 +111,14 @@
         </div>
     </div>
 </div>
+{% else %}
+<div class="card">
+    <div class="card-header bg-info text-dark">
+        <h5 class="mb-0">
+            Размер не найден попробуйте указать более точные данные.
+        </h5>
+    </div>
+    <div class="card-body">
 {% endif %}
 </div>
 

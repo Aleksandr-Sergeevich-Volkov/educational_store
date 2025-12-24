@@ -2,6 +2,7 @@ import re
 
 from django.contrib.postgres.fields import IntegerRangeField
 from django.db import models
+from django.db.models import Max
 
 from traning_store.constant import COLOR_LEN, MEASURE_LEN, TITLE_LEN
 
@@ -287,7 +288,7 @@ class Product(models.Model):
     )
 
     articul = models.CharField('Артикул', max_length=MEASURE_LEN, default='P280')
-    code = models.CharField('Код товара', max_length=MEASURE_LEN, default='51723')
+    code = models.PositiveIntegerField('Код товара', unique=True, null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField()
     available = models.BooleanField(default=True)
@@ -319,7 +320,14 @@ class Product(models.Model):
         if not self.seo_keywords:
             self.seo_keywords = self._generate_keywords()
 
+        if not self.code:
+            self.code = self._generate_code()
+
         super().save(*args, **kwargs)
+
+    def _generate_code(self):
+        max_code = Product.objects.aggregate(Max('code'))['code__max']
+        return (max_code or 51722) + 1  # 51723 будет первым кодом
 
     # ДОБАВИТЬ эти методы:
     def _generate_seo_title(self):

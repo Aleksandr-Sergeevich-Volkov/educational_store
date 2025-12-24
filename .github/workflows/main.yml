@@ -162,6 +162,7 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         passphrase: ${{ secrets.SSH_PASSPHRASE }}
         script: |
+          set -e          # Выход при любой ошибке 
           cd educational_store
           
           # 1. Останавливаем старые контейнеры

@@ -114,7 +114,7 @@ class GalleryInline(admin.TabularInline):
 class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
     inlines = [GalleryInline, ]
-    list_display = ['name', 'brand', 'price', 'stock', 'available', 'created', 'updated', 'main_image_preview']
+    list_display = ['name', 'code', 'brand', 'price', 'stock', 'available', 'created', 'updated', 'main_image_preview']
     list_filter = ['brand', 'available', 'Class_compress', 'Male', 'created']
     search_fields = ['name', 'brand__name', 'articul', 'code']
     list_editable = ['price', 'stock', 'available']

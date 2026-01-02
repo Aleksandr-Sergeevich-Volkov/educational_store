@@ -7,140 +7,352 @@
 </head>
 
 {% block content %}
+<!-- Поисковая строка - такой же ширины как заголовок -->
+<div class="mb-3">
+    <div class="card-header font-family:sans-serif">
+        <form method="get" action="{% url 'homepage:search' %}" class="mb-0">
+            <div class="input-group">
+                <input type="text" 
+                       name="query" 
+                       class="form-control" 
+                       placeholder="Быстрый поиск по названию, артикулу или бренду..."
+                       id="home-search-input"
+                       autocomplete="off"
+                       aria-label="Поиск товаров"
+                       style="border-top-right-radius: 0; border-bottom-right-radius: 0;">
+                <button type="submit" class="btn btn-primary" 
+                        style="border-top-left-radius: 0; border-bottom-left-radius: 0;">
+                    <i class="bi bi-search"></i> Найти
+                </button>
+            </div>
+        </form>
+        <!-- Контейнер для автодополнения -->
+        <div id="home-autocomplete" class="autocomplete-dropdown mt-1"></div>
+    </div>
+</div>
+
 <div class="mb-3">
     <h2 class="card-header font-family:sans-serif">Магазин kompressionnye-chulki24.ru</h2>
 </div>
 
-<!-- Кнопки -->
-<div class="btn-group d-grid gap-2 d-md-flex justify-content-md-end mb-4 flex-column flex-md-row">
-    <a href="catalog/" class="btn btn-primary mb-2 mb-md-0">Каталог всех товаров</a>
-    <a href="search/" class="btn btn-primary">Поиск товаров</a>
-    <a href="size_finder/" class="btn btn-primary">Подбор размера</a>              
-</div>    
+<!-- Кнопки - одинаковой ширины и выровнены -->
 <div class="row mb-4">
-    <div class="col-12 col-md-4 text-center text-md-start">
-        <img src="{% static 'logo.jpeg' %}" 
-             alt="Логотип магазина" 
-             class="mb-3 img-fluid"
-             style="max-width: 100%; height: auto;">
-        <div class="mt-2">
-            <b><i>Всего товаров в нашем магазине: {{prod_count.id__count}}</b></i>
-        </div>
+    <div class="col-md-4 mb-2 mb-md-0">
+        <a href="catalog/" class="btn btn-primary w-100">Каталог всех товаров</a>
     </div>
-    <div class="col-12 col-md-4 mt-3 mt-md-0">
-        <b><i>Самое популярное:</b></i>
-        {% for prod in product %} 
-        <p class="mb-2">
-            <a href="{% url 'catalog:detail' prod.slug %}" class="card-link">{{prod.name}}</a>
-        </p>
-        {% endfor %} 
+    <div class="col-md-4 mb-2 mb-md-0">
+        <a href="{% url 'homepage:search' %}" class="btn btn-primary w-100">Поиск товаров</a>
     </div>
-    <div class="col-12 col-md-4 mt-3 mt-md-0">
-        {% for post in text %} 
-   <div class="mb-3">
-    <p class="h5 mb-2">{{ post.title }}</p>          
-    
-    <div class="post-content">
-        <p class="card-text mb-2" id="text-{{ post.id }}">
-            {{ post.text|truncatewords:25 }}
-        </p>
-    </div>
-    
-    <div class="d-flex gap-2 flex-wrap">
-        <button class="btn btn-outline-primary btn-sm" 
-                onclick="toggleFullText({{ post.id }}, '{{ post.text|escapejs }}')">
-            📖 Читать полный текст
-        </button>
-        
-        <button class="btn btn-outline-secondary btn-sm comments-btn" 
-                data-post-id="{{ post.id }}"
-                data-comment-count="{{ post.comment_count }}"
-                onclick="toggleComments({{ post.id }})">
-            💬 Комментарии ({{ post.comment_count }})
-        </button>
-    </div>
-    
-    <!-- Блок комментариев (изначально скрыт) -->
-    <div id="comments-{{ post.id }}" class="comments-section mt-3" style="display: {% if request.GET.open_comments == post.id|stringformat:'i' %}block{% else %}none{% endif %};">
-        <div class="card">
-            <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                <h6 class="card-title mb-0">💬 Комментарии ({{ post.comment_count }})</h6>
-                <button class="btn btn-close btn-sm" onclick="toggleComments({{ post.id }})"></button>
-            </div>
-            <div class="card-body">
-                {% if post.comments.all %}
-                    {% for comment in post.comments.all %}
-                    <div class="comment mb-3 pb-3 border-bottom">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <div>
-                                <strong class="text-primary">{{ comment.author.username }}</strong>
-                                <small class="text-muted ms-2">{{ comment.created_at|date:"d.m.Y H:i" }}</small>
-                                {% if comment.updated_at != comment.created_at %}
-                                <small class="text-muted ms-2">(изменено)</small>
-                                {% endif %}
-                            </div>
-                            
-                            <!-- Кнопки управления для автора комментария -->
-                            {% if user == comment.author %}
-                            <div class="btn-group btn-group-sm">
-                                <a href="{% url 'homepage:edit_comment' post.id comment.id %}" 
-                                   class="btn btn-outline-warning btn-sm"
-                                   title="Редактировать комментарий">
-                                    ✏️
-                                </a>
-                                <a href="{% url 'homepage:delete_comment' post.id comment.id %}" 
-                                   class="btn btn-outline-danger btn-sm"
-                                   title="Удалить комментарий"
-                                   onclick="return confirm('Вы уверены, что хотите удалить этот комментарий?');">
-                                    🗑️
-                                </a>
-                            </div>
-                            {% endif %}
-                        </div>
-                        
-                        <!-- Текст комментария -->
-                        <p class="mb-0 comment-text">
-                            {{ comment.text }}
-                        </p>
-                    </div>
-                    {% endfor %}
-                {% else %}
-                    <p class="text-muted mb-0">Пока нет комментариев. Будьте первым!</p>
-                {% endif %}
-                
-                <!-- Форма добавления комментария -->
-                {% if user.is_authenticated %}
-                <div class="add-comment mt-3 pt-3 border-top">
-                    <form method="post" action="{% url 'homepage:add_comment' post.id %}" class="comment-form">
-                        {% csrf_token %}
-                        <div class="mb-2">
-                            <textarea name="text" class="form-control form-control-sm" 
-                                      rows="2" placeholder="Напишите комментарий..." required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-sm">💬 Добавить комментарий</button>
-                    </form>
-                </div>
-                {% else %}
-                <div class="mt-3 pt-3 border-top">
-                    <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-outline-primary btn-sm">
-                        🔑 Войдите, чтобы комментировать
-                    </a>
-                </div>
-                {% endif %}
-            </div>
-        </div>
+    <div class="col-md-4">
+        <a href="size_finder/" class="btn btn-primary w-100">Подбор размера</a>
     </div>
 </div>
 
+<!-- Три колонки под кнопками - одинаковой ширины -->
+<div class="row mb-4">
+    <!-- Левая колонка: логотип (под кнопкой "Каталог") -->
+    <div class="col-md-4 mb-3 mb-md-0">
+        <div class="text-center">
+            <div class="mb-3" style="max-width: 100%;">
+                <img src="{% static 'logo.jpeg' %}" 
+                     alt="Логотип магазина" 
+                     class="img-fluid"
+                     style="max-width: 100%; height: auto;">
+            </div>
+            <div>
+                <b><i>Всего товаров в нашем магазине: {{prod_count.id__count}}</b></i>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Средняя колонка: популярное (под кнопкой "Поиск") - выровнено по левому краю -->
+    <div class="col-md-4 mb-3 mb-md-0">
+        <div>
+            <b><i>Самое популярное:</b></i>
+            {% for prod in random_products %} 
+            <p class="mb-2">
+                <a href="{% url 'catalog:detail' prod.slug %}" class="card-link">{{prod.name}}</a>
+            </p>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Правая колонка: посты (под кнопкой "Подбор") -->
+    <div class="col-md-4">
+        {% for post in text %} 
+        <div class="mb-3">
+            <p class="h5 mb-2">{{ post.title }}</p>          
+            
+            <div class="post-content">
+                <p class="card-text mb-2" id="text-{{ post.id }}">
+                    {{ post.text|truncatewords:25 }}
+                </p>
+            </div>
+            
+            <!-- Кнопки в одну строку -->
+            <div class="d-flex gap-1">
+                <button class="btn btn-outline-primary btn-sm flex-fill" 
+                        onclick="toggleFullText({{ post.id }}, '{{ post.text|escapejs }}')"
+                        style="white-space: nowrap;">
+                    📖 Читать полный текст
+                </button>
+                
+                <button class="btn btn-outline-secondary btn-sm flex-fill" 
+                        data-post-id="{{ post.id }}"
+                        data-comment-count="{{ post.comment_count }}"
+                        onclick="toggleComments({{ post.id }})"
+                        style="white-space: nowrap;">
+                    💬 Комментарии ({{ post.comment_count }})
+                </button>
+            </div>
+            
+            <!-- Блок комментариев (изначально скрыт) -->
+            <div id="comments-{{ post.id }}" class="comments-section mt-3" style="display: {% if request.GET.open_comments == post.id|stringformat:'i' %}block{% else %}none{% endif %};">
+                <div class="card">
+                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                        <h6 class="card-title mb-0">💬 Комментарии ({{ post.comment_count }})</h6>
+                        <button class="btn btn-close btn-sm" onclick="toggleComments({{ post.id }})"></button>
+                    </div>
+                    <div class="card-body">
+                        {% if post.comments.all %}
+                            {% for comment in post.comments.all %}
+                            <div class="comment mb-3 pb-3 border-bottom">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <strong class="text-primary">{{ comment.author.username }}</strong>
+                                        <small class="text-muted ms-2">{{ comment.created_at|date:"d.m.Y H:i" }}</small>
+                                        {% if comment.updated_at != comment.created_at %}
+                                        <small class="text-muted ms-2">(изменено)</small>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <!-- Кнопки управления для автора комментария -->
+                                    {% if user == comment.author %}
+                                    <div class="btn-group btn-group-sm">
+                                        <a href="{% url 'homepage:edit_comment' post.id comment.id %}" 
+                                           class="btn btn-outline-warning btn-sm"
+                                           title="Редактировать комментарий">
+                                            ✏️
+                                        </a>
+                                        <a href="{% url 'homepage:delete_comment' post.id comment.id %}" 
+                                           class="btn btn-outline-danger btn-sm"
+                                           title="Удалить комментарий"
+                                           onclick="return confirm('Вы уверены, что хотите удалить этот комментарий?');">
+                                            🗑️
+                                        </a>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Текст комментария -->
+                                <p class="mb-0 comment-text">
+                                    {{ comment.text }}
+                                </p>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted mb-0">Пока нет комментариев. Будьте первым!</p>
+                        {% endif %}
+                        
+                        <!-- Форма добавления комментария -->
+                        {% if user.is_authenticated %}
+                        <div class="add-comment mt-3 pt-3 border-top">
+                            <form method="post" action="{% url 'homepage:add_comment' post.id %}" class="comment-form">
+                                {% csrf_token %}
+                                <div class="mb-2">
+                                    <textarea name="text" class="form-control form-control-sm" 
+                                              rows="2" placeholder="Напишите комментарий..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm">💬 Добавить комментарий</button>
+                            </form>
+                        </div>
+                        {% else %}
+                        <div class="mt-3 pt-3 border-top">
+                            <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-outline-primary btn-sm">
+                                🔑 Войдите, чтобы комментировать
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="btn-group mt-3 mb-4">
+    <a href="{% static 'oferta.pdf' %}" class="btn btn-primary">Оферта</a> 
+</div>
+
+<div class="row mt-4">
+    <div class="col-12 col-md-8 mb-3 mb-md-0">     
+        <div class="text-center text-md-start" style="font-size: 12px; font-family:sans-serif;">
+            <strong>Контакты:</strong><br>
+            ООО "Консалтинговый Центр "Алгоритм"<br>
+            Реквизиты: р/с 40702810200010000418 в АКБ "АБСОЛЮТ БАНК" (ПАО) к/с 30101810500000000976 бик 044525976<br>
+            Адрес: 141402, Московская область, город Химки, Союзная ул., д. 3, офис 15<br>
+            Телефон/Telegram/WhatsApp: 8-906-717-48-77<br>
+            e-mail: volkov_aleksandr_sergeevich@mail.ru
+        </div>
+    </div>
+    <div class="col-12 col-md-3 text-center"> 
+        <a title="Telegram" href="https://telegram.me/volkovaleksandrsergeevich" target="_blank">
+            <img src="{% static 'telegram_icon.jpg' %}" class="img-fluid" style="max-width: 75px;" alt='Написать в Telegram'>
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
 <script>
-// Функция для раскрытия/скрытия текста поста
+// Автодополнение для главной страницы
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('home-search-input');
+    const autocompleteContainer = document.getElementById('home-autocomplete');
+    
+    if (!searchInput || !autocompleteContainer) return;
+    
+    let currentRequest = null;
+    
+    searchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+        
+        // Отменяем предыдущий запрос
+        if (currentRequest) {
+            currentRequest.abort();
+        }
+        
+        // Очищаем и скрываем контейнер
+        autocompleteContainer.innerHTML = '';
+        autocompleteContainer.style.display = 'none';
+        
+        if (query.length >= 2) {
+            // Показываем индикатор загрузки
+            autocompleteContainer.innerHTML = `
+                <div class="autocomplete-loading p-2 text-center text-muted">
+                    <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                    Поиск...
+                </div>
+            `;
+            autocompleteContainer.style.display = 'block';
+            
+            // Делаем AJAX запрос
+            currentRequest = new XMLHttpRequest();
+            currentRequest.open('GET', '{% url "homepage:autocomplete" %}?term=' + encodeURIComponent(query));
+            currentRequest.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            
+            currentRequest.onload = function() {
+                if (currentRequest.status === 200) {
+                    const data = JSON.parse(currentRequest.responseText);
+                    autocompleteContainer.innerHTML = '';
+                    
+                    if (data.suggestions && data.suggestions.length > 0) {
+                       data.suggestions.forEach(item => {
+    const link = document.createElement('a');
+    link.href = item.url || '#';
+    link.className = 'autocomplete-item d-block p-2 border-bottom';
+    link.style.textDecoration = 'none';
+    
+    let html = `
+        <div class="d-flex align-items-center">
+            ${item.image ? `
+                <div class="flex-shrink-0 me-2" style="width: 40px; height: 40px;">
+                    <img src="${item.image}" 
+                         alt="${item.name}" 
+                         class="img-fluid rounded"
+                         style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+            ` : `
+                <div class="flex-shrink-0 me-2" style="width: 40px; height: 40px;">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center" 
+                         style="width: 100%; height: 100%;">
+                        <i class="bi bi-image text-muted"></i>
+                    </div>
+                </div>
+            `}
+            
+            <div class="flex-grow-1">
+                <strong class="d-block">${item.name || ''}</strong>
+                <small class="text-muted d-block">
+                    ${item.brand ? `${item.brand} • ` : ''}${item.articul}
+                </small>
+            </div>
+            
+            <div class="flex-shrink-0 text-end ms-2">
+                <span class="text-success fw-bold">${item.price || ''}</span>
+            </div>
+        </div>
+    `;
+    
+    link.innerHTML = html;
+    autocompleteContainer.appendChild(link);
+});
+                        
+                        // Добавляем ссылку "Все результаты"
+                        const allResults = document.createElement('a');
+                        allResults.href = '{% url "homepage:search" %}?query=' + encodeURIComponent(query);
+                        allResults.className = 'autocomplete-all-results d-block p-2 text-center bg-light';
+                        allResults.style.textDecoration = 'none';
+                        allResults.innerHTML = `
+                            <small><strong>Показать все результаты</strong></small>
+                        `;
+                        autocompleteContainer.appendChild(allResults);
+                        
+                        autocompleteContainer.style.display = 'block';
+                    } else {
+                        autocompleteContainer.innerHTML = `
+                            <div class="autocomplete-no-results p-2 text-center text-muted">
+                                <small><i class="bi bi-search me-1"></i>Ничего не найдено</small>
+                            </div>
+                        `;
+                        autocompleteContainer.style.display = 'block';
+                    }
+                }
+            };
+            
+            currentRequest.onerror = function() {
+                autocompleteContainer.innerHTML = `
+                    <div class="autocomplete-error p-2 text-center text-danger">
+                        <small><i class="bi bi-exclamation-triangle me-1"></i>Ошибка соединения</small>
+                    </div>
+                `;
+            };
+            
+            currentRequest.send();
+        }
+    });
+    
+    // Скрываем при клике вне
+    document.addEventListener('click', function(e) {
+        if (!autocompleteContainer.contains(e.target) && e.target !== searchInput) {
+            autocompleteContainer.style.display = 'none';
+        }
+    });
+    
+    // Показываем при фокусе (если есть результаты)
+    searchInput.addEventListener('focus', function() {
+        if (autocompleteContainer.children.length > 0) {
+            autocompleteContainer.style.display = 'block';
+        }
+    });
+    
+    // При потере фокуса скрываем с задержкой
+    searchInput.addEventListener('blur', function() {
+        setTimeout(() => {
+            autocompleteContainer.style.display = 'none';
+        }, 200);
+    });
+});
+
+// Ваши существующие функции для постов и комментариев
 function toggleFullText(postId, fullText) {
     const textElement = document.getElementById(`text-${postId}`);
     const button = event.target;
     
-    if (button.textContent.includes('Читать')) {
+    if (button.textContent.includes('Читать полный текст')) {
         textElement.textContent = fullText;
-        button.textContent = '📖 Свернуть текст';
+        button.textContent = '📖 Скрыть';
         button.classList.add('active');
     } else {
         const words = fullText.split(' ');
@@ -151,7 +363,6 @@ function toggleFullText(postId, fullText) {
     }
 }
 
-// Функция для раскрытия/скрытия комментариев
 function toggleComments(postId) {
     const commentsSection = document.getElementById(`comments-${postId}`);
     const button = document.querySelector(`[data-post-id="${postId}"]`);
@@ -159,7 +370,7 @@ function toggleComments(postId) {
     
     if (commentsSection.style.display === 'none') {
         commentsSection.style.display = 'block';
-        button.textContent = '💬 Скрыть комментарии';
+        button.textContent = '💬 Скрыть';
         button.classList.add('active');
         
         commentsSection.style.opacity = '0';
@@ -177,47 +388,38 @@ function toggleComments(postId) {
     }
 }
 
-// Обработка формы комментария (простая отправка)
+// Обработка формы комментария
 document.addEventListener('DOMContentLoaded', function() {
     const commentForms = document.querySelectorAll('.comment-form');
     commentForms.forEach(form => {
         form.addEventListener('submit', function(e) {
-            // Форма отправится обычным way, перезагрузит страницу
-            // Можно оставить так или добавить небольшую анимацию
             const button = this.querySelector('button[type="submit"]');
             button.innerHTML = '⏳ Отправка...';
             button.disabled = true;
         });
     });
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Получаем ID поста из URL параметра
+    
+    // Открытие комментариев из URL параметра
     const urlParams = new URLSearchParams(window.location.search);
     const postIdToOpen = urlParams.get('open_comments');
     
     if (postIdToOpen) {
-        // Находим блок комментариев
         const commentsDiv = document.getElementById(`comments-${postIdToOpen}`);
         
         if (commentsDiv) {
-            // Открываем блок (если он еще не открыт)
             commentsDiv.style.display = 'block';
             
-            // Обновляем текст кнопки
             const button = document.querySelector(`[onclick*="${postIdToOpen}"]`);
-            if (button && button.textContent.includes('Комментарии')) {
-                button.textContent = button.textContent.replace('Комментарии', 'Скрыть комментарии');
+            if (button && button.textContent.includes('(')) {
+                button.textContent = '💬 Скрыть';
             }
             
-            // Прокручиваем к комментариям
             setTimeout(() => {
                 commentsDiv.scrollIntoView({ 
                     behavior: 'smooth', 
                     block: 'start' 
                 });
                 
-                // Фокусируем поле ввода
                 const textarea = commentsDiv.querySelector('textarea[name="text"]');
                 if (textarea) {
                     textarea.focus();
@@ -229,6 +431,99 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <style>
+/* Стили только для автодополнения */
+.autocomplete-dropdown {
+    position: absolute;
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 1000;
+    width: 100%;
+    display: none;
+}
+
+.autocomplete-item {
+    border-bottom: 1px solid #f8f9fa;
+    color: #212529;
+    transition: background-color 0.15s;
+    font-size: 0.9rem;
+}
+
+.autocomplete-item:hover {
+    background-color: #f8f9fa;
+    text-decoration: none;
+}
+
+.autocomplete-all-results {
+    color: #0d6efd;
+    border-top: 1px solid #dee2e6;
+    font-size: 0.85rem;
+}
+
+.autocomplete-all-results:hover {
+    background-color: #e7f1ff;
+}
+
+.autocomplete-loading,
+.autocomplete-no-results,
+.autocomplete-error {
+    font-size: 0.85rem;
+}
+
+/* Выравнивание "Самое популярное" по левому краю */
+.col-md-4:nth-child(2) > div {
+    text-align: left;
+}
+
+/* Кнопки в одну строку для постов */
+.col-md-4:last-child .d-flex.gap-1 {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.col-md-4:last-child .btn-sm {
+    flex: 1;
+    min-width: 0;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+/* Одинаковая ширина для всех колонок */
+.row .col-md-4 {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Кнопки занимают всю ширину колонки */
+.row .col-md-4 .btn {
+    width: 100%;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .row .col-md-4 {
+        margin-bottom: 1.5rem;
+    }
+    
+    .col-md-4:nth-child(2) > div {
+        text-align: center;
+    }
+    
+    .col-md-4:last-child .d-flex.gap-1 {
+        justify-content: center;
+    }
+    
+    .col-md-4:last-child .btn-sm {
+        flex: 0 1 auto;
+        min-width: 100px;
+    }
+}
+
+/* Ваши существующие стили для постов и комментариев */
 .comments-section {
     transition: all 0.3s ease;
 }
@@ -271,29 +566,4 @@ document.addEventListener('DOMContentLoaded', function() {
     text-decoration: none;
 }
 </style>
-        {% endfor %}        
-    </div>
-</div>
-
-<div class="btn-group mt-3 mb-4">
-    <a href="{% static 'oferta.pdf' %}" class="btn btn-primary">Оферта</a> 
-</div>
-
-<div class="row mt-4">
-    <div class="col-12 col-md-8 mb-3 mb-md-0">     
-        <div class="text-center text-md-start" style="font-size: 12px; font-family:sans-serif;">
-            <strong>Контакты:</strong><br>
-            ООО "Консалтинговый Центр "Алгоритм"<br>
-            Реквизиты: р/с 40702810200010000418 в АКБ "АБСОЛЮТ БАНК" (ПАО) к/с 30101810500000000976 бик 044525976<br>
-            Адрес: 141402, Московская область, город Химки, Союзная ул., д. 3, офис 15<br>
-            Телефон/Telegram/WhatsApp: 8-906-717-48-77<br>
-            e-mail: volkov_aleksandr_sergeevich@mail.ru
-        </div>
-    </div>
-    <div class="col-12 col-md-3 text-center"> 
-        <a title="Telegram" href="https://telegram.me/volkovaleksandrsergeevich" target="_blank">
-            <img src="{% static 'telegram_icon.jpg' %}" class="img-fluid" style="max-width: 75px;" alt='Написать в Telegram'>
-        </a>
-    </div>
-</div>
 {% endblock %}

@@ -3,6 +3,7 @@ import re
 from django.contrib.postgres.fields import IntegerRangeField
 from django.db import models
 from django.db.models import Max
+from django.urls import reverse
 
 from traning_store.constant import COLOR_LEN, MEASURE_LEN, TITLE_LEN
 
@@ -674,6 +675,10 @@ class Product(models.Model):
             'Пол': str(self.Male) if self.Male else '',
             'Цвета': colors
         }
+
+    def get_absolute_url(self):
+        """Возвращает URL товара"""
+        return reverse('catalog:detail', kwargs={'slug': self.slug})
 
 
 class Gallery(models.Model):

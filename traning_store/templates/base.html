@@ -127,5 +127,93 @@
 	]
 }
 </script>
+<!-- В вашем основном шаблоне, где есть поле поиска -->
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    const $searchInput = $('#id_query');  # Поле из основной формы поиска
+    const $autocompleteResults = $('<div class="autocomplete-results"></div>');
+    $searchInput.after($autocompleteResults);
+    
+    $searchInput.on('input', function() {
+        const query = $(this).val().trim();
+        
+        if (query.length >= 2) {
+            // Делаем AJAX запрос к endpoint автодополнения
+            $.ajax({
+                url: '{% url "homepage:autocomplete" %}',
+                data: {
+                    'term': query
+                },
+                dataType: 'json',
+                success: function(data) {
+                    $autocompleteResults.empty();
+                    
+                    if (data.suggestions.length > 0) {
+                        $.each(data.suggestions, function(index, suggestion) {
+                            const $item = $('<div class="autocomplete-item"></div>');
+                            $item.html(`
+                                <a href="${suggestion.url}">
+                                    ${suggestion.name} <small>${suggestion.brand}</small>
+                                </a>
+                            `);
+                            $autocompleteResults.append($item);
+                        });
+                        $autocompleteResults.show();
+                    } else {
+                        $autocompleteResults.hide();
+                    }
+                }
+            });
+        } else {
+            $autocompleteResults.hide();
+        }
+    });
+    
+    // Скрываем при клике вне
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.autocomplete-results, #id_query').length) {
+            $autocompleteResults.hide();
+        }
+    });
+    
+    // При выборе варианта
+    $autocompleteResults.on('click', '.autocomplete-item', function() {
+        const url = $(this).find('a').attr('href');
+        window.location.href = url;
+    });
+});
+</script>
+
+<style>
+.autocomplete-results {
+    position: absolute;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    width: 100%;
+    display: none;
+}
+
+.autocomplete-item {
+    padding: 8px 12px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+
+.autocomplete-item:hover {
+    background-color: #f8f9fa;
+}
+
+.autocomplete-item a {
+    color: #333;
+    text-decoration: none;
+    display: block;
+}
+</style>
+{% endblock %}
 </body>
 </html>

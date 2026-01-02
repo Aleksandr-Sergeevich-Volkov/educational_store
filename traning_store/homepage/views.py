@@ -1,13 +1,19 @@
 import random
 
-from catalog.models import Gallery, Product, SizeDetail
+from catalog.models import (Appointment, Brend, Class_compress, Color, Gallery,
+                            Male, Model_type, Product, Side, Size, SizeDetail,
+                            Soсk, Type_product, Wide_hips)
 from django.contrib.auth.decorators import login_required
-from django.contrib.postgres.search import SearchQuery, SearchVector
+from django.contrib.postgres.search import TrigramSimilarity
+# from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.db import models
-from django.db.models import Count
+from django.db.models import Count, Prefetch, Q
+# views.py - AJAX view для автодополнения
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.defaulttags import register
 from django.urls import reverse
+from django.views.decorators.http import require_GET
 from django.views.generic import TemplateView
 
 from .forms import (CommentForm, SearchForm, SizeFinderForm,
@@ -20,32 +26,196 @@ class HomePage(TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['text'] = Post.objects.all().annotate(comment_count=models.Count('comments')).order_by('id')
+
+        # Добавляем форму поиска в контекст
+        context['search_form'] = SearchForm()
+
+        # Блог посты
+        context['text'] = Post.objects.all().annotate(
+            comment_count=models.Count('comments')
+        ).order_by('id')
+
+        # Счетчик товаров
         context['prod_count'] = Product.objects.aggregate(Count('id'))
-        product_list = [x for x in range(context['prod_count']['id__count'])]
-        random_list = random.shuffle(product_list)
-        context['random_list'] = random_list
-        context['product'] = Product.objects.filter(id__in=product_list[:3])
+
+        # Рандомные товары
+        product_count = context['prod_count']['id__count']
+        if product_count > 0:
+            # Генерируем случайные ID
+            all_ids = list(Product.objects.values_list('id', flat=True))
+            random_ids = random.sample(all_ids, min(3, len(all_ids)))
+            context['random_products'] = Product.objects.filter(
+                id__in=random_ids
+            ).prefetch_related(
+                models.Prefetch(
+                    'images',
+                    queryset=Gallery.objects.filter(main=True),
+                    to_attr='main_images'
+                )
+            )
+        else:
+            context['random_products'] = Product.objects.none()
+
+        # Добавляем популярные категории для главной
+        from catalog.models import Type_product  # Импорт в методе
+        context['popular_categories'] = Type_product.objects.all()[:4]
+
+        # Добавляем бренды для подсказок
+        from catalog.models import Brend
+        context['popular_brands'] = Brend.objects.all()[:5]
+
         return context
 
 
 def search(request):
     form = SearchForm(request.GET)
-    results = None
     query = ''
+    results = None
+    filters = {}
+
     if form.is_valid():
         query = form.cleaned_data['query']
+
+        # Базовый запрос с предзагрузкой
+        base_query = Product.objects.select_related(
+            'brand', 'Appointment', 'Male', 'Class_compress',
+            'Sock', 'Type_product', 'Size', 'Model_type',
+            'Wide_hips', 'Side'
+        ).prefetch_related(
+            'Color',
+            Prefetch(
+                'images',
+                queryset=Gallery.objects.filter(main=True),
+                to_attr='main_images'
+            )
+        )
+
         if query:
-            results = Product.objects.annotate(search=SearchVector(
-                'name', 'Type_product', 'brand')).filter(
-                search=SearchQuery(query)).prefetch_related(
-                models.Prefetch(
-                    'images',
-                    queryset=Gallery.objects.filter(main=True),
-                    to_attr='main_images'))
-    else:
-        results = Product.objects.none()
-    return render(request, 'search.html', {'form': form, 'results': results, 'query': query})
+            # Используем триграммы для нечеткого поиска
+            products = base_query.annotate(
+                similarity=TrigramSimilarity('name', query) + TrigramSimilarity('articul', query) * 0.8 + TrigramSimilarity('brand__name', query) * 0.7
+            ).filter(
+                Q(similarity__gt=0.1)
+                | Q(name__icontains=query)
+                | Q(articul__icontains=query)
+                | Q(code__icontains=query)
+                | Q(brand__name__icontains=query)
+                | Q(Type_product__name__icontains=query)
+                | Q(Appointment__name__icontains=query)
+            ).order_by('-similarity')
+        else:
+            products = base_query.all()
+
+        # Динамические фильтры из GET параметров
+        filter_mapping = {
+            'brand': 'brand__id__in',
+            'appointment': 'Appointment__id__in',
+            'male': 'Male__id__in',
+            'color': 'Color__id__in',
+            'class_compress': 'Class_compress__id__in',
+            'sock': 'Sock__id__in',
+            'type_product': 'Type_product__id__in',
+            'size': 'Size__id__in',
+            'model_type': 'Model_type__id__in',
+            'wide_hips': 'Wide_hips__id__in',
+            'side': 'Side__id__in',
+            'price_min': 'price__gte',
+            'price_max': 'price__lte',
+        }
+
+        for param, filter_field in filter_mapping.items():
+            value = request.GET.get(param)
+            if value:
+                if param in ['price_min', 'price_max']:
+                    products = products.filter(**{filter_field: value})
+                else:
+                    # Для множественного выбора (через запятую)
+                    ids = [int(x) for x in value.split(',') if x.isdigit()]
+                    if ids:
+                        products = products.filter(**{filter_field: ids})
+                        filters[param] = ids
+
+        # Сортировка
+        sort_options = {
+            'price_asc': 'price',
+            'price_desc': '-price',
+            'name_asc': 'name',
+            'name_desc': '-name',
+            'popular': '-code',  # или другое поле для популярности
+            'new': '-id',
+        }
+        sort_by = request.GET.get('sort', 'new')
+        products = products.order_by(sort_options.get(sort_by, '-id'))
+
+        results = products
+
+    # Получаем доступные значения для фильтров
+    filter_context = {
+        'brands': Brend.objects.all(),
+        'appointments': Appointment.objects.all(),
+        'males': Male.objects.all(),
+        'colors': Color.objects.all(),
+        'class_compresses': Class_compress.objects.all(),
+        'socks': Soсk.objects.all(),
+        'type_products': Type_product.objects.all(),
+        'sizes': Size.objects.all(),
+        'model_types': Model_type.objects.all(),
+        'wide_hips_list': Wide_hips.objects.all(),
+        'sides': Side.objects.all(),
+    }
+
+    return render(request, 'search.html', {
+        'form': form,
+        'results': results,
+        'query': query,
+        'filters': filters,
+        **filter_context
+    })
+
+
+@require_GET
+def autocomplete(request):
+    """
+    AJAX-функция для автодополнения.
+    Возвращает JSON с подсказками, не HTML страницу.
+    """
+    term = request.GET.get('term', '').strip()
+
+    # Если меньше 2 символов - не ищем
+    if len(term) < 2:
+        return JsonResponse({'suggestions': []})
+
+    try:
+        # Упрощенный поиск для автодополнения (быстрый)
+        products = Product.objects.filter(
+            Q(name__icontains=term)
+            | Q(articul__icontains=term)
+        ).select_related('brand').prefetch_related(
+            models.Prefetch(
+                'images',
+                queryset=Gallery.objects.filter(main=True),
+                to_attr='main_images'
+            ))[:10]  # Только 10 результатов для скорости
+
+        suggestions = []
+        for product in products:
+            main_image = ''
+            if hasattr(product, 'main_images') and product.main_images:
+                main_image = product.main_images[0].image.url
+            suggestions.append({
+                'id': product.id,
+                'name': product.name,
+                'brand': product.brand.name,
+                'articul': product.articul,
+                'price': str(product.price),
+                'url': product.get_absolute_url(),
+                'image': main_image,
+            })
+        return JsonResponse({'suggestions': suggestions})
+
+    except Exception as e:
+        # В случае ошибки возвращаем пустой список
+        return JsonResponse({'suggestions': [], 'error': str(e)})
 
 
 def detail_view(request, pk):
@@ -67,8 +237,6 @@ def add_comment(request, post_id):
         comment.author = request.user
         comment.post = post
         comment.save()
-    # return redirect('homepage:detail', pk=post_id)
-    # Возвращаем на главную с параметром, какой блок открыть
     return redirect(f'{reverse("homepage:homepage")}?open_comments={post_id}')
 
 

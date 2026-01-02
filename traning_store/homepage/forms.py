@@ -15,7 +15,28 @@ class CommentForm(forms.ModelForm):
 
 
 class SearchForm(forms.Form):
-    query = forms.CharField(label='Поиск', max_length=100)
+    query = forms.CharField(
+        label='Поиск',
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Название, артикул или бренд...',
+            'class': 'form-control',
+            'id': 'search-input',  # ← ВАЖНО: добавляем этот ID
+            'autocomplete': 'off',  # ← Отключаем автодополнение браузера
+        })
+    )
+
+
+class AutocompleteForm(forms.Form):
+    term = forms.CharField(
+        max_length=50,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'id': 'autocomplete-input',
+            'autocomplete': 'off'
+        })
+    )
 
 
 class SizeFinderForm(forms.Form):

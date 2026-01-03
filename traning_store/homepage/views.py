@@ -5,7 +5,7 @@ from catalog.models import (Appointment, Brend, Class_compress, Color, Gallery,
                             Soсk, Type_product, Wide_hips)
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import TrigramSimilarity
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
 from django.db.models import Count, Prefetch, Q
 # views.py - AJAX view для автодополнения

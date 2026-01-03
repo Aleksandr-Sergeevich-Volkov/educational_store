@@ -258,7 +258,6 @@ def edit_comment(request, post_id, comment_id):
         if form.is_valid():
             form.save()
         return redirect(f'{reverse("homepage:homepage")}?open_comments={post_id}')
-        # return redirect('homepage:detail', pk=post_id)
     return render(request, 'blog/comment.html', context)
 
 

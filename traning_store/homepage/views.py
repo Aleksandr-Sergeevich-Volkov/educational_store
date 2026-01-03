@@ -5,7 +5,7 @@ from catalog.models import (Appointment, Brend, Class_compress, Color, Gallery,
                             Soсk, Type_product, Wide_hips)
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import TrigramSimilarity
-# from django.contrib.postgres.search import SearchQuery, SearchVector
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import models
 from django.db.models import Count, Prefetch, Q
 # views.py - AJAX view для автодополнения
@@ -146,8 +146,18 @@ def search(request):
         }
         sort_by = request.GET.get('sort', 'new')
         products = products.order_by(sort_options.get(sort_by, '-id'))
+        # Пагинация
+        paginator = Paginator(products, 6)  # 6 товара на страницу
 
-        results = products
+        page_number = request.GET.get('page')
+        try:
+            page_obj = paginator.page(page_number)
+        except PageNotAnInteger:
+            page_obj = paginator.page(1)
+        except EmptyPage:
+            page_obj = paginator.page(paginator.num_pages)
+
+        prod_count = paginator.count
 
     # Получаем доступные значения для фильтров
     filter_context = {
@@ -168,7 +178,10 @@ def search(request):
         'form': form,
         'results': results,
         'query': query,
+        'page_obj': page_obj,
+        'prod_count': prod_count,
         'filters': filters,
+        'per_page': int(request.GET.get('per_page', 24)),
         **filter_context
     })
 

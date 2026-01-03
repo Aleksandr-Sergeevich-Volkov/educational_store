@@ -1,263 +1,246 @@
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
 {% load static %}
+{% load search_tags %}
 
-{% block title %}Поиск товаров{% endblock %}
+{% block title %}Поиск товаров{% if query %}: "{{ query }}"{% endif %}{% endblock %}
+
+{% block meta_description %}{% if query %}Результаты поиска по запросу "{{ query }}". Найдено {{ prod_count }} товаров.{% else %}Поиск компрессионного трикотажа по названию и артикулу.{% endif %}{% endblock %}
 
 {% block content %}
-<div class="container">
-    <h1>Поиск товаров</h1>
-    
-    <!-- Форма поиска с позиционированием -->
-    <div class="position-relative">  <!-- Добавляем эту обертку -->
-        <form method="get" class="d-flex mb-4">
-            <div class="flex-grow-1 position-relative">  <!-- И эту обертку для поля -->
-                <input type="text" 
-                       name="query" 
-                       class="form-control" 
-                       placeholder="Введите название или артикул..."
-                       value="{{ query|default:'' }}"
-                       id="search-input">
-            </div>
-            <button type="submit" class="btn btn-primary ms-2">Поиск</button>
-        </form>
+<div class="container-fluid">
+    <!-- Заголовок -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h4 mb-3">
+                {% if query %}
+                    Результаты поиска: "{{ query }}"
+                {% else %}
+                    Поиск товаров
+                {% endif %}
+            </h1>
+        </div>
     </div>
-    
-    <!-- Результаты -->
+
+    <!-- Форма поиска -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <form method="get" class="d-flex mb-3">
+                <div class="flex-grow-1 position-relative">
+                    <input type="text" 
+                           name="query" 
+                           class="form-control" 
+                           placeholder="Введите название товара, артикул или бренд..."
+                           value="{{ query|default:'' }}"
+                           autocomplete="off">
+                </div>
+                <button type="submit" class="btn btn-primary ms-2">
+                    <i class="bi bi-search me-1"></i>Найти
+                </button>
+            </form>
+        </div>
+    </div>
+
     {% if query %}
-        {% if results %}
-            <h5>Найдено товаров: {{ results|length }}</h5>
-            <div class="row">
-                {% for product in results %}
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100">
-                        {% if product.main_images %}
+        <!-- Информация о результатах -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="text-muted">
+                        Найдено товаров: {{ prod_count }}
+                    </div>
+                    
+                    {% if prod_count > 0 %}
+                    <!-- Простая сортировка -->
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle" 
+                                type="button" 
+                                data-bs-toggle="dropdown">
+                            Сортировка
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item {% if sort_by == 'relevance' %}active{% endif %}" 
+                                   href="?query={{ query }}&sort=relevance">
+                                    По релевантности
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item {% if sort_by == 'price_asc' %}active{% endif %}" 
+                                   href="?query={{ query }}&sort=price_asc">
+                                    По цене (сначала дешевые)
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item {% if sort_by == 'price_desc' %}active{% endif %}" 
+                                   href="?query={{ query }}&sort=price_desc">
+                                    По цене (сначала дорогие)
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item {% if sort_by == 'name_asc' %}active{% endif %}" 
+                                   href="?query={{ query }}&sort=name_asc">
+                                    По названию (А-Я)
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Результаты поиска -->
+        {% if page_obj and page_obj.object_list %}
+        <div class="row">
+            {% for product in page_obj.object_list %}
+            <div class="col-12 col-sm-6 col-lg-4 col-xl-3 mb-4">
+                <div class="card h-100">
+                    <!-- Изображение -->
+                    <div class="text-center p-3" style="height: 200px;">
+                        <a href="{{ product.get_absolute_url }}">
+                            {% if product.main_images %}
                             <img src="{{ product.main_images.0.image.url }}" 
-                                 class="card-img-top" 
                                  alt="{{ product.name }}"
-                                 style="height: 200px; object-fit: contain;">
+                                 class="img-fluid"
+                                 style="max-height: 180px; width: auto; object-fit: contain;">
+                            {% else %}
+                            <div class="bg-light h-100 d-flex align-items-center justify-content-center">
+                                <span class="text-muted">Нет изображения</span>
+                            </div>
+                            {% endif %}
+                        </a>
+                    </div>
+
+                    <!-- Информация -->
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">
+                            <a href="{{ product.get_absolute_url }}" class="text-decoration-none">
+                                {{ product.name|highlight_safe:query }}
+                            </a>
+                        </h5>
+                        
+                        <div class="mb-2">
+                            {% if product.brand %}
+                            <small class="text-muted">Бренд:</small>
+                            <span class="fw-bold">{{ product.brand.name|highlight_safe:query }}</span>
+                            {% endif %}
+                        </div>
+                        
+                        {% if product.articul %}
+                        <div class="mb-2">
+                            <small class="text-muted">Артикул:</small>
+                            <span class="fw-bold">{{ product.articul|highlight_safe:query }}</span>
+                        </div>
                         {% endif %}
-                        <div class="card-body">
-                            <h5 class="card-title">{{ product.name }}</h5>
-                            <p class="card-text">
-                                <small class="text-muted">
-                                    {{ product.brand.name }} | {{ product.articul }}
-                                </small>
-                            </p>
-                            <p class="card-text">
-                                <strong>{{ product.price }} ₽</strong>
-                            </p>
-                            <a href="{{ product.get_absolute_url }}" class="btn btn-primary">
+                        
+                        <!-- Цена -->
+                        <div class="mt-auto pt-3">
+                            <div class="h5 text-primary mb-0">
+                                {{ product.price }} ₽
+                            </div>
+                            <a href="{{ product.get_absolute_url }}" 
+                               class="btn btn-outline-primary mt-2 w-100">
                                 Подробнее
                             </a>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
             </div>
-        {% else %}
-            <div class="alert alert-info">
-                По запросу "{{ query }}" ничего не найдено.
+            {% endfor %}
+        </div>
+
+        <!-- Пагинация -->
+        {% if page_obj.has_other_pages %}
+        <div class="row mt-4">
+            <div class="col-12">
+                <nav aria-label="Пагинация поиска">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?query={{ query }}&page={{ page_obj.previous_page_number }}{% if sort_by != 'relevance' %}&sort={{ sort_by }}{% endif %}">
+                                &laquo;
+                            </a>
+                        </li>
+                        {% endif %}
+                        
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if num == page_obj.number %}
+                                <li class="page-item active">
+                                    <span class="page-link">{{ num }}</span>
+                                </li>
+                            {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?query={{ query }}&page={{ num }}{% if sort_by != 'relevance' %}&sort={{ sort_by }}{% endif %}">
+                                        {{ num }}
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?query={{ query }}&page={{ page_obj.next_page_number }}{% if sort_by != 'relevance' %}&sort={{ sort_by }}{% endif %}">
+                                &raquo;
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                
+                <!-- Информация о странице -->
+                <div class="text-center text-muted mt-2">
+                    <small>
+                        Показано {{ page_obj.start_index }}–{{ page_obj.end_index }} из {{ prod_count }} товаров
+                    </small>
+                </div>
             </div>
+        </div>
         {% endif %}
+        
+        {% elif query and prod_count == 0 %}
+        <!-- Нет результатов -->
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-info text-center py-5">
+                    <div class="mb-3">
+                        <i class="bi bi-search display-1 text-muted"></i>
+                    </div>
+                    <h5>По запросу "{{ query }}" ничего не найдено</h5>
+                    <p class="mb-0">Попробуйте изменить поисковый запрос</p>
+                    <div class="mt-3">
+                        <a href="{% url 'catalog:catalog' %}" class="btn btn-primary">
+                            <i class="bi bi-grid me-1"></i>Перейти в каталог
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    
+    {% else %}
+    <!-- Страница поиска без запроса -->
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-light text-center py-5">
+                <div class="mb-3">
+                    <i class="bi bi-search display-1 text-muted"></i>
+                </div>
+                <h5>Поиск по каталогу</h5>
+                <p class="mb-3">Введите название товара, артикул или бренд в поле поиска выше</p>
+                
+                <div class="mt-4">
+                    <h6>Примеры поиска:</h6>
+                    <div class="d-flex flex-wrap justify-content-center gap-2 mt-2">
+                        <a href="?query=гольфы" class="btn btn-sm btn-outline-primary">Гольфы</a>
+                        <a href="?query=чулки" class="btn btn-sm btn-outline-primary">Чулки</a>
+                        <a href="?query=колготки" class="btn btn-sm btn-outline-primary">Колготки</a>
+                        <a href="?query=2 класс" class="btn btn-sm btn-outline-primary">2 класс компрессии</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     {% endif %}
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-// Автодополнение
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('search-input');
-    
-    // Создаем контейнер для автодополнения
-    const autocompleteContainer = document.createElement('div');
-    autocompleteContainer.className = 'autocomplete-dropdown';
-    autocompleteContainer.id = 'autocomplete-results';
-    
-    // Вставляем контейнер ПОСЛЕ поля ввода
-    searchInput.parentNode.appendChild(autocompleteContainer);
-    
-    let currentRequest = null;
-    
-    // Функция для позиционирования контейнера
-    function positionAutocomplete() {
-        if (searchInput && autocompleteContainer) {
-            // Получаем размеры и позицию поля ввода
-            const inputRect = searchInput.getBoundingClientRect();
-            
-            // Устанавливаем позицию контейнера
-            autocompleteContainer.style.position = 'absolute';
-            autocompleteContainer.style.top = inputRect.height + 'px';
-            autocompleteContainer.style.left = '0';
-            autocompleteContainer.style.width = inputRect.width + 'px';
-        }
-    }
-    
-    // Позиционируем при загрузке и изменении размера окна
-    positionAutocomplete();
-    window.addEventListener('resize', positionAutocomplete);
-    
-    // Обработчик ввода текста
-    searchInput.addEventListener('input', function() {
-        const query = this.value.trim();
-        
-        // Отменяем предыдущий запрос
-        if (currentRequest) {
-            currentRequest.abort();
-        }
-        
-        // Обновляем позицию (на случай если что-то изменилось)
-        positionAutocomplete();
-        
-        if (query.length >= 2) {
-            // Показываем индикатор загрузки
-            autocompleteContainer.innerHTML = `
-                <div class="autocomplete-loading">
-                    <div class="spinner-border spinner-border-sm me-2" role="status"></div>
-                    Поиск...
-                </div>
-            `;
-            autocompleteContainer.style.display = 'block';
-            
-            // Делаем AJAX запрос
-            currentRequest = new XMLHttpRequest();
-            currentRequest.open('GET', `{% url 'homepage:autocomplete' %}?term=${encodeURIComponent(query)}`);
-            currentRequest.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-            
-            currentRequest.onload = function() {
-                if (currentRequest.status === 200) {
-                    const data = JSON.parse(currentRequest.responseText);
-                    autocompleteContainer.innerHTML = '';
-                    
-                    if (data.suggestions && data.suggestions.length > 0) {
-                        data.suggestions.forEach(item => {
-                            const div = document.createElement('a');
-                            div.href = item.url || '#';
-                            div.className = 'autocomplete-item';
-                            div.innerHTML = `
-                                <div class="autocomplete-item-content">
-                                    <strong>${item.name || ''}</strong>
-                                    ${item.brand ? `<div class="text-muted small">${item.brand}</div>` : ''}
-                                    ${item.price ? `<div class="text-success small">${item.price} ₽</div>` : ''}
-                                </div>
-                            `;
-                            autocompleteContainer.appendChild(div);
-                        });
-                    } else {
-                        autocompleteContainer.innerHTML = `
-                            <div class="autocomplete-no-results">
-                                <i class="bi bi-search me-2"></i>
-                                Ничего не найдено
-                            </div>
-                        `;
-                    }
-                    autocompleteContainer.style.display = 'block';
-                }
-            };
-            
-            currentRequest.onerror = function() {
-                autocompleteContainer.innerHTML = `
-                    <div class="autocomplete-error">
-                        <i class="bi bi-exclamation-triangle me-2"></i>
-                        Ошибка соединения
-                    </div>
-                `;
-            };
-            
-            currentRequest.send();
-        } else {
-            autocompleteContainer.style.display = 'none';
-        }
-    });
-    
-    // Скрыть при клике вне
-    document.addEventListener('click', function(e) {
-        if (!autocompleteContainer.contains(e.target) && e.target !== searchInput) {
-            autocompleteContainer.style.display = 'none';
-        }
-    });
-    
-    // Показать при фокусе на поле (если есть результаты)
-    searchInput.addEventListener('focus', function() {
-        if (autocompleteContainer.children.length > 0) {
-            autocompleteContainer.style.display = 'block';
-        }
-    });
-    
-    // Скрыть при потере фокуса
-    searchInput.addEventListener('blur', function() {
-        // Небольшая задержка, чтобы можно было кликнуть на элемент автодополнения
-        setTimeout(() => {
-            autocompleteContainer.style.display = 'none';
-        }, 200);
-    });
-});
-</script>
-
-<style>
-/* Контейнер для автодополнения */
-.autocomplete-dropdown {
-    display: none;
-    background: white;
-    border: 1px solid #ced4da;
-    border-top: none;
-    border-radius: 0 0 0.375rem 0.375rem;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    max-height: 350px;
-    overflow-y: auto;
-    z-index: 1000;
-}
-
-/* Элементы автодополнения */
-.autocomplete-item {
-    display: block;
-    padding: 10px 15px;
-    text-decoration: none;
-    color: #212529;
-    border-bottom: 1px solid #f8f9fa;
-    transition: background-color 0.15s;
-}
-
-.autocomplete-item:hover {
-    background-color: #f8f9fa;
-    text-decoration: none;
-}
-
-.autocomplete-item:last-child {
-    border-bottom: none;
-}
-
-.autocomplete-item-content {
-    display: flex;
-    flex-direction: column;
-}
-
-/* Состояния */
-.autocomplete-loading,
-.autocomplete-no-results,
-.autocomplete-error {
-    padding: 15px;
-    text-align: center;
-    color: #6c757d;
-    font-style: italic;
-}
-
-.autocomplete-error {
-    color: #dc3545;
-}
-
-/* Убедимся, что поле ввода имеет правильные стили */
-#search-input {
-    position: relative;
-    z-index: 1;
-}
-
-/* Для мобильных устройств */
-@media (max-width: 768px) {
-    .autocomplete-dropdown {
-        max-height: 250px;
-    }
-}
-</style>
 {% endblock %}

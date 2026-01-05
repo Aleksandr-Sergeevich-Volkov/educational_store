@@ -1,12 +1,12 @@
 User-agent: *
-Disallow: /cart/           # Корзина
-Disallow: /search/         # Поиск
-Disallow: /admin/          # Админка
-Disallow: /order/          # Страницы заказов
-Allow: /catalog/           # Явно разрешаем каталог
+Disallow: /cart/
+Disallow: /search/
+Disallow: /admin/
+Disallow: /order/
+Allow: /catalog/
+
+# Директива Clean-param для Яндекса
+Clean-param: ref /cart/delivery/
+Clean-param: utm_source|utm_medium|utm_campaign|utm_content|utm_term /
 
 Sitemap: https://kompressionnye-chulki24.ru/sitemap.xml
-
-# Убираем параметры из URL для избежания дублей
-Clean-param: ref /cart/delivery/
-Clean-param: utm_source & utm_medium & utm_campaign /

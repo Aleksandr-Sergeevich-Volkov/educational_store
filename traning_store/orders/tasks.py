@@ -65,9 +65,9 @@ def order_created(order_id):
 ----------------------------------------
 Номер заказа: {order.id}
 Дата заказа: {order.created.strftime('%d.%m.%Y H:%M')}
-Сумма товаров: {order.get_total_cost()} руб.
+Сумма товаров: {float(order.get_total_cost() - order.delivery_sum)} руб.
 Доставка: {order.delivery_sum} руб.
-Общая сумма: {float(order.get_total_cost()) + float(order.delivery_sum)} руб.
+Общая сумма: {float(order.get_total_cost())} руб.
 Адрес пункта выдачи: {order.address_pvz}
 Статус оплаты: {"Оплачен" if order.paid else "Ожидает оплаты"}
 ----------------------------------------

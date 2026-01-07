@@ -40,9 +40,22 @@
     <div class="col-md-4 mb-2 mb-md-0">
         <a href="catalog/" class="btn btn-primary w-100">Каталог всех товаров</a>
     </div>
-    <div class="col-md-4 mb-2 mb-md-0">
-        <a href="{% url 'homepage:search' %}" class="btn btn-primary w-100">Поиск товаров</a>
+<div class="col-md-4 mb-2 mb-md-0">
+    <div class="d-flex gap-1">
+        <a href="{% url 'homepage:search' %}?query=чулки" 
+           class="btn btn-primary flex-fill">
+            👢 Чулки
+        </a>
+        <a href="{% url 'homepage:search' %}?query=гольфы" 
+           class="btn btn-primary flex-fill">
+            🧦 Гольфы
+        </a>
+        <a href="{% url 'homepage:search' %}?query=колготки" 
+           class="btn btn-primary flex-fill">
+            👖 Колготки
+        </a>
     </div>
+</div>
     <div class="col-md-4">
         <a href="size_finder/" class="btn btn-primary w-100">Подбор размера</a>
     </div>
@@ -60,7 +73,7 @@
                      style="max-width: 100%; height: auto;">
             </div>
             <div>
-                <b><i>Всего товаров в нашем магазине: {{prod_count.id__count}}</b></i>
+                <a href="catalog/">Всего товаров в нашем магазине: {{prod_count.id__count}}</a>
             </div>
         </div>
     </div>
@@ -71,7 +84,6 @@
         <h6 class="mb-3 text-primary">
             <i class="bi bi-star-fill me-1"></i>Популярные товары
         </h6>
-        
         <div class="d-flex flex-column gap-3">
             {% for prod in random_products %}
             <a href="{% url 'catalog:detail' prod.slug %}" 
@@ -85,21 +97,13 @@
                 <div class="flex-grow-1 text-start">
                     <div class="fw-medium text-dark mb-1" style="font-size: 0.9rem; line-height: 1.2;">
                         {{ prod.name|truncatechars:40 }}
-                    </div>
-                    
+                    </div>                    
                     <!-- Добавлен артикул -->
-                    {% if prod.articul %}
+                    {% if prod.articul and prod.brand%}
                     <div class="text-muted small mb-1">
-                        <i class="bi bi-upc-scan me-1"></i>Арт: {{ prod.articul }}
+                        <i class="bi bi-upc-scan me-1"></i>{{ prod.brand.name }} Арт: {{ prod.articul }}
                     </div>
-                    {% endif %}
-                    
-                    {% if prod.brand %}
-                    <div class="text-muted small mb-1">
-                        <i class="bi bi-tag me-1"></i>{{ prod.brand.name }}
-                    </div>
-                    {% endif %}
-                    
+                    {% endif %} 
                     <div class="text-success fw-bold">{{ prod.price }} ₽</div>
                 </div>
             </a>

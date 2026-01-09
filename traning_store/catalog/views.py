@@ -147,6 +147,13 @@ class ProductDetailView(DetailView):
     template_name = 'product_detail.html'
     slug_url_kwarg = 'slug'
 
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        # Увеличиваем счетчик просмотров
+        obj.views += 1
+        obj.save(update_fields=['views'])
+        return obj
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Добавляем в словарь новый ключ:

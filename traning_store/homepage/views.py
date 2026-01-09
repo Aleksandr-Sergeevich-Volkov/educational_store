@@ -1,5 +1,3 @@
-import random
-
 from catalog.models import (Appointment, Brend, Class_compress, Color, Gallery,
                             Male, Model_type, Product, Side, Size, SizeDetail,
                             Soсk, Type_product, Wide_hips)
@@ -38,23 +36,15 @@ class HomePage(TemplateView):
         # Счетчик товаров
         context['prod_count'] = Product.objects.aggregate(Count('id'))
 
-        # Рандомные товары
-        product_count = context['prod_count']['id__count']
-        if product_count > 0:
-            # Генерируем случайные ID
-            all_ids = list(Product.objects.values_list('id', flat=True))
-            random_ids = random.sample(all_ids, min(3, len(all_ids)))
-            context['random_products'] = Product.objects.filter(
-                id__in=random_ids
-            ).prefetch_related(
-                models.Prefetch(
-                    'images',
-                    queryset=Gallery.objects.filter(main=True),
-                    to_attr='main_images'
-                )
-            )
+        # Самые просматриваемые товары
+        # Проверяем наличие товаров в базе
+        if Product.objects.exists():
+            context['popular_products'] = Product.objects.order_by('-views')[:3].prefetch_related(
+                models.Prefetch('images',
+                                queryset=Gallery.objects.filter(main=True),
+                                to_attr='main_images'))
         else:
-            context['random_products'] = Product.objects.none()
+            context['popular_products'] = Product.objects.none()
 
         # Добавляем популярные категории для главной
         from catalog.models import Type_product  # Импорт в методе

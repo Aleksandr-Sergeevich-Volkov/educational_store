@@ -302,6 +302,7 @@ class Product(models.Model):
     # ДОБАВИТЬ эти SEO-поля:
     seo_h1 = models.CharField('H1 заголовок', max_length=255, blank=True)
     seo_keywords = models.TextField('Ключевые слова', blank=True)
+    views = models.PositiveIntegerField(default=0, verbose_name='Количество просмотров')
 
     # УЛУЧШИТЬ метод save():
     def save(self, *args, **kwargs):

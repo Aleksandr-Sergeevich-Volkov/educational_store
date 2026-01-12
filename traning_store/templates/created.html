@@ -1,12 +1,84 @@
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
 
-{% block title %}Спасибо{% endblock %}
+{% block title %}Спасибо за заказ{% endblock %}
 
 {% block content %}
-    <h1>Спасибо</h1>
-    <p>Ваш заказ успешно сформирован. Номер заказа 
-        <strong>{{ order.id }}</strong>.</p>
-        <a href= {{pay_link}} class="btn btn-primary">Оплата заказа</a>    
-        <a href="{% url "catalog:catalog" %}" class="btn btn-primary">Продолжить покупки</a>    
+<div class="container min-vh-50 d-flex align-items-center py-5">
+    <div class="row justify-content-center w-100">
+        <div class="col-md-8 col-lg-6">
+            <div class="text-center">
+                <!-- Иконка -->
+                <div class="mb-4">
+                    <span class="display-1 text-success">✓</span>
+                </div>
+                
+                <!-- Заголовок -->
+                <h1 class="display-6 fw-bold mb-3">Спасибо за покупку!</h1>
+                
+                <!-- Сообщение -->
+                <p class="lead text-muted mb-4">
+                    Ваш заказ <span class="fw-bold text-dark">№{{ order.id }}</span> успешно оформлен.
+                    Детали заказа отправлены на вашу почту.
+                </p>
+                
+                <!-- Прогресс заказа -->
+                <div class="progress-steps mb-5" style="max-width: 400px; margin: 0 auto;">
+                    <div class="d-flex justify-content-between position-relative">
+                        <div class="step completed text-center">
+                            <div class="step-circle bg-success text-white rounded-circle mx-auto mb-2" 
+                                 style="width: 40px; height: 40px; line-height: 40px;">1</div>
+                            <small class="text-muted">Оформление</small>
+                        </div>
+                        <div class="step active text-center">
+                            <div class="step-circle bg-primary text-white rounded-circle mx-auto mb-2" 
+                                 style="width: 40px; height: 40px; line-height: 40px;">2</div>
+                            <small>Оплата</small>
+                        </div>
+                        <div class="step text-center">
+                            <div class="step-circle bg-light border text-muted rounded-circle mx-auto mb-2" 
+                                 style="width: 40px; height: 40px; line-height: 40px;">3</div>
+                            <small class="text-muted">Доставка</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Кнопки -->
+                <div class="d-grid gap-3">
+                    <a href="{{ pay_link }}" class="btn btn-primary btn-lg fw-bold shadow">
+                        Перейти к оплате
+                    </a>
+                    <a href="{% url 'catalog:catalog' %}" class="btn btn-light btn-lg">
+                        Вернуться в каталог
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.progress-steps .step-circle {
+    transition: all 0.3s ease;
+}
+
+.progress-steps .step.completed .step-circle {
+    background-color: #198754 !important;
+}
+
+.progress-steps .step.active .step-circle {
+    box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.2);
+}
+
+.progress-steps::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    height: 2px;
+    background: #e9ecef;
+    z-index: -1;
+}
+</style>
 {% endblock %}

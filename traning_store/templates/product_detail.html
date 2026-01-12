@@ -65,7 +65,7 @@
                                     <div class="d-flex align-items-center">
                                         <span class="h2 text-primary mb-0">
                                             ₽{{ product.price }}
-                                            <meta itemprop="price" content="{{ product.price }}">
+                                            <meta itemprop="price" content="{{ product.price|floatformat:'2u' }}">
                                             <meta itemprop="priceCurrency" content="RUB">
                                         </span>
                                         <meta itemprop="availability" href="http://schema.org/InStock">

@@ -15,6 +15,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <script type="text/javascript">
         (function(m,e,t,r,i,k,a){
@@ -39,7 +40,49 @@
                         </a>
                     </div>
                 </div>
-                
+                <!-- Замените ваш текущий блок геолокации на этот упрощенный -->
+<div class="col-md-6 text-center">
+    <div class="city-selector">
+        {% if current_city %}
+            <div class="d-flex align-items-center justify-content-center">
+                <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                <strong>{{ current_city.name }}</strong>
+                <div class="dropdown ms-2">
+                    <button class="btn btn-sm btn-link p-0" type="button" 
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-chevron-down text-muted"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        {% for city in popular_cities %}
+                            <li>
+                                <a class="dropdown-item city-change-link" 
+   href="{% url 'homepage:homepage' %}?city_id={{ city.id }}&change_city=1"
+   data-city-id="{{ city.id }}">
+                                    {{ city.name }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% else %}
+            <button class="btn btn-sm btn-outline-primary" 
+                    onclick="detectCity()">
+                <i class="fas fa-location-arrow me-1"></i>
+                Определить город
+            </button>
+        {% endif %}
+    </div>
+</div>
+<div style="position: fixed; bottom: 10px; right: 10px; background: white; padding: 10px; border: 1px solid #ccc; z-index: 9999; font-size: 12px;">
+    <strong>Отладка города:</strong><br>
+    Session city_id: {{ request.session.current_city_id|default:"нет" }}<br>
+    Current city: {{ current_city.name|default:"не определен" }}<br>
+    IP клиента: {{ request.META.REMOTE_ADDR }}<br>
+    <button onclick="fetch('{% url "homepage:detect_city" %}', {method: 'POST', headers: {'X-CSRFToken': '{{ csrf_token }}'}}).then(r => location.reload())">
+        Определить город
+    </button>
+</div>
                 <!-- Правая часть: пользователь, корзина, валюта -->
                 <div class="col-md-6">
                     <div class="d-flex align-items-center justify-content-end">
@@ -215,5 +258,169 @@ $(document).ready(function() {
 }
 </style>
 {% endblock %}
+<!-- Модальное окно выбора города -->
+<div class="modal fade" id="cityModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Выберите ваш город</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Быстрый поиск -->
+                <div class="mb-3">
+                    <input type="text" 
+                           class="form-control" 
+                           id="citySearch" 
+                           placeholder="Начните вводить название города...">
+                </div>
+                
+                <!-- Популярные города -->
+                <h6 class="text-muted mb-2">Популярные города:</h6>
+                <div class="row g-2 mb-3" id="popularCities">
+                    {% for city in popular_cities %}
+                        <div class="col-6">
+                            <a href="?city_id={{ city.id }}&change_city=1" 
+                               class="btn btn-outline-primary w-100 text-start">
+                                {{ city.name }}
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Все города (скрыто по умолчанию) -->
+                <div id="allCities" style="display: none;">
+                    <h6 class="text-muted mb-2">Все города:</h6>
+                    <div class="list-group" id="citiesList">
+                        <!-- Динамически загружается через AJAX -->
+                    </div>
+                </div>
+                
+                <!-- Автоопределение -->
+                <div class="text-center mt-3">
+                    <button class="btn btn-link" onclick="detectCity()">
+                        <i class="fas fa-location-arrow me-1"></i>
+                        Определить автоматически
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Функция определения города
+function detectCity() {
+    fetch('{% url "homepage:detect_city" %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Показываем уведомление
+            showNotification('Город определен: ' + data.city, 'success');
+            // Перезагружаем страницу через 1 секунду
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showNotification('Не удалось определить город', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Ошибка при определении города', 'error');
+    });
+}
+
+// Функция для уведомлений
+function showNotification(message, type) {
+    // Создаем элемент уведомления
+    const notification = document.createElement('div');
+    notification.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible fade show`;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        min-width: 300px;
+    `;
+    notification.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Автоматически скрываем через 3 секунды
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.remove();
+        }
+    }, 3000);
+}
+
+// Вспомогательная функция для получения CSRF токена
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Обработка смены города из dropdown
+document.addEventListener('DOMContentLoaded', function() {
+    // Добавляем индикатор загрузки при клике на смену города
+    document.querySelectorAll('.city-selector a[href*="city_id"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            // Можно добавить спиннер загрузки
+            const originalText = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Загрузка...';
+            
+            // Восстанавливаем текст через 2 секунды (на случай если редирект не сработал)
+            setTimeout(() => {
+                this.innerHTML = originalText;
+            }, 2000);
+        });
+    });
+});
+</script>
+
+<style>
+.city-selector {
+    position: relative;
+}
+
+.city-selector .dropdown-menu {
+    min-width: 200px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.city-selector .dropdown-item.active {
+    background-color: #0d6efd;
+    color: white;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .city-selector {
+        font-size: 0.9rem;
+    }
+    
+    .city-selector i {
+        font-size: 0.8rem;
+    }
+}
+</style>
 </body>
 </html>

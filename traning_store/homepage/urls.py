@@ -7,6 +7,8 @@ app_name = 'homepage'
 
 urlpatterns = [
     path('', views.HomePage.as_view(), name='homepage'),
+    path('detect-city/', views.detect_city, name='detect_city'),
+    path('search-city/', views.search_city, name='search_city'),
     path('<int:pk>/', views.detail_view, name='detail'),
     path('<int:post_id>/comment/',
          views.add_comment, name='add_comment'),

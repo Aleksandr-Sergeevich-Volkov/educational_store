@@ -11,33 +11,93 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.defaulttags import register
 from django.urls import reverse
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_POST
 from django.views.generic import TemplateView
 
 from .forms import (CommentForm, SearchForm, SizeFinderForm,
                     SmartMeasurementForm)
-from .models import Comment, Post
+from .models import City, Comment, Post
 
 
 class HomePage(TemplateView):
     template_name = 'index.html'
 
+    def get(self, request, *args, **kwargs):
+        """
+        Обрабатывает GET запрос, включая смену города
+        """
+        # Проверяем параметры смены города
+        city_id = request.GET.get('city_id')
+        change_city = request.GET.get('change_city')
+
+        if city_id and change_city:
+            try:
+                from .models import City
+                city = City.objects.get(id=city_id)
+                # Сохраняем в сессии
+                request.session['current_city_id'] = city.id
+                request.session.modified = True
+
+                # Редирект на ту же страницу без параметров
+                from django.shortcuts import redirect
+                return redirect('homepage:homepage')
+
+            except City.DoesNotExist:
+                pass  # Город не найден, продолжаем как обычно
+
+        # Если не было смены города, вызываем стандартный обработчик
+        return super().get(request, *args, **kwargs)
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
 
-        # Добавляем форму поиска в контекст
+        # Ваш существующий код получения города...
+        from .models import City
+
+        city_id = self.request.session.get('current_city_id')
+        current_city = None
+
+        if city_id:
+            try:
+                current_city = City.objects.get(id=city_id)
+            except City.DoesNotExist:
+                pass
+
+        if not current_city:
+            try:
+                from .services.geo import SimpleGeolocation
+                ip = SimpleGeolocation.get_client_ip(self.request)
+                city_name, region_name = SimpleGeolocation.get_city_by_ip(ip)
+
+                if city_name:
+                    from django.db.models import Q
+                    current_city = City.objects.filter(
+                        Q(name__iexact=city_name)
+                        | Q(region__icontains=region_name)
+                    ).first()
+
+                    if current_city:
+                        self.request.session['current_city_id'] = current_city.id
+            except City.DoesNotExist:
+                pass
+
+        if not current_city:
+            current_city = City.objects.filter(is_default=True).first()
+            if current_city:
+                self.request.session['current_city_id'] = current_city.id
+
+        context['current_city'] = current_city
+        context['popular_cities'] = City.objects.filter(is_popular=True)[:10]
+
+        # 3. Остальной ваш код...
         context['search_form'] = SearchForm()
 
-        # Блог посты
         context['text'] = Post.objects.all().annotate(
             comment_count=models.Count('comments')
         ).order_by('id')
 
-        # Счетчик товаров
         context['prod_count'] = Product.objects.aggregate(Count('id'))
 
-        # Самые просматриваемые товары
-        # Проверяем наличие товаров в базе
         if Product.objects.exists():
             context['popular_products'] = Product.objects.order_by('-views')[:3].prefetch_related(
                 models.Prefetch('images',
@@ -46,12 +106,8 @@ class HomePage(TemplateView):
         else:
             context['popular_products'] = Product.objects.none()
 
-        # Добавляем популярные категории для главной
-        from catalog.models import Type_product  # Импорт в методе
+        from catalog.models import Brend, Type_product
         context['popular_categories'] = Type_product.objects.all()[:4]
-
-        # Добавляем бренды для подсказок
-        from catalog.models import Brend
         context['popular_brands'] = Brend.objects.all()[:5]
 
         return context
@@ -367,3 +423,66 @@ def is_size_match(size_detail, measurements):
         if not size_detail.is_measurement_in_range(field_name, user_value):
             return False
     return True
+
+
+@require_POST
+def detect_city(request):
+    """Определение города по IP"""
+    try:
+        from django.db.models import Q
+
+        from .models import City
+        from .services.geo import SimpleGeolocation
+
+        ip = SimpleGeolocation.get_client_ip(request)
+        print(f"Определение города для IP: {ip}")  # Для логов
+
+        city_name, region_name = SimpleGeolocation.get_city_by_ip(ip)
+
+        if city_name:
+            # Ищем город в базе
+            city = City.objects.filter(
+                Q(name__iexact=city_name)
+                | Q(region__icontains=region_name)
+            ).first()
+
+            if city:
+                request.session['current_city_id'] = city.id
+                return JsonResponse({
+                    'success': True,
+                    'city': city.name,
+                    'message': f'Город определен: {city.name}'
+                })
+            else:
+                # Город найден API, но нет в нашей базе
+                return JsonResponse({
+                    'success': False,
+                    'message': f'Город {city_name} не найден в нашей базе'
+                })
+        else:
+            # API не смог определить город
+            return JsonResponse({
+                'success': False,
+                'message': 'Не удалось определить город по IP'
+            })
+
+    except Exception as e:
+        print(f"Ошибка при определении города: {e}")
+        return JsonResponse({
+            'success': False,
+            'message': f'Ошибка сервера: {str(e)}'
+        })
+
+
+def search_city(request):
+    """Поиск городов по названию"""
+    query = request.GET.get('q', '')
+    cities = []
+
+    if len(query) >= 2:
+        cities = City.objects.filter(
+            Q(name__icontains=query)
+            | Q(region__icontains=query)
+        ).values('id', 'name', 'region')[:20]
+
+    return JsonResponse(list(cities), safe=False)

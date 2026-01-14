@@ -1,0 +1,78 @@
+<div class="city-selector">
+    <div class="current-city">
+        {% if current_city %}
+            <i class="fas fa-map-marker-alt"></i>
+            <span class="city-name">{{ current_city.name }}</span>
+            <a href="#" class="change-city-trigger" title="Сменить город">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        {% else %}
+            <a href="#" class="detect-city-trigger">
+                <i class="fas fa-location-arrow"></i>
+                Определить город
+            </a>
+        {% endif %}
+    </div>
+    
+    <div class="city-dropdown">
+        <div class="city-dropdown-content">
+            <div class="popular-cities">
+                <h4>Популярные города:</h4>
+                {% for city in popular_cities %}
+                    <a href="?city_id={{ city.id }}&change_city=1" 
+                       class="city-link {% if city.id == current_city.id %}active{% endif %}">
+                        {{ city.name }}
+                    </a>
+                {% endfor %}
+            </div>
+            
+            {% if request.user.is_staff %}
+            <div class="all-cities">
+                <h4>Все города:</h4>
+                <input type="text" class="city-search" placeholder="Поиск города...">
+                <div class="search-results"></div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.city-selector {
+    position: relative;
+    display: inline-block;
+}
+
+.city-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    z-index: 1000;
+    min-width: 200px;
+}
+
+.city-selector:hover .city-dropdown {
+    display: block;
+}
+
+.city-dropdown-content {
+    padding: 10px;
+}
+
+.city-link {
+    display: block;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #333;
+}
+
+.city-link:hover,
+.city-link.active {
+    background: #f5f5f5;
+    color: #007bff;
+}
+</style>

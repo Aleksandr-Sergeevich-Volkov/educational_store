@@ -1,7 +1,7 @@
 from catalog.models import Brend, SizeDetail
 from django import forms
 
-from .models import Comment
+from .models import City, Comment
 
 
 class CommentForm(forms.ModelForm):
@@ -95,3 +95,15 @@ class SmartMeasurementForm(forms.Form):
                         'placeholder': 'Введите см'
                     })
                 )
+
+
+class CitySelectForm(forms.Form):
+    """Простая форма для выбора города"""
+    city = forms.ModelChoiceField(
+        queryset=City.objects.filter(is_active=True).order_by('name'),
+        empty_label="Выберите город",
+        widget=forms.Select(attrs={
+            'class': 'city-select',
+            'onchange': 'this.form.submit()'
+        })
+    )

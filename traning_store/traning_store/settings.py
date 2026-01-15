@@ -183,17 +183,13 @@ ROBOKASSA_TEST_MODE = True
 ROBOKASSA_PASSWORD_U1 = os.getenv('ROBOKASSA_PASSWORD_U1')
 ROBOKASSA_PASSWORD_U2 = os.getenv('ROBOKASSA_PASSWORD_U2')
 
-# Кэширование для геолокации
+# Для начала используйте простой кэш в памяти
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/0',
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        }
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
     }
 }
 
 # Время кэширования геолокации (секунды)
 GEOLOCATION_CACHE_TIMEOUT = 86400  # 24 часа
-

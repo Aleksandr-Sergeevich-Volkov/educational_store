@@ -96,5 +96,4 @@ class SimpleGeolocation:
             ip = x_forwarded_for.split(',')[0].strip()
         else:
             ip = request.META.get('REMOTE_ADDR')
-
         return ip

@@ -132,7 +132,6 @@ def search(request):
                 to_attr='main_images'
             )
         )
-
         if query:
             # Используем триграммы для нечеткого поиска
             products = base_query.annotate(

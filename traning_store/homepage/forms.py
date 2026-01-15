@@ -98,7 +98,6 @@ class SmartMeasurementForm(forms.Form):
 
 
 class CitySelectForm(forms.Form):
-    """Простая форма для выбора города"""
     city = forms.ModelChoiceField(
         queryset=City.objects.filter(is_active=True).order_by('name'),
         empty_label="Выберите город",

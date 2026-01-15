@@ -119,7 +119,6 @@ def search(request):
 
     if form.is_valid():
         query = form.cleaned_data['query']
-
         # Базовый запрос с предзагрузкой
         base_query = Product.objects.select_related(
             'brand', 'Appointment', 'Male', 'Class_compress',

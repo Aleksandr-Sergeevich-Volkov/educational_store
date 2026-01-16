@@ -74,15 +74,6 @@
         {% endif %}
     </div>
 </div>
-<div style="position: fixed; bottom: 10px; right: 10px; background: white; padding: 10px; border: 1px solid #ccc; z-index: 9999; font-size: 12px;">
-    <strong>Отладка города:</strong><br>
-    Session city_id: {{ request.session.current_city_id|default:"нет" }}<br>
-    Current city: {{ current_city.name|default:"не определен" }}<br>
-    IP клиента: {{ request.META.REMOTE_ADDR }}<br>
-    <button onclick="fetch('{% url "homepage:detect_city" %}', {method: 'POST', headers: {'X-CSRFToken': '{{ csrf_token }}'}}).then(r => location.reload())">
-        Определить город
-    </button>
-</div>
                 <!-- Правая часть: пользователь, корзина, валюта -->
                 <div class="col-md-6">
                     <div class="d-flex align-items-center justify-content-end">

@@ -265,7 +265,6 @@ def autocomplete(request):
                 'image': main_image,
             })
         return JsonResponse({'suggestions': suggestions})
-
     except Exception as e:
         # В случае ошибки возвращаем пустой список
         return JsonResponse({'suggestions': [], 'error': str(e)})

@@ -250,7 +250,6 @@ def autocomplete(request):
                 queryset=Gallery.objects.filter(main=True),
                 to_attr='main_images'
             ))[:10]  # Только 10 результатов для скорости
-
         suggestions = []
         for product in products:
             main_image = ''

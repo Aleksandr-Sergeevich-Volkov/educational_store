@@ -380,7 +380,6 @@ def size_finder(request):
                 request.POST,
                 brand=selected_brand
             )
-
             if measurement_form and measurement_form.is_valid():
                 measurements = measurement_form.cleaned_data
                 results = find_matching_sizes(selected_brand, measurements)

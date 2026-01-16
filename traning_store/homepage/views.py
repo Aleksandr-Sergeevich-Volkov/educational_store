@@ -361,7 +361,6 @@ def get_measurement_fields_config(brand):
             'show_in_results': bool(getattr(sample_size, 'Upper_thigh_circumference', None))
         }
     }
-
     return fields_config
 
 

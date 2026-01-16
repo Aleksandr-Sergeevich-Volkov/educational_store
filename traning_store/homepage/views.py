@@ -235,7 +235,6 @@ def autocomplete(request):
     Возвращает JSON с подсказками, не HTML страницу.
     """
     term = request.GET.get('term', '').strip()
-
     # Если меньше 2 символов - не ищем
     if len(term) < 2:
         return JsonResponse({'suggestions': []})

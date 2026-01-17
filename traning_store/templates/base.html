@@ -74,19 +74,37 @@
         {% endif %}
     </div>
 </div>
-<div style="position: fixed; top: 10px; right: 10px; background: white; padding: 10px; border: 1px solid red; z-index: 9999; font-size: 12px;">
-    <strong>NGINX Debug:</strong><br>
-    X-Real-IP: <span id="real-ip">{{ request.META.HTTP_X_REAL_IP|default:"НЕТ" }}</span><br>
-    X-Forwarded-For: <span id="forwarded-for">{{ request.META.HTTP_X_FORWARDED_FOR|default:"НЕТ" }}</span><br>
+<div style="position: fixed; top: 10px; right: 10px; background: white; padding: 10px; border: 1px solid green; z-index: 9999; font-size: 11px; max-width: 450px;">
+    <strong>🌍 Геолокация (РАБОТАЕТ!):</strong><br>
+    
+    <strong>X-Forwarded-For цепочка:</strong><br>
+    {% with xff=request.META.HTTP_X_FORWARDED_FOR|default:"нет" %}
+        {% if "," in xff %}
+            {% for ip in xff.split %}
+                {% if forloop.first %}
+                    ✅ <span style="color: green;">Реальный IP: {{ ip }}</span><br>
+                {% else %}
+                    🔄 Прокси: {{ ip }}<br>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {{ xff }}<br>
+        {% endif %}
+    {% endwith %}
+    
+    <strong>Текущий город:</strong> {{ current_city.name }}<br>
+    <strong>Регион:</strong> {{ current_city.region }}<br>
+    
+    <hr>
+    <strong>Детали:</strong><br>
+    X-Real-IP: {{ request.META.HTTP_X_REAL_IP|default:"нет" }}<br>
     REMOTE_ADDR: {{ request.META.REMOTE_ADDR }}<br>
-    Все заголовки: 
-    <select onchange="console.log(this.value)">
-        {% for key, value in request.META.items %}
-            {% if 'IP' in key or 'ADDR' in key %}
-                <option>{{ key }}: {{ value }}</option>
-            {% endif %}
-        {% endfor %}
-    </select>
+    
+    <hr>
+    <button onclick="location.reload()">Обновить</button>
+    <button onclick="fetch('{% url "homepage:detect_city" %}', {method: 'POST'}).then(() => location.reload())">
+        Переопределить город
+    </button>
 </div>
                 <!-- Правая часть: пользователь, корзина, валюта -->
                 <div class="col-md-6">

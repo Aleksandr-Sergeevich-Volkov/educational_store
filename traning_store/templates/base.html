@@ -74,14 +74,19 @@
         {% endif %}
     </div>
 </div>
-<div style="position: fixed; bottom: 10px; right: 10px; background: white; padding: 10px; border: 1px solid #ccc; z-index: 9999; font-size: 12px;">
-    <strong>Отладка города:</strong><br>
-    Session city_id: {{ request.session.current_city_id|default:"нет" }}<br>
-    Current city: {{ current_city.name|default:"не определен" }}<br>
-    IP клиента: {{ request.META.REMOTE_ADDR }}<br>
-    <button onclick="fetch('{% url "homepage:detect_city" %}', {method: 'POST', headers: {'X-CSRFToken': '{{ csrf_token }}'}}).then(r => location.reload())">
-        Определить город
-    </button>
+<div style="position: fixed; top: 10px; right: 10px; background: white; padding: 10px; border: 1px solid red; z-index: 9999; font-size: 12px;">
+    <strong>NGINX Debug:</strong><br>
+    X-Real-IP: <span id="real-ip">{{ request.META.HTTP_X_REAL_IP|default:"НЕТ" }}</span><br>
+    X-Forwarded-For: <span id="forwarded-for">{{ request.META.HTTP_X_FORWARDED_FOR|default:"НЕТ" }}</span><br>
+    REMOTE_ADDR: {{ request.META.REMOTE_ADDR }}<br>
+    Все заголовки: 
+    <select onchange="console.log(this.value)">
+        {% for key, value in request.META.items %}
+            {% if 'IP' in key or 'ADDR' in key %}
+                <option>{{ key }}: {{ value }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
 </div>
                 <!-- Правая часть: пользователь, корзина, валюта -->
                 <div class="col-md-6">

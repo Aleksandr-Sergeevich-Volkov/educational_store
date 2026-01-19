@@ -21,14 +21,13 @@ class CityContextMixin:
     cache_timeout = 86400  # 24 часа
 
     def get_city_context(self, request):
-        """
-        Возвращает словарь с контекстом города для шаблона
-        """
+        """Возвращает словарь с контекстом города для шаблона"""
         city = self.get_current_city(request)
 
         return {
             'current_city': city,
             'popular_cities': self.get_popular_cities(),
+            'city_stats': self.get_city_stats(),  # Добавляем статистику
             'nearby_cities': self.get_nearby_cities(city) if city else [],
             'all_cities': self.get_all_cities() if request.user.is_staff else [],
         }
@@ -47,6 +46,8 @@ class CityContextMixin:
             city = self.get_city_by_id(city_id_from_get)
             if city:
                 request.session['current_city_id'] = city.id
+                # УВЕЛИЧИВАЕМ СЧЕТЧИК ПРИ РУЧНОЙ СМЕНЕ ГОРОДА
+                self.increment_city_detection_count(city)
                 return city
 
         # 2. Проверяем сессию
@@ -66,12 +67,18 @@ class CityContextMixin:
         default_city = self.get_default_city()
         if default_city:
             request.session['current_city_id'] = default_city.id
+            # УВЕЛИЧИВАЕМ СЧЕТЧИК ДЛЯ ГОРОДА ПО УМОЛЧАНИЮ
+            self.increment_city_detection_count(default_city)
         return default_city
 
-    def get_city_by_id(self, city_id):
+    def get_city_by_id(self, city_id, increment_count=True):
         """Безопасное получение города по ID"""
         try:
-            return City.objects.get(id=city_id, is_active=True)
+            city = City.objects.get(id=city_id, is_active=True)
+            # Опционально увеличиваем счетчик
+            if increment_count:
+                self.increment_city_detection_count(city)
+            return city
         except (City.DoesNotExist, ValueError):
             return None
 
@@ -190,14 +197,22 @@ class CityContextMixin:
     def increment_city_detection_count(self, city):
         """Увеличивает счетчик определений города"""
         try:
-            city.detection_count = models.F('detection_count') + 1
-            city.save(update_fields=['detection_count'])
+            from django.db.models import F
+            from django.db import transaction
+
+            with transaction.atomic():
+                # Используем update для атомарности
+                City.objects.filter(id=city.id).update(
+                    detection_count=F('detection_count') + 1
+                )
+                # Обновляем объект в памяти
+                city.refresh_from_db(fields=['detection_count'])
+                logger.info(f"Incremented detection count for {city.name}: {city.detection_count}")
+
         except DatabaseError as e:
-            # Ошибка базы данных
             logger.error(f"Database error incrementing detection count for city {city.id}: {e}")
 
         except Exception as e:
-            # Любая другая ошибка
             logger.error(f"Error incrementing detection count for city {city.id}: {e}")
 
     def get_default_city(self):
@@ -215,12 +230,15 @@ class CityContextMixin:
         # Затем просто первый активный
         return City.objects.filter(is_active=True).first()
 
-    def get_popular_cities(self):
+    def get_popular_cities(self, limit=None):
         """Получает список популярных городов"""
+        if limit is None:
+            limit = self.popular_cities_limit
+
+        # Сначала сортируем по счетчику определений, затем по флагу популярности
         return City.objects.filter(
-            is_popular=True,
             is_active=True
-        ).order_by('order')[:self.popular_cities_limit]
+        ).order_by('-detection_count', '-is_popular', 'order')[:limit]
 
     def get_nearby_cities(self, current_city):
         """
@@ -251,3 +269,22 @@ class CityContextMixin:
             request.session.modified = True
             return True
         return False
+
+    def get_city_stats(self):
+        """Получает статистику по городам"""
+        from django.db.models import Sum
+
+        stats = City.objects.aggregate(
+            total_detections=Sum('detection_count'),
+            total_cities=models.Count('id'),
+            active_cities=models.Count('id', filter=models.Q(is_active=True)),
+        )
+
+        return {
+            'total_detections': stats['total_detections'] or 0,
+            'total_cities': stats['total_cities'],
+            'active_cities': stats['active_cities'],
+            'top_cities': City.objects.filter(
+                detection_count__gt=0
+            ).order_by('-detection_count')[:5],
+        }

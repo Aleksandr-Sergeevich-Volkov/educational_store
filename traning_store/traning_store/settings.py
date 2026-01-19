@@ -94,6 +94,7 @@ TEMPLATES = [
                 'cart.context_processors.user_context_processor',
                 'cart.context_processors.currency',
                 'cart.context_processors.weather',
+                'homepage.context_processors.city_context',
             ],
         },
     },

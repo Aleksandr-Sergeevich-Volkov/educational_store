@@ -55,9 +55,10 @@
                     <ul class="dropdown-menu">
                         {% for city in popular_cities %}
                             <li>
+                                <!-- Используем текущий URL с добавлением параметра city_id -->
                                 <a class="dropdown-item city-change-link" 
-   href="{% url 'homepage:homepage' %}?city_id={{ city.id }}&change_city=1"
-   data-city-id="{{ city.id }}">
+                                   href="{{ request.path }}?city_id={{ city.id }}&change_city=1"
+                                   data-city-id="{{ city.id }}">
                                     {{ city.name }}
                                 </a>
                             </li>

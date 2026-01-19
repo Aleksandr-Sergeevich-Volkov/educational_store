@@ -16,9 +16,10 @@ from django.views.generic import TemplateView
 from .forms import (CommentForm, SearchForm, SizeFinderForm,
                     SmartMeasurementForm)
 from .models import City, Comment, Post
+from .core.mixins import CityContextMixin
 
 
-class HomePage(TemplateView):
+class HomePage(CityContextMixin, TemplateView):
     template_name = 'index.html'
 
     def get(self, request, *args, **kwargs):
@@ -36,6 +37,8 @@ class HomePage(TemplateView):
                 # Сохраняем в сессии
                 request.session['current_city_id'] = city.id
                 request.session.modified = True
+                # УВЕЛИЧИВАЕМ СЧЕТЧИК ПРИ РУЧНОЙ СМЕНЕ ГОРОДА
+                self.increment_city_detection_count(city)
 
                 # Редирект на ту же страницу без параметров
                 from django.shortcuts import redirect

@@ -26,8 +26,8 @@ class TestRoutes(TestCase):
         self.color_black = Color.objects.create(name="black", color='000000')
         self.color_white = Color.objects.create(name="white", color='FFFFFF')
         self.color_red = Color.objects.create(name="red", color='FF0000')
-        City.objects.create(name="Москва", is_popular=True)
-        City.objects.create(name="Санкт-Петербург", is_popular=True)
+        self.city1 = City.objects.create(name="Москва", is_popular=True)
+        self.city2 = City.objects.create(name="Санкт-Петербург", is_popular=True)
 
         # Создание размеров и типов моделей
         self.size = Size.objects.create(name="4", brand=self.brend)

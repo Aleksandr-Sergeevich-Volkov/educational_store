@@ -13,10 +13,10 @@ from django.urls import reverse
 from django.views.decorators.http import require_GET, require_POST
 from django.views.generic import TemplateView
 
+from .core.mixins import CityContextMixin
 from .forms import (CommentForm, SearchForm, SizeFinderForm,
                     SmartMeasurementForm)
 from .models import City, Comment, Post
-from .core.mixins import CityContextMixin
 
 
 class HomePage(CityContextMixin, TemplateView):

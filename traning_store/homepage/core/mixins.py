@@ -197,8 +197,8 @@ class CityContextMixin:
     def increment_city_detection_count(self, city):
         """Увеличивает счетчик определений города"""
         try:
-            from django.db.models import F
             from django.db import transaction
+            from django.db.models import F
 
             with transaction.atomic():
                 # Используем update для атомарности

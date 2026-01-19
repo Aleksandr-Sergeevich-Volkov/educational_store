@@ -7,9 +7,9 @@ from catalog.models import (Appointment, Brend, Class_compress, Color, Country,
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
+from homepage.models import City
 from orders.forms import OrderCreateForm
 from orders.models import Order, OrderItem
-from homepage.models import City
 
 
 class TestRoutes(TestCase):

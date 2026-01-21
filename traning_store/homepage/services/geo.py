@@ -147,7 +147,6 @@ class SimpleGeolocation:
 
         except Exception as e:
             print(f"❌ API ipinfo.io failed: {e}")
-
         # Если ipinfo.io не сработал, используем fallback
         print('⚠️ ipinfo.io failed, using fallback')
         return SimpleGeolocation._get_fallback_city(ip)

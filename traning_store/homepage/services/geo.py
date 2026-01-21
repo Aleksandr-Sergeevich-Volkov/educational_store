@@ -1,8 +1,13 @@
 import logging
+import os
 
+import requests
 from django.core.cache import cache
+from dotenv import load_dotenv
 
 logger = logging.getLogger(__name__)
+
+load_dotenv()
 
 
 class SimpleGeolocation:
@@ -106,7 +111,7 @@ class SimpleGeolocation:
 
     @staticmethod
     def _get_real_city_by_ip(ip):
-        """Получение реального города через API"""
+        """Получение реального города через ipinfo.io API"""
         # Проверяем кэш
         cache_key = f'geo_real_{ip}'
         cached = cache.get(cache_key)
@@ -114,40 +119,35 @@ class SimpleGeolocation:
             print(f"📦 From cache: {cached}")
             return cached.get('city'), cached.get('region')
 
-        # Пробуем API
-        apis = [
-            {
-                'name': 'ip-api',
-                'url': f'http://ip-api.com/json/{ip}?lang=ru',
-                'parser': lambda d: (d.get('city'), d.get('regionName'))
-                if d.get('status') == 'success' else (None, None)
-            },
-            {
-                'name': 'ipapi',
-                'url': f'https://ipapi.co/{ip}/json/',
-                'parser': lambda d: (d.get('city'), d.get('region'))
-            },
-        ]
+        # Пробуем ipinfo.io API
+        try:
+            # Получаем токен из настроек
+            token = os.getenv('IPINFO_TOKEN')
+            url = f'https://ipinfo.io/{ip}/json'
+            params = {}
 
-        for api in apis:
-            try:
-                import requests
-                response = requests.get(api['url'], timeout=2)
-                response.raise_for_status()
-                data = response.json()
+            if token:
+                params['token'] = token
 
-                city, region = api['parser'](data)
+            response = requests.get(url, params=params, timeout=3)
+            response.raise_for_status()
+            data = response.json()
 
-                if city and region:
-                    result = {'city': city, 'region': region}
-                    cache.set(cache_key, result, 3600)  # Кэш на 1 час
-                    print(f"✅ API {api['name']} found: {city}, {region}")
-                    return city, region
+            # Получаем данные
+            city = data.get('city')
+            region = data.get('region')
 
-            except Exception as e:
-                print(f"❌ API {api['name']} failed: {e}")
-                continue
+            if city and region:
+                result = {'city': city, 'region': region}
+                cache.set(cache_key, result, 3600)  # Кэш на 1 час
+                print(f"✅ API ipinfo.io found: {city}, {region}")
+                return city, region
+            else:
+                print(f"⚠️ ipinfo.io returned incomplete data: city={city}, region={region}")
 
-        # Если API не сработали, используем fallback
-        print('⚠️ All APIs failed, using fallback')
+        except Exception as e:
+            print(f"❌ API ipinfo.io failed: {e}")
+
+        # Если ipinfo.io не сработал, используем fallback
+        print('⚠️ ipinfo.io failed, using fallback')
         return SimpleGeolocation._get_fallback_city(ip)

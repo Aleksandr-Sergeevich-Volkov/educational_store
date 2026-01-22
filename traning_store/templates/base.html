@@ -46,7 +46,7 @@
         {% if current_city %}
             <div class="d-flex align-items-center justify-content-center">
                 <i class="fas fa-map-marker-alt text-danger me-2"></i>
-                <strong>{{ current_city.name }}</strong>
+                <strong>{{ current_city.name_ru }}</strong>
                 <div class="dropdown ms-2">
                     <button class="btn btn-sm btn-link p-0" type="button" 
                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -59,7 +59,7 @@
                                 <a class="dropdown-item city-change-link" 
                                    href="{{ request.path }}?city_id={{ city.id }}&change_city=1"
                                    data-city-id="{{ city.id }}">
-                                    {{ city.name }}
+                                    {{ city.name_ru}}
                                 </a>
                             </li>
                         {% endfor %}

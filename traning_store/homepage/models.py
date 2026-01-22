@@ -44,6 +44,7 @@ class City(models.Model):
     name = models.CharField(max_length=100, verbose_name='Город')
     region = models.CharField(max_length=100, verbose_name='Регион')
     country = models.CharField(max_length=50, default='Россия', verbose_name='Страна')
+    name_ru = models.CharField(max_length=100, verbose_name='Город_ру')
 
     # Координаты (опционально)
     latitude = models.DecimalField(

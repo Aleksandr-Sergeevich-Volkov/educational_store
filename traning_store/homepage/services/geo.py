@@ -113,6 +113,18 @@ class SimpleGeolocation:
             return test_cities[0]  # Москва по умолчанию:
 
     @staticmethod
+    def _get_fallback_city(ip) -> Tuple[str, str]:
+        """Fallback если API не сработал"""
+        # Пробуем получить город по умолчанию из базы
+        if City:
+            default_city = City.objects.filter(is_default=True).first()
+            if default_city:
+                return default_city.name_ru or default_city.name, default_city.region
+
+        # Или используем Москву как запасной вариант
+        return 'Москва', 'Moscow'
+
+    @staticmethod
     def _get_real_city_by_ip(ip) -> Tuple[str, str]:
         """Получение реального города через ipinfo.io"""
         # Проверяем кэш

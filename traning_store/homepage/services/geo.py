@@ -6,7 +6,7 @@ import requests
 from django.core.cache import cache
 from django.db import transaction
 from dotenv import load_dotenv
-from models import City
+from homepage.models import City
 
 logger = logging.getLogger(__name__)
 

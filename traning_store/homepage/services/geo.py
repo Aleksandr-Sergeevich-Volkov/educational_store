@@ -1,9 +1,12 @@
 import logging
 import os
+from typing import Optional, Tuple
 
 import requests
 from django.core.cache import cache
+from django.db import transaction
 from dotenv import load_dotenv
+from models import City
 
 logger = logging.getLogger(__name__)
 
@@ -110,8 +113,8 @@ class SimpleGeolocation:
             return test_cities[0]  # Москва по умолчанию:
 
     @staticmethod
-    def _get_real_city_by_ip(ip):
-        """Получение реального города через ipinfo.io API"""
+    def _get_real_city_by_ip(ip) -> Tuple[str, str]:
+        """Получение реального города через ipinfo.io"""
         # Проверяем кэш
         cache_key = f'geo_real_{ip}'
         cached = cache.get(cache_key)
@@ -119,34 +122,75 @@ class SimpleGeolocation:
             print(f"📦 From cache: {cached}")
             return cached.get('city'), cached.get('region')
 
-        # Пробуем ipinfo.io API
         try:
-            # Получаем токен из настроек
+            # Получаем токен
             token = os.getenv('IPINFO_TOKEN')
             url = f'https://ipinfo.io/{ip}/json'
-            params = {}
-
-            if token:
-                params['token'] = token
+            params = {'token': token} if token else {}
 
             response = requests.get(url, params=params, timeout=3)
-            response.raise_for_status()
             data = response.json()
 
-            # Получаем данные
-            city = data.get('city')
-            region = data.get('region')
+            # Получаем данные (латиница)
+            city_lat = data.get('city', '').strip()
+            region_lat = data.get('region', '').strip()
+            country_code = data.get('country', '')
 
-            if city and region:
-                result = {'city': city, 'region': region}
-                cache.set(cache_key, result, 3600)  # Кэш на 1 час
-                print(f"✅ API ipinfo.io found: {city}, {region}")
-                return city, region
+            if city_lat and region_lat and country_code == 'RU':
+                # ✅ СОХРАНЯЕМ ГОРОД В БАЗУ (без передачи IP)
+                SimpleGeolocation._save_city_simple(city_lat, region_lat)
+
+                # Кэшируем
+                result = {'city': city_lat, 'region': region_lat}
+                cache.set(cache_key, result, 3600)
+                print(f"✅ City from API: {city_lat}, {region_lat}")
+
+                return city_lat, region_lat
             else:
-                print(f"⚠️ ipinfo.io returned incomplete data: city={city}, region={region}")
+                print(f"⚠️ No Russian city found for IP {ip}")
+                return SimpleGeolocation._get_fallback_city(ip)
 
         except Exception as e:
-            print(f"❌ API ipinfo.io failed: {e}")
-        # Если ipinfo.io не сработал, используем fallback
-        print('⚠️ ipinfo.io failed, using fallback')
-        return SimpleGeolocation._get_fallback_city(ip)
+            print(f"❌ API error: {e}")
+            return SimpleGeolocation._get_fallback_city(ip)
+
+    @staticmethod
+    def _save_city_simple(city_lat: str, region_lat: str) -> Optional['City']:
+        """
+        ПРОСТОЙ способ: сохраняем город как есть
+        city_lat - название города на латинице (Moscow)
+        region_lat - название региона на латинице (Moscow Oblast)
+        """
+        if not City:
+            return None
+
+        try:
+            with transaction.atomic():
+                # Ищем город по латинскому названию
+                city_obj = City.objects.filter(
+                    name=city_lat,
+                    region=region_lat
+                ).first()
+
+                if city_obj:
+                    # Город уже есть - увеличиваем счетчик
+                    city_obj.detection_count += 1
+                    city_obj.save(update_fields=['detection_count', 'updated_at'])
+                    print(f"   🔄 City exists: {city_lat} (count: {city_obj.detection_count})")
+                else:
+                    # Создаем новый город
+                    city_obj = City.objects.create(
+                        name=city_lat,           # Латинское название
+                        name_ru=city_lat,        # Пока тоже латиница (админ поправит)
+                        region=region_lat,       # Латинское название региона
+                        country='Russia',
+                        detection_count=1,
+                        is_active=True,
+                    )
+                    print(f"   ✅ NEW CITY ADDED: {city_lat}, {region_lat}")
+
+                return city_obj
+
+        except Exception as e:
+            print(f"   ❌ Error saving city: {e}")
+            return None

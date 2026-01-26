@@ -29,102 +29,103 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
     <!-- Верхняя панель с яркими цветами -->
-    <header class="header-bg">
-        <div class="container-fluid">
-            <div class="row align-items-center py-2">
-                <!-- Логотип -->
-                <div class="col-md-6">
-                    <div class="d-flex align-items-center">
-                        <a class="navbar-brand fw-bold text-dark me-3" href="{% url 'homepage:homepage' %}">
-                            🏠 Главная страница
-                        </a>
-                    </div>
-                </div>
-                <!-- Замените ваш текущий блок геолокации на этот упрощенный -->
-<div class="col-md-6 text-center">
-    <div class="city-selector">
-        {% if current_city %}
-            <div class="d-flex align-items-center justify-content-center">
-                <i class="fas fa-map-marker-alt text-danger me-2"></i>
-                <strong>{{ current_city.name_ru }}</strong>
-                <div class="dropdown ms-2">
-                    <button class="btn btn-sm btn-link p-0" type="button" 
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-chevron-down text-muted"></i>
-                    </button>
-                    <ul class="dropdown-menu">
-                        {% for city in popular_cities %}
-                            <li>
-                                <!-- Используем текущий URL с добавлением параметра city_id -->
-                                <a class="dropdown-item city-change-link" 
-                                   href="{{ request.path }}?city_id={{ city.id }}&change_city=1"
-                                   data-city-id="{{ city.id }}">
-                                    {{ city.name_ru}}
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        {% else %}
-            <button class="btn btn-sm btn-outline-primary" 
-                    onclick="detectCity()">
-                <i class="fas fa-location-arrow me-1"></i>
-                Определить город
-            </button>
-        {% endif %}
-    </div>
-</div>                
-                <!-- Правая часть: пользователь, корзина, валюта -->
-                <div class="col-md-6">
-                    <div class="d-flex align-items-center justify-content-end">
-                        <!-- Корзина -->
-                        <div class="me-3">
-                            {% with total_items=cart|length %}
-                                {% if total_items > 0 %}
-                                    <a href="{% url 'cart:cart_detail' %}" class="btn cart-btn btn-sm position-relative">
-                                        🛒 Корзина
-                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                            {{ total_items }}
-                                        </span>
-                                    </a>
-                                {% else %}
-                                    <span class="cart-empty">🛒 Корзина пуста</span>
-                                {% endif %}
-                            {% endwith %}
-                        </div>
-                        <!-- Пользователь -->
-                        <div class="me-3">
-                            {% if user.is_authenticated %}
-                                <div class="dropdown">
-                                    <button class="btn user-btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                        👤 {{ user.username }}
+<header class="header-bg">
+    <div class="container-fluid">
+        <div class="row align-items-center py-2">
+            <!-- ЛЕВАЯ ЧАСТЬ: Логотип + Геолокация -->
+            <div class="col-md-6">
+                <div class="d-flex align-items-center">
+                    <!-- Логотип -->
+                    <a class="navbar-brand fw-bold text-dark me-4" href="{% url 'homepage:homepage' %}">
+                        🏠 Главная страница
+                    </a>
+                    
+                    <!-- Геолокация -->
+                    <div class="city-selector">
+                        {% if current_city %}
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                                <strong>{{ current_city.name_ru|default:current_city.name }}</strong>
+                                <div class="dropdown ms-2">
+                                    <button class="btn btn-sm btn-link p-0" type="button" 
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-chevron-down text-muted"></i>
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="{% url 'catalog:profile' user.username %}">Мои заказы</a></li>
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
+                                        {% for city in popular_cities %}
+                                            <li>
+                                                <a class="dropdown-item city-change-link" 
+                                                   href="{{ request.path }}?city_id={{ city.id }}&change_city=1"
+                                                   data-city-id="{{ city.id }}">
+                                                    {{ city.name_ru|default:city.name }}
+                                                </a>
+                                            </li>
+                                        {% endfor %}
                                     </ul>
                                 </div>
-                            {% else %}
-                                <div class="btn-group">
-                                    <a href="{% url 'login' %}" class="btn login-btn btn-sm">Войти</a>
-                                    <a href="{% url 'registration' %}" class="btn register-btn btn-sm">Регистрация</a>
-                                </div>
-                            {% endif %}
-                        </div>
-                        <!-- Валюта и погода -->
-                        <div class="text-end">
-                            <div class="currency-weather">
-                                <div>💱 <strong>{{USD}}</strong> / <strong>{{EUR}}</strong> / <strong>{{TRY}}</strong></div>
-                                <div>🌡 <strong>{{city_temp}}</strong></div>
                             </div>
+                        {% else %}
+                            <button class="btn btn-sm btn-outline-primary" onclick="detectCity()">
+                                <i class="fas fa-location-arrow me-1"></i>
+                                Определить город
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- ПРАВАЯ ЧАСТЬ: Корзина, пользователь, валюта -->
+            <div class="col-md-6">
+                <div class="d-flex align-items-center justify-content-end">
+                    <!-- Корзина -->
+                    <div class="me-3">
+                        {% with total_items=cart|length %}
+                            {% if total_items > 0 %}
+                                <a href="{% url 'cart:cart_detail' %}" class="btn cart-btn btn-sm position-relative">
+                                    🛒 Корзина
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ total_items }}
+                                    </span>
+                                </a>
+                            {% else %}
+                                <span class="cart-empty">🛒 Корзина пуста</span>
+                            {% endif %}
+                        {% endwith %}
+                    </div>
+                    
+                    <!-- Пользователь -->
+                    <div class="me-3">
+                        {% if user.is_authenticated %}
+                            <div class="dropdown">
+                                <button class="btn user-btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    👤 {{ user.username }}
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{% url 'catalog:profile' user.username %}">Мои заказы</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
+                                </ul>
+                            </div>
+                        {% else %}
+                            <div class="btn-group">
+                                <a href="{% url 'login' %}" class="btn login-btn btn-sm">Войти</a>
+                                <a href="{% url 'registration' %}" class="btn register-btn btn-sm">Регистрация</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Валюта и погода -->
+                    <div class="text-end">
+                        <div class="currency-weather">
+                            <div>💱 <strong>{{USD}}</strong> / <strong>{{EUR}}</strong> / <strong>{{TRY}}</strong></div>
+                            <div>🌡 <strong>{{city_temp}}</strong></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </header>
+    </div>
+</header>
     <!-- Основной контент на весь экран -->
     <main class="flex-grow-1 main-bg">
         {% block content %}{% endblock %}

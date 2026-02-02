@@ -101,7 +101,7 @@ class HomePage(CityContextMixin, TemplateView):
         context['prod_count'] = Product.objects.aggregate(Count('id'))
 
         if Product.objects.exists():
-            context['popular_products'] = Product.objects.order_by('-views')[:3].prefetch_related(
+            context['popular_products'] = Product.objects.order_by('-views')[:5].prefetch_related(
                 models.Prefetch('images',
                                 queryset=Gallery.objects.filter(main=True),
                                 to_attr='main_images'))

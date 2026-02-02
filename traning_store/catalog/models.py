@@ -135,7 +135,7 @@ class Size(models.Model):
         ordering = ('name',)
 
     def __str__(self):
-        return f'{self.brand.name} - {self.name}'
+        return f'{self.name}'
 
 
 class SizeDetail(models.Model):
@@ -204,7 +204,7 @@ class Model_type(models.Model):
         ordering = ('name',)
 
     def __str__(self):
-        return f"{self.brand.name} - {self.name}"
+        return f"{self.name}"
 
 
 class Wide_hips(models.Model):

@@ -110,7 +110,7 @@ class HomePage(CityContextMixin, TemplateView):
 
         from catalog.models import Brend, Type_product
         context['popular_categories'] = Type_product.objects.all()[:4]
-        context['popular_brands'] = Brend.objects.all()[:5]
+        context['popular_brands'] = Brend.objects.all()[:6]
         return context
 
 

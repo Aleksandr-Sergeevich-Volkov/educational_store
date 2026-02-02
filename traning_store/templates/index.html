@@ -32,12 +32,31 @@
 </div>
 
 <div class="mb-3 d-flex justify-content-between align-items-center">
-    <h2 class="card-header font-family:sans-serif mb-0">Магазин kompressionnye-chulki24.ru</h2>
-    <div>
-        <a title="Telegram" href="https://telegram.me/volkovaleksandrsergeevich" target="_blank" class="telegram-btn">
-            <img src="{% static 'telegram_icon.jpg' %}" class="img-fluid pulse-animation" style="max-width: 75px;" alt='Написать в Telegram'>
+    <!-- ТОЛЬКО бренды слева -->
+    <div class="d-flex flex-wrap gap-1 align-items-center">
+        {% for brand in popular_brands %}
+        <a href="{% url 'homepage:search' %}?query={{ brand.name }}"
+           class="btn btn-primary btn-sm text-nowrap d-flex align-items-center"
+           title="{{ brand.name }}"
+           style="font-size: 0.85rem; padding: 0.25rem 0.5rem;">
+            {% if brand.logo %}
+            <img src="{{ brand.logo.url }}" 
+                 alt="{{ brand.name }}"
+                 style="height: 18px; width: auto; margin-right: 5px; object-fit: contain;">
+            {% endif %}
+            {{ brand.name|truncatechars:10 }}
         </a>
+        {% endfor %}
     </div>
+    
+    <!-- ТОЛЬКО Telegram справа -->
+    <a title="Telegram" href="https://telegram.me/volkovaleksandrsergeevich" 
+       target="_blank" class="telegram-btn ms-auto flex-shrink-0">
+        <img src="{% static 'telegram_icon.jpg' %}" 
+             class="img-fluid pulse-animation" 
+             style="max-width: 70px;" 
+             alt='Написать в Telegram'>
+    </a>
 </div>
 
 <style>

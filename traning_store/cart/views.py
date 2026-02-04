@@ -84,7 +84,6 @@ def update_quantity(request):
             m_type=m_type,
             update_quantity=True  # Заменяем количество
         )
-
         return redirect('cart:cart_detail')
 
 

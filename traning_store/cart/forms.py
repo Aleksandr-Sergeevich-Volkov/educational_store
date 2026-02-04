@@ -19,19 +19,22 @@ class CartAddProductForm(forms.Form):
     size = forms.ModelChoiceField(
         label='Размер',
         queryset=Size.objects.none(),
-        required=False,
+        required=True,
         widget=forms.Select(attrs={'class': 'form-select'})
     )
     color = forms.ModelChoiceField(
         label='Цвет',
         queryset=Color.objects.none(),
-        required=False,
+        required=True,
+        error_messages={
+            'required': 'Пожалуйста, выберите цвет'
+        },
         widget=forms.RadioSelect(attrs={'class': 'color-radio'})
     )
     m_type = forms.ModelChoiceField(
         label='Тип',
         queryset=Model_type.objects.none(),
-        required=False,
+        required=True,
         widget=forms.Select(attrs={'class': 'form-select'})
     )
 
@@ -49,11 +52,19 @@ class CartAddProductForm(forms.Form):
                     single_color = available_colors.first()
                     self.fields['color'].initial = single_color
                     self.fields['color'].widget = forms.HiddenInput()
+                    # Добавляем скрытое поле с id цвета
+                    self.fields['color_hidden'] = forms.CharField(
+                        initial=single_color.id,
+                        widget=forms.HiddenInput()
+                    )
                 else:
                     self.fields['color'].queryset = available_colors
                     self.fields['color'].empty_label = None
             else:
+                # Если цветов нет, скрываем поле и добавляем ошибку
                 self.fields['color'].widget = forms.HiddenInput()
+                self.fields['color'].required = False
+                self.add_error(None, "Для этого товара не указаны доступные цвета")
 
         if product and product.brand:
             self.fields['m_type'].queryset = Model_type.objects.filter(
@@ -66,7 +77,22 @@ class CartAddProductForm(forms.Form):
     # ДОБАВЬТЕ ЭТОТ МЕТОД ДЛЯ ЗАГРУЗКИ ОБЪЕКТОВ
     def get_color_choices(self):
         """Возвращает цвета с полными объектами"""
-        return [(color.id, color) for color in self.fields['color'].queryset]
+
+    def clean_color(self):
+        color = self.cleaned_data.get('color')
+        if not color:
+            raise forms.ValidationError("Пожалуйста, выберите цвет")
+        return color
+
+    def clean(self):
+        cleaned_data = super().clean()
+        color = cleaned_data.get('color')
+
+        if not color:
+            # Добавляем ошибку к полю
+            self.add_error('color', 'Пожалуйста, выберите цвет')
+
+        return cleaned_data
 
 
 class DeliveryForm(forms.Form):

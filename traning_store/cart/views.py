@@ -2,6 +2,7 @@ import logging
 
 from catalog.models import Gallery, Product
 from coupons.forms import CouponApplyForm
+from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
@@ -26,6 +27,16 @@ def cart_add(request, product_id):
                  m_type=cd['m_type'],
                  images_m=images_m,
                  update_quantity=cd['update'])
+        messages.success(request, f'Товар "{product.name}" добавлен в корзину')
+    else:
+        # Отображаем ошибки формы
+        for field, errors in form.errors.items():
+            for error in errors:
+                if field == '__all__':
+                    messages.error(request, error)
+                else:
+                    field_label = form.fields[field].label if field in form.fields else field
+                    messages.error(request, f"{field_label}: {error}")
     return redirect('cart:cart_detail')
 
 

@@ -36,8 +36,16 @@ class Cart(object):
         else:
             size_str = str(size)
 
-        # Обработка color (просто строка)
-        color_str = str(color)
+        # Обработка color (теперь это объект Color)
+        if color is None:
+            raise ValueError("Пожалуйста, выберите цвет")
+
+        if hasattr(color, 'name') and color.name:
+            color_str = str(color.name)
+        elif hasattr(color, 'id'):
+            color_str = str(color.id)
+        else:
+            color_str = str(color)
 
         # Обработка m_type
         if hasattr(m_type, 'name') and m_type.name:
@@ -58,7 +66,11 @@ class Cart(object):
             m_type='Стандартный', images_m='1', update_quantity=False):
         # Добавить продукт в корзину или обновить его количество.
         # Создаем уникальный ключ на основе ID товара и его характеристик
-        product_key = self._generate_product_key(product, size, color, m_type)
+        try:
+            product_key = self._generate_product_key(product, size, color, m_type)
+        except ValueError as e:
+            # Возвращаем ошибку для отображения пользователю
+            return str(e)
         if product_key not in self.cart:
             self.cart[product_key] = {
                 'product_id': str(product.id),

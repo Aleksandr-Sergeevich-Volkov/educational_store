@@ -71,41 +71,83 @@
                                         <meta itemprop="availability" href="http://schema.org/InStock">
                                     </div>
                                 </div>           
-            <!-- Форма добавления в корзину -->
-<form action="{% url 'cart:cart_add' product.id %}" method="post" class="mb-3">
+           <!-- Форма добавления в корзину -->
+<form action="{% url 'cart:cart_add' product.id %}" method="post" 
+      class="mb-3" id="cart-form">
     <div class="row g-2 align-items-center">
         <div class="col-12">
-            <!-- Рендерим все поля кроме цвета -->
+            
+            <!-- Отображение сообщений -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            <!-- Поля формы кроме цвета -->
             {% for field in cart_product_form %}
                 {% if field.name != 'color' %}
-                    {% bootstrap_field field %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label">
+                            {{ field.label }}
+                            {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+                        </label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in field.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
                 {% endif %}
             {% endfor %}
             
-            <!-- АЛЬТЕРНАТИВНЫЙ СПОСОБ РЕНДЕРИНГА ЦВЕТОВ -->
+            <!-- Блок выбора цвета -->
             {% if cart_product_form.color.field.queryset.exists %}
                 <div class="mb-3">
-                    <label class="form-label">{{ cart_product_form.color.label }}</label>
-                    <div class="color-tags-container">
+                    <label class="form-label">
+                        Цвет <span class="text-danger">*</span>
+                    </label>
+                    
+                    <!-- Сообщение об ошибке (изначально скрыто) -->
+                    <div id="color-error" class="alert alert-danger d-none mb-2">
+                        <i class="bi bi-exclamation-triangle"></i> Пожалуйста, выберите цвет
+                    </div>
+                    
+                    <div class="color-tags-container" id="color-container">
                         {% for color_obj in cart_product_form.color.field.queryset %}
                             <label class="color-tag-label">
-                                <input type="radio" name="color" value="{{ color_obj.id }}" 
-                                       {% if cart_product_form.color.value == color_obj.id %}checked{% endif %}
-                                       class="color-radio-input">
-                                <span class="color-tag" style="background-color: {{ color_obj.color }};" 
-                                      title="{{ color_obj.name }} ({{ color_obj.color }})"></span>
+                                <input type="radio" 
+                                       name="color" 
+                                       value="{{ color_obj.id }}" 
+                                       {% if cart_product_form.color.value|stringformat:"s" == color_obj.id|stringformat:"s" %}checked{% endif %}
+                                       class="color-radio-input"
+                                       data-color-name="{{ color_obj.name }}">
+                                <span class="color-tag" 
+                                      style="background-color: {{ color_obj.color }};" 
+                                      title="{{ color_obj.name }} ({{ color_obj.color }})">
+                                </span>
                                 <span class="color-name">{{ color_obj.name }}</span>
                             </label>
                         {% endfor %}
                     </div>
+                </div>
+            {% else %}
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-circle"></i> Цвета для этого товара не указаны
                 </div>
             {% endif %}
         </div>
         
         <div class="col-12">
             {% csrf_token %}
-            <button type="submit" class="btn btn-primary w-100 py-3 fs-5">
-                🛒 Добавить в корзину
+            <button type="submit" class="btn btn-primary w-100 py-3 fs-5" id="submit-btn">
+                <i class="bi bi-cart-plus"></i> Добавить в корзину
             </button>
         </div>
     </div>
@@ -163,7 +205,6 @@
         </div>
     </div>
 </div>
-
 <style>
 .color-tags-container {
     display: flex;
@@ -305,4 +346,142 @@
     font-weight: 600;
 }
 </style>
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('cart-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const colorError = document.getElementById('color-error');
+    const colorRadios = document.querySelectorAll('.color-radio-input');
+    
+    if (!form) return;
+    
+    // Функция проверки выбора цвета
+    function validateColorSelection() {
+        let colorSelected = false;
+        
+        colorRadios.forEach(radio => {
+            if (radio.checked) {
+                colorSelected = true;
+            }
+        });
+        
+        return colorSelected;
+    }
+    
+    // Проверка при отправке формы
+    form.addEventListener('submit', function(e) {
+        const hasColor = validateColorSelection();
+        
+        // Если цвет не выбран и цвета вообще есть
+        if (!hasColor && colorRadios.length > 0) {
+            e.preventDefault(); // Останавливаем отправку
+            
+            // Показываем ошибку
+            if (colorError) {
+                colorError.classList.remove('d-none');
+                colorError.classList.add('d-block');
+                
+                // Анимация
+                colorError.style.animation = 'none';
+                setTimeout(() => {
+                    colorError.style.animation = 'shake 0.5s ease-in-out';
+                }, 10);
+                
+                // Прокручиваем к ошибке
+                colorError.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center'
+                });
+            }
+            
+            // Подсвечиваем контейнер цветов
+            const colorContainer = document.getElementById('color-container');
+            if (colorContainer) {
+                colorContainer.style.border = '2px solid #dc3545';
+                colorContainer.style.borderRadius = '8px';
+                colorContainer.style.padding = '10px';
+                colorContainer.style.backgroundColor = '#fff5f5';
+                
+                setTimeout(() => {
+                    colorContainer.style.border = '';
+                    colorContainer.style.padding = '';
+                    colorContainer.style.backgroundColor = '';
+                }, 3000);
+            }
+            
+            // Фокус на первый радио-элемент
+            if (colorRadios.length > 0) {
+                colorRadios[0].focus();
+            }
+            
+            return false;
+        }
+        
+        // Если цвет выбран - скрываем ошибку
+        if (colorError) {
+            colorError.classList.add('d-none');
+            colorError.classList.remove('d-block');
+        }
+    });
+    
+    // Скрываем ошибку при выборе цвета
+    colorRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (colorError) {
+                colorError.classList.add('d-none');
+                colorError.classList.remove('d-block');
+            }
+            
+            // Убираем подсветку контейнера
+            const colorContainer = document.getElementById('color-container');
+            if (colorContainer) {
+                colorContainer.style.border = '';
+                colorContainer.style.padding = '';
+                colorContainer.style.backgroundColor = '';
+            }
+        });
+    });
+    
+    // Валидация при наведении на кнопку (опционально)
+    submitBtn.addEventListener('mouseover', function() {
+        const hasColor = validateColorSelection();
+        
+        if (!hasColor && colorRadios.length > 0) {
+            this.title = "⚠️ Сначала выберите цвет!";
+            this.style.cursor = 'not-allowed';
+        } else {
+            this.title = "Добавить в корзину";
+            this.style.cursor = 'pointer';
+        }
+    });
+});
+
+// Анимация тряски для ошибки
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+        20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+    
+    .color-tag-label {
+        transition: all 0.2s ease;
+    }
+    
+    .color-radio-input:checked + .color-tag {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 3px #007bff, 0 0 0 5px white;
+    }
+    
+    /* Стиль для обязательного поля */
+    .required-field::after {
+        content: " *";
+        color: #dc3545;
+    }
+`;
+document.head.appendChild(style);
+</script>
+{% endblock %}
 {% endblock %}

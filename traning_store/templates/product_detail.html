@@ -89,7 +89,7 @@
             
             <!-- Поля формы кроме цвета -->
             {% for field in cart_product_form %}
-                {% if field.name != 'color' %}
+                {% if field.name != 'color' and field.name != 'update' %}
                     <div class="mb-3">
                         <label for="{{ field.id_for_label }}" class="form-label">
                             {{ field.label }}
@@ -106,7 +106,6 @@
                     </div>
                 {% endif %}
             {% endfor %}
-            
             <!-- Блок выбора цвета -->
             {% if cart_product_form.color.field.queryset.exists %}
                 <div class="mb-3">

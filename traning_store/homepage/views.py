@@ -1,3 +1,5 @@
+import logging
+
 from catalog.models import (Appointment, Brend, Class_compress, Color, Gallery,
                             Male, Model_type, Product, Side, Size, SizeDetail,
                             Soсk, Type_product, Wide_hips)
@@ -17,6 +19,8 @@ from .core.mixins import CityContextMixin
 from .forms import (CommentForm, SearchForm, SizeFinderForm,
                     SmartMeasurementForm)
 from .models import City, Comment, Post
+
+logger = logging.getLogger(__name__)
 
 
 class HomePage(CityContextMixin, TemplateView):
@@ -480,3 +484,38 @@ def search_city(request):
         ).values('id', 'name', 'region')[:20]
 
     return JsonResponse(list(cities), safe=False)
+
+# views.py в вашем основном приложении
+
+
+def handler404(request, exception):
+    logger.debug(f"handler404 вызван для пути: {request.path}")
+    logger.debug(f"Исключение: {exception}")
+    # Кастомный обработчик 404 ошибки.
+    # Получаем популярные товары для отображения на странице 404
+
+    context = {
+        'title': '404 - Страница не найдена',
+        'message': 'Извините, такой страницы не существует.',
+        'request_path': request.path,
+    }
+    return render(request, '404.html', context, status=404)
+
+
+""" def handler404(request, exception):
+    logger.debug(f"handler404 вызван для пути: {request.path}")
+    logger.debug(f"Исключение: {exception}")
+
+    # Сначала вернем простой текст
+    from django.http import HttpResponse
+    return HttpResponse(f"404: {request.path}", status=404) """
+
+
+def handler500(request):
+    """Кастомный обработчик 500 ошибки."""
+    return render(request, '500.html', status=500)
+
+
+def handler403(request, exception):
+    """Кастомный обработчик 403 ошибки."""
+    return render(request, '403.html', status=403)

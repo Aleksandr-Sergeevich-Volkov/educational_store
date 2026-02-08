@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}404 - Страница не найдена{% endblock %}
+{% block meta_description %}Извините, запрашиваемая страница не существует.{% endblock %}
+
+{% block content %}
+<div class="container my-5 py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6 text-center">
+            
+            <!-- Иконка ошибки -->
+            <div class="mb-4">
+                <i class="fas fa-map-signs text-muted" style="font-size: 6rem; opacity: 0.7;"></i>
+            </div>
+            
+            <!-- Код ошибки -->
+            <h1 class="display-1 fw-bold text-muted mb-3">404</h1>
+            
+            <!-- Заголовок -->
+            <h2 class="h3 mb-4">Страница не найдена</h2>
+            
+            <!-- Сообщение -->
+            <p class="lead text-muted mb-5">
+                Запрашиваемая вами страница не существует или была перемещена.
+            </p>
+            
+            <!-- Действия -->
+            <div class="d-grid gap-3 d-md-flex justify-content-center">
+                <a href="/" class="btn btn-primary btn-lg px-4">
+                    <i class="fas fa-home me-2"></i>На главную
+                </a>
+                
+                <a href="/catalog/" class="btn btn-outline-secondary btn-lg px-4">
+                    <i class="fas fa-shopping-bag me-2"></i>Перейти в каталог
+                </a>
+            </div>
+            
+            <!-- Дополнительная информация -->
+            <div class="mt-5 pt-4 border-top">
+                <p class="text-muted small">
+                    Если вы уверены, что страница должна существовать, 
+                    <a href="mailto:support@kompressionnye-chulki24.ru" class="text-decoration-none">
+                        свяжитесь с поддержкой
+                    </a>
+                </p>
+                
+                <!-- Для отладки (можно убрать) -->
+                {% if debug %}
+                <div class="mt-3 p-3 bg-light rounded">
+                    <small class="text-muted">
+                        <strong>Запрошенный путь:</strong> {{ request.path }}<br>
+                        {% if exception %}
+                        <strong>Ошибка:</strong> {{ exception }}
+                        {% endif %}
+                    </small>
+                </div>
+                {% endif %}
+            </div>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Минимальные стили для 404 */
+.display-1 {
+    font-size: 8rem;
+    letter-spacing: -0.5rem;
+}
+
+@media (max-width: 768px) {
+    .display-1 {
+        font-size: 5rem;
+        letter-spacing: -0.3rem;
+    }
+    
+    .btn-lg {
+        font-size: 1rem;
+        padding: 0.75rem 1.5rem;
+    }
+}
+
+/* Анимация для иконки */
+.fa-map-signs {
+    animation: gentlePulse 3s infinite ease-in-out;
+}
+
+@keyframes gentlePulse {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.05); }
+}
+</style>
+{% endblock %}

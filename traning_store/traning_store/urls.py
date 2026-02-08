@@ -45,3 +45,7 @@ if settings.DEBUG:
     urlpatterns += (path('__debug__/', include(debug_toolbar.urls)),)
     urlpatterns += static(settings.MEDIA_URL,
                           document_root=settings.MEDIA_ROOT)
+
+handler404 = 'homepage.views.handler404'    # myproject.views
+handler403 = 'homepage.views.handler403'
+handler500 = 'homepage.views.handler500'

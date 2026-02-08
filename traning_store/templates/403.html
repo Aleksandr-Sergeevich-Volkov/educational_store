@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Доступ запрещен (403){% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <i class="fas fa-ban text-warning" style="font-size: 5rem;"></i>
+            <h1 class="display-4 fw-bold text-warning mb-3">403</h1>
+            <h2 class="h3 mb-4">Доступ запрещен</h2>
+            <p class="lead mb-4">
+                У вас нет прав для доступа к этой странице.
+            </p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{% url 'homepage:homepage' %}" class="btn btn-primary btn-lg">
+                    На главную
+                </a>
+                <a href="{% url 'login' %}" class="btn btn-success btn-lg">
+                    Войти в аккаунт
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -5,6 +5,7 @@ from . import views
 
 app_name = 'homepage'
 
+
 urlpatterns = [
     path('', views.HomePage.as_view(), name='homepage'),
     path('detect-city/', views.detect_city, name='detect_city'),

@@ -15,7 +15,14 @@ admin.site.register(Type_product)
 admin.site.register(Wide_hips)
 admin.site.register(Side)
 admin.site.register(Model_type)
-admin.site.register(Gallery)
+# admin.site.register(Gallery)
+
+
+@admin.register(Size)
+class GalleryAdmin(admin.ModelAdmin):
+    list_display = ['mine', 'type_product']
+    list_filter = ['mine']
+    search_fields = ['type_product']
 
 
 @admin.register(Brend)

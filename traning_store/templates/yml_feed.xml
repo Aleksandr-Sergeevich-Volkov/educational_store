@@ -27,8 +27,29 @@
     <description>
      <![CDATA[<p>{{ product.name }}</p>]]>
     </description>
+    {% if product.collection_id %}
+    <collectionId>{{ product.collection_id }}</collectionId>
+    {% endif %}
    </offer>
    {% endfor %}
   </offers>
+  
+  {% if collections %}
+  <collections>
+   {% for collection in collections %}
+   <collection id="{{ collection.id }}">
+    <url>{{ collection.url }}</url>
+    {% for picture in collection.pictures %}
+    <picture>{{ picture }}</picture>
+    {% endfor %}
+    <name>{{ collection.name }}</name>
+    {% if collection.description %}
+    <description>{{ collection.description }}</description>
+    {% endif %}
+   </collection>
+   {% endfor %}
+  </collections>
+  {% endif %}
+  
  </shop>
 </yml_catalog>

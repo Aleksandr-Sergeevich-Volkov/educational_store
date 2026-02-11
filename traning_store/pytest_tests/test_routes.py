@@ -21,7 +21,7 @@ class TestRoutes(TestCase):
         self.male = Male.objects.create(name="Test Male")
         self.class_compress = Class_compress.objects.create(name="2 class")
         self.sock = Soсk.objects.create(name="Closed")
-        self.type_product = Type_product.objects.create(name="Chulki")
+        self.type_product = Type_product.objects.create(name="Chulki", description="Компрессионный трикотаж")
         # Создаем несколько цветов для ManyToMany
         self.color_black = Color.objects.create(name="black", color='000000')
         self.color_white = Color.objects.create(name="white", color='FFFFFF')

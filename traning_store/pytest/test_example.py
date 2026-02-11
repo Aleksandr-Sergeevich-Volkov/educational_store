@@ -25,7 +25,7 @@ def test_data(db):
     color_white = Color.objects.create(name="white", color='FFFFFF')
     color_red = Color.objects.create(name="red", color='FF0000')
     sock = Soсk.objects.create(name="Closed")
-    type_product = Type_product.objects.create(name="Chulki")
+    type_product = Type_product.objects.create(name="Chulki", description="Компрессионный трикотаж")
 
     # Создание размеров и типов моделей
     size = Size.objects.create(name="4", brand=brend)

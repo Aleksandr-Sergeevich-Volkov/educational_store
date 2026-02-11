@@ -18,7 +18,7 @@ admin.site.register(Model_type)
 # admin.site.register(Gallery)
 
 
-@admin.register(Size)
+@admin.register(Gallery)
 class GalleryAdmin(admin.ModelAdmin):
     list_display = ['mine', 'type_product']
     list_filter = ['mine']

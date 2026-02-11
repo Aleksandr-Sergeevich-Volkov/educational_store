@@ -109,8 +109,8 @@ class TestRoutes(TestCase):
         self.product4.Color.add(self.color_black, self.color_white, self.color_red)
 
         # Создание галереи для продукта
-        self.gallery1 = Gallery.objects.create(product=self.product1, image="test1.jpg")
-        self.gallery2 = Gallery.objects.create(product=self.product1, image="test2.jpg")
+        self.gallery1 = Gallery.objects.create(product=self.product1, type_product=self.type_product, image="test1.jpg")
+        self.gallery2 = Gallery.objects.create(product=self.product1, type_product=self.type_product, image="test2.jpg")
 
         # Настройка запроса и корзины
         self.request = RequestFactory().get('/')

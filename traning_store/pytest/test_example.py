@@ -101,8 +101,8 @@ def test_data(db):
     product4.Color.add(color_black)
 
     # Создание галереи для продукта
-    gallery1 = Gallery.objects.create(product=product1, image="test1.jpg")
-    gallery2 = Gallery.objects.create(product=product1, image="test2.jpg")
+    gallery1 = Gallery.objects.create(product=product1, type_product=type_product, image="test1.jpg")
+    gallery2 = Gallery.objects.create(product=product1, Type_product=type_product, image="test2.jpg")
 
     return {
         'country': country,

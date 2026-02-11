@@ -102,7 +102,7 @@ def test_data(db):
 
     # Создание галереи для продукта
     gallery1 = Gallery.objects.create(product=product1, type_product=type_product, image="test1.jpg")
-    gallery2 = Gallery.objects.create(product=product1, Type_product=type_product, image="test2.jpg")
+    gallery2 = Gallery.objects.create(product=product1, type_product=type_product, image="test2.jpg")
 
     return {
         'country': country,

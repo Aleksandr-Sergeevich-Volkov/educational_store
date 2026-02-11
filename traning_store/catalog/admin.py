@@ -21,7 +21,6 @@ admin.site.register(Model_type)
 @admin.register(Gallery)
 class GalleryAdmin(admin.ModelAdmin):
     list_display = ['mine', 'type_product']
-    list_filter = ['mine']
     search_fields = ['type_product']
 
 

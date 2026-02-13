@@ -502,15 +502,6 @@ def handler404(request, exception):
     return render(request, '404.html', context, status=404)
 
 
-""" def handler404(request, exception):
-    logger.debug(f"handler404 вызван для пути: {request.path}")
-    logger.debug(f"Исключение: {exception}")
-
-    # Сначала вернем простой текст
-    from django.http import HttpResponse
-    return HttpResponse(f"404: {request.path}", status=404) """
-
-
 def handler500(request):
     """Кастомный обработчик 500 ошибки."""
     return render(request, '500.html', status=500)

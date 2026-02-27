@@ -18,7 +18,7 @@ class Command(BaseCommand):
                     'id': f'cat_{cat.id}',
                     'url': f'https://kompressionnye-chulki24.ru/search/?query={cat.name.split()[-1]}',
                     'pictures': [f'https://kompressionnye-chulki24.ru{img.image.url}' for img in images],
-                    'name': f'{cat.name} - Компрессионные_чулки24',
+                    'name': f'{cat.name} - Интернет магазин-компрессионные_чулки24',
                     'description': cat.description or f'Купить {cat.name.lower()}',
                 })
 

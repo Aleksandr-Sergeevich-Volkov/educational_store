@@ -34,7 +34,6 @@
    </offer>
    {% endfor %}
   </offers>
-  
   {% if collections %}
   <collections>
    {% for collection in collections %}

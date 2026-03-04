@@ -56,7 +56,6 @@ class Command(BaseCommand):
             'products': products_data,
             'collections': catalogs,
         })
-
         # Сохранение файла
         file_path = '/var/www/html/goods_chulki.xml'
         with open(file_path, 'w', encoding='utf-8') as f:

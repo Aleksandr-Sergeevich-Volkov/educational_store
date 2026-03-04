@@ -50,7 +50,6 @@ class Command(BaseCommand):
                 'collection_id': f'cat_{p.Type_product.id}',
                 'seo_title': p.seo_title,  # Просто передаем, фильтр сделает всё в шаблоне
             })
-
         # Генерация XML
         xml_content = render_to_string('yml_feed.xml', {
             'current_date': datetime.now().strftime("%Y-%m-%dT%H:%M+03:00"),

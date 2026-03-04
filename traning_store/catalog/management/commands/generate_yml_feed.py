@@ -60,7 +60,6 @@ class Command(BaseCommand):
         file_path = '/var/www/html/goods_chulki.xml'
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(xml_content)
-
         self.stdout.write(
             self.style.SUCCESS(f'✅ YML feed generated: {file_path} ({len(catalogs)} cats, {len(products_data)} offers)')
         )

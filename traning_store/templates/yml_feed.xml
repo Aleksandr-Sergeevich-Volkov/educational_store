@@ -1,3 +1,4 @@
+{% load custom_filters %}
 <?xml version="1.0" encoding="UTF-8"?>
 <yml_catalog date="{{ current_date }}">
  <shop>
@@ -25,7 +26,7 @@
     <name>{{ product.name }}</name>
     <picture>https://kompressionnye-chulki24.ru{{ product.main_image_url }}</picture>
     <description>
-     <![CDATA[<p>{{ product.name }}</p>]]>
+    <![CDATA[<p>{{ product.seo_title|default:product.name|extract_middle }}</p>]]>
     </description>
     {% if product.collection_id %}
     <collectionId>{{ product.collection_id }}</collectionId>

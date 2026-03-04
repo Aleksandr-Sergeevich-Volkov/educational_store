@@ -336,6 +336,7 @@ class Product(models.Model):
     def _generate_seo_title(self):
         """Умная генерация title с вариативностью"""
         import random
+
         # Разные шаблоны для разных типов запросов
         templates = [
             # Коммерческие шаблоны

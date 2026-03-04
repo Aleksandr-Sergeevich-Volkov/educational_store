@@ -48,6 +48,7 @@ class Command(BaseCommand):
                 'main_image_url': img.image.url if img else '',
                 'category_id': cat_map.get(p.Type_product.name, 1),
                 'collection_id': f'cat_{p.Type_product.id}',
+                'seo_title': p.seo_title,  # Просто передаем, фильтр сделает всё в шаблоне
             })
 
         # Генерация XML

@@ -343,7 +343,6 @@ class Product(models.Model):
             lambda: f"{self.name} - купить арт. {self.articul} в Москве | {self.brand}",
             lambda: f"Купить {self.name} {self.brand} арт. {self.articul} цена с доставкой",
             lambda: f"{self.name} {self.brand} арт. {self.articul} - заказать в интернет-магазине",
-
             # С характеристиками
             lambda: f"{self.name} {self.Class_compress} - купить {self.brand} арт. {self.articul}",
             lambda: f"{self.Type_product} {self.Appointment} {self.brand} - купить арт. {self.articul}",

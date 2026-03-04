@@ -50,6 +50,5 @@
    {% endfor %}
   </collections>
   {% endif %}
-  
  </shop>
 </yml_catalog>

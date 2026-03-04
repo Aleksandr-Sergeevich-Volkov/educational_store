@@ -1,5 +1,5 @@
-{% load custom_filters %}
 <?xml version="1.0" encoding="UTF-8"?>
+{% load custom_filters %}
 <yml_catalog date="{{ current_date }}">
  <shop>
   <name>Компрессионные_чулки24</name>

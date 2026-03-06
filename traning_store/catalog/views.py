@@ -32,6 +32,7 @@ class ProductListView(FilterView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        queryset = queryset.filter(available=True)
         return queryset.prefetch_related(models.Prefetch(
             'images',
             queryset=Gallery.objects.filter(main=True),

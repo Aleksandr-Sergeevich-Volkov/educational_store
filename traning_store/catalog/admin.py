@@ -107,7 +107,7 @@ class GalleryInline(admin.TabularInline):
     model = Gallery
     extra = 1  # Показывать только 1 пустую строку
     classes = ['collapse']  # Сворачиваем по умолчанию
-    fields = ['image', 'image_preview', 'main']  # Показываем превью
+    fields = ['image', 'image_preview', 'main', 'type_product']  # Показываем превью
     readonly_fields = ['image_preview']
 
     def image_preview(self, obj):

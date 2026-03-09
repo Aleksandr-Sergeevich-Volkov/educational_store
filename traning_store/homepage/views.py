@@ -102,7 +102,7 @@ class HomePage(CityContextMixin, TemplateView):
             comment_count=models.Count('comments')
         ).order_by('id')
 
-        context['prod_count'] = Product.objects.aggregate(Count('id'))
+        context['prod_count'] = Product.objects.filter(available=True).aggregate(Count('id'))
 
         if Product.objects.exists():
             context['popular_products'] = Product.objects.filter(available=True).order_by('-views')[:5].prefetch_related(

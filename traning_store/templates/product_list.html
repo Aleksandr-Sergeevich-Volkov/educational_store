@@ -160,29 +160,16 @@ document.querySelectorAll('.filter-form select').forEach(select => {
         <img src="{{ image.image.url }}" 
              alt="{{ product.seo_alt|default:product.name }}" 
              class="card-img-top img-fluid" 
-             style="max-height: 250px; width: 100%; object-fit: contain; background-color: #f8f9fa;"
+             style="height: 280px; width: 100%; object-fit: cover;"
              itemprop="image">
     </a>
     {% empty %}
     <div class="bg-light d-flex align-items-center justify-content-center" 
-         style="height: 250px;">
+         style="height: 280px;">
         <span class="text-muted">Нет изображения</span>
     </div>
     {% endfor %}
 </div>
-
-<style>
-@media (min-width: 768px) {
-    .card-img-top {
-        max-height: 350px !important;
-    }
-}
-@media (min-width: 1200px) {
-    .card-img-top {
-        max-height: 400px !important;
-    }
-}
-</style>
 
                 <!-- Информация о товаре -->
                 <div class="card-body d-flex flex-column">

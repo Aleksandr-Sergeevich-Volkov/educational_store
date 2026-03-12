@@ -154,22 +154,22 @@ document.querySelectorAll('.filter-form select').forEach(select => {
             
             <div class="card h-100" itemscope itemtype="https://schema.org/Product">
                 <!-- Изображение товара -->
-                <div class="text-center p-3">
-                    {% for image in product.main_images %}
-                    <a href="{% url 'catalog:detail' product.slug %}">
-                        <img src="{{ image.image.url }}" 
-                             alt="{{ product.seo_alt|default:product.name }}" 
-                             class="card-img-top img-fluid" 
-                             style="max-height: 200px; width: auto; object-fit: contain;"
-                             itemprop="image">
-                    </a>
-                    {% empty %}
-                    <div class="bg-light d-flex align-items-center justify-content-center" 
-                         style="height: 200px;">
-                        <span class="text-muted">Нет изображения</span>
-                    </div>
-                    {% endfor %}
-                </div>
+<div class="text-center p-3">
+    {% for image in product.main_images %}
+    <a href="{% url 'catalog:detail' product.slug %}">
+        <img src="{{ image.image.url }}" 
+             alt="{{ product.seo_alt|default:product.name }}" 
+             class="card-img-top img-fluid" 
+             style="max-height: 300px; width: 100%; object-fit: contain; background-color: #f8f9fa;"
+             itemprop="image">
+    </a>
+    {% empty %}
+    <div class="bg-light d-flex align-items-center justify-content-center" 
+         style="height: 300px;">
+        <span class="text-muted">Нет изображения</span>
+    </div>
+    {% endfor %}
+</div>
 
                 <!-- Информация о товаре -->
                 <div class="card-body d-flex flex-column">

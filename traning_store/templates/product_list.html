@@ -160,12 +160,12 @@ document.querySelectorAll('.filter-form select').forEach(select => {
         <img src="{{ image.image.url }}" 
              alt="{{ product.seo_alt|default:product.name }}" 
              class="card-img-top img-fluid" 
-             style="height: 280px; width: 100%; object-fit: cover;"
+             style="height: min(300px, 40vh); width: 100%; object-fit: cover;"
              itemprop="image">
     </a>
     {% empty %}
     <div class="bg-light d-flex align-items-center justify-content-center" 
-         style="height: 280px;">
+         style="height: min(300px, 40vh);">
         <span class="text-muted">Нет изображения</span>
     </div>
     {% endfor %}

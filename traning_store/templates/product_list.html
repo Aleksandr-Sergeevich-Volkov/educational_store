@@ -154,29 +154,32 @@ document.querySelectorAll('.filter-form select').forEach(select => {
             
             <div class="card h-100" itemscope itemtype="https://schema.org/Product">
                 <!-- Изображение товара -->
-<div class="text-center p-3">
+<div class="text-center p-2">  <!-- Уменьшили p-3 → p-2 -->
     {% for image in product.main_images %}
     <a href="{% url 'catalog:detail' product.slug %}">
         <img src="{{ image.image.url }}" 
              alt="{{ product.seo_alt|default:product.name }}" 
              class="card-img-top img-fluid" 
-             style="max-height: 280px; width: 100%; object-fit: contain; background-color: #f8f9fa;"
+             style="max-height: 300px; width: 100%; object-fit: contain; background-color: #f8f9fa;"
              itemprop="image">
     </a>
     {% empty %}
     <div class="bg-light d-flex align-items-center justify-content-center" 
-         style="height: 280px;">
+         style="height: 300px;">
         <span class="text-muted">Нет изображения</span>
     </div>
     {% endfor %}
 </div>
-                <!-- Информация о товаре -->
-                <div class="card-body d-flex flex-column">
-                    <h2 class="h5 card-title">
-                        <a href="{% url 'catalog:detail' product.slug %}" class="text-decoration-none" itemprop="url">
-                            <span itemprop="name">{{ product.seo_title|default:product.name }}</span>
-                        </a>
-                    </h2>                                        
+
+<!-- Информация о товаре -->
+<div class="card-body d-flex flex-column pt-2">  <!-- Добавили pt-2 (padding-top) -->
+    <h2 class="h6 card-title mb-1">  <!-- h5 → h6, уменьшили mb-2 → mb-1 -->
+        <a href="{% url 'catalog:detail' product.slug %}" class="text-decoration-none" itemprop="url">
+            <span itemprop="name">{{ product.seo_title|default:product.name }}</span>
+        </a>
+    </h2>
+    <!-- остальное содержимое карточки -->
+</div>                   
                     <!-- Артикул товара -->
                     {% if product.articul %}
                     <div class="mb-2">

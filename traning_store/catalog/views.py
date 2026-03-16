@@ -168,7 +168,6 @@ class ProductDetailView(DetailView):
 
 def user_profile(request, username):
     profile = get_object_or_404(User, username=username)
-    # if request.user == profile and request.user.is_authenticated:
     if request.user != profile:
         # Можно сделать редирект на свой профиль или показать ошибку
         from django.http import HttpResponseForbidden

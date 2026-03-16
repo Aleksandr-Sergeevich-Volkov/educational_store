@@ -58,7 +58,6 @@ class ProductListView(FilterView):
         # Анализируем параметры фильтрации
         if hasattr(self, 'filterset') and self.filterset:
             filters = self.filterset.data
-
             # Бренд
             if filters.get('brand'):
                 try:

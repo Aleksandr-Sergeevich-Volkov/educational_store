@@ -158,7 +158,7 @@ class ProductDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Добавляем в словарь новый ключ:
-        context['images_m'] = Gallery.objects.filter(product=self.object).order_by('main', 'id')
+        context['images_m'] = Gallery.objects.filter(product=self.object).order_by('-main', 'id')
         context['colors'] = Color.objects.all()
         context['sizes'] = Size.objects.all()
         context['model_t'] = Model_type.objects.all()

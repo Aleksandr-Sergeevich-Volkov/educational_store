@@ -30,7 +30,6 @@ def delivery_add(request):
             json=data,
         )
         cost_ = homework_statuses.json().get('pricing_total')
-        # cost_not_price = Decimal('0')
         request.session['delivery_cost'] = homework_statuses.json().get('pricing_total').replace('RUB', "")
         request.session['delivery_address'] = form.cleaned_data['address_pvz'] + ' (Яндекс)'
         if cart.get_total_price() >= Decimal('500'):

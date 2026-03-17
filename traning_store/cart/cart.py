@@ -22,7 +22,7 @@ class Cart(object):
         self.cart = cart
         # сохранение текущего примененного купона
         self.coupon_id = self.session.get('coupon_id')
-        self.cost = Decimal('5000.00')
+        self.cost = Decimal('500.00')
         if self.session.get('delivery_cost'):
             self.delivery_cost = Decimal(self.session.get('delivery_cost'))
 

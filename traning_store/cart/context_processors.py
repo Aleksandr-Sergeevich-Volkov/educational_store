@@ -33,7 +33,7 @@ def currency(request):
 
 def weather(request):
     API_key = os.getenv('HEADERS')
-    coordinates = {'Химки': [55.897, 37.4297], 'Колорадо-Спрингс': [38.8339, 104.821]}
+    coordinates = {'Химки': [55.897, 37.4297], 'Хатанга': [71.964027, 102.440613]}
     lang = 'ru'
     celvin = 273.15
     city_temp = {}

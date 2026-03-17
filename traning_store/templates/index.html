@@ -27,16 +27,17 @@
             </div>
         </form>
         <!-- Контейнер для автодополнения -->
-        <div id="home-autocomplete" class="autocomplete-dropdown mt-1"></div>
+<div id="home-autocomplete" class="autocomplete-dropdown mt-1"></div>
     </div>
 </div>
 
 <div class="mb-3 d-flex justify-content-between align-items-center">
-    <div class="d-flex flex-wrap gap-2 align-items-center flex-grow-1">
+    <!-- Контейнер с кнопками брендов + баннер (горизонтальный скролл) -->
+    <div class="d-flex flex-nowrap gap-2 align-items-center overflow-auto flex-grow-1 pb-1" style="scrollbar-width: thin;">
         {% for brand in popular_brands %}
         <a href="{% url 'homepage:search' %}?query={{ brand.name }}"
-           class="btn btn-primary d-flex align-items-center justify-content-center"
-           style="min-width: fit-content; padding: 0.5rem 1rem; margin: 2px;">
+           class="btn btn-primary d-flex align-items-center justify-content-center flex-shrink-0"
+           style="padding: 0.5rem 1rem;">
             {% if brand.logo %}
             <img src="{{ brand.logo.url }}" 
                  alt="{{ brand.name }}"
@@ -46,6 +47,17 @@
             <span style="font-size: 0.95rem;">{{ brand.name }}</span>
         </a>
         {% endfor %}
+        
+        <!-- Рекламный баннер с бесплатной доставкой -->
+        <a href="catalog/" 
+           class="btn btn-primary d-flex align-items-center justify-content-center flex-shrink-0"
+           style="padding: 0.5rem 1rem; background-color: #28a745; border-color: #28a745;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="me-2" viewBox="0 0 16 16">
+                <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H6a2 2 0 1 1-4 0H1.5a1.5 1.5 0 0 1-1.5-1.5v-7zM3 12a1 1 0 1 0 2 0 1 1 0 0 0-2 0zm9-1a1 1 0 1 0 2 0 1 1 0 0 0-2 0z"/>
+                <path d="M4.5 5h4.5v1.5h-6V6H4v-.5z"/>
+            </svg>
+            <span style="font-size: 0.95rem;">🚚 Бесплатная доставка от 500₽</span>
+        </a>
     </div>
     
     <div class="ms-3 flex-shrink-0">

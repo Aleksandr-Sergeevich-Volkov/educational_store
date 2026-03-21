@@ -259,8 +259,6 @@ def get_cdek_order_status(track_number):
 def get_yandex_order_status(track_number):
     """Получение статуса от Яндекс.Доставки"""
     try:
-        # TODO: Реализовать запрос к API Яндекс.Доставки
-        # headers = {'Authorization': f'Bearer {YANDEX_API_KEY}'}
         params = {
             'request_id': track_number,
             'slim': True
@@ -299,7 +297,6 @@ def user_order_detail(request, order_id):
     # Получаем статус CDEK если есть трек-номер
     delivery_status = None
     if order.track_number and order.delivery_type == 'cdek':  # предполагаем, что у модели Order есть поле cdek_track_number
-        print(get_yandex_order_status(order.track_number))
         delivery_status = get_cdek_order_status(order.track_number)
     elif order.delivery_type == 'yandex':
         delivery_status = get_yandex_order_status(order.track_number)

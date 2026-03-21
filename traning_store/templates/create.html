@@ -128,6 +128,14 @@
                                         {% endif %}
                                         <div class="form-text">Улица, дом, квартира</div>
                                     </div>
+
+                                    <div class="col-12">
+                                        <label for="{{ form.delivery_type.id_for_label }}" class="form-label">Вид доставки *</label>
+                                        {{ form.delivery_type }}
+                                        {% if form.delivery_type.errors %}
+                                        <div class="text-danger small">{{ form.delivery_type.errors }}</div>
+                                        {% endif %}
+                                    </div>
                                     
                                     <div class="col-12">
                                         <label for="{{ form.address_pvz.id_for_label }}" class="form-label">Адрес ПВЗ (если доставка в пункт выдачи)</label>

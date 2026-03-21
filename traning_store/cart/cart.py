@@ -81,7 +81,6 @@ class Cart(object):
                 'm_type': str(m_type.name) if m_type else str(product.Model_type.name),
                 'images_m': str(Gallery.objects.filter(product=product))
             }
-            print(f'add {self.cart[product_key]}')
         if update_quantity:
             self.cart[product_key]['quantity'] = quantity
         else:
@@ -97,7 +96,6 @@ class Cart(object):
     def remove(self, product, size, color, m_type):
         """Удаляет товар с конкретными характеристиками из корзины"""
         product_key = self._generate_product_key(product, size, color, m_type)
-        print(f'Key remove {product_key}')
         if product_key in self.cart:
             del self.cart[product_key]
             self.save()

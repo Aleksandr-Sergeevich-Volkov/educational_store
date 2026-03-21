@@ -15,6 +15,39 @@
                     {% if order.paid %}Оплачен{% else %}Ожидает оплаты{% endif %}
                 </span>
             </div>
+            
+<!-- Статус доставки (единый блок для всех служб) -->
+{% if order.track_number %}
+    <div class="delivery-status card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                🚚 Статус доставки
+                {% if order.delivery_type == 'cdek' %}(СДЭК){% elif order.delivery_type == 'yandex' %}(Яндекс.Доставка){% endif %}
+            </h5>
+        </div>
+        <div class="card-body">
+            <p><strong>Трек-номер:</strong> <code>{{ order.track_number }}</code></p>
+            
+            {% if delivery_status %}
+                <p><strong>Статус:</strong> {{ delivery_status.description }}</p>
+                 <p><strong>Дата обновления:</strong> {{ delivery_status.date }}</p>
+                
+                {% if delivery_status.sharing_url %}
+                    <div class="mt-3">
+                        <a href="{{ delivery_status.sharing_url }}" target="_blank" class="btn btn-primary">
+                            🔍 Отследить на сайте 
+                            {% if order.delivery_type == 'cdek' %}СДЭК{% else %}Яндекс.Доставки{% endif %}
+                        </a>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="alert alert-warning mt-2 mb-0">
+                    ⏳ Информация о статусе загружается...
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
 
             <!-- Список товаров -->
             <div class="card mb-4">

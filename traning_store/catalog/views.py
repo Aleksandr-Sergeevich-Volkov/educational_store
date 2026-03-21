@@ -1,5 +1,8 @@
+import os
 from urllib.parse import urlencode
 
+import dateutil.parser
+import requests
 from cart.forms import CartAddProductForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -9,9 +12,11 @@ from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView
 from django_filters.views import FilterView
+from dotenv import load_dotenv
 from orders.models import Order, OrderItem
 
-from traning_store.settings import ROBOKASSA_LOGIN, ROBOKASSA_PASSWORD_1
+from traning_store.settings import (CDEK_CLIENT_ID, CDEK_CLIENT_SECRET,
+                                    ROBOKASSA_LOGIN, ROBOKASSA_PASSWORD_1)
 from traning_store.views import generate_payment_link
 
 from .filters import ProductFilter
@@ -20,6 +25,8 @@ from .models import (Appointment, Brend, Color, Gallery, Model_type, Product,
                      Size, Type_product)
 
 User = get_user_model()
+
+load_dotenv()
 
 
 class ProductListView(FilterView):
@@ -181,9 +188,121 @@ def user_profile(request, username):
     return render(request, 'blog/profile.html', context)
 
 
+def get_cdek_order_status(track_number):
+    """
+    Получение статуса заказа от CDEK по трек-номеру
+    """
+    try:
+        # Авторизация в API CDEK (получение токена)
+        auth_data = {
+            'grant_type': 'client_credentials',
+            'client_id': CDEK_CLIENT_ID,
+            'client_secret': CDEK_CLIENT_SECRET
+        }
+        auth_response = requests.post(
+            'https://api.cdek.ru/v2/oauth/token',
+            data=auth_data
+        )
+        if auth_response.status_code == 200:
+            access_token = auth_response.json().get('access_token')
+
+            # Запрос информации о заказе
+            headers = {
+                'Authorization': f'Bearer {access_token}',
+                'Content-Type': 'application/json'
+            }
+
+            # Получение информации о заказе по трек-номеру
+            order_response = requests.get(
+                f'https://api.cdek.ru/v2/orders?cdek_number={track_number}',
+                headers=headers
+            )
+
+            if order_response.status_code == 200:
+                data = order_response.json()
+                # Ваш реальный ответ содержит 'entity'
+                if 'entity' in data:
+                    entity = data['entity']
+
+                    # Статусы находятся в entity.statuses
+                    if 'statuses' in entity and entity['statuses']:
+                        statuses = entity['statuses']
+                        # Первый статус - самый новый
+                        latest_status = statuses[0]
+                        # Преобразуем дату из строки в datetime объект
+                        date_str = latest_status.get('date_time')
+                        date_obj = None
+                        if date_str:
+                            try:
+                                date_obj = dateutil.parser.parse(date_str)
+                            except (ValueError, TypeError, OverflowError) as e:
+                                print(f"Error getting CDEK status: {e}")
+                                date_obj = date_str
+                        # ПРАВИЛЬНЫЕ ПОЛЯ ИЗ ВАШЕГО ОТВЕТА
+                        return {
+                            'code': latest_status.get('code'),           # 'CREATED'
+                            'description': latest_status.get('name'),    # 'Создан'
+                            'date': date_obj,      # '2026-03-18T09:41:46+0000'
+                            'track_number': track_number,
+                            'sharing_url': f'https://www.cdek.ru/ru/tracking?order_id={track_number}',
+                            'all_statuses': statuses,
+                            'service': 'cdek'
+                        }
+
+    except Exception as e:
+        print(f"Error getting CDEK status: {e}")
+        return None
+
+    return None
+
+
+def get_yandex_order_status(track_number):
+    """Получение статуса от Яндекс.Доставки"""
+    try:
+        # TODO: Реализовать запрос к API Яндекс.Доставки
+        # headers = {'Authorization': f'Bearer {YANDEX_API_KEY}'}
+        params = {
+            'request_id': track_number,
+            'slim': True
+        }
+        HEADERS = {'Authorization': os.getenv('HEADERS_Delivery')}
+        response = requests.get('https://b2b-authproxy.taxi.yandex.net/api/b2b/platform/request/info', params=params, headers=HEADERS)
+
+        if response.status_code == 200:
+            data = response.json()
+            state = data.get('state', {})
+            date_str = state.get('timestamp')
+            date_obj = None
+            if date_str:
+                try:
+                    date_obj = dateutil.parser.parse(date_str)
+                except (ValueError, TypeError, OverflowError) as e:
+                    print(f"Yandex error: {e}")
+                    date_obj = date_str
+            return {
+                'code': state.get('status'),                    # 'SORTING_CENTER_LOADED'
+                'description': state.get('description'),        # 'Создан в сортировочном центре'
+                'date': date_obj,                               # '2026-03-20T19:51:12.000000Z'
+                'track_number': data.get('request_id'),         # трек-номер
+                'sharing_url': data.get('sharing_url'),         # ссылка для отслеживания
+                'all_statuses': None,                           # Яндекс не возвращает историю в этом запросе
+                'service': 'yandex'
+            }
+    except Exception as e:
+        print(f"Yandex error: {e}")
+        return None
+
+
 def user_order_detail(request, order_id):
     profile = get_object_or_404(User, username=request.user)
     order = get_object_or_404(Order, id=order_id)
+    # Получаем статус CDEK если есть трек-номер
+    delivery_status = None
+    if order.track_number and order.delivery_type == 'cdek':  # предполагаем, что у модели Order есть поле cdek_track_number
+        print(get_yandex_order_status(order.track_number))
+        delivery_status = get_cdek_order_status(order.track_number)
+    elif order.delivery_type == 'yandex':
+        delivery_status = get_yandex_order_status(order.track_number)
     if order.paid is False and request.user == profile and request.user.is_authenticated:
         pay_link = generate_payment_link(merchant_login=ROBOKASSA_LOGIN,
                                          merchant_password_1=ROBOKASSA_PASSWORD_1,
@@ -197,12 +316,14 @@ def user_order_detail(request, order_id):
         context = {'order_item': order_item,
                    'pay_link': pay_link,
                    'order': order,
+                   'delivery_status': delivery_status,  # добавляем статус досавки в контекст
                    }
         return render(request, 'blog/user_orders_detail.html', context)
     else:
         order_item = OrderItem.objects.filter(order=order_id)
         context = {'order_item': order_item,
                    'order': order,
+                   'status': delivery_status,  # добавляем статус CDEK в контекст
                    }
         return render(request, 'blog/user_orders_detail.html', context)
 

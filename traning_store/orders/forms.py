@@ -13,18 +13,19 @@ class OrderCreateForm(forms.ModelForm):
     last_name = models.CharField('Фамилия', max_length=20)
     email = models.EmailField('Почта', max_length=300)
     address = models.CharField('Адрес', max_length=20)
+    delivery_type = models.CharField('Доставка', max_length=20)
     address_pvz = models.CharField('Адрес ПВЗ', max_length=20)
     postal_code = models.CharField('Индекс', max_length=20)
     city = models.CharField('Город', max_length=20)
 
     class Meta:
         model = Order
-        fields = ['first_name', 'last_name', 'email', 'address', 'address_pvz',
+        fields = ['first_name', 'last_name', 'email', 'address', 'address_pvz', 'delivery_type',
                   'postal_code', 'city']
         labels = {'first_name': 'Имя', 'last_name': 'Фамилия',
-                  'email': 'Почта', 'address': 'Адрес',
+                  'email': 'Почта', 'address': 'Адрес', 'delivery_type': 'Доставка',
                   'address_pvz': 'Адрес ПВЗ', 'postal_code': 'Индекс',
-                  'city': 'Город'}
+                  'city': 'Город', }
 
     def __init__(self, *args, **kwargs):
         super(OrderCreateForm, self).__init__(*args, **kwargs)

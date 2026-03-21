@@ -28,6 +28,11 @@ class Order(models.Model):
     delivery_sum = models.DecimalField(default=0,
                                        max_digits=10,
                                        decimal_places=2)
+    delivery_type = models.CharField(max_length=50, blank=True, null=True, verbose_name='Вид доставки')
+    track_number = models.CharField(max_length=50, blank=True, null=True, verbose_name='Трек-номер CDEK')
+    order_id = models.CharField(max_length=50, blank=True, null=True, verbose_name='ID заказа в CDEK')
+    delivery_status = models.CharField(max_length=100, blank=True, null=True, verbose_name='Статус доставки')
+    last_status_update = models.DateTimeField(auto_now=True, verbose_name='Последнее обновление статуса')
 
     class Meta:
         ordering = ('-created',)

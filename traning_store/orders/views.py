@@ -84,6 +84,10 @@ def _prepare_initial_form_data(request):
     if delivery_address:
         initial_data["address_pvz"] = delivery_address
 
+    delivery_type = request.session.get('delivery_type')
+    if delivery_type:
+        initial_data["delivery_type"] = delivery_type
+
     return initial_data
 
 

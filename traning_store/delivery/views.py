@@ -32,6 +32,7 @@ def delivery_add(request):
         cost_ = homework_statuses.json().get('pricing_total')
         request.session['delivery_cost'] = homework_statuses.json().get('pricing_total').replace('RUB', "")
         request.session['delivery_address'] = form.cleaned_data['address_pvz'] + ' (Яндекс)'
+        request.session['delivery_type'] = 'yandex'  # Тип доставки
         if cart.get_total_price() >= Decimal('500'):
             messages.success(request, 'Поздравляем! Доставка бесплатна!')
         else:
@@ -49,6 +50,7 @@ def delivery_add_cdek(request):
         sum = form.cleaned_data['sum']
         request.session['delivery_cost'] = sum
         request.session['delivery_address'] = form.cleaned_data['address_pvz'] + ' (Сдек)'
+        request.session['delivery_type'] = 'cdek'  # Тип доставки
         if cart.get_total_price() >= Decimal('500'):
             messages.success(request, 'Поздравляем! Доставка бесплатна!')
         else:

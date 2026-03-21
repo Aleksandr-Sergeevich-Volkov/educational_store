@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 
-from django.urls import reverse_lazy
+# from django.urls import reverse_lazy
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -194,3 +194,6 @@ CACHES = {
 
 # Время кэширования геолокации (секунды)
 GEOLOCATION_CACHE_TIMEOUT = 86400  # 24 часа
+
+CDEK_CLIENT_ID = os.getenv('CDEK_CLIENT_ID')
+CDEK_CLIENT_SECRET = os.getenv('CDEK_CLIENT_SECRET')

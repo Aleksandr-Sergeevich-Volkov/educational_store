@@ -38,12 +38,26 @@ export_to_csv.short_description = 'Export to CSV'
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'first_name', 'last_name', 'email',
-                    'address', 'address_pvz', 'postal_code', 'city', 'paid',
-                    'created', 'updated']
+    list_display = [
+        'id', 'first_name', 'last_name', 'email',
+        'address', 'address_pvz', 'postal_code', 'city',
+        'paid', 'created', 'updated',
+        'track_number',  # Добавили трек-номер
+        'order_id',       # Добавили ID заказа в CDEK
+        'get_status'      # Кастомное поле для статуса
+    ]
     list_filter = ['paid', 'created', 'updated']
     inlines = [OrderItemInline]
     actions = [export_to_csv]
+
+    def get_status(self, obj):
+        """Отображение статуса CDEK в админке"""
+        if obj.track_number:
+            # Здесь можно добавить вызов API для получения актуального статуса
+            # Или просто показать сохраненный статус
+            return obj.delivery_status or "Статус неизвестен"
+        return "Нет трек-номера"
+    get_status.short_description = "Статус доставки "
 
 
 admin.site.register(Order, OrderAdmin)

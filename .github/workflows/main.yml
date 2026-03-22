@@ -218,11 +218,10 @@ jobs:
     steps:
     - name: Send MAX notification
       run: |
-        curl -X POST "https://platform-api.max.ru/messages" \
+          curl -X POST "https://platform-api.max.ru/messages" \
           -H "Authorization: ${{ secrets.MAX_BOT_TOKEN }}" \
           -H "Content-Type: application/json" \
-          -d '{
-            "user_id": ${{ secrets.MAX_USER_ID }},
-            "text": "✅ Деплой успешно выполнен!\n\n📦 Репозиторий: ${{ github.repository }}\n🌿 Ветка: ${{ github.ref_name }}\n👤 Автор: ${{ github.actor }}\n\nСмотреть логи: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
-            "format": "html"
-          }'      
+          -d "{
+           \"user_id\": ${{ secrets.MAX_USER_ID }},
+           \"text\": \"✅ Деплой успешно выполнен!\n\n📦 ${{ github.repository }}\n🌿 ${{ github.ref_name }}\n👤 ${{ github.actor }}\n\nЛоги: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+          }"

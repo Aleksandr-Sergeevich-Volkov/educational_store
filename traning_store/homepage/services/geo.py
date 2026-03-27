@@ -30,17 +30,17 @@ class SimpleGeolocation:
             # Ищем первый не-Docker, не-localhost IP
             for ip in ips:
                 if ip and SimpleGeolocation._is_external_ip(ip):
-                    print(f"✅ Found real IP from X-Forwarded-For: {ip}")
+                    # print(f"✅ Found real IP from X-Forwarded-For: {ip}")
                     return ip
 
         # 2. Проверяем X-Real-IP (может быть Docker IP)
         x_real_ip = request.META.get('HTTP_X_REAL_IP')
         if x_real_ip and SimpleGeolocation._is_external_ip(x_real_ip):
-            print(f"✅ Found real IP from X-Real-IP: {x_real_ip}")
+            # print(f"✅ Found real IP from X-Real-IP: {x_real_ip}")
             return x_real_ip
 
         # 3. Для разработки или если нет внешнего IP
-        print('⚠️ No external IP found, using emulation')
+        # print('⚠️ No external IP found, using emulation')
         return SimpleGeolocation._emulate_ip(request)
 
     @staticmethod
@@ -90,7 +90,7 @@ class SimpleGeolocation:
             return SimpleGeolocation._get_test_city_for_ip(ip)
 
         # Для реальных IP используем API
-        print(f"🌍 Looking up real IP {ip} via API...")
+        # print(f"🌍 Looking up real IP {ip} via API...")
         return SimpleGeolocation._get_real_city_by_ip(ip)
 
     @staticmethod
@@ -131,7 +131,7 @@ class SimpleGeolocation:
         cache_key = f'geo_real_{ip}'
         cached = cache.get(cache_key)
         if cached:
-            print(f"📦 From cache: {cached}")
+            # print(f"📦 From cache: {cached}")
             return cached.get('city'), cached.get('region')
 
         try:
@@ -155,15 +155,15 @@ class SimpleGeolocation:
                 # Кэшируем
                 result = {'city': city_lat, 'region': region_lat}
                 cache.set(cache_key, result, 3600)
-                print(f"✅ City from API: {city_lat}, {region_lat}")
+                # print(f"✅ City from API: {city_lat}, {region_lat}")
 
                 return city_lat, region_lat
             else:
-                print(f"⚠️ No Russian city found for IP {ip}")
+                # print(f"⚠️ No Russian city found for IP {ip}")
                 return SimpleGeolocation._get_fallback_city(ip)
 
         except Exception as e:
-            print(f"❌ API error: {e}")
+            # print(f"❌ API error: {e}")
             return SimpleGeolocation._get_fallback_city(ip)
 
     @staticmethod
@@ -188,7 +188,7 @@ class SimpleGeolocation:
                     # Город уже есть - увеличиваем счетчик
                     city_obj.detection_count += 1
                     city_obj.save(update_fields=['detection_count', 'updated_at'])
-                    print(f"   🔄 City exists: {city_lat} (count: {city_obj.detection_count})")
+                    # print(f"   🔄 City exists: {city_lat} (count: {city_obj.detection_count})")
                 else:
                     # Создаем новый город
                     city_obj = City.objects.create(
@@ -199,10 +199,10 @@ class SimpleGeolocation:
                         detection_count=1,
                         is_active=True,
                     )
-                    print(f"   ✅ NEW CITY ADDED: {city_lat}, {region_lat}")
+                    # print(f"   ✅ NEW CITY ADDED: {city_lat}, {region_lat}")
 
                 return city_obj
 
         except Exception as e:
-            print(f"   ❌ Error saving city: {e}")
+            # print(f"   ❌ Error saving city: {e}")
             return None

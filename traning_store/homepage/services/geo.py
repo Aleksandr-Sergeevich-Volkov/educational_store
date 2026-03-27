@@ -162,7 +162,8 @@ class SimpleGeolocation:
                 # print(f"⚠️ No Russian city found for IP {ip}")
                 return SimpleGeolocation._get_fallback_city(ip)
 
-        except Exception as e:
+        #  as e:
+        except Exception:
             # print(f"❌ API error: {e}")
             return SimpleGeolocation._get_fallback_city(ip)
 
@@ -203,6 +204,7 @@ class SimpleGeolocation:
 
                 return city_obj
 
-        except Exception as e:
+        # except Exception as e:
+        except Exception:
             # print(f"   ❌ Error saving city: {e}")
             return None

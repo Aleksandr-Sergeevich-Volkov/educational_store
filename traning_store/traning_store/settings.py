@@ -63,6 +63,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_toolbar',
     'django_bootstrap5',
+    'api',
+    'rest_framework',
+    'max_bot',
 ]
 
 MIDDLEWARE = [
@@ -197,3 +200,4 @@ GEOLOCATION_CACHE_TIMEOUT = 86400  # 24 часа
 
 CDEK_CLIENT_ID = os.getenv('CDEK_CLIENT_ID')
 CDEK_CLIENT_SECRET = os.getenv('CDEK_CLIENT_SECRET')
+MAX_BOT_TOKEN = os.getenv('MAX_BOT_TOKEN', '')

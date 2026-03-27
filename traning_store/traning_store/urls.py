@@ -17,6 +17,8 @@ urlpatterns = [
     re_path(r'^cart/', include(('cart.urls', 'cart'), namespace='cart')),
     path('', include('homepage.urls')),
     path('', include('catalog.urls')),
+    path('api/', include('api.urls')),  # API приложения
+    path('bot/', include('max_bot.urls')),  # ← все маршруты бота
     path('', include('delivery.urls')),
     path('auth/login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),

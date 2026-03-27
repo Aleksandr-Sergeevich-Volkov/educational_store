@@ -288,7 +288,7 @@ def detail_view(request, pk):
 
 @login_required
 def add_comment(request, post_id):
-    print(f'test{post_id}')
+    # print(f'test{post_id}')
     post = get_object_or_404(Post, pk=post_id)
     form = CommentForm(request.POST)
     if form.is_valid():
@@ -433,7 +433,7 @@ def detect_city(request):
         from .services.geo import SimpleGeolocation
 
         ip = SimpleGeolocation.get_client_ip(request)
-        print(f"Определение города для IP: {ip}")  # Для логов
+        # print(f"Определение города для IP: {ip}")  # Для логов
 
         city_name, region_name = SimpleGeolocation.get_city_by_ip(ip)
 
@@ -465,7 +465,7 @@ def detect_city(request):
             })
 
     except Exception as e:
-        print(f"Ошибка при определении города: {e}")
+        # print(f"Ошибка при определении города: {e}")
         return JsonResponse({
             'success': False,
             'message': f'Ошибка сервера: {str(e)}'

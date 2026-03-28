@@ -4,19 +4,18 @@
 
 
 def get_main_keyboard():
-    """Главная клавиатура"""
     return {
-        "inline_keyboard": [
+        "buttons": [  # ← ключ "buttons"
             [
-                {"text": "🛍 Каталог", "callback_data": "catalog"},
-                {"text": "🔍 Поиск", "callback_data": "search"}
+                {"text": "🛍 Каталог", "callback": "catalog"},
+                {"text": "🔍 Поиск", "callback": "search"}
             ],
             [
-                {"text": "📦 Корзина", "callback_data": "cart"},
-                {"text": "📞 Контакты", "callback_data": "contacts"}
+                {"text": "📦 Корзина", "callback": "cart"},
+                {"text": "📞 Контакты", "callback": "contacts"}
             ],
             [
-                {"text": "❓ Помощь", "callback_data": "help"}
+                {"text": "❓ Помощь", "callback": "help"}
             ]
         ]
     }

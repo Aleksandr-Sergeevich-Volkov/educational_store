@@ -23,6 +23,16 @@ def send_message(user_id, text, keyboard=None):
     Returns:
         bool: True если отправлено успешно
     """
+    payload = {"text": text}
+    if keyboard:
+        payload["keyboard"] = keyboard
+
+    # Подробный вывод
+    import json
+    print("=" * 50)
+    print(f"Sending to user_id: {user_id}")
+    print(f"Payload JSON: {json.dumps(payload, ensure_ascii=False, indent=2)}")
+    print("=" * 50)
     if not settings.MAX_BOT_TOKEN:
         logger.error("MAX_BOT_TOKEN не настроен в settings.py")
         return False

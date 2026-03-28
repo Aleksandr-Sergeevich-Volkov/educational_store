@@ -4,73 +4,44 @@
 
 
 def get_main_keyboard():
-    return {
-        "buttons": [  # ← ключ "buttons"
-            [
-                {"text": "🛍 Каталог", "callback": "catalog"},
-                {"text": "🔍 Поиск", "callback": "search"}
-            ],
-            [
-                {"text": "📦 Корзина", "callback": "cart"},
-                {"text": "📞 Контакты", "callback": "contacts"}
-            ],
-            [
-                {"text": "❓ Помощь", "callback": "help"}
-            ]
+    """Главная клавиатура"""
+    return [
+        [
+            {"type": "callback", "text": "🛍 Каталог", "payload": "catalog"},
+            {"type": "callback", "text": "🔍 Поиск", "payload": "search"}
+        ],
+        [
+            {"type": "callback", "text": "📦 Корзина", "payload": "cart"},
+            {"type": "callback", "text": "📞 Контакты", "payload": "contacts"}
+        ],
+        [
+            {"type": "callback", "text": "❓ Помощь", "payload": "help"}
         ]
-    }
+    ]
 
 
 def get_categories_keyboard(categories):
-    """Клавиатура с категориями товаров (виды изделий)"""
-    keyboard = []
-    row = []
-    for i, cat in enumerate(categories):
-        row.append({"text": cat.name, "callback_data": f"category_{cat.id}"})
-        if len(row) == 2 or i == len(categories) - 1:
-            keyboard.append(row)
-            row = []
-
-    keyboard.append([{"text": "◀️ Назад", "callback_data": "back"}])
-    return {"inline_keyboard": keyboard}
-
-
-def get_compress_classes_keyboard(classes):
-    """Клавиатура с классами компрессии"""
-    keyboard = []
-    for cls in classes:
-        keyboard.append([{"text": cls.name, "callback_data": f"compress_{cls.id}"}])
-
-    keyboard.append([{"text": "◀️ Назад", "callback_data": "back"}])
-
-    return {"inline_keyboard": keyboard}
+    """Клавиатура с категориями"""
+    buttons = []
+    for cat in categories:
+        buttons.append([
+            {"type": "callback", "text": cat.name, "payload": f"category_{cat.id}"}
+        ])
+    buttons.append([
+        {"type": "callback", "text": "◀️ Назад", "payload": "back"}
+    ])
+    return buttons
 
 
 def get_products_keyboard(products):
     """Клавиатура со списком товаров"""
-    keyboard = []
+    buttons = []
     for product in products[:10]:
         text = f"{product.name[:30]} - {product.price} ₽"
-        keyboard.append([{"text": text, "callback_data": f"product_{product.id}"}])
-
-    keyboard.append([{"text": "⬅️ Назад", "callback_data": "back"}])
-
-    return {"inline_keyboard": keyboard}
-
-
-def get_product_keyboard(product_id):
-    """Клавиатура для карточки товара"""
-    return {
-        "inline_keyboard": [
-            [
-                {"text": "🛒 В корзину", "callback_data": f"add_to_cart_{product_id}"},
-                {"text": "❤️ В избранное", "callback_data": f"favorite_{product_id}"}
-            ],
-            [
-                {"text": "📏 Таблица размеров", "callback_data": f"size_table_{product_id}"}
-            ],
-            [
-                {"text": "◀️ Назад к каталогу", "callback_data": "back_to_catalog"}
-            ]
-        ]
-    }
+        buttons.append([
+            {"type": "callback", "text": text, "payload": f"product_{product.id}"}
+        ])
+    buttons.append([
+        {"type": "callback", "text": "◀️ Назад", "payload": "back"}
+    ])
+    return buttons

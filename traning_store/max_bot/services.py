@@ -11,56 +11,26 @@ logger = logging.getLogger(__name__)
 MAX_API_URL = "https://platform-api.max.ru/messages"
 
 
-def send_message(user_id, text, keyboard=None):
+def send_message(user_id, text, buttons=None):
     """
     Отправляет сообщение пользователю через MAX API.
-
-    Args:
-        user_id (str): ID пользователя в MAX
-        text (str): Текст сообщения (можно с Markdown)
-        keyboard (dict, optional): Inline-клавиатура
-
-    Returns:
-        bool: True если отправлено успешно
+    buttons — список списков кнопок, где каждая кнопка: {"type": "callback", "text": "...", "payload": "..."}
     """
-    payload = {"text": text}
-    if keyboard:
-        payload["keyboard"] = keyboard
-
-    # Подробный вывод
-    import json
-    print("=" * 50)
-    print(f"Sending to user_id: {user_id}")
-    print(f"Payload JSON: {json.dumps(payload, ensure_ascii=False, indent=2)}")
-    print("=" * 50)
-    if not settings.MAX_BOT_TOKEN:
-        logger.error("MAX_BOT_TOKEN не настроен в settings.py")
-        return False
-
     headers = {
         "Authorization": settings.MAX_BOT_TOKEN,
         "Content-Type": "application/json"
     }
 
     payload = {"text": text}
-    if keyboard:
-        payload["keyboard"] = keyboard
 
-    try:
-        response = requests.post(
-            f"{MAX_API_URL}?user_id={user_id}",
-            json=payload,
-            headers=headers,
-            timeout=10
-        )
+    if buttons:
+        payload["attachments"] = [
+            {
+                "type": "inline_keyboard",
+                "payload": {"buttons": buttons}
+            }
+        ]
 
-        if response.status_code == 200:
-            logger.info(f"Message sent to {user_id}")
-            return True
-        else:
-            logger.error(f"Failed to send message: {response.status_code} - {response.text}")
-            return False
-
-    except Exception as e:
-        logger.error(f"Error sending message: {e}")
-        return False
+    url = f"https://platform-api.max.ru/messages?user_id={user_id}"
+    response = requests.post(url, json=payload, headers=headers, timeout=10)
+    return response.status_code == 200

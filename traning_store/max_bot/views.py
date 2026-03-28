@@ -10,8 +10,9 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from .keyboards import (get_compress_classes_keyboard, get_main_keyboard,
-                        get_product_keyboard, get_products_keyboard)
+from .keyboards import (get_categories_keyboard, get_compress_classes_keyboard,
+                        get_main_keyboard, get_product_keyboard,
+                        get_products_keyboard)
 from .messages import (format_product_card, format_product_list,
                        get_cart_message, get_help_message, get_start_message)
 from .services import send_message
@@ -78,23 +79,18 @@ def max_webhook(request):
 
 
 def send_welcome(user_id):
-    from .keyboards import get_main_keyboard
-    from .services import send_message
-
-    text = get_start_message()
-    buttons = get_main_keyboard()
-    send_message(user_id, text, buttons)
+    """Отправляет приветственное сообщение"""
+    send_message(user_id, get_start_message(), get_main_keyboard())
 
 
 def show_catalog_categories(user_id):
-    from .keyboards import get_categories_keyboard
-    from .services import send_message
-
+    """Показывает категории товаров (виды изделий)"""
     categories = Type_product.objects.all()
+
     if categories.exists():
         text = "Выберите вид изделия:"
-        buttons = get_categories_keyboard(categories)
-        send_message(user_id, text, buttons)
+        keyboard = get_categories_keyboard(categories)
+        send_message(user_id, text, keyboard)
     else:
         send_message(user_id, "Категории временно недоступны")
 

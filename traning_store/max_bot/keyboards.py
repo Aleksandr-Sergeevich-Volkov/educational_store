@@ -32,7 +32,6 @@ def get_categories_keyboard(categories):
             row = []
 
     keyboard.append([{"text": "◀️ Назад", "callback_data": "back"}])
-
     return {"inline_keyboard": keyboard}
 
 

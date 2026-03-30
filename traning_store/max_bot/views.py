@@ -26,7 +26,6 @@ def max_webhook(request):
     try:
         data = json.loads(request.body)
         update_type = data.get('update_type')
-
         user_id = None
         text = None
         callback = None  # ← добавим переменную для callback

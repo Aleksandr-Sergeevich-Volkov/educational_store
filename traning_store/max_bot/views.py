@@ -26,6 +26,7 @@ def max_webhook(request):
     """
     Эндпоинт для получения вебхуков от MAX.
     """
+
     print(json.loads(request.body))
     print("=" * 60)
     print("WEBHOOK CALLED")

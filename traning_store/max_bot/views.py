@@ -190,7 +190,6 @@ def show_product_detail(user_id, product_id):
 
     text = format_product_card(product)
     keyboard = get_product_keyboard(product_id)
-
     send_message(user_id, text, keyboard)
 
 

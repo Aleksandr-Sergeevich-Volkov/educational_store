@@ -79,7 +79,6 @@ def max_webhook(request):
         else:
             print(f"Unknown command: {text}")
             send_message(user_id, "Неизвестная команда. Используйте /help")
-
         print("Returning success response")
         return JsonResponse({"ok": True})
 

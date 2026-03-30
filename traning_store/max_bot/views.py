@@ -36,7 +36,6 @@ def max_webhook(request):
     try:
         data = json.loads(request.body)
         print(f"Parsed data: {json.dumps(data, ensure_ascii=False, indent=2)}")
-
         update_type = data.get('update_type')
         print(f"update_type: {update_type}")
 

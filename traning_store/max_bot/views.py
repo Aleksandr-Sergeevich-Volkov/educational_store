@@ -90,7 +90,6 @@ def send_welcome(user_id):
     """Отправляет приветственное сообщение"""
     # print(f"send_welcome called for user_id={user_id}")
     from .services import send_message
-
     text = get_start_message()
     buttons = get_main_keyboard()
     # print(f"Welcome text: {text[:50]}...")

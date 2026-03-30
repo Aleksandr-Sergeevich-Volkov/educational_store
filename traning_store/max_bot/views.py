@@ -26,6 +26,8 @@ def max_webhook(request):
     """
     Эндпоинт для получения вебхуков от MAX.
     """
+    print(json.loads(request))
+    print(json.loads(request.body))
     print("=" * 60)
     print("WEBHOOK CALLED")
     print(f"Method: {request.method}")
@@ -34,37 +36,54 @@ def max_webhook(request):
 
     try:
         data = json.loads(request.body)
+        print(f"Parsed data: {json.dumps(data, ensure_ascii=False, indent=2)}")
 
-        # Извлекаем данные из реальной структуры MAX
-        message = data.get('message', {})
-        sender = message.get('sender', {})
-        user_id = sender.get('user_id')  # ← user_id отправителя
+        update_type = data.get('update_type')
+        print(f"update_type: {update_type}")
 
-        body = message.get('body', {})
-        text = body.get('text', '')
+        user_id = None
+        text = None
 
-        # callback может приходить в другом поле
-        callback = data.get('callback') or data.get('payload')
+        # Обработка bot_started (нажатие кнопки "Начать")
+        if update_type == 'bot_started':
+            user_id = data.get('user_id')
+            text = '/start'
+            print(f"bot_started: user_id={user_id}")
 
-        print(f"user_id: {user_id}, text: {text}, callback: {callback}")
-
-        if not user_id:
-            return JsonResponse({"ok": False, "error": "user_id required"}, status=400)
-
-        # Обработка нажатия на кнопку
-        if callback:
-            handle_callback(user_id, callback)
-
-        # Обработка текстовых команд
-        elif text == '/start':
-            send_welcome(user_id)
-
-        elif text == '/help':
-            send_message(user_id, "Помощь в разработке")
+        # Обработка message_created (текстовое сообщение)
+        elif update_type == 'message_created':
+            message_data = data.get('message', {})
+            sender = message_data.get('sender', {})
+            user_id = sender.get('user_id')
+            body = message_data.get('body', {})
+            text = body.get('text', '')
+            print(f"message_created: user_id={user_id}, text={text}")
 
         else:
+            print(f"Unknown update_type: {update_type}")
+            return JsonResponse({"ok": True})
+
+        if not user_id:
+            print("ERROR: No user_id found")
+            return JsonResponse({"ok": False, "error": "user_id required"}, status=400)
+
+        print(f"Processing: user_id={user_id}, text={text}")
+
+        # Обработка команд
+        if text == '/start':
+            print("Calling send_welcome...")
+            send_welcome(user_id)
+            print("send_welcome completed")
+
+        elif text == '/help':
+            print("Calling send_message for help...")
+            send_message(user_id, "❓ Помощь в разработке")
+
+        else:
+            print(f"Unknown command: {text}")
             send_message(user_id, "Неизвестная команда. Используйте /help")
 
+        print("Returning success response")
         return JsonResponse({"ok": True})
 
     except json.JSONDecodeError as e:
@@ -72,7 +91,7 @@ def max_webhook(request):
         return JsonResponse({"ok": False, "error": "Invalid JSON"}, status=400)
 
     except Exception as e:
-        print(f"Unexpected error: {e}")
+        print(f"UNEXPECTED ERROR: {e}")
         import traceback
         traceback.print_exc()
         return JsonResponse({"ok": False, "error": str(e)}, status=500)
@@ -80,11 +99,16 @@ def max_webhook(request):
 
 def send_welcome(user_id):
     """Отправляет приветственное сообщение"""
+    print(f"send_welcome called for user_id={user_id}")
     from .services import send_message
 
     text = get_start_message()
-    buttons = get_main_keyboard()  # ← теперь buttons
-    send_message(user_id, text, buttons)
+    buttons = get_main_keyboard()
+    print(f"Welcome text: {text[:50]}...")
+    print(f"Buttons: {buttons}")
+
+    result = send_message(user_id, text, buttons)
+    print(f"send_message result: {result}")
 
 
 def show_catalog_categories(user_id):

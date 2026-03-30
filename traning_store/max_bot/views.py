@@ -63,7 +63,6 @@ def max_webhook(request):
         if not user_id:
             print("ERROR: No user_id found")
             return JsonResponse({"ok": False, "error": "user_id required"}, status=400)
-
         print(f"Processing: user_id={user_id}, text={text}")
 
         # Обработка команд

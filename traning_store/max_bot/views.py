@@ -8,7 +8,7 @@ from catalog.models import Class_compress, Product, Type_product
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
+# from django.views.decorators.http import require_POST
 
 from .keyboards import (get_compress_classes_keyboard, get_main_keyboard,
                         get_product_keyboard, get_products_keyboard)
@@ -20,12 +20,19 @@ logger = logging.getLogger(__name__)
 
 
 @csrf_exempt
-@require_POST
+# @require_POST
 def max_webhook(request):
     """
     Эндпоинт для получения вебхуков от MAX.
     URL: /bot/webhook/
     """
+    print("=" * 60)
+    print("WEBHOOK CALLED")
+    print(f"Method: {request.method}")
+    print(f"Content-Type: {request.content_type}")
+    print(f"Body: {request.body}")
+    print("=" * 60)
+
     try:
         data = json.loads(request.body)
         logger.info(f"Webhook received: {data}")

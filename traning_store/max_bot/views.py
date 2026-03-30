@@ -43,7 +43,6 @@ def max_webhook(request):
             user_id = sender.get('user_id')
             body = message_data.get('body', {})
             text = body.get('text', '')
-
         # ========== НОВОЕ: Обработка callback от кнопок ==========
         elif update_type == 'message_callback':
             # При нажатии на кнопку MAX присылает payload

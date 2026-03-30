@@ -23,30 +23,18 @@ logger = logging.getLogger(__name__)
 
 @csrf_exempt
 def max_webhook(request):
-    """
-    Эндпоинт для получения вебхуков от MAX.
-    """
-
-    print(json.loads(request.body))
-    print("=" * 60)
-    print("WEBHOOK CALLED")
-    print(f"Method: {request.method}")
-    print(f"Body: {request.body}")
-    print("=" * 60)
-
     try:
         data = json.loads(request.body)
-        print(f"Parsed data: {json.dumps(data, ensure_ascii=False, indent=2)}")
         update_type = data.get('update_type')
-        print(f"update_type: {update_type}")
+
         user_id = None
         text = None
+        callback = None  # ← добавим переменную для callback
 
         # Обработка bot_started (нажатие кнопки "Начать")
         if update_type == 'bot_started':
             user_id = data.get('user_id')
             text = '/start'
-            print(f"bot_started: user_id={user_id}")
 
         # Обработка message_created (текстовое сообщение)
         elif update_type == 'message_created':
@@ -55,38 +43,44 @@ def max_webhook(request):
             user_id = sender.get('user_id')
             body = message_data.get('body', {})
             text = body.get('text', '')
-            print(f"message_created: user_id={user_id}, text={text}")
+
+        # ========== НОВОЕ: Обработка callback от кнопок ==========
+        elif update_type == 'message_callback':
+            # При нажатии на кнопку MAX присылает payload
+            callback = data.get('payload')
+            user_id = data.get('user_id')
+            # Если user_id нет в корне, ищем в message.sender
+            if not user_id:
+                message_data = data.get('message', {})
+                sender = message_data.get('sender', {})
+                user_id = sender.get('user_id')
+            print(f"🔘 Callback received: {callback} for user {user_id}")
+
         else:
-            print(f"Unknown update_type: {update_type}")
             return JsonResponse({"ok": True})
 
         if not user_id:
-            print("ERROR: No user_id found")
             return JsonResponse({"ok": False, "error": "user_id required"}, status=400)
-        print(f"Processing: user_id={user_id}, text={text}")
 
-        # Обработка команд
-        if text == '/start':
-            print("Calling send_welcome...")
+        # ========== ОБРАБОТКА ==========
+        # Приоритет: callback от кнопки
+        if callback:
+            handle_callback(user_id, callback)
+
+        # Текстовые команды
+        elif text == '/start':
             send_welcome(user_id)
-            print("send_welcome completed")
 
         elif text == '/help':
-            print("Calling send_message for help...")
             send_message(user_id, "❓ Помощь в разработке")
 
         else:
-            print(f"Unknown command: {text}")
             send_message(user_id, "Неизвестная команда. Используйте /help")
-        print("Returning success response")
+
         return JsonResponse({"ok": True})
 
-    except json.JSONDecodeError as e:
-        print(f"JSON decode error: {e}")
-        return JsonResponse({"ok": False, "error": "Invalid JSON"}, status=400)
-
     except Exception as e:
-        print(f"UNEXPECTED ERROR: {e}")
+        print(f"Error: {e}")
         import traceback
         traceback.print_exc()
         return JsonResponse({"ok": False, "error": str(e)}, status=500)
@@ -94,13 +88,13 @@ def max_webhook(request):
 
 def send_welcome(user_id):
     """Отправляет приветственное сообщение"""
-    print(f"send_welcome called for user_id={user_id}")
+    # print(f"send_welcome called for user_id={user_id}")
     from .services import send_message
 
     text = get_start_message()
     buttons = get_main_keyboard()
-    print(f"Welcome text: {text[:50]}...")
-    print(f"Buttons: {buttons}")
+    # print(f"Welcome text: {text[:50]}...")
+    # print(f"Buttons: {buttons}")
 
     result = send_message(user_id, text, buttons)
     print(f"send_message result: {result}")
@@ -205,7 +199,7 @@ def search_products(user_id, query):
 
 def handle_callback(user_id, callback):
     """Обработка нажатий на кнопки"""
-    print(f"handle_callback: user_id={user_id}, callback={callback}")
+    # print(f"handle_callback: user_id={user_id}, callback={callback}")
 
     if callback == 'catalog':
         show_catalog_categories(user_id)

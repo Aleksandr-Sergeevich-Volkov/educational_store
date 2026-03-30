@@ -54,7 +54,6 @@ def max_webhook(request):
                 sender = message_data.get('sender', {})
                 user_id = sender.get('user_id')
             print(f"🔘 Callback received: {callback} for user {user_id}")
-
         else:
             return JsonResponse({"ok": True})
 

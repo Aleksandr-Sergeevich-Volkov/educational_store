@@ -8,13 +8,15 @@ from catalog.models import Class_compress, Product, Type_product
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-# from django.views.decorators.http import require_POST
 
 from .keyboards import (get_compress_classes_keyboard, get_main_keyboard,
                         get_product_keyboard, get_products_keyboard)
 from .messages import (format_product_card, format_product_list,
                        get_cart_message, get_help_message, get_start_message)
 from .services import send_message
+
+# from django.views.decorators.http import require_POST
+
 
 logger = logging.getLogger(__name__)
 

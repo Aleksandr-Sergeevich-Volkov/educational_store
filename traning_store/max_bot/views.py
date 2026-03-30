@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .keyboards import (get_compress_classes_keyboard, get_main_keyboard,
                         get_product_keyboard, get_products_keyboard)
 from .messages import (format_product_card, format_product_list,
-                       get_cart_message, get_help_message, get_start_message)
+                       get_start_message)
 from .services import send_message
 
 # from django.views.decorators.http import require_POST
@@ -22,73 +22,64 @@ logger = logging.getLogger(__name__)
 
 
 @csrf_exempt
-# @require_POST
 def max_webhook(request):
     """
     Эндпоинт для получения вебхуков от MAX.
-    URL: /bot/webhook/
     """
     print("=" * 60)
     print("WEBHOOK CALLED")
     print(f"Method: {request.method}")
-    print(f"Content-Type: {request.content_type}")
     print(f"Body: {request.body}")
     print("=" * 60)
 
     try:
         data = json.loads(request.body)
-        logger.info(f"Webhook received: {data}")
 
-        # Извлекаем данные из запроса
-        user_id = data.get('user_id')
+        # Извлекаем данные из реальной структуры MAX
         message = data.get('message', {})
-        text = message.get('text', '')
-        callback_data = data.get('callback_data', '')
+        sender = message.get('sender', {})
+        user_id = sender.get('user_id')  # ← user_id отправителя
+
+        body = message.get('body', {})
+        text = body.get('text', '')
+
+        # callback может приходить в другом поле
+        callback = data.get('callback') or data.get('payload')
+
+        print(f"user_id: {user_id}, text: {text}, callback: {callback}")
 
         if not user_id:
             return JsonResponse({"ok": False, "error": "user_id required"}, status=400)
 
+        # Обработка нажатия на кнопку
+        if callback:
+            handle_callback(user_id, callback)
+
         # Обработка текстовых команд
-        if text == '/start':
+        elif text == '/start':
             send_welcome(user_id)
 
-        elif text == '/catalog' or text == '🛍 Каталог':
-            show_catalog_categories(user_id)
-
         elif text == '/help':
-            send_message(user_id, get_help_message(), get_main_keyboard())
-
-        elif text == '/cart':
-            send_message(user_id, get_cart_message([]))
-
-        elif text == '/search':
-            send_message(user_id, "🔍 Введите название товара для поиска")
-
-        # Обработка callback от кнопок
-        elif callback_data:
-            handle_callback(user_id, callback_data)
-
-        # Поиск по тексту (если не команда)
-        elif text and not text.startswith('/'):
-            search_products(user_id, text)
+            send_message(user_id, "Помощь в разработке")
 
         else:
-            send_message(user_id, "Неизвестная команда. Используйте /help", get_main_keyboard())
+            send_message(user_id, "Неизвестная команда. Используйте /help")
 
         return JsonResponse({"ok": True})
 
     except json.JSONDecodeError as e:
-        logger.error(f"Invalid JSON: {e}")
+        print(f"JSON decode error: {e}")
         return JsonResponse({"ok": False, "error": "Invalid JSON"}, status=400)
 
     except Exception as e:
-        logger.error(f"Webhook error: {e}")
+        print(f"Unexpected error: {e}")
+        import traceback
+        traceback.print_exc()
         return JsonResponse({"ok": False, "error": str(e)}, status=500)
 
 
 def send_welcome(user_id):
     """Отправляет приветственное сообщение"""
-    from .keyboards import get_main_keyboard
     from .services import send_message
 
     text = get_start_message()
@@ -195,44 +186,27 @@ def search_products(user_id, query):
         send_message(user_id, f"😔 По запросу «{query}» ничего не найдено")
 
 
-def handle_callback(user_id, callback_data):
-    """Обработка callback от кнопок"""
+def handle_callback(user_id, callback):
+    """Обработка нажатий на кнопки"""
+    print(f"handle_callback: user_id={user_id}, callback={callback}")
 
-    if callback_data == 'catalog':
+    if callback == 'catalog':
         show_catalog_categories(user_id)
-
-    elif callback_data == 'filter_by_compress':
-        show_compress_classes(user_id)
-
-    elif callback_data == 'all_products':
-        show_all_products(user_id)
-
-    elif callback_data == 'back':
+    elif callback == 'search':
+        send_message(user_id, "🔍 Введите название товара для поиска")
+    elif callback == 'cart':
+        send_message(user_id, "🛒 Корзина пуста")
+    elif callback == 'contacts':
+        send_message(user_id, "📞 Контакты: +7 (906) 717-48-77")
+    elif callback == 'help':
+        send_message(user_id, "❓ Помощь в разработке")
+    elif callback == 'back':
         send_welcome(user_id)
-
-    elif callback_data == 'back_to_catalog':
-        show_catalog_categories(user_id)
-
-    elif callback_data.startswith('category_'):
-        category_id = callback_data.split('_')[1]
+    elif callback.startswith('category_'):
+        category_id = callback.split('_')[1]
         show_products_by_category(user_id, category_id)
-
-    elif callback_data.startswith('compress_'):
-        compress_id = callback_data.split('_')[1]
-        show_products_by_compress(user_id, compress_id)
-
-    elif callback_data.startswith('product_'):
-        product_id = callback_data.split('_')[1]
+    elif callback.startswith('product_'):
+        product_id = callback.split('_')[1]
         show_product_detail(user_id, product_id)
-
-    elif callback_data == 'cart':
-        send_message(user_id, get_cart_message([]))
-
-    elif callback_data == 'contacts':
-        send_message(user_id, get_help_message())  # временно, можно отдельный текст
-
-    elif callback_data == 'help':
-        send_message(user_id, get_help_message())
-
     else:
-        send_message(user_id, "Неизвестная команда")
+        send_message(user_id, f"Неизвестная команда: {callback}")

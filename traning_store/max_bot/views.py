@@ -78,15 +78,17 @@ def max_webhook(request):
 
 
 def send_welcome(user_id):
+    """Отправляет приветственное сообщение"""
     from .keyboards import get_main_keyboard
     from .services import send_message
 
     text = get_start_message()
-    buttons = get_main_keyboard()
+    buttons = get_main_keyboard()  # ← теперь buttons
     send_message(user_id, text, buttons)
 
 
 def show_catalog_categories(user_id):
+    """Показывает категории товаров (виды изделий)"""
     from .keyboards import get_categories_keyboard
     from .services import send_message
 

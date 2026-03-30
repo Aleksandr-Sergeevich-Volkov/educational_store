@@ -14,7 +14,8 @@ MAX_API_URL = "https://platform-api.max.ru/messages"
 def send_message(user_id, text, buttons=None):
     """
     Отправляет сообщение пользователю через MAX API.
-    buttons — список списков кнопок, где каждая кнопка: {"type": "callback", "text": "...", "payload": "..."}
+    buttons — список списков кнопок, где каждая кнопка:
+        {"type": "callback", "text": "...", "payload": "..."}
     """
     headers = {
         "Authorization": settings.MAX_BOT_TOKEN,
@@ -32,5 +33,10 @@ def send_message(user_id, text, buttons=None):
         ]
 
     url = f"https://platform-api.max.ru/messages?user_id={user_id}"
-    response = requests.post(url, json=payload, headers=headers, timeout=10)
-    return response.status_code == 200
+
+    try:
+        response = requests.post(url, json=payload, headers=headers, timeout=10)
+        return response.status_code == 200
+    except Exception as e:
+        print(f"Error sending message: {e}")
+        return False

@@ -56,7 +56,6 @@ def max_webhook(request):
             body = message_data.get('body', {})
             text = body.get('text', '')
             print(f"message_created: user_id={user_id}, text={text}")
-
         else:
             print(f"Unknown update_type: {update_type}")
             return JsonResponse({"ok": True})

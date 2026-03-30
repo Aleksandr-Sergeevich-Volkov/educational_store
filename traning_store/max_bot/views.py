@@ -128,7 +128,6 @@ def show_compress_classes(user_id):
 def show_all_products(user_id):
     """Показывает все товары в наличии"""
     products = Product.objects.filter(available=True, stock__gt=0)[:20]
-
     if products.exists():
         text = format_product_list(products)
         keyboard = get_products_keyboard(products)

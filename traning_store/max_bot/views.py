@@ -143,7 +143,6 @@ def show_products_by_category(user_id, category_id):
         Type_product_id=category_id,
         available=True
     )[:20]
-
     category = Type_product.objects.filter(id=category_id).first()
     category_name = category.name if category else "выбранной категории"
 

@@ -187,7 +187,6 @@ def show_products_by_compress(user_id, compress_id):
 def show_product_detail(user_id, product_id):
     """Показывает детальную карточку товара"""
     product = get_object_or_404(Product, id=product_id, available=True)
-
     text = format_product_card(product)
     keyboard = get_product_keyboard(product_id)
     send_message(user_id, text, keyboard)

@@ -197,7 +197,7 @@ def search_products(user_id, query):
 
 def handle_callback(user_id, callback):
     """Обработка нажатий на кнопки"""
-    # print(f"handle_callback: user_id={user_id}, callback={callback}")
+    print(f"handle_callback: user_id={user_id}, callback={callback}")
 
     if callback == 'catalog':
         show_catalog_categories(user_id)

@@ -24,7 +24,9 @@ logger = logging.getLogger(__name__)
 @csrf_exempt
 def max_webhook(request):
     try:
+        print(json.loads(request.body))
         data = json.loads(request.body)
+        print(data.get('update_type'))
         update_type = data.get('update_type')
         user_id = None
         text = None

@@ -144,7 +144,6 @@ def show_products_by_category(user_id, category_id):
     )[:20]
     category = Type_product.objects.filter(id=category_id).first()
     category_name = category.name if category else "выбранной категории"
-
     if products.exists():
         text = format_product_list(products, f"🛍 {category_name}")
         keyboard = get_products_keyboard(products)

@@ -33,7 +33,6 @@ def max_webhook(request):
         if update_type == 'bot_started':
             user_id = data.get('user_id')
             text = '/start'
-
         # 2. message_created — текстовое сообщение
         elif update_type == 'message_created':
             message_data = data.get('message', {})

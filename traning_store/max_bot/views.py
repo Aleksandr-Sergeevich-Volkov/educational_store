@@ -29,7 +29,6 @@ def max_webhook(request):
         user_id = None
         text = None
         callback = None
-
         # 1. bot_started — нажали "Начать"
         if update_type == 'bot_started':
             user_id = data.get('user_id')

@@ -24,54 +24,49 @@ logger = logging.getLogger(__name__)
 @csrf_exempt
 def max_webhook(request):
     try:
-        print(json.loads(request.body))
         data = json.loads(request.body)
-        print(data.get('update_type'))
         update_type = data.get('update_type')
+
         user_id = None
         text = None
-        callback = None  # ← добавим переменную для callback
+        callback = None
 
-        # Обработка bot_started (нажатие кнопки "Начать")
+        # 1. bot_started — нажали "Начать"
         if update_type == 'bot_started':
             user_id = data.get('user_id')
             text = '/start'
 
-        # Обработка message_created (текстовое сообщение)
+        # 2. message_created — текстовое сообщение
         elif update_type == 'message_created':
             message_data = data.get('message', {})
             sender = message_data.get('sender', {})
             user_id = sender.get('user_id')
             body = message_data.get('body', {})
             text = body.get('text', '')
-        # ========== НОВОЕ: Обработка callback от кнопок ==========
+
+        # 3. message_callback — нажатие на кнопку
         elif update_type == 'message_callback':
-            # При нажатии на кнопку MAX присылает payload
-            callback = data.get('payload')
-            user_id = data.get('user_id')
-            # Если user_id нет в корне, ищем в message.sender
-            if not user_id:
-                message_data = data.get('message', {})
-                sender = message_data.get('sender', {})
-                user_id = sender.get('user_id')
-            print(f"🔘 Callback received: {callback} for user {user_id}")
+            message_data = data.get('message', {})
+            sender = message_data.get('sender', {})
+            user_id = sender.get('user_id')  # ← пользователь
+
+            body = message_data.get('body', {})
+            callback = body.get('callback') or body.get('payload')
+            print(f"🔘 Callback: {callback} from user {user_id}")
+
         else:
             return JsonResponse({"ok": True})
 
         if not user_id:
             return JsonResponse({"ok": False, "error": "user_id required"}, status=400)
-        # ========== ОБРАБОТКА ==========
-        # Приоритет: callback от кнопки
+
+        # Обработка
         if callback:
             handle_callback(user_id, callback)
-
-        # Текстовые команды
         elif text == '/start':
             send_welcome(user_id)
-
         elif text == '/help':
             send_message(user_id, "❓ Помощь в разработке")
-
         else:
             send_message(user_id, "Неизвестная команда. Используйте /help")
 

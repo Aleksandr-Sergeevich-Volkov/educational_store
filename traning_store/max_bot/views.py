@@ -60,7 +60,6 @@ def max_webhook(request):
 
         if not user_id:
             return JsonResponse({"ok": False, "error": "user_id required"}, status=400)
-
         # ========== ОБРАБОТКА ==========
         # Приоритет: callback от кнопки
         if callback:

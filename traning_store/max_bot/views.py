@@ -43,26 +43,31 @@ def max_webhook(request):
 
         # 3. message_callback — нажатие на кнопку
         elif update_type == 'message_callback':
-            # ВЫВОДИМ ВСЁ, ЧТО ПРИШЛО
-            print("=" * 60)
-            print("MESSAGE_CALLBACK RAW DATA:")
-            print(json.dumps(data, ensure_ascii=False, indent=2))
-            print("=" * 60)
+            # Получаем объект callback
+            callback_obj = data.get('callback') or data.get('message', {}).get('body', {}).get('callback')
 
-            # Пробуем найти callback в разных местах
-            callback = data.get('callback') or data.get('payload')
-            if not callback:
-                callback = data.get('message', {}).get('body', {}).get('callback')
-            if not callback:
-                callback = data.get('message', {}).get('body', {}).get('payload')
+            callback_payload = None
+            user_id = None
 
-            # user_id
-            user_id = data.get('user_id')
-            if not user_id or user_id == 228090361:  # если пришёл ID бота
-                user_id = data.get('message', {}).get('sender', {}).get('user_id')
+            if callback_obj and isinstance(callback_obj, dict):
+                # Извлекаем payload и user_id из объекта callback
+                callback_payload = callback_obj.get('payload')
+                user_id = callback_obj.get('user', {}).get('user_id')
+                print(f"🔘 Callback payload: {callback_payload} from user {user_id}")
+            else:
+                # Fallback: ищем в других местах
+                callback_payload = data.get('payload') or data.get('callback')
+                user_id = data.get('user_id') or data.get('message', {}).get('sender', {}).get('user_id')
 
-            print(f"🔘 Extracted callback: {callback}")
-            print(f"👤 Extracted user_id: {user_id}")
+            # Если user_id всё ещё ID бота, пробуем другой вариант
+            if user_id == 228090361 and callback_obj:
+                user_id = callback_obj.get('user', {}).get('user_id')
+
+            print(f"👤 Final user_id: {user_id}")
+            print(f"🔘 Final callback: {callback_payload}")
+
+            # Сохраняем для дальнейшей обработки
+            callback = callback_payload
 
         # Обработка
         if callback:
@@ -191,9 +196,25 @@ def search_products(user_id, query):
 
 
 def handle_callback(user_id, callback):
-    """Обработка нажатий на кнопки"""
-    print(f"handle_callback: user_id={user_id}, callback={callback}")
+    """
+    Обработка нажатий на кнопки.
+    callback — это строка (payload), например 'catalog'
+    """
+    print(f"🔵 handle_callback: user_id={user_id}, callback={callback}")
+
+    # Если callback пришёл как словарь, извлекаем payload
+    if isinstance(callback, dict):
+        callback = callback.get('payload')
+        print(f"   Extracted payload: {callback}")
+
+    if not callback or not isinstance(callback, str):
+        print("Invalid callback format")
+        send_message(user_id, "Ошибка обработки кнопки")
+        return
+
+    # Обработка
     if callback == 'catalog':
+        print("🟢 Showing catalog categories")
         show_catalog_categories(user_id)
     elif callback == 'search':
         send_message(user_id, "🔍 Введите название товара для поиска")

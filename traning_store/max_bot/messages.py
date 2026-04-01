@@ -20,8 +20,7 @@ def format_product_card(product):
         text += f"🎨 *Цвета:* {colors}\n"
     if product.Type_product:
         text += f"🧦 *Вид:* {product.Type_product.name}\n"
-
-    if product.description:
+    if product.seo_description:
         text += f"\n📝 *Описание:*\n{product.seo_description[:200]}...\n"
 
     return text

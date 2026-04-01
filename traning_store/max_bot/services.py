@@ -45,3 +45,44 @@ def send_message(user_id, text, buttons=None):
     except Exception as e:
         print(f"Error sending message: {e}")
         return False
+
+
+def send_message_with_image(user_id, text, image_url, buttons=None):
+    """
+    Отправляет сообщение с изображением и кнопками
+    """
+    headers = {
+        "Authorization": settings.MAX_BOT_TOKEN,
+        "Content-Type": "application/json"
+    }
+
+    payload = {"text": text}
+
+    # Собираем attachments
+    attachments = []
+
+    # Добавляем изображение
+    if image_url:
+        attachments.append({
+            "type": "image",
+            "payload": {"url": image_url}
+        })
+
+    # Добавляем кнопки, если есть
+    if buttons:
+        attachments.append({
+            "type": "inline_keyboard",
+            "payload": {"buttons": buttons}
+        })
+
+    if attachments:
+        payload["attachments"] = attachments
+
+    url = f"https://platform-api.max.ru/messages?user_id={user_id}"
+
+    try:
+        response = requests.post(url, json=payload, headers=headers, timeout=10)
+        return response.status_code == 200
+    except Exception as e:
+        print(f"Error sending message: {e}")
+        return False

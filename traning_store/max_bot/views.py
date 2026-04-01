@@ -4,7 +4,8 @@
 import json
 import logging
 
-from catalog.models import Class_compress, Product, Type_product
+from django.db import models
+from catalog.models import Class_compress, Product, Type_product, Gallery
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
@@ -13,7 +14,7 @@ from .keyboards import (get_compress_classes_keyboard, get_main_keyboard,
                         get_product_keyboard, get_products_keyboard)
 from .messages import (format_product_card, format_product_list,
                        get_start_message)
-from .services import send_message
+from .services import send_message, send_message_with_image
 
 # from django.views.decorators.http import require_POST
 
@@ -86,6 +87,59 @@ def max_webhook(request):
         return JsonResponse({"ok": False, "error": str(e)}, status=500)
 
 
+def get_products_with_main_images(queryset):
+    """Добавляет главные изображения к queryset товаров"""
+    return queryset.prefetch_related(
+        models.Prefetch(
+            'images',
+            queryset=Gallery.objects.filter(main=True),
+            to_attr='main_images'
+        )
+    )
+
+
+def send_products_with_photos(user_id, products, title):
+    """
+    Отправляет список товаров, каждый с фото.
+    Использует тот же формат текста, что и format_product_list.
+    """
+    if not products.exists():
+        send_message(user_id, f"😔 {title} не найдены")
+        return
+
+    # Отправляем заголовок категории
+    send_message(user_id, f"🛍 *{title}*")
+
+    # Отправляем каждый товар с фото
+    for product in products:
+        # Получаем фото
+        image_url = None
+        if hasattr(product, 'main_images') and product.main_images:
+            image_url = product.main_images[0].image.url
+            if image_url.startswith('/'):
+                image_url = f"https://kompressionnye-chulki24.ru{image_url}"
+
+        # Формируем текст ТОЧНО КАК В format_product_list
+        text = f"*{product.name[:40]}*\n"
+        text += f"  💰 {product.price:,.0f} ₽ | 📦 {'В наличии' if product.stock > 0 else 'Под заказ'}\n"
+        text += f"  🆔 {product.articul}"
+
+        # Кнопка для просмотра
+        buttons = [[
+            {"type": "callback", "text": "🔍 Подробнее", "payload": f"product_{product.id}"}
+        ]]
+
+        if image_url:
+            send_message_with_image(user_id, text, image_url, {"buttons": buttons})
+        else:
+            send_message(user_id, text, {"buttons": buttons})
+
+    # Кнопка "Назад"
+    send_message(user_id, "◀️ Навигация", {
+        "buttons": [[{"type": "callback", "text": "◀️ Назад к категориям", "payload": "back"}]]
+    })
+
+
 def send_welcome(user_id):
     """Отправляет приветственное сообщение"""
     # print(f"send_welcome called for user_id={user_id}")
@@ -137,19 +191,53 @@ def show_all_products(user_id):
 
 
 def show_products_by_category(user_id, category_id):
-    """Показывает товары по категории (виду изделия)"""
-    products = Product.objects.filter(
+    """Показывает товары по категории — каждый с фото"""
+    products_qs = Product.objects.filter(
         Type_product_id=category_id,
         available=True
-    )[:20]
+    )[:10]
+
+    products = get_products_with_main_images(products_qs)
+
     category = Type_product.objects.filter(id=category_id).first()
     category_name = category.name if category else "выбранной категории"
-    if products.exists():
-        text = format_product_list(products, f"🛍 {category_name}")
-        keyboard = get_products_keyboard(products)
-        send_message(user_id, text, keyboard)
-    else:
+
+    if not products.exists():
         send_message(user_id, f"В категории «{category_name}» пока нет товаров")
+        return
+
+    # Отправляем заголовок
+    send_message(user_id, f"🛍 *{category_name}*")
+
+    # Отправляем каждый товар с фото
+    for product in products:
+        # Получаем URL фото
+        image_url = None
+        if hasattr(product, 'main_images') and product.main_images:
+            image_url = product.main_images[0].image.url
+            if image_url.startswith('/'):
+                image_url = f"https://kompressionnye-chulki24.ru{image_url}"
+
+        # Формируем текст
+        text = f"*{product.name[:50]}*\n"
+        text += f"💰 *Цена:* {product.price:,.0f} ₽\n"
+        text += f"📦 *Наличие:* {'В наличии' if product.stock > 0 else 'Под заказ'}\n"
+        text += f"🏷 *Артикул:* {product.articul}"
+
+        # Кнопка для просмотра
+        buttons = [[
+            {"type": "callback", "text": "🔍 Подробнее", "payload": f"product_{product.id}"}
+        ]]
+
+        if image_url:
+            send_message_with_image(user_id, text, image_url, {"buttons": buttons})
+        else:
+            send_message(user_id, text, {"buttons": buttons})
+
+    # Кнопка "Назад"
+    send_message(user_id, "◀️ Навигация", {
+        "buttons": [[{"type": "callback", "text": "◀️ Назад к категориям", "payload": "back"}]]
+    })
 
 
 def show_products_by_compress(user_id, compress_id):

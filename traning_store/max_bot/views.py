@@ -44,7 +44,6 @@ def max_webhook(request):
         elif update_type == 'message_callback':
             # Получаем объект callback
             callback_obj = data.get('callback') or data.get('message', {}).get('body', {}).get('callback')
-
             callback_payload = None
             user_id = None
 

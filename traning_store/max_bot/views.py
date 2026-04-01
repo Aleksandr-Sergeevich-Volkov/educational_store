@@ -99,10 +99,14 @@ def get_products_with_main_images(queryset):
 
 
 def send_products_with_photos(user_id, products, title):
-    """
-    Отправляет список товаров, каждый с фото.
-    Использует тот же формат текста, что и format_product_list.
-    """
+    """Отправляет список товаров, каждый с фото."""
+
+    # ===== ОТЛАДКА: считаем количество товаров =====
+    print("🔍 send_products_with_photos called")
+    print(f"   Title: {title}")
+    print(f"   Products exists: {products.exists()}")
+    print(f"   Products count: {products.count()}")
+
     if not products.exists():
         send_message(user_id, f"😔 {title} не найдены")
         return
@@ -110,16 +114,21 @@ def send_products_with_photos(user_id, products, title):
     # Отправляем заголовок категории
     send_message(user_id, f"🛍 *{title}*")
 
-    # Отправляем каждый товар с фото
-    for product in products:
+    # ===== ОТЛАДКА: выводим каждый товар =====
+    for idx, product in enumerate(products):
+        print(f"   Product {idx}: id={product.id}, name={product.name[:30]}, stock={product.stock}")
+
         # Получаем фото
         image_url = None
         if hasattr(product, 'main_images') and product.main_images:
             image_url = product.main_images[0].image.url
             if image_url.startswith('/'):
                 image_url = f"https://kompressionnye-chulki24.ru{image_url}"
+            print(f"      Image URL: {image_url}")
+        else:
+            print("No main_images attribute or empty")
 
-        # Формируем текст ТОЧНО КАК В format_product_list
+        # Формируем текст
         text = f"*{product.name[:40]}*\n"
         text += f"  💰 {product.price:,.0f} ₽ | 📦 {'В наличии' if product.stock > 0 else 'Под заказ'}\n"
         text += f"  🆔 {product.articul}"
@@ -129,15 +138,20 @@ def send_products_with_photos(user_id, products, title):
             {"type": "callback", "text": "🔍 Подробнее", "payload": f"product_{product.id}"}
         ]]
 
+        # ===== ОТЛАДКА: что отправляем =====
+        print(f"      Sending message for product {product.id}")
+
         if image_url:
             send_message_with_image(user_id, text, image_url, {"buttons": buttons})
         else:
             send_message(user_id, text, {"buttons": buttons})
 
     # Кнопка "Назад"
+    print("   Sending back button")
     send_message(user_id, "◀️ Навигация", {
         "buttons": [[{"type": "callback", "text": "◀️ Назад к категориям", "payload": "back"}]]
     })
+    print("✅ send_products_with_photos completed")
 
 
 def send_welcome(user_id):

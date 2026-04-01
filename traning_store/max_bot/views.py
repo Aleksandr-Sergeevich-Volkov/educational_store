@@ -43,19 +43,26 @@ def max_webhook(request):
 
         # 3. message_callback — нажатие на кнопку
         elif update_type == 'message_callback':
-            message_data = data.get('message', {})
-            sender = message_data.get('sender', {})
-            user_id = sender.get('user_id')  # ← пользователь
-
-            body = message_data.get('body', {})
-            callback = body.get('callback') or body.get('payload')
-            print(f"🔘 Callback: {callback} from user {user_id}")
-
-        else:
-            return JsonResponse({"ok": True})
-
-        if not user_id:
-            return JsonResponse({"ok": False, "error": "user_id required"}, status=400)
+            # ВЫВОДИМ ВСЁ, ЧТО ПРИШЛО
+            print("=" * 60)
+            print("MESSAGE_CALLBACK RAW DATA:")
+            print(json.dumps(data, ensure_ascii=False, indent=2))
+            print("=" * 60)
+    
+            # Пробуем найти callback в разных местах
+            callback = data.get('callback') or data.get('payload')
+            if not callback:
+                callback = data.get('message', {}).get('body', {}).get('callback')
+            if not callback:
+                callback = data.get('message', {}).get('body', {}).get('payload')
+    
+            # user_id
+            user_id = data.get('user_id')
+            if not user_id or user_id == 228090361:  # если пришёл ID бота
+                user_id = data.get('message', {}).get('sender', {}).get('user_id')
+    
+            print(f"🔘 Extracted callback: {callback}")
+            print(f"👤 Extracted user_id: {user_id}")
 
         # Обработка
         if callback:

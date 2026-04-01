@@ -4,8 +4,8 @@
 import json
 import logging
 
+from catalog.models import Class_compress, Gallery, Product, Type_product
 from django.db import models
-from catalog.models import Class_compress, Product, Type_product, Gallery
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt

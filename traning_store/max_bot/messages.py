@@ -24,7 +24,7 @@ def format_product_card(product):
         text += f"🧦 *Вид:* {product.Type_product.name}\n"
 
     if product.description:
-        text += f"\n📝 *Описание:*\n{product.description[:200]}...\n"
+        text += f"\n📝 *Описание:*\n{product.seo_description[:200]}...\n"
 
     return text
 
@@ -53,8 +53,9 @@ def get_start_message():
 
 Мы предлагаем качественный лечебный трикотаж от ведущих производителей:
 • ORTO
+• Luomia Idealista
+• Ergoforma
 • Trives
-• Venoteks
 • И другие
 
 🛍 *Что вы можете сделать:*

@@ -211,7 +211,6 @@ def handle_callback(user_id, callback):
         print("Invalid callback format")
         send_message(user_id, "Ошибка обработки кнопки")
         return
-
     # Обработка
     if callback == 'catalog':
         print("🟢 Showing catalog categories")

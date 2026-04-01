@@ -201,7 +201,6 @@ def handle_callback(user_id, callback):
     callback — это строка (payload), например 'catalog'
     """
     print(f"🔵 handle_callback: user_id={user_id}, callback={callback}")
-
     # Если callback пришёл как словарь, извлекаем payload
     if isinstance(callback, dict):
         callback = callback.get('payload')

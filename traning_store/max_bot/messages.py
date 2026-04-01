@@ -15,7 +15,6 @@ def format_product_card(product):
 📊 *Класс компрессии:* {product.Class_compress.name}
 👤 *Пол:* {product.Male.name if product.Male else 'Унисекс'}
 """
-
     if product.Color.exists():
         colors = ', '.join([c.name for c in product.Color.all()])
         text += f"🎨 *Цвета:* {colors}\n"

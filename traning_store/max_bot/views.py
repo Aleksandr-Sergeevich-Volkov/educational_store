@@ -40,7 +40,6 @@ def max_webhook(request):
             user_id = sender.get('user_id')
             body = message_data.get('body', {})
             text = body.get('text', '')
-
         # 3. message_callback — нажатие на кнопку
         elif update_type == 'message_callback':
             # Получаем объект callback

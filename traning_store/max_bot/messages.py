@@ -18,7 +18,6 @@ def format_product_card(product):
     if product.Color.exists():
         colors = ', '.join([c.name for c in product.Color.all()])
         text += f"🎨 *Цвета:* {colors}\n"
-
     if product.Type_product:
         text += f"🧦 *Вид:* {product.Type_product.name}\n"
 

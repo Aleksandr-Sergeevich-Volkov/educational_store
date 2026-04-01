@@ -48,19 +48,19 @@ def max_webhook(request):
             print("MESSAGE_CALLBACK RAW DATA:")
             print(json.dumps(data, ensure_ascii=False, indent=2))
             print("=" * 60)
-    
+
             # Пробуем найти callback в разных местах
             callback = data.get('callback') or data.get('payload')
             if not callback:
                 callback = data.get('message', {}).get('body', {}).get('callback')
             if not callback:
                 callback = data.get('message', {}).get('body', {}).get('payload')
-    
+
             # user_id
             user_id = data.get('user_id')
             if not user_id or user_id == 228090361:  # если пришёл ID бота
                 user_id = data.get('message', {}).get('sender', {}).get('user_id')
-    
+
             print(f"🔘 Extracted callback: {callback}")
             print(f"👤 Extracted user_id: {user_id}")
 

@@ -113,7 +113,6 @@ def send_products_with_photos(user_id, products, title):
     print(f"   Title: {title}")
     print(f"   Products exists: {products.exists()}")
     print(f"   Products count: {products.count()}")
-
     if not products.exists():
         send_message(user_id, f"😔 {title} не найдены")
         return

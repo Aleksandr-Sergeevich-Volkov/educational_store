@@ -108,7 +108,6 @@ def get_products_with_main_images(queryset):
 
 def send_products_with_photos(user_id, products, title):
     """Отправляет список товаров, каждый с фото."""
-
     # ===== ОТЛАДКА: считаем количество товаров =====
     print("🔍 send_products_with_photos called")
     print(f"   Title: {title}")

@@ -89,6 +89,14 @@ def max_webhook(request):
 
 def get_products_with_main_images(queryset):
     """Добавляет главные изображения к queryset товаров"""
+    image = queryset.prefetch_related(
+        models.Prefetch(
+            'images',
+            queryset=Gallery.objects.filter(main=True),
+            to_attr='main_images'
+        )
+    )
+    print(f'image:{image}')
     return queryset.prefetch_related(
         models.Prefetch(
             'images',

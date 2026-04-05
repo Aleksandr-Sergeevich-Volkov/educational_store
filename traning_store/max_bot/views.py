@@ -240,7 +240,6 @@ def show_products_by_category(user_id, category_id):
         buttons = [[
             {"type": "callback", "text": "🔍 Подробнее", "payload": f"product_{product.id}"}
         ]]
-
         if image_url:
             send_message_with_image(user_id, text, image_url, {"buttons": buttons})
         else:

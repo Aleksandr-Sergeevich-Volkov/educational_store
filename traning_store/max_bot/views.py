@@ -229,7 +229,6 @@ def show_products_by_category(user_id, category_id):
             image_url = product.main_images[0].image.url
             if image_url.startswith('/'):
                 image_url = f"https://kompressionnye-chulki24.ru{image_url}"
-
         # Формируем текст
         text = f"*{product.name[:50]}*\n"
         text += f"💰 *Цена:* {product.price:,.0f} ₽\n"

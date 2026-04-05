@@ -236,7 +236,6 @@ def show_products_by_category(user_id, category_id):
         text += f"💰 *Цена:* {product.price:,.0f} ₽\n"
         text += f"📦 *Наличие:* {'В наличии' if product.stock > 0 else 'Под заказ'}\n"
         text += f"🏷 *Артикул:* {product.articul}"
-
         # Кнопка для просмотра
         buttons = [[
             {"type": "callback", "text": "🔍 Подробнее", "payload": f"product_{product.id}"}

@@ -116,7 +116,6 @@ def send_products_with_photos(user_id, products, title):
     if not products.exists():
         send_message(user_id, f"😔 {title} не найдены")
         return
-
     # Отправляем заголовок категории
     send_message(user_id, f"🛍 *{title}*")
 

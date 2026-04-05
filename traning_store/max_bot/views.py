@@ -224,7 +224,7 @@ def show_products_by_category(user_id, category_id):
     for product in products:
         # Получаем URL фото
         image_url = None
-        print(f'product: {product}')
+        print(f"image: {hasattr(product, 'main_images')}")
         if hasattr(product, 'main_images') and product.main_images:
             image_url = product.main_images[0].image.url
             if image_url.startswith('/'):

@@ -206,9 +206,9 @@ def show_products_by_category(user_id, category_id):
         Type_product_id=category_id,
         available=True
     )[:10]
-    print(f'products_qs: {products_qs}')
+    # print(f'products_qs: {products_qs}')
     products = get_products_with_main_images(products_qs)
-    print(f'products: {products}')
+    # print(f'products: {products}')
     category = Type_product.objects.filter(id=category_id).first()
     category_name = category.name if category else "выбранной категории"
     if not products.exists():

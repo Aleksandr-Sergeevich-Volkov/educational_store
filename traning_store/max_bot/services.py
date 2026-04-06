@@ -75,9 +75,9 @@ def send_message_with_image(user_id, text, image_url, buttons=None):
             "payload": {"url": image_url}
         })
 
-    print(f'attachments_!_@_№_: {attachments}')
     if attachments:
         payload["attachments"] = attachments
+    print(f'payload_!_@_№_: {payload}')    
 
     url = f"https://platform-api.max.ru/messages?user_id={user_id}"
 

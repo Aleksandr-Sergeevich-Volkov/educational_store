@@ -212,7 +212,6 @@ def show_products_by_category(user_id, category_id):
     print(f'products: {products}')
     category = Type_product.objects.filter(id=category_id).first()
     category_name = category.name if category else "выбранной категории"
-
     if not products.exists():
         send_message(user_id, f"В категории «{category_name}» пока нет товаров")
         return

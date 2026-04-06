@@ -235,6 +235,7 @@ def show_products_by_category(user_id, category_id):
             {"type": "callback", "text": "🔍 Подробнее", "payload": f"product_{product.id}"}
         ]]
         if image_url:
+            print(f'user_id:{user_id}, text:{text}, image_url:{image_url},buttons:{buttons}')
             send_message_with_image(user_id, text, image_url, {"buttons": buttons})
         else:
             send_message(user_id, text, {"buttons": buttons})

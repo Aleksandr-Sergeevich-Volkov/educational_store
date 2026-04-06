@@ -293,7 +293,6 @@ def handle_callback(user_id, callback):
     if isinstance(callback, dict):
         callback = callback.get('payload')
         print(f"   Extracted payload: {callback}")
-
     if not callback or not isinstance(callback, str):
         print("Invalid callback format")
         send_message(user_id, "Ошибка обработки кнопки")

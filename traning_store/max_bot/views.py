@@ -249,7 +249,6 @@ def show_products_by_compress(user_id, compress_id):
     """Показывает товары по классу компрессии"""
     compress_class = Class_compress.objects.filter(id=compress_id).first()
     compress_name = compress_class.name if compress_class else f"{compress_id} класс"
-
     products = Product.objects.filter(
         Class_compress_id=compress_id,
         available=True

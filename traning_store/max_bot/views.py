@@ -221,7 +221,7 @@ def show_products_by_category(user_id, category_id):
         # Получаем URL фото
         image_url = None
         if hasattr(product, 'main_images') and product.main_images:
-            print(f"image_url_!_@_: {product.main_images[0].image.url}")
+            # print(f"image_url_!_@_: {product.main_images[0].image.url}")
             image_url = product.main_images[0].image.url
             if image_url.startswith('/'):
                 image_url = f"https://kompressionnye-chulki24.ru{image_url}"
@@ -235,7 +235,7 @@ def show_products_by_category(user_id, category_id):
             {"type": "callback", "text": "🔍 Подробнее", "payload": f"product_{product.id}"}
         ]]
         if image_url:
-            print(f'user_id:{user_id}, text:{text}, image_url:{image_url},buttons:{buttons}')
+            # print(f'user_id:{user_id}, text:{text}, image_url:{image_url},buttons:{buttons}')
             send_message_with_image(user_id, text, image_url, {"buttons": buttons})
         else:
             send_message(user_id, text, {"buttons": buttons})

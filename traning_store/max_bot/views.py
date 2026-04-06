@@ -221,7 +221,7 @@ def show_products_by_category(user_id, category_id):
         # Получаем URL фото
         image_url = None
         if hasattr(product, 'main_images') and product.main_images:
-            print(f"image_url: {product.main_images[0].image.url}")
+            print(f"image_url : {product.main_images[0].image.url}")
             image_url = product.main_images[0].image.url
             if image_url.startswith('/'):
                 image_url = f"https://kompressionnye-chulki24.ru{image_url}"

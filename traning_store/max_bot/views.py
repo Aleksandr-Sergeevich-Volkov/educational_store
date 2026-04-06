@@ -181,7 +181,6 @@ def show_catalog_categories(user_id):
 def show_compress_classes(user_id):
     """Показывает классы компрессии для фильтрации"""
     classes = Class_compress.objects.all()
-
     if classes.exists():
         text = "Выберите класс компрессии:"
         keyboard = get_compress_classes_keyboard(classes)

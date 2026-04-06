@@ -217,7 +217,6 @@ def show_products_by_category(user_id, category_id):
         return
     # Отправляем заголовок
     send_message(user_id, f"🛍 *{category_name}*")
-
     # Отправляем каждый товар с фото
     for product in products:
         # Получаем URL фото

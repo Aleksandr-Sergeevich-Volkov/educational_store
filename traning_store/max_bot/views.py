@@ -253,7 +253,6 @@ def show_products_by_compress(user_id, compress_id):
         Class_compress_id=compress_id,
         available=True
     )[:20]
-
     if products.exists():
         text = format_product_list(products, f"📊 {compress_name} компрессии")
         keyboard = get_products_keyboard(products)

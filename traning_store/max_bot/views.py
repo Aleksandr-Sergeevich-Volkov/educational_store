@@ -242,7 +242,6 @@ def show_products_by_category(user_id, category_id):
             send_message_with_image(user_id, text, image_url, {"buttons": buttons})
         else:
             send_message(user_id, text, {"buttons": buttons})
-
     # Кнопка "Назад"
     send_message(user_id, "◀️ Навигация", {
         "buttons": [[{"type": "callback", "text": "◀️ Назад к категориям", "payload": "back"}]]

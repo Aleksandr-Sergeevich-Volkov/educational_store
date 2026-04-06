@@ -61,6 +61,13 @@ def send_message_with_image(user_id, text, image_url, buttons=None):
     # Собираем attachments
     attachments = []
 
+    # Добавляем кнопки, если есть
+    if buttons:
+        attachments.append({
+            "type": "inline_keyboard",
+            "payload": {"buttons": buttons}
+        })
+
     # Добавляем изображение
     if image_url:
         attachments.append({
@@ -68,12 +75,6 @@ def send_message_with_image(user_id, text, image_url, buttons=None):
             "payload": {"url": image_url}
         })
     print(f'url_!: {attachments}')
-    # Добавляем кнопки, если есть
-    if buttons:
-        attachments.append({
-            "type": "inline_keyboard",
-            "payload": {"buttons": buttons}
-        })
 
     if attachments:
         payload["attachments"] = attachments

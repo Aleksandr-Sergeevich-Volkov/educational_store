@@ -215,7 +215,6 @@ def show_products_by_category(user_id, category_id):
     if not products.exists():
         send_message(user_id, f"В категории «{category_name}» пока нет товаров")
         return
-
     # Отправляем заголовок
     send_message(user_id, f"🛍 *{category_name}*")
 

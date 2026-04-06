@@ -275,7 +275,6 @@ def search_products(user_id, query):
         name__icontains=query,
         available=True
     )[:10]
-
     if products.exists():
         text = format_product_list(products, f"🔍 Результаты поиска: «{query}»")
         keyboard = get_products_keyboard(products)

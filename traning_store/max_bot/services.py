@@ -74,7 +74,7 @@ def send_message_with_image(user_id, text, image_url, buttons=None):
             "type": "image",
             "payload": {"url": image_url}
         })
-    # print(f'url_!: {attachments}')
+    # print(f'url_!_: {attachments}')
 
     if attachments:
         payload["attachments"] = attachments

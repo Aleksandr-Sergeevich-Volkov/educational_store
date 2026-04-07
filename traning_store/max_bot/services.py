@@ -65,7 +65,7 @@ def send_message_with_image(user_id, text, image_url, buttons=None):
     if buttons:
         attachments.append({
             "type": "inline_keyboard",
-            "payload": {"buttons": buttons}
+            "payload": buttons
         })
 
     # Добавляем изображение

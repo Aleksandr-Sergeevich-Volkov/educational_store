@@ -29,7 +29,7 @@ def send_message(user_id, text, buttons=None):
         payload["attachments"] = [
             {
                 "type": "inline_keyboard",
-                "payload": {"buttons": buttons}
+                "payload": buttons
             }
         ]
 

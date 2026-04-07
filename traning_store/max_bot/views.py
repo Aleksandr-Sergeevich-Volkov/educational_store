@@ -145,9 +145,7 @@ def send_products_with_photos(user_id, products, title):
 
     # Кнопка "Назад"
     print("   Sending back button")
-    send_message(user_id, "◀️ Навигация", {
-        "buttons": [[{"type": "callback", "text": "◀️ Назад к категориям", "payload": "back"}]]
-    })
+    send_message(user_id, "◀️ Навигация", {"buttons": [[{"type": "callback", "text": "◀️ Назад к категориям", "payload": "back"}]]})
     print("✅ send_products_with_photos completed")
 
 

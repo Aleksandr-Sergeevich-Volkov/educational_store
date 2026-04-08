@@ -159,7 +159,7 @@ def send_welcome(user_id):
     print(f"Buttons: {buttons}")
 
     result = send_message(user_id, text, buttons)
-    print(f"send_message result_: {result}")
+    print(f"send_message result: {result}")
 
 
 def show_catalog_categories(user_id):

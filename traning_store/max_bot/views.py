@@ -307,6 +307,8 @@ def handle_callback(user_id, callback):
         send_message(user_id, "❓ Помощь в разработке")
     elif callback == 'back':
         send_welcome(user_id)
+    elif callback == 'back_to_categories':
+        show_catalog_categories(user_id)
     elif callback == 'back_to_products':
         show_catalog_categories(user_id)
     elif callback.startswith('category_'):

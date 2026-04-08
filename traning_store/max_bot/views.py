@@ -237,7 +237,7 @@ def show_products_by_category(user_id, category_id):
             send_message(user_id, text, {"buttons": buttons})
     # Кнопка "Назад"
     send_message(user_id, "◀️ Навигация", {
-        "buttons": [[{"type": "callback", "text": "◀️ Назад к категориям", "payload": "back"}]]
+        "buttons": [[{"type": "callback", "text": "◀️ Назад к категориям", "payload": "back_to_categories"}]]
     })
 
 
@@ -307,6 +307,8 @@ def handle_callback(user_id, callback):
         send_message(user_id, "❓ Помощь в разработке")
     elif callback == 'back':
         send_welcome(user_id)
+    elif callback == 'back_to_products':
+        show_catalog_categories(user_id)
     elif callback.startswith('category_'):
         category_id = callback.split('_')[1]
         show_products_by_category(user_id, category_id)

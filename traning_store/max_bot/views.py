@@ -236,9 +236,7 @@ def show_products_by_category(user_id, category_id):
         else:
             send_message(user_id, text, {"buttons": buttons})
     # Кнопка "Назад"
-    send_message(user_id, "◀️ Навигация", {
-        "buttons": [[{"type": "callback", "text": "◀️ Назад к категориям", "payload": "back_to_categories"}]]
-    })
+    send_message(user_id, "◀️ Навигация", [[{"type": "callback", "text": "◀️ Назад к категориям", "payload": "back_to_categories"}]])
 
 
 def show_products_by_compress(user_id, compress_id):

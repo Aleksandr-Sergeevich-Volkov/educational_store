@@ -306,7 +306,7 @@ def show_cart(user_id):
         {"type": "callback", "text": "📝 Оформить заказ", "payload": "checkout"}
     ])
 
-    send_message(user_id, text, {"buttons": buttons})
+    send_message(user_id, text, buttons)
 
 
 # ========== ДОБАВЛЕНИЕ В КОРЗИНУ (С ВЫБОРОМ ХАРАКТЕРИСТИК) ==========

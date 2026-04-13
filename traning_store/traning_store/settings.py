@@ -201,3 +201,7 @@ GEOLOCATION_CACHE_TIMEOUT = 86400  # 24 часа
 CDEK_CLIENT_ID = os.getenv('CDEK_CLIENT_ID')
 CDEK_CLIENT_SECRET = os.getenv('CDEK_CLIENT_SECRET')
 MAX_BOT_TOKEN = os.getenv('MAX_BOT_TOKEN', '')
+
+REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
+REDIS_PORT = int(os.getenv('REDIS_PORT', 6379))
+REDIS_DB = int(os.getenv('REDIS_DB', 0))

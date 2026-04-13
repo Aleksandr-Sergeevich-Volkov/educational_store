@@ -4,7 +4,8 @@
 import json
 import logging
 
-from catalog.models import Class_compress, Gallery, Product, Type_product
+from catalog.models import (Class_compress, Color, Gallery, Model_type,
+                            Product, Size, Type_product)
 from django.db import models
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -14,7 +15,8 @@ from .keyboards import (get_compress_classes_keyboard, get_main_keyboard,
                         get_product_keyboard, get_products_keyboard)
 from .messages import (format_product_card, format_product_list,
                        get_start_message)
-from .services import send_message, send_message_with_image
+from .services import CartService, send_message, send_message_with_image
+from .state import clear_temp_selection, get_temp_selection, set_temp_selection
 
 # from django.views.decorators.http import require_POST
 
@@ -277,6 +279,146 @@ def search_products(user_id, query):
         send_message(user_id, f"😔 По запросу «{query}» ничего не найдено")
 
 
+# ========== КОРЗИНА ==========
+
+def show_cart(user_id):
+    """Показывает содержимое корзины"""
+    cart = CartService(user_id)
+    items = cart.get_items()
+
+    if cart.is_empty():
+        send_message(user_id, "🛒 *Ваша корзина пуста*\n\nДобавьте товары через карточку товара")
+        return
+
+    text = "🛒 *Ваша корзина:*\n\n"
+    buttons = []
+
+    for item in items:
+        subtotal = item.get_total_price()
+        text += f"• *{item.get_display_name()}*\n"
+        text += f"  {item.quantity} шт × {item.price_at_add:,.0f} ₽ = {subtotal:,.0f} ₽\n\n"
+
+        buttons.append([
+            {"type": "callback", "text": "❌ Удалить", "payload": f"cart_remove_{item.id}"}
+        ])
+
+    text += f"💰 *Итого:* {cart.get_total_price():,.0f} ₽"
+
+    buttons.append([
+        {"type": "callback", "text": "➕ Продолжить покупки", "payload": "catalog"},
+        {"type": "callback", "text": "📝 Оформить заказ", "payload": "checkout"}
+    ])
+
+    send_message(user_id, text, {"buttons": buttons})
+
+
+# ========== ДОБАВЛЕНИЕ В КОРЗИНУ (С ВЫБОРОМ ХАРАКТЕРИСТИК) ==========
+
+def add_to_cart_start(user_id, product_id):
+    """Начало процесса добавления в корзину — выбор размера"""
+    product = Product.objects.get(id=product_id, available=True)
+
+    # Очищаем предыдущие временные выборы
+    clear_temp_selection(user_id, product_id)
+
+    # Получаем доступные размеры для этого бренда
+    sizes = Size.objects.filter(brand=product.brand)
+
+    if sizes.exists():
+        keyboard = {
+            "buttons": [
+                [{"type": "callback", "text": size.name, "payload": f"select_size_{product_id}_{size.id}"}]
+                for size in sizes
+            ]
+        }
+        send_message(user_id, "📏 *Выберите размер:*", keyboard)
+    else:
+        # Если размеров нет, сохраняем None и переходим к цвету
+        set_temp_selection(user_id, product_id, 'size', None)
+        add_to_cart_select_color(user_id, product_id)
+
+
+def add_to_cart_select_color(user_id, product_id):
+    """Шаг 2: выбор цвета"""
+    product = Product.objects.get(id=product_id)
+    colors = product.Color.all()
+
+    if colors.exists():
+        keyboard = {
+            "buttons": [
+                [{"type": "callback", "text": color.name, "payload": f"select_color_{product_id}_{color.id}"}]
+                for color in colors
+            ]
+        }
+        send_message(user_id, "🎨 *Выберите цвет:*", keyboard)
+    else:
+        set_temp_selection(user_id, product_id, 'color', None)
+        add_to_cart_select_model_type(user_id, product_id)
+
+
+def add_to_cart_select_model_type(user_id, product_id):
+    """Шаг 3: выбор типа модели"""
+    product = Product.objects.get(id=product_id)
+    model_types = Model_type.objects.filter(brand=product.brand)
+
+    if model_types.exists():
+        keyboard = {
+            "buttons": [
+                [{"type": "callback", "text": mt.name, "payload": f"select_model_{product_id}_{mt.id}"}]
+                for mt in model_types
+            ]
+        }
+        send_message(user_id, "📦 *Выберите тип модели:*", keyboard)
+    else:
+        set_temp_selection(user_id, product_id, 'model_type', None)
+        add_to_cart_select_quantity(user_id, product_id)
+
+
+def add_to_cart_select_quantity(user_id, product_id):
+    """Шаг 4: выбор количества"""
+    keyboard = {
+        "buttons": [
+            [{"type": "callback", "text": str(i), "payload": f"select_quantity_{product_id}_{i}"}]
+            for i in [1, 2, 3, 4, 5]
+        ]
+    }
+    send_message(user_id, "🔢 *Выберите количество:*", keyboard)
+
+
+def add_to_cart_finalize(user_id, product_id, quantity):
+    """Финальное добавление в корзину"""
+    product = Product.objects.get(id=product_id, available=True)
+    selections = get_temp_selection(user_id, product_id)
+
+    # Получаем объекты характеристик
+    size = Size.objects.get(id=selections.get('size')) if selections.get('size') else None
+    color = Color.objects.get(id=selections.get('color')) if selections.get('color') else None
+    model_type = Model_type.objects.get(id=selections.get('model_type')) if selections.get('model_type') else None
+
+    # Добавляем в корзину
+    cart = CartService(user_id)
+    cart.add(
+        product=product,
+        quantity=quantity,
+        size=size,
+        color=color,
+        model_type=model_type
+    )
+
+    # Очищаем временные данные из Redis
+    clear_temp_selection(user_id, product_id)
+
+    send_message(user_id, f"✅ *{product.name[:40]}*\n\nДобавлен в корзину!\n\n🛒 /cart — посмотреть корзину")
+
+
+def remove_from_cart_handler(user_id, cart_item_id):
+    """Удаление товара из корзины"""
+    cart = CartService(user_id)
+    cart.remove(cart_item_id)
+    send_message(user_id, "🗑 Товар удалён из корзины")
+    show_cart(user_id)
+
+
 def handle_callback(user_id, callback):
     """
     Обработка нажатий на кнопки.
@@ -297,8 +439,45 @@ def handle_callback(user_id, callback):
         show_catalog_categories(user_id)
     elif callback == 'search':
         send_message(user_id, "🔍 Введите название товара для поиска")
+
+    # ========== КОРЗИНА ==========
     elif callback == 'cart':
-        send_message(user_id, "🛒 Корзина пуста")
+        show_cart(user_id)
+
+    elif callback.startswith('cart_remove_'):
+        cart_item_id = callback.split('_')[2]
+        remove_from_cart_handler(user_id, cart_item_id)
+        # ========== ДОБАВЛЕНИЕ В КОРЗИНУ (пошагово) ==========
+    elif callback.startswith('add_to_cart_'):
+        product_id = callback.split('_')[3]
+        add_to_cart_start(user_id, product_id)
+
+    elif callback.startswith('select_size_'):
+        parts = callback.split('_')
+        product_id = parts[2]
+        size_id = parts[3]
+        set_temp_selection(user_id, product_id, 'size', size_id)
+        add_to_cart_select_color(user_id, product_id)
+
+    elif callback.startswith('select_color_'):
+        parts = callback.split('_')
+        product_id = parts[2]
+        color_id = parts[3]
+        set_temp_selection(user_id, product_id, 'color', color_id)
+        add_to_cart_select_model_type(user_id, product_id)
+
+    elif callback.startswith('select_model_'):
+        parts = callback.split('_')
+        product_id = parts[2]
+        model_id = parts[3]
+        set_temp_selection(user_id, product_id, 'model_type', model_id)
+        add_to_cart_select_quantity(user_id, product_id)
+
+    elif callback.startswith('select_quantity_'):
+        parts = callback.split('_')
+        product_id = parts[2]
+        quantity = int(parts[3])
+        add_to_cart_finalize(user_id, product_id, quantity)
     elif callback == 'contacts':
         send_message(user_id, "📞 Контакты: +7 (906) 717-48-77")
     elif callback == 'help':

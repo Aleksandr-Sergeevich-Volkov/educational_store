@@ -322,13 +322,12 @@ def add_to_cart_start(user_id, product_id):
     sizes = Size.objects.filter(brand=product.brand)
 
     if sizes.exists():
-        keyboard = {
-            "buttons": [
-                [{"type": "callback", "text": size.name, "payload": f"select_size_{product_id}_{size.id}"}]
-                for size in sizes
-            ]
-        }
-        send_message(user_id, "📏 *Выберите размер:*", keyboard)
+        buttons = []
+        for size in sizes:
+            buttons.append([
+                {"type": "callback", "text": size.name, "payload": f"select_size_{product_id}_{size.id}"}
+            ])
+        send_message(user_id, "📏 *Выберите размер:*", buttons)
     else:
         # Если размеров нет, сохраняем None и переходим к цвету
         set_temp_selection(user_id, product_id, 'size', None)

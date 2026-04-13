@@ -18,7 +18,6 @@ from .messages import (format_product_card, format_product_list,
 from .services import CartService, send_message, send_message_with_image
 from .state import clear_temp_selection, get_temp_selection, set_temp_selection
 
-
 logger = logging.getLogger(__name__)
 
 

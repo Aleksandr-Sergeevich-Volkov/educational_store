@@ -51,7 +51,7 @@ def get_product_keyboard(product_id):
     """Клавиатура для карточки товара"""
     return [
         [
-            {"type": "callback", "text": "🛒 В корзину", "payload": f"add_to_cart_{product_id}"},
+            {"type": "callback", "text": "🛒 В корзину_", "payload": f"add_to_cart_{product_id}"},
             {"type": "callback", "text": "❤️ В избранное", "payload": f"favorite_{product_id}"}
         ],
         [

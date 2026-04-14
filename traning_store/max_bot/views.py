@@ -296,7 +296,7 @@ def show_cart(user_id):
         text += f"   {item.quantity} шт × {item.price_at_add:,.0f} ₽ = {subtotal:,.0f} ₽\n\n"
 
         buttons.append([
-            {"type": "callback", "text": "❌ Удалить #{idx}", "payload": f"cart_remove_{item.id}"}
+            {"type": "callback", "text": "❌ Удалить # {idx}", "payload": f"cart_remove_{item.id}"}
         ])
 
     text += f"💰 *Итого:* {cart.get_total_price():,.0f} ₽"

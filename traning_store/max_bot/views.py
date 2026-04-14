@@ -108,7 +108,6 @@ def send_products_with_photos(user_id, products, title):
         return
     # Отправляем заголовок категории
     send_message(user_id, f"🛍 *{title}*")
-
     # ===== ОТЛАДКА: выводим каждый товар =====
     for idx, product in enumerate(products):
         print(f"   Product {idx}: id={product.id}, name={product.name[:30]}, stock={product.stock}")

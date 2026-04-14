@@ -76,7 +76,6 @@ def max_webhook(request):
             send_message(user_id, "❓ Помощь в разработке")
         else:
             send_message(user_id, "Неизвестная команда. Используйте /help")
-
         return JsonResponse({"ok": True})
 
     except Exception as e:

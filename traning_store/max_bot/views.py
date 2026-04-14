@@ -373,7 +373,7 @@ def add_to_cart_select_quantity(user_id, product_id):
     for i in [1, 2, 3, 4, 5]:
         buttons.append([
             {"type": "callback", "text": str(i), "payload": f"select_quantity_{product_id}_{i}"}])
-    send_message(user_id, "🔢 *Выберите количество:_!_", buttons)
+    send_message(user_id, "🔢 *Выберите количество:_!", buttons)
 
 
 def add_to_cart_finalize(user_id, product_id, quantity):

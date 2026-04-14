@@ -404,7 +404,7 @@ def add_to_cart_finalize(user_id, product_id, quantity):
         {"type": "callback", "text": "Посмотреть корзину", "payload": "cart"},
     ])
 
-    send_message(user_id, f"✅ *{product.name[:40]}*\n\nДобавлен в корзину_!\n\n🛒", buttons)
+    send_message(user_id, f"✅ *{product.name[:40]}*\n\nДобавлен в корзину_!_\n\n🛒", buttons)
 
 
 def remove_from_cart_handler(user_id, cart_item_id):

@@ -340,13 +340,12 @@ def add_to_cart_select_color(user_id, product_id):
     colors = product.Color.all()
 
     if colors.exists():
-        keyboard = {
-            "buttons": [
-                [{"type": "callback", "text": color.name, "payload": f"select_color_{product_id}_{color.id}"}]
-                for color in colors
-            ]
-        }
-        send_message(user_id, "🎨 *Выберите цвет:*", keyboard)
+        buttons = []
+        for color in colors:
+            buttons.append([
+                {"type": "callback", "text": color.name, "payload": f"select_color_{product_id}_{color.id}"}
+            ])
+        send_message(user_id, "🎨 *Выберите цвет:*", buttons)
     else:
         set_temp_selection(user_id, product_id, 'color', None)
         add_to_cart_select_model_type(user_id, product_id)
@@ -358,13 +357,12 @@ def add_to_cart_select_model_type(user_id, product_id):
     model_types = Model_type.objects.filter(brand=product.brand)
 
     if model_types.exists():
-        keyboard = {
-            "buttons": [
-                [{"type": "callback", "text": mt.name, "payload": f"select_model_{product_id}_{mt.id}"}]
-                for mt in model_types
-            ]
-        }
-        send_message(user_id, "📦 *Выберите тип модели:*", keyboard)
+        buttons = []
+        for mt in model_types:
+            buttons.append([
+                {"type": "callback", "text": mt.name, "payload": f"select_model_{product_id}_{mt.id}"}
+            ])
+        send_message(user_id, "📦 *Выберите тип модели:*", buttons)
     else:
         set_temp_selection(user_id, product_id, 'model_type', None)
         add_to_cart_select_quantity(user_id, product_id)

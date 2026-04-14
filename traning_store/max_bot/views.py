@@ -290,13 +290,13 @@ def show_cart(user_id):
     text = "🛒 *Ваша корзина:*\n\n"
     buttons = []
 
-    for item in items:
+    for idx, item in enumerate(items, 1):  # ← нумерация с 1
         subtotal = item.get_total_price()
-        text += f"• *{item.get_display_name()}*\n"
-        text += f"  {item.quantity} шт × {item.price_at_add:,.0f} ₽ = {subtotal:,.0f} ₽\n\n"
+        text += f"{idx}. *{item.get_display_name()}*\n"
+        text += f"   {item.quantity} шт × {item.price_at_add:,.0f} ₽ = {subtotal:,.0f} ₽\n\n"
 
         buttons.append([
-            {"type": "callback", "text": "❌ Удалить", "payload": f"cart_remove_{item.id}"}
+            {"type": "callback", "text": "❌ Удалить #{idx}", "payload": f"cart_remove_{item.id}"}
         ])
 
     text += f"💰 *Итого:* {cart.get_total_price():,.0f} ₽"

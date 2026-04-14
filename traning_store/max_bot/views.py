@@ -370,13 +370,11 @@ def add_to_cart_select_model_type(user_id, product_id):
 
 def add_to_cart_select_quantity(user_id, product_id):
     """Шаг 4: выбор количества"""
-    keyboard = {
-        "buttons": [
-            [{"type": "callback", "text": str(i), "payload": f"select_quantity_{product_id}_{i}"}]
-            for i in [1, 2, 3, 4, 5]
-        ]
-    }
-    send_message(user_id, "🔢 *Выберите количество:*", keyboard)
+    buttons = []
+    for i in [1, 2, 3, 4, 5]:
+        buttons.append([
+            {"type": "callback", "text": str(i), "payload": f"select_quantity_{product_id}_{i}"}])
+    send_message(user_id, "🔢 *Выберите количество:*", buttons)
 
 
 def add_to_cart_finalize(user_id, product_id, quantity):

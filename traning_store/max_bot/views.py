@@ -498,8 +498,7 @@ def checkout_process_delivery(user_id, delivery_type):
         set_order_state(user_id, 'step', 'yandex_address')
         send_message(
             user_id,
-            "📍 *Введите ID пункта выдачи Яндекс или адрес:*\n\n"
-            "Пример ID: 01978d0f333b73d680d32e7d696090e3\n"
+            "📍 *Введите адрес пункта выдачи Яндекс:*\n\n"
             "Пример адреса: г. Москва, ул. Тверская, д. 1"
         )
 
@@ -507,7 +506,7 @@ def checkout_process_delivery(user_id, delivery_type):
         set_order_state(user_id, 'step', 'cdek_address')
         send_message(
             user_id,
-            "📍 *Введите адрес доставки СДЭК:*\n\n"
+            "📍 *Введите адрес пункта выдачи СДЭК:*\n\n"
             "Пример: г. Москва, ул. Тверская, д. 1"
         )
 
@@ -686,9 +685,11 @@ def handle_callback(user_id, callback):
     elif callback == 'checkout':
         checkout_start(user_id)
 
-    elif callback.startswith('delivery_'):
-        delivery_type = callback.split('_')[1]  # yandex или cdek
-        checkout_process_delivery(user_id, delivery_type)
+    elif callback == 'delivery_yandex':
+        checkout_process_delivery(user_id, 'yandex')
+
+    elif callback == 'delivery_cdek':
+        checkout_process_delivery(user_id, 'cdek')
 
     elif callback == 'order_confirm':
         checkout_finalize(user_id)

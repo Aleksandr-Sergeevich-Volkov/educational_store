@@ -62,3 +62,25 @@ def update_selection_ttl(user_id, product_id):
     if redis_client.exists(key):
         redis_client.expire(key, TTL_SELECTION)
         print(f"🔄 TTL обновлён: {key}")
+
+
+def set_order_state(user_id, field, value):
+    """Сохраняет состояние оформления заказа"""
+    key = f"order_temp:{user_id}"
+    data = redis_client.get(key)
+    order_data = json.loads(data) if data else {}
+    order_data[field] = value
+    redis_client.setex(key, 3600, json.dumps(order_data))  # 1 час
+
+
+def get_order_state(user_id):
+    """Получает состояние оформления заказа"""
+    key = f"order_temp:{user_id}"
+    data = redis_client.get(key)
+    return json.loads(data) if data else {}
+
+
+def clear_order_state(user_id):
+    """Очищает состояние заказа"""
+    key = f"order_temp:{user_id}"
+    redis_client.delete(key)

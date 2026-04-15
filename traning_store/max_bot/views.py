@@ -10,13 +10,15 @@ from django.db import models
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
+from orders.models import Order, OrderItem
 
 from .keyboards import (get_compress_classes_keyboard, get_main_keyboard,
                         get_product_keyboard, get_products_keyboard)
 from .messages import (format_product_card, format_product_list,
                        get_start_message)
 from .services import CartService, send_message, send_message_with_image
-from .state import clear_temp_selection, get_temp_selection, set_temp_selection
+from .state import (clear_order_state, clear_temp_selection, get_order_state,
+                    get_temp_selection, set_order_state, set_temp_selection)
 
 logger = logging.getLogger(__name__)
 
@@ -76,7 +78,23 @@ def max_webhook(request):
             send_message(user_id, "❓ Помощь в разработке")
         else:
             send_message(user_id, "Неизвестная команда. Используйте /help")
-        return JsonResponse({"ok": True})
+        order_state = get_order_state(user_id)
+        step = order_state.get('step')
+
+        if step and text and not text.startswith('/'):
+            if step == 'first_name':
+                checkout_process_first_name(user_id, text)
+            elif step == 'last_name':
+                checkout_process_last_name(user_id, text)
+            elif step == 'email':
+                checkout_process_email(user_id, text)
+            elif step == 'yandex_address':
+                checkout_process_address(user_id, text, 'yandex')
+            elif step == 'cdek_address':
+                checkout_process_address(user_id, text, 'cdek')
+            else:
+                send_message(user_id, "Неизвестная команда")
+            return JsonResponse({"ok": True})
 
     except Exception as e:
         print(f"Error: {e}")
@@ -412,6 +430,187 @@ def remove_from_cart_handler(user_id, cart_item_id):
     show_cart(user_id)
 
 
+# max_bot/views.py
+
+def checkout_start(user_id):
+    """Начало оформления заказа"""
+    cart = CartService(user_id)
+
+    if cart.is_empty():
+        send_message(user_id, "🛒 *Корзина пуста*\n\nДобавьте товары перед оформлением")
+        return
+
+    clear_order_state(user_id)
+
+    total = cart.get_total_price()
+
+    text = "📝 *Оформление заказа*\n\n"
+    text += f"💰 *Сумма заказа:* {total:,.0f} ₽\n\n"
+    text += "👤 *Введите ваше имя:*"
+
+    set_order_state(user_id, 'step', 'first_name')
+    send_message(user_id, text)
+
+
+def checkout_process_first_name(user_id, text):
+    """Обработка ввода имени"""
+    if len(text.strip()) < 2:
+        send_message(user_id, "❌ *Введите корректное имя* (не менее 2 символов)")
+        return
+
+    set_order_state(user_id, 'first_name', text.strip())
+    set_order_state(user_id, 'step', 'last_name')
+    send_message(user_id, "👤 *Введите вашу фамилию:*")
+
+
+def checkout_process_last_name(user_id, text):
+    """Обработка ввода фамилии"""
+    if len(text.strip()) < 2:
+        send_message(user_id, "❌ *Введите корректную фамилию* (не менее 2 символов)")
+        return
+
+    set_order_state(user_id, 'last_name', text.strip())
+    set_order_state(user_id, 'step', 'email')
+    send_message(user_id, "📧 *Введите ваш email:*\n\nПример: name@example.com")
+
+
+def checkout_process_email(user_id, text):
+    """Обработка ввода email"""
+    if '@' not in text or '.' not in text:
+        send_message(user_id, "❌ *Неверный формат email*\n\nПример: name@example.com")
+        return
+
+    set_order_state(user_id, 'email', text.strip())
+    set_order_state(user_id, 'step', 'delivery_type')
+
+    # Выбор способа доставки
+    keyboard = {
+        "buttons": [
+            [{"type": "callback", "text": "📦 Яндекс Доставка", "payload": "delivery_yandex"}],
+            [{"type": "callback", "text": "📮 СДЭК", "payload": "delivery_cdek"}]
+        ]
+    }
+    send_message(user_id, "🚚 *Выберите способ доставки:*", keyboard)
+
+
+def checkout_process_delivery(user_id, delivery_type):
+    """Обработка выбора доставки"""
+    set_order_state(user_id, 'delivery_type', delivery_type)
+
+    if delivery_type == 'yandex':
+        set_order_state(user_id, 'step', 'yandex_address')
+        send_message(
+            user_id,
+            "📍 *Введите ID пункта выдачи Яндекс или адрес:*\n\n"
+            "Пример ID: 01978d0f333b73d680d32e7d696090e3\n"
+            "Пример адреса: г. Москва, ул. Тверская, д. 1"
+        )
+
+    elif delivery_type == 'cdek':
+        set_order_state(user_id, 'step', 'cdek_address')
+        send_message(
+            user_id,
+            "📍 *Введите адрес доставки СДЭК:*\n\n"
+            "Пример: г. Москва, ул. Тверская, д. 1"
+        )
+
+
+def checkout_process_address(user_id, text, delivery_type):
+    """Обработка ввода адреса/ID ПВЗ"""
+    set_order_state(user_id, 'address_pvz', text.strip())
+    checkout_confirm(user_id)
+
+
+def checkout_confirm(user_id):
+    """Подтверждение заказа (без расчёта доставки)"""
+    state = get_order_state(user_id)
+    cart = CartService(user_id)
+    items = cart.get_items()
+
+    total = cart.get_total_price()
+
+    # Формируем текст для подтверждения
+    text = "📝 *Проверьте данные заказа:*\n\n"
+    text += f"👤 *Имя:* {state.get('first_name')} {state.get('last_name')}\n"
+    text += f"📧 *Email:* {state.get('email')}\n"
+    text += f"🚚 *Доставка:* {state.get('delivery_type')}\n"
+    text += f"📍 *Адрес/ПВЗ:* {state.get('address_pvz')}\n\n"
+
+    text += "📦 *Товары:*\n"
+    for item in items:
+        text += f"• {item.get_display_name()}\n"
+        text += f"  {item.quantity} шт × {item.price_at_add:,.0f} ₽\n"
+
+    text += f"\n💰 *Итого:* {total:,.0f} ₽\n"
+    text += "🚚 *Доставка:* от 500 рублей бесплатно\n\n"
+    text += "✅ Для подтверждения заказа нажмите кнопку ниже"
+
+    keyboard = {
+        "buttons": [
+            [{"type": "callback", "text": "✅ Подтвердить заказ", "payload": "order_confirm"}],
+            [{"type": "callback", "text": "❌ Отменить", "payload": "order_cancel"}]
+        ]
+    }
+
+    set_order_state(user_id, 'step', 'confirm')
+    send_message(user_id, text, keyboard)
+
+
+def checkout_finalize(user_id):
+    """Сохранение заказа в БД"""
+    state = get_order_state(user_id)
+    cart = CartService(user_id)
+    items = cart.get_items()
+
+    if not items:
+        send_message(user_id, "❌ Корзина пуста")
+        return
+
+    # Создаём заказ
+    order = Order.objects.create(
+        first_name=state.get('first_name', ''),
+        last_name=state.get('last_name', ''),
+        email=state.get('email', ''),
+        delivery_type=state.get('delivery_type', ''),
+        address_pvz=state.get('address_pvz', ''),
+        delivery_sum=0,  # без расчёта
+        paid=False
+    )
+
+    # Создаём позиции заказа
+    for item in items:
+        OrderItem.objects.create(
+            order=order,
+            product=item.product,
+            price=item.price_at_add,
+            quantity=item.quantity,
+            size=item.size,
+            color=item.color,
+            m_type=item.model_type
+        )
+
+    # Очищаем корзину и состояние
+    cart.clear()
+    clear_order_state(user_id)
+
+    # Отправляем подтверждение
+    text = f"✅ *Заказ #{order.id} оформлен!*\n\n"
+    text += f"📧 Подтверждение отправлено на {state.get('email')}\n"
+    text += "📞 Менеджер свяжется с вами для уточнения деталей доставки\n\n"
+    text += "Спасибо за покупку!"
+
+    send_message(user_id, text)
+
+    # Уведомление администратору
+    admin_text = f"🆕 *Новый заказ #{order.id}*\n"
+    admin_text += f"👤 {state.get('first_name')} {state.get('last_name')}\n"
+    admin_text += f"📧 {state.get('email')}\n"
+    admin_text += f"🚚 {state.get('delivery_type')}\n"
+    admin_text += f"📍 {state.get('address_pvz')}\n"
+    admin_text += f"💰 Сумма: {cart.get_total_price():,.0f} ₽"
+    # send_message(ADMIN_USER_ID, admin_text)  # раскомментировать, если есть ID админа
+
+
 def handle_callback(user_id, callback):
     """
     Обработка нажатий на кнопки.
@@ -487,5 +686,18 @@ def handle_callback(user_id, callback):
     elif callback.startswith('product_'):
         product_id = callback.split('_')[1]
         show_product_detail(user_id, product_id)
+    elif callback == 'checkout':
+        checkout_start(user_id)
+
+    elif callback.startswith('delivery_'):
+        delivery_type = callback.split('_')[1]  # yandex или cdek
+        checkout_process_delivery(user_id, delivery_type)
+
+    elif callback == 'order_confirm':
+        checkout_finalize(user_id)
+
+    elif callback == 'order_cancel':
+        clear_order_state(user_id)
+        send_message(user_id, "❌ Оформление заказа отменено")
     else:
         send_message(user_id, f"Неизвестная команда: {callback}")

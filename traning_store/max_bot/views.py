@@ -479,7 +479,6 @@ def checkout_process_email(user_id, text):
     if '@' not in text or '.' not in text:
         send_message(user_id, "❌ *Неверный формат email*\n\nПример: name@example.com")
         return
-
     set_order_state(user_id, 'email', text.strip())
     set_order_state(user_id, 'step', 'delivery_type')
 

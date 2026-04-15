@@ -484,12 +484,9 @@ def checkout_process_email(user_id, text):
     set_order_state(user_id, 'step', 'delivery_type')
 
     # Выбор способа доставки
-    keyboard = {
-        "buttons": [
-            [{"type": "callback", "text": "📦 Яндекс Доставка", "payload": "delivery_yandex"}],
-            [{"type": "callback", "text": "📮 СДЭК", "payload": "delivery_cdek"}]
-        ]
-    }
+    keyboard = [
+               [{"type": "callback", "text": "📦 Яндекс Доставка", "payload": "delivery_yandex"}],
+               [{"type": "callback", "text": "📮 СДЭК", "payload": "delivery_cdek"}]]
     send_message(user_id, "🚚 *Выберите способ доставки:*", keyboard)
 
 

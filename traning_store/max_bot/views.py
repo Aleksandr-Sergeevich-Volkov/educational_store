@@ -541,12 +541,9 @@ def checkout_confirm(user_id):
     text += "🚚 *Доставка:* от 500 рублей бесплатно\n\n"
     text += "✅ Для подтверждения заказа нажмите кнопку ниже"
 
-    keyboard = {
-        "buttons": [
-            [{"type": "callback", "text": "✅ Подтвердить заказ", "payload": "order_confirm"}],
-            [{"type": "callback", "text": "❌ Отменить", "payload": "order_cancel"}]
-        ]
-    }
+    keyboard = [
+               [{"type": "callback", "text": "✅ Подтвердить заказ", "payload": "order_confirm"}],
+               [{"type": "callback", "text": "❌ Отменить", "payload": "order_cancel"}]]
 
     set_order_state(user_id, 'step', 'confirm')
     send_message(user_id, text, keyboard)

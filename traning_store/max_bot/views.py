@@ -69,15 +69,6 @@ def max_webhook(request):
             # Сохраняем для дальнейшей обработки
             callback = callback_payload
 
-        # Обработка
-        if callback:
-            handle_callback(user_id, callback)
-        elif text == '/start':
-            send_welcome(user_id)
-        elif text == '/help':
-            send_message(user_id, "❓ Помощь в разработке")
-        else:
-            send_message(user_id, "Неизвестная команда. Используйте /help")
         order_state = get_order_state(user_id)
         step = order_state.get('step')
 
@@ -95,6 +86,16 @@ def max_webhook(request):
             else:
                 send_message(user_id, "Неизвестная команда")
             return JsonResponse({"ok": True})
+
+        # Обработка
+        if callback:
+            handle_callback(user_id, callback)
+        elif text == '/start':
+            send_welcome(user_id)
+        elif text == '/help':
+            send_message(user_id, "❓ Помощь в разработке")
+        else:
+            send_message(user_id, "Неизвестная команда. Используйте /help")
 
     except Exception as e:
         print(f"Error: {e}")

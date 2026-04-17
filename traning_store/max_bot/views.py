@@ -11,6 +11,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from orders.models import Order, OrderItem
+from orders.tasks import order_created
 
 from .keyboards import (get_compress_classes_keyboard, get_main_keyboard,
                         get_product_keyboard, get_products_keyboard)
@@ -587,11 +588,19 @@ def checkout_finalize(user_id):
     cart.clear()
     clear_order_state(user_id)
 
-    # Отправляем подтверждение
+    # ========== ВЫЗЫВАЕМ ЗАДАЧУ ДЛЯ ОТПРАВКИ EMAIL ==========
+    try:
+        order_created.delay(order.id)  # ← асинхронно через Celery
+        email_status = "отправлено"
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+        email_status = "не отправлено (ошибка)"
+
+    # Отправляем подтверждение в бот
     text = f"✅ *Заказ #{order.id} оформлен!*\n\n"
-    text += f"📧 Подтверждение отправлено на {state.get('email')}\n"
-    text += "📞 Менеджер свяжется с вами для уточнения деталей доставки\n\n"
-    text += "Спасибо за покупку!"
+    text += f"📧 Письмо с подтверждением {email_status} на {state.get('email')}\n"
+    text += "📞 Менеджер свяжется с вами для уточнения деталей\n\n"
+    text += "🙏 Спасибо за покупку!"
 
     send_message(user_id, text)
 

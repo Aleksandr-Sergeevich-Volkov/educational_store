@@ -613,7 +613,7 @@ def checkout_finalize(user_id):
     admin_text += f"📧 {state.get('email')}\n"
     admin_text += f"🚚 {state.get('delivery_type')}\n"
     admin_text += f"📍 {state.get('address_pvz')}\n"
-    admin_text += f"💰 Сумма: {cart.get_total_price():,.0f} ₽"
+    admin_text += f"💰 Сумма: {order.get_total_cost():,.0f} ₽"
     send_message(10817976, admin_text)  # раскомментировать, если есть ID админа
 
 

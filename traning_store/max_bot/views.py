@@ -583,7 +583,6 @@ def checkout_finalize(user_id):
             color=item.color,
             m_type=item.model_type
         )
-
     # Очищаем корзину и состояние
     cart.clear()
     clear_order_state(user_id)

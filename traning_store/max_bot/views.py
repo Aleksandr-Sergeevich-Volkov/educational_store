@@ -13,6 +13,9 @@ from django.views.decorators.csrf import csrf_exempt
 from orders.models import Order, OrderItem
 from orders.tasks import order_created
 
+from traning_store.settings import ROBOKASSA_LOGIN, ROBOKASSA_PASSWORD_1
+from traning_store.views import generate_payment_link
+
 from .keyboards import (get_compress_classes_keyboard, get_main_keyboard,
                         get_product_keyboard, get_products_keyboard)
 from .messages import (format_product_card, format_product_list,
@@ -600,8 +603,9 @@ def checkout_finalize(user_id):
     text += f"📧 Письмо с подтверждением {email_status} на {state.get('email')}\n"
     text += "📞 Менеджер свяжется с вами для уточнения деталей\n\n"
     text += "🙏 Спасибо за покупку!"
-
-    send_message(user_id, text)
+    keyboard = {[[{"type": "callback", "text": "💳 Оплатить заказ", "payload": f"order_pay_{order.id}"}],
+                 [{"type": "callback", "text": "🛍 Продолжить покупки", "payload": "catalog"}]]}
+    send_message(user_id, text, keyboard)
 
     # Уведомление администратору
     admin_text = f"🆕 *Новый заказ #{order.id}*\n"
@@ -611,6 +615,21 @@ def checkout_finalize(user_id):
     admin_text += f"📍 {state.get('address_pvz')}\n"
     admin_text += f"💰 Сумма: {cart.get_total_price():,.0f} ₽"
     # send_message(ADMIN_USER_ID, admin_text)  # раскомментировать, если есть ID админа
+
+
+def pay(user_id, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    text = generate_payment_link(
+        merchant_login=ROBOKASSA_LOGIN,
+        merchant_password_1=ROBOKASSA_PASSWORD_1,
+        cost=order.get_total_cost(),
+        number=order.id,
+        description='kompressionnyj_trikotazh',
+        is_test=0,
+        robokassa_payment_url='https://auth.robokassa.ru/Merchant/Index.aspx',
+        email=order.email,
+    )
+    send_message(user_id, text)
 
 
 def handle_callback(user_id, callback):
@@ -703,5 +722,10 @@ def handle_callback(user_id, callback):
     elif callback == 'order_cancel':
         clear_order_state(user_id)
         send_message(user_id, "❌ Оформление заказа отменено")
+
+    elif callback.startswith('order_pay_'):
+        # Извлекаем order_id из callback
+        order_id = callback.split('_')[2]  # "order_pay_42" → ["order", "pay", "42"] → "42"
+        pay(user_id, order_id)
     else:
         send_message(user_id, f"Неизвестная команда: {callback}")

@@ -602,7 +602,7 @@ def checkout_finalize(user_id):
     text = f"✅ *Заказ #{order.id} оформлен!*\n\n"
     text += f"📧 Письмо с подтверждением {email_status} на {state.get('email')}\n"
     text += "📞 Менеджер свяжется с вами для уточнения деталей\n\n"
-    text += "🙏 Спасибо за покупку!"
+    text += "Спасибо за покупку!"
     keyboard = [[{"type": "callback", "text": "💳 Оплатить заказ", "payload": f"order_pay_{order.id}"}],
                 [{"type": "callback", "text": "🛍 Продолжить покупки", "payload": "catalog"}]]
     send_message(user_id, text, keyboard)

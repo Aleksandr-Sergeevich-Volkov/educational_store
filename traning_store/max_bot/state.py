@@ -84,3 +84,16 @@ def clear_order_state(user_id):
     """Очищает состояние заказа"""
     key = f"order_temp:{user_id}"
     redis_client.delete(key)
+
+
+def save_user_id_for_order(order_id, user_id):
+    """Сохраняет связь заказа с user_id (в Redis)"""
+    key = f"order_user:{order_id}"
+    redis_client.setex(key, 86400, str(user_id))  # храним 24 часа
+
+
+def get_user_id_by_order(order_id):
+    """Получает user_id по номеру заказа"""
+    key = f"order_user:{order_id}"
+    user_id = redis_client.get(key)
+    return int(user_id) if user_id else None

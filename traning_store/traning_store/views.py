@@ -13,6 +13,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views.generic.edit import CreateView
+from max_bot.services import send_message
+from max_bot.state import get_user_id_by_order
 from orders.models import Order
 
 from .settings import ROBOKASSA_PASSWORD_1, ROBOKASSA_PASSWORD_2
@@ -168,6 +170,19 @@ def result_payment(request: str, merchant_password_2: str) -> str:
     number = param_request['InvId']
     signature = param_request['SignatureValue']
     if check_signature_result(number, cost, signature, merchant_password_2):
+        # Обновляем статус заказа
+        try:
+            order = Order.objects.get(id=number)
+            if not order.paid:
+                order.paid = True
+                order.save()
+                print(f"✅ Заказ #{number} оплачен на сумму {cost}")
+
+                # Отправляем уведомление в бот
+                notify_user_about_payment(number, cost)
+
+        except Order.DoesNotExist:
+            print(f"❌ Заказ #{number} не найден")
         return HttpResponse(f'OK{param_request["InvId"]}')
     return HttpResponse('bad sign')
 
@@ -187,6 +202,18 @@ def check_success_payment(request: str, merchant_password_1: str = ROBOKASSA_PAS
         order.save()
         return HttpResponse('Thank you for using our service')
     return HttpResponse('bad sign')
+
+
+def notify_user_about_payment(order_id, sum_amount):
+    """Отправляет пользователю уведомление об успешной оплате"""
+    user_id = get_user_id_by_order(order_id)
+    if user_id:
+        text = f"✅ *Оплата заказа #{order_id} прошла успешно!*\n\n"
+        text += f"💰 Сумма: {sum_amount} ₽\n"
+        text += "📦 Статус: *Оплачен*\n\n"
+        text += "🙏 Спасибо за покупку!"
+
+        send_message(user_id, text)
 
 
 def staff_required(function=None):

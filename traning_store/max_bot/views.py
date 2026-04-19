@@ -22,7 +22,8 @@ from .messages import (format_product_card, format_product_list,
                        get_start_message)
 from .services import CartService, send_message, send_message_with_image
 from .state import (clear_order_state, clear_temp_selection, get_order_state,
-                    get_temp_selection, set_order_state, set_temp_selection)
+                    get_temp_selection, save_user_id_for_order,
+                    set_order_state, set_temp_selection)
 
 logger = logging.getLogger(__name__)
 
@@ -586,6 +587,7 @@ def checkout_finalize(user_id):
             color=item.color,
             m_type=item.model_type
         )
+    save_user_id_for_order(order.id, user_id)
     # Очищаем корзину и состояние
     cart.clear()
     clear_order_state(user_id)

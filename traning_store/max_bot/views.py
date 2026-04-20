@@ -93,7 +93,7 @@ def max_webhook(request):
             elif step == 'coupon_code':
                 apply_coupon_code(user_id, text)
             else:
-                send_message(user_id, "Неизвестная команда_!")
+                send_message(user_id, "Неизвестная команда_!_")
             return JsonResponse({"ok": True})
 
         # Обработка

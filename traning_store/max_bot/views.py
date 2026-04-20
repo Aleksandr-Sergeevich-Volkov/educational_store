@@ -90,12 +90,11 @@ def max_webhook(request):
                 checkout_process_address(user_id, text, 'yandex')
             elif step == 'cdek_address':
                 checkout_process_address(user_id, text, 'cdek')
+            elif step == 'coupon_code':
+                apply_coupon_code(user_id, text)
             else:
                 send_message(user_id, "Неизвестная команда")
             return JsonResponse({"ok": True})
-
-        if step == 'coupon_code':
-            apply_coupon_code(user_id, text)
 
         # Обработка
         if callback:

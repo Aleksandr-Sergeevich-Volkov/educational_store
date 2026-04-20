@@ -19,9 +19,6 @@ MAX_API_URL = "https://platform-api.max.ru/messages"
 
 def send_message(user_id, text, buttons=None):
     """Отправляет сообщение пользователю через MAX API"""
-    # print(f"send_message: user_id={user_id}")
-    # print(f"text: {text[:50]}...")
-    # print(f"buttons: {buttons}")
 
     headers = {
         "Authorization": settings.MAX_BOT_TOKEN,

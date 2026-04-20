@@ -165,12 +165,16 @@ class CartService:
                 return None
         return None
 
+    def get_total(self):
+        # Подсчет стоимости товаров в корзине.
+        return sum(item.get_total_price() for item in self.get_items())
+
     def get_discount(self):
         """Возвращает сумму скидки"""
         coupon = self.get_coupon()
         if coupon:
             discount_percent = Decimal(str(coupon.discount))
-            return (discount_percent / Decimal('100')) * self.get_total_price()
+            return (discount_percent / Decimal('100')) * self.get_total()
         return Decimal('0')
 
     def get_total_price(self):

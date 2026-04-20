@@ -325,6 +325,7 @@ def show_cart(user_id):
 
     buttons.append([
         {"type": "callback", "text": "➕ Продолжить покупки", "payload": "catalog"},
+        {"type": "callback", "text": "Применить купон", "payload": "coupon"},
         {"type": "callback", "text": "📝 Оформить заказ", "payload": "checkout"}
     ])
 
@@ -724,6 +725,9 @@ def handle_callback(user_id, callback):
     elif callback == 'order_cancel':
         clear_order_state(user_id)
         send_message(user_id, "❌ Оформление заказа отменено")
+
+    elif callback == 'coupon':
+        send_message(user_id, "Введите купон")
 
     elif callback.startswith('order_pay_'):
         # Извлекаем order_id из callback

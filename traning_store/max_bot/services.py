@@ -6,6 +6,7 @@ import logging
 from decimal import Decimal
 
 import requests
+from coupons.models import Coupon
 from django.conf import settings
 
 from .models import CartItem
@@ -144,12 +145,23 @@ class CartService:
             'product', 'size', 'color', 'model_type'
         )
 
+    def coupon(self):
+        if self.coupon_id:
+            return Coupon.objects.get(id=self.coupon_id)
+        return None
+
+    def get_discount(self):
+        if self.coupon:
+            return (self.coupon.discount / Decimal('100')
+                    ) * self.get_total_price()
+        return Decimal('0')
+
     def get_total_price(self):
         """Общая стоимость корзины"""
         total = Decimal('0')
         for item in self.get_items():
             total += item.get_total_price()
-        return total
+        return total - self.get_discount()
 
     def get_total_items(self):
         """Общее количество товаров в корзине"""

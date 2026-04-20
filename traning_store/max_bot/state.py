@@ -97,3 +97,16 @@ def get_user_id_by_order(order_id):
     key = f"order_user:{order_id}"
     user_id = redis_client.get(key)
     return int(user_id) if user_id else None
+
+
+def get_cart_state(user_id):
+    """Получает состояние корзины из Redis"""
+    key = f"cart_state:{user_id}"
+    data = redis_client.get(key)
+    return json.loads(data) if data else {}
+
+
+def set_cart_state(user_id, state):
+    """Сохраняет состояние корзины в Redis"""
+    key = f"cart_state:{user_id}"
+    redis_client.setex(key, 86400, json.dumps(state))  # 24 часа

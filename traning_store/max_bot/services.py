@@ -10,6 +10,7 @@ from coupons.models import Coupon
 from django.conf import settings
 
 from .models import CartItem
+from .state import get_cart_state, set_cart_state
 
 logger = logging.getLogger(__name__)
 
@@ -98,6 +99,9 @@ class CartService:
 
     def __init__(self, user_id):
         self.user_id = str(user_id)
+        # Загружаем состояние корзины из Redis
+        self.state = get_cart_state(self.user_id)
+        self.coupon_id = self.state.get('coupon_id')
 
     def add(self, product, quantity=1, size=None, color=None, model_type=None):
         """
@@ -145,15 +149,31 @@ class CartService:
             'product', 'size', 'color', 'model_type'
         )
 
-    def coupon(self):
+    def save_state(self):
+        """Сохраняет состояние корзины в Redis"""
+        self.state['coupon_id'] = self.coupon_id
+        set_cart_state(self.user_id, self.state)
+
+    def set_coupon(self, coupon_id):
+        """Устанавливает купон для корзины"""
+        self.coupon_id = coupon_id
+        self.save_state()
+
+    def get_coupon(self):
+        """Возвращает объект купона"""
         if self.coupon_id:
-            return Coupon.objects.get(id=self.coupon_id)
+            try:
+                return Coupon.objects.get(id=self.coupon_id, active=True)
+            except Coupon.DoesNotExist:
+                return None
         return None
 
     def get_discount(self):
-        if self.coupon:
-            return (self.coupon.discount / Decimal('100')
-                    ) * self.get_total_price()
+        """Возвращает сумму скидки"""
+        coupon = self.get_coupon()
+        if coupon:
+            discount_percent = Decimal(str(coupon.discount))
+            return (discount_percent / Decimal('100')) * self.get_total_price()
         return Decimal('0')
 
     def get_total_price(self):

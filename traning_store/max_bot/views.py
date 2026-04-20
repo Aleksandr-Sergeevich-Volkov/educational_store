@@ -363,6 +363,8 @@ def apply_coupon_code(user_id, coupon_id):
     except Coupon.DoesNotExist:
         send_message(user_id, "❌ *Неверный или просроченный промокод*\n\nПопробуйте другой код")
 
+    clear_order_state(user_id)
+
 
 def add_to_cart_start(user_id, product_id):
     """Начало процесса добавления в корзину — выбор размера"""

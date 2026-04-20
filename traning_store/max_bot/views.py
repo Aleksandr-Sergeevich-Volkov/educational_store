@@ -6,9 +6,11 @@ import logging
 
 from catalog.models import (Class_compress, Color, Gallery, Model_type,
                             Product, Size, Type_product)
+from coupons.models import Coupon
 from django.db import models
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from orders.models import Order, OrderItem
 from orders.tasks import order_created
@@ -90,6 +92,10 @@ def max_webhook(request):
                 checkout_process_address(user_id, text, 'cdek')
             else:
                 send_message(user_id, "Неизвестная команда")
+            return JsonResponse({"ok": True})
+
+        if step == 'coupon_code':
+            apply_coupon_code(user_id, text)
             return JsonResponse({"ok": True})
 
         # Обработка
@@ -331,6 +337,32 @@ def show_cart(user_id):
     send_message(user_id, text, buttons)
 
 # ========== ДОБАВЛЕНИЕ В КОРЗИНУ (С ВЫБОРОМ ХАРАКТЕРИСТИК) ==========
+
+
+def apply_coupon_code(user_id, coupon_id):
+    now = timezone.now()
+    try:
+        coupon = Coupon.objects.get(code__iexact=coupon_id,
+                                    valid_from__lte=now,
+                                    valid_to__gte=now,
+                                    active=True)
+        cart = CartService(user_id)
+        cart.set_coupon(coupon.id)
+
+        discount = cart.get_discount()
+        total = cart.get_total_price()
+        total_with_discount = total
+
+        text = f"✅ *Промокод {coupon.code} применён!*\n\n"
+        text += f"💰 Скидка: {coupon.discount}%\n"
+        text += f"📉 Сумма скидки: {discount:,.0f} ₽\n"
+        text += f"💵 Итого к оплате: {total_with_discount:,.0f} ₽\n\n"
+        text += "🛒 /cart — посмотреть корзину"
+
+        send_message(user_id, text)
+
+    except Coupon.DoesNotExist:
+        send_message(user_id, "❌ *Неверный или просроченный промокод*\n\nПопробуйте другой код")
 
 
 def add_to_cart_start(user_id, product_id):
@@ -726,7 +758,8 @@ def handle_callback(user_id, callback):
         send_message(user_id, "❌ Оформление заказа отменено")
 
     elif callback == 'coupon':
-        send_message(user_id, "Введите купон")
+        set_order_state(user_id, 'step', 'coupon_code')
+        send_message(user_id, "🎫 *Введите промокод:*\n\nНапример: SUMMER10")
 
     elif callback.startswith('order_pay_'):
         # Извлекаем order_id из callback

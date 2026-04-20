@@ -355,9 +355,9 @@ def apply_coupon_code(user_id, coupon_id):
         text += f"💰 Скидка: {coupon.discount}%\n"
         text += f"📉 Сумма скидки: {discount:,.0f} ₽\n"
         text += f"💵 Итого к оплате: {total_with_discount:,.0f} ₽\n\n"
-        text += "🛒 /cart — посмотреть корзину"
-
-        send_message(user_id, text)
+        buttons = []
+        buttons.append([{"type": "callback", "text": "Посмотреть корзину", "payload": "cart"}])
+        send_message(user_id, text, buttons)
 
     except Coupon.DoesNotExist:
         send_message(user_id, "❌ *Неверный или просроченный промокод*\n\nПопробуйте другой код")

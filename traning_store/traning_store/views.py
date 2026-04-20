@@ -26,27 +26,6 @@ class SomeEntityCreateView(CreateView):
     success_url = reverse_lazy('homepage:homepage')
 
 
-""" def login_view(request):
-    next_url = request.META.get('HTTP_REFERER')
-
-    if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            # Ensure next_url is safe or default to home page
-            next_url = request.POST.get('next', next_url)
-            parsed_url = urlparse(next_url)
-            if not parsed_url.netloc and is_valid_path(next_url):
-                return HttpResponseRedirect(next_url)
-            return HttpResponseRedirect(next_url)
-    else:
-        form = AuthenticationForm()
-
-    return render(request, 'registration/login.html', {'form': form, 'next': next_url})
- """
-
-
 def login_view(request):
     # Получаем next из GET параметров или из POST
     next_url = request.GET.get('next') or request.POST.get('next')

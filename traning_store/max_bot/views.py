@@ -330,8 +330,8 @@ def show_cart(user_id):
     ])
     send_message(user_id, text, buttons)
 
-
 # ========== ДОБАВЛЕНИЕ В КОРЗИНУ (С ВЫБОРОМ ХАРАКТЕРИСТИК) ==========
+
 
 def add_to_cart_start(user_id, product_id):
     """Начало процесса добавления в корзину — выбор размера"""

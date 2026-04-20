@@ -328,7 +328,6 @@ def show_cart(user_id):
         {"type": "callback", "text": "Применить купон", "payload": "coupon"},
         {"type": "callback", "text": "📝 Оформить заказ", "payload": "checkout"}
     ])
-
     send_message(user_id, text, buttons)
 
 

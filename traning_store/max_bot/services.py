@@ -156,6 +156,7 @@ class CartService:
         self.coupon_id = coupon_id
         self.save_state()
 
+    @property
     def get_coupon(self):
         """Возвращает объект купона"""
         if self.coupon_id:

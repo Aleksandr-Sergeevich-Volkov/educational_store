@@ -605,7 +605,7 @@ def checkout_finalize(user_id):
         email=state.get('email', ''),
         delivery_type=state.get('delivery_type', ''),
         address_pvz=state.get('address_pvz', ''),
-        discount=cart.get_discount(),
+        discount=cart.get_coupon.discount,
         delivery_sum=0,  # без расчёта
         paid=False
     )

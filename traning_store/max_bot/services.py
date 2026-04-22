@@ -172,7 +172,7 @@ class CartService:
 
     def get_discount(self):
         """Возвращает сумму скидки"""
-        coupon = self.get_coupon()
+        coupon = self.get_coupon
         if coupon:
             discount_percent = Decimal(str(coupon.discount))
             return (discount_percent / Decimal('100')) * self.get_total()

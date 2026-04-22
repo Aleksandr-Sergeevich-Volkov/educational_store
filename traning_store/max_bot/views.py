@@ -353,8 +353,8 @@ def apply_coupon_code(user_id, coupon_id):
 
         text = f"✅ *Промокод {coupon.code} применён!*\n\n"
         text += f"💰 Скидка: {coupon.discount}%\n"
-        text += f"📉 Сумма скидки: {discount:,.0f} ₽\n"
-        text += f"💵 Итого к оплате: {total_with_discount:,.0f} ₽\n\n"
+        text += f"📉 Сумма скидки: {discount:,.2f} ₽\n"
+        text += f"💵 Итого к оплате: {total_with_discount:,.2f} ₽\n\n"
 
         buttons = []
         buttons.append([{"type": "callback", "text": "Посмотреть корзину", "payload": "cart"}])

@@ -192,6 +192,7 @@ class CartService:
     def clear(self):
         """Очистить корзину"""
         CartItem.objects.filter(user_id=self.user_id).delete()
+        self.set_coupon(None)
 
     def is_empty(self):
         """Проверить, пуста ли корзина"""

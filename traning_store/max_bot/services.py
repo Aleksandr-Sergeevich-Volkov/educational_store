@@ -42,7 +42,6 @@ def send_message(user_id, text, buttons=None):
     try:
         response = requests.post(url, json=payload, headers=headers, timeout=10)
         # print(f"Response status: {response.status_code}")
-        # print(f"Response body: {response.text}")
         return response.status_code == 200
     except Exception as e:
         print(f"Error sending message: {e}")

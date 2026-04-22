@@ -183,6 +183,7 @@ class CartService:
         total = Decimal('0')
         for item in self.get_items():
             total += item.get_total_price()
+        print(self.get_discount())
         return total - self.get_discount()
 
     def get_total_items(self):

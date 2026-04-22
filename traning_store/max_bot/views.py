@@ -470,8 +470,6 @@ def remove_from_cart_handler(user_id, cart_item_id):
     show_cart(user_id)
 
 
-# max_bot/views.py
-
 def checkout_start(user_id):
     """Начало оформления заказа"""
     cart = CartService(user_id)

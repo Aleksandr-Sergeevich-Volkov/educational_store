@@ -576,7 +576,7 @@ def checkout_confirm(user_id):
         text += f"• {item.get_display_name()}\n"
         text += f"  {item.quantity} шт × {item.price_at_add:,.0f} ₽\n"
 
-    text += f"\n💰 *Итого:* {total:,.0f} ₽\n"
+    text += f"\n💰 *Итого:* {total:,.2f} ₽\n"
     text += "🚚 *Доставка:* от 500 рублей бесплатно\n\n"
     text += "✅ Для подтверждения заказа нажмите кнопку ниже"
 

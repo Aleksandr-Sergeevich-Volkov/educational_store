@@ -124,6 +124,7 @@ class CartService:
     def remove(self, cart_item_id):
         """Удалить позицию из корзины по ID"""
         CartItem.objects.filter(id=cart_item_id, user_id=self.user_id).delete()
+        self.set_coupon(None)
 
     def update_quantity(self, cart_item_id, quantity):
         """Изменить количество товара"""

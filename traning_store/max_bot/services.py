@@ -158,6 +158,7 @@ class CartService:
     def get_coupon(self):
         """Возвращает объект купона"""
         if self.coupon_id:
+            print(self.coupon_id)
             try:
                 return Coupon.objects.get(id=self.coupon_id, active=True)
             except Coupon.DoesNotExist:
@@ -192,7 +193,7 @@ class CartService:
     def clear(self):
         """Очистить корзину"""
         CartItem.objects.filter(user_id=self.user_id).delete()
-        self.set_coupon = None
+        self.set_coupon(None)
 
     def is_empty(self):
         """Проверить, пуста ли корзина"""

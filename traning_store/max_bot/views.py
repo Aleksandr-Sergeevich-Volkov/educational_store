@@ -325,7 +325,7 @@ def show_cart(user_id):
             {"type": "callback", "text": f"❌ Удалить # {idx}", "payload": f"cart_remove_{item.id}"}
         ])
 
-    text += f"💰 *Итого:_*_! {cart.get_total_price():,.0f} ₽"
+    text += f"💰 *Итого:_*_ {cart.get_total_price():,.2f} ₽"
 
     buttons.append([
         {"type": "callback", "text": "➕ Продолжить покупки", "payload": "catalog"},

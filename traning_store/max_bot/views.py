@@ -483,7 +483,7 @@ def checkout_start(user_id):
     total = cart.get_total_price()
 
     text = "📝 *Оформление заказа*\n\n"
-    text += f"💰 *Сумма заказа:* {total:,.0f} ₽\n\n"
+    text += f"💰 *Сумма заказа:* {total:,.2f} ₽\n\n"
     text += "👤 *Введите ваше имя:*"
 
     set_order_state(user_id, 'step', 'first_name')
@@ -686,6 +686,8 @@ def handle_callback(user_id, callback):
         show_catalog_categories(user_id)
     elif callback == 'search':
         send_message(user_id, "🔍 Введите название товара для поиска")
+        query = callback[1]
+        search_products(user_id, query)
 
     # ========== КОРЗИНА ==========
     elif callback == 'cart':

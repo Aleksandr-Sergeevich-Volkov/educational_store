@@ -689,7 +689,6 @@ def handle_callback(user_id, callback):
     elif callback == 'search':
         set_order_state(user_id, 'step', 'search_query')
         send_message(user_id, "🔍 *Введите название товара для поиска:* ")
-
     # ========== КОРЗИНА ==========
     elif callback == 'cart':
         show_cart(user_id)

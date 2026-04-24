@@ -685,7 +685,7 @@ def handle_callback(user_id, callback):
         print("🟢 Showing catalog categories")
         show_catalog_categories(user_id)
     elif callback == 'search':
-        send_message(user_id, "🔍 Введите название товара для поиска")
+        send_message(user_id, "🔍 Введите название товара для поиска_")
         print(callback)
         query = callback[1]
         search_products(user_id, query)

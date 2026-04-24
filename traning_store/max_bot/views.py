@@ -92,6 +92,9 @@ def max_webhook(request):
                 checkout_process_address(user_id, text, 'cdek')
             elif step == 'coupon_code':
                 apply_coupon_code(user_id, text)
+            elif step == 'search_query':
+                search_products(user_id, text)
+                clear_order_state(user_id)
             else:
                 send_message(user_id, "Неизвестная команда_!_")
             return JsonResponse({"ok": True})
@@ -685,10 +688,8 @@ def handle_callback(user_id, callback):
         print("🟢 Showing catalog categories")
         show_catalog_categories(user_id)
     elif callback == 'search':
-        send_message(user_id, "🔍 Введите название товара для поиска_")
-        print(callback)
-        query = callback[1]
-        search_products(user_id, query)
+        set_order_state(user_id, 'step', 'search_query')
+        send_message(user_id, "🔍 *Введите название товара для поиска:* ")
 
     # ========== КОРЗИНА ==========
     elif callback == 'cart':

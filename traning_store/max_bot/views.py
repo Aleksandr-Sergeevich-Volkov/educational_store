@@ -643,7 +643,6 @@ def checkout_finalize(user_id):
     keyboard = [[{"type": "callback", "text": "💳 Оплатить заказ", "payload": f"order_pay_{order.id}"}],
                 [{"type": "callback", "text": "🛍 Продолжить покупки", "payload": "catalog"}]]
     send_message(user_id, text, keyboard)
-
     # Уведомление администратору
     admin_text = f"🆕 *Новый заказ #{order.id}*\n"
     admin_text += f"👤 {state.get('first_name')} {state.get('last_name')}\n"

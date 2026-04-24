@@ -139,11 +139,10 @@ def generate_payment_link(
 
 # Получение уведомления об исполнении операции (ResultURL).
 
-def result_payment(request: str, merchant_password_2: str) -> str:
+def result_payment(request: str, merchant_password_2: str = ROBOKASSA_PASSWORD_2) -> str:
     """Verification of notification (ResultURL).
     :param request: HTTP parameters.
     """
-    merchant_password_2 = ROBOKASSA_PASSWORD_2
     param_request = parse_response(request)
     cost = param_request['OutSum']
     number = param_request['InvId']

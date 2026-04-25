@@ -178,8 +178,11 @@ def check_success_payment(request: str, merchant_password_1: str = ROBOKASSA_PAS
         order = Order.objects.get(pk=param_request['InvId'])
         order.paid = True
         order.save()
-        return HttpResponse('Thank you for using our service')
-    return HttpResponse('bad sign')
+        # ✅ Рендерим красивую страницу
+        return render(request, 'payment_success.html', {'order_id': number})
+
+    # В случае ошибки подписи
+    return render(request, 'payment_failed.html', {'order_id': number})
 
 
 def notify_user_about_payment(order_id, sum_amount):
@@ -189,7 +192,7 @@ def notify_user_about_payment(order_id, sum_amount):
         text = f"✅ *Оплата заказа #{order_id} прошла успешно!*\n\n"
         text += f"💰 Сумма: {sum_amount} ₽\n"
         text += "📦 Статус: *Оплачен*\n\n"
-        text += "🙏 Спасибо за покупку!"
+        text += "Спасибо за покупку!"
 
         send_message(user_id, text)
 

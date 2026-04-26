@@ -23,7 +23,7 @@ services:
       - pg_data:/var/lib/postgresql/data
   # Имя и описание контейнера с бэкендом
   rabbitmq:
-    image: rabbitmq:latest
+    image: rabbitmq:3.13-management
     hostname: rabbit
     restart: always
     environment:

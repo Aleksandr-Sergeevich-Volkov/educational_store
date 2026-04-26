@@ -29,7 +29,7 @@
                     
                     <!-- Кнопки действий -->
                     <div class="d-flex justify-content-center gap-3 flex-wrap">
-                        <a href="{% url 'catalog:product_list' %}" class="btn btn-primary btn-lg px-4">
+                        <a href="{% url 'catalog:catalog' %}" class="btn btn-primary btn-lg px-4">
                             <i class="fas fa-shopping-bag me-2"></i>Продолжить покупки
                         </a>
                         <a href="{% url 'catalog:profile' user.username %}" class="btn btn-outline-secondary btn-lg px-4">
@@ -59,7 +59,7 @@
         
         if (seconds <= 0) {
             clearInterval(interval);
-            window.location.href = "{% url 'catalog:product_list' %}";
+            window.location.href = "{% url 'catalog:catalog' %}";
         }
     }, 1000);
 </script>

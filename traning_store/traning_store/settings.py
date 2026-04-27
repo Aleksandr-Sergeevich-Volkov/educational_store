@@ -210,47 +210,14 @@ REDIS_DB = int(os.getenv('REDIS_DB', 0))
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
-            'style': '{',
-        },
-        'simple': {
-            'format': '{levelname} {message}',
-            'style': '{',
-        },
-    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
             'stream': sys.stdout,
-            'formatter': 'simple',
-        },
-        'file': {
-            'class': 'logging.FileHandler',
-            'filename': '/var/log/django.log',
-            'formatter': 'verbose',
         },
     },
     'root': {
         'handlers': ['console'],
-        'level': 'INFO',  # ← УРОВЕНЬ: INFO и выше
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': False,
-        },
-        'max_bot': {  # ← ваш логгер
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': False,
-        },
-        'orders': {  # ← логгер заказов
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': False,
-        },
+        'level': 'INFO',
     },
 }

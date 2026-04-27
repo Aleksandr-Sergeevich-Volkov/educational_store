@@ -189,7 +189,7 @@ class SimpleGeolocation:
                     # Город уже есть - увеличиваем счетчик
                     city_obj.detection_count += 1
                     city_obj.save(update_fields=['detection_count', 'updated_at'])
-                    print(f"   🔄 City exists: {city_lat} (count: {city_obj.detection_count})")
+                    # print(f"   🔄 City exists: {city_lat} (count: {city_obj.detection_count})")
                 else:
                     # Создаем новый город
                     city_obj = City.objects.create(

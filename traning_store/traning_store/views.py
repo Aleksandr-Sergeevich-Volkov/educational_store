@@ -1,5 +1,6 @@
 import decimal
 import hashlib
+import logging
 from urllib import parse
 from urllib.parse import urlparse
 
@@ -18,6 +19,8 @@ from max_bot.state import get_user_id_by_order
 from orders.models import Order
 
 from .settings import ROBOKASSA_PASSWORD_1, ROBOKASSA_PASSWORD_2
+
+logger = logging.getLogger(__name__)
 
 
 class SomeEntityCreateView(CreateView):
@@ -85,10 +88,10 @@ def parse_response(request: str) -> dict:
     :return: Dictionary.
     """
     url = request.META.get('RAW_URI')
-    print(f'url: {url}')
+    logger.info(f'url: {url}')
     params = {}
     for item in urlparse(url).query.split('&'):
-        print(f'item: {item}')
+        logger.info(f'item: {item}')
         key, value = item.split('=')
         params[key] = value
     return params

@@ -88,10 +88,8 @@ def parse_response(request: str) -> dict:
     :return: Dictionary.
     """
     url = request.META.get('RAW_URI')
-    logger.info(f'url: {url}')
     params = {}
     for item in urlparse(url).query.split('&'):
-        logger.info(f'item: {item}')
         key, value = item.split('=')
         params[key] = value
     return params

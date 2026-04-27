@@ -156,7 +156,7 @@ def send_products_with_photos(user_id, products, title):
 
         # Формируем текст
         text = f"*{product.name[:40]}*\n"
-        text += f"  💰 {product.price:,.0f} ₽ | 📦 {'В наличии' if product.stock > 0 else 'Под заказ'}\n"
+        text += f"  💰 {product.price:,.2f} ₽ | 📦 {'В наличии' if product.stock > 0 else 'Под заказ'}\n"
         text += f"  🆔 {product.articul}"
 
         # Кнопка для просмотра
@@ -254,7 +254,7 @@ def show_products_by_category(user_id, category_id):
                 image_url = f"https://kompressionnye-chulki24.ru{image_url}"
         # Формируем текст
         text = f"*{product.name[:50]}*\n"
-        text += f"💰 *Цена:* {product.price:,.0f} ₽\n"
+        text += f"💰 *Цена:* {product.price:,.2f} ₽\n"
         text += f"📦 *Наличие:* {'В наличии' if product.stock > 0 else 'Под заказ'}\n"
         text += f"🏷 *Артикул:* {product.articul}"
         # Кнопка для просмотра
@@ -322,7 +322,7 @@ def show_cart(user_id):
     for idx, item in enumerate(items, 1):  # ← нумерация с 1
         subtotal = item.get_total_price()
         text += f"{idx}. *{item.get_display_name()}*\n"
-        text += f"   {item.quantity} шт × {item.price_at_add:,.0f} ₽ = {subtotal:,.0f} ₽\n\n"
+        text += f"   {item.quantity} шт × {item.price_at_add:,.2f} ₽ = {subtotal:,.2f} ₽\n\n"
 
         buttons.append([
             {"type": "callback", "text": f"❌ Удалить # {idx}", "payload": f"cart_remove_{item.id}"}
@@ -575,7 +575,7 @@ def checkout_confirm(user_id):
     text += "📦 *Товары:*\n"
     for item in items:
         text += f"• {item.get_display_name()}\n"
-        text += f"  {item.quantity} шт × {item.price_at_add:,.0f} ₽\n"
+        text += f"  {item.quantity} шт × {item.price_at_add:,.2f} ₽\n"
 
     text += f"\n💰 *Итого:* {total:,.2f} ₽\n"
     text += "🚚 *Доставка:* от 500 рублей бесплатно\n\n"
@@ -649,7 +649,7 @@ def checkout_finalize(user_id):
     admin_text += f"📧 {state.get('email')}\n"
     admin_text += f"🚚 {state.get('delivery_type')}\n"
     admin_text += f"📍 {state.get('address_pvz')}\n"
-    admin_text += f"💰 Сумма: {order.get_total_cost():,.0f} ₽"
+    admin_text += f"💰 Сумма: {order.get_total_cost():,.2f} ₽"
     send_message(10817976, admin_text)  # раскомментировать, если есть ID админа
 
 

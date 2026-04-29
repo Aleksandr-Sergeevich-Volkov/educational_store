@@ -103,6 +103,6 @@ services:
       - media:/media
       - nginx_html:/usr/share/nginx/html
     ports:
-      - 8000:80 
+      - "127.0.0.1:8000:80" 
     depends_on:
      - traning_store  

@@ -167,56 +167,63 @@
 {% block extra_js %}
 <script>
 $(document).ready(function() {
-    const $searchInput = $('#id_query');  # Поле из основной формы поиска
+    const $searchInput = $('#id_query');
     const $autocompleteResults = $('<div class="autocomplete-results"></div>');
     $searchInput.after($autocompleteResults);
     
+    let debounceTimer;
+    
     $searchInput.on('input', function() {
+        clearTimeout(debounceTimer);
         const query = $(this).val().trim();
         
         if (query.length >= 2) {
-            // Делаем AJAX запрос к endpoint автодополнения
-            $.ajax({
-                url: '{% url "homepage:autocomplete" %}',
-                data: {
-                    'term': query
-                },
-                dataType: 'json',
-                success: function(data) {
-                    $autocompleteResults.empty();
-                    
-                    if (data.suggestions.length > 0) {
-                        $.each(data.suggestions, function(index, suggestion) {
-                            const $item = $('<div class="autocomplete-item"></div>');
-                            $item.html(`
-                                <a href="${suggestion.url}">
-                                    ${suggestion.name} <small>${suggestion.brand}</small>
-                                </a>
-                            `);
-                            $autocompleteResults.append($item);
-                        });
-                        $autocompleteResults.show();
-                    } else {
+            debounceTimer = setTimeout(() => {
+                $.ajax({
+                    url: '{% url "homepage:autocomplete" %}',
+                    data: { 'term': query },
+                    dataType: 'json',
+                    success: function(data) {
+                        $autocompleteResults.empty();
+                        
+                        if (data.suggestions && data.suggestions.length > 0) {
+                            $.each(data.suggestions, function(index, suggestion) {
+                                // ✅ Безопасное создание элемента
+                                const $item = $('<div class="autocomplete-item"></div>');
+                                const $link = $('<a></a>');
+                                
+                                // Валидация URL
+                                let url = suggestion.url || '#';
+                                if (url.startsWith('javascript:') || url.startsWith('data:')) {
+                                    url = '#';
+                                }
+                                
+                                $link.attr('href', url);
+                                $link.text(suggestion.name + (suggestion.brand ? ' ' + suggestion.brand : ''));
+                                
+                                $item.append($link);
+                                $autocompleteResults.append($item);
+                            });
+                            $autocompleteResults.show();
+                        } else {
+                            $autocompleteResults.hide();
+                        }
+                    },
+                    error: function() {
                         $autocompleteResults.hide();
                     }
-                }
-            });
+                });
+            }, 300); // debounce
         } else {
             $autocompleteResults.hide();
         }
     });
     
-    // Скрываем при клике вне
+    // Закрытие при клике вне
     $(document).on('click', function(e) {
         if (!$(e.target).closest('.autocomplete-results, #id_query').length) {
             $autocompleteResults.hide();
         }
-    });
-    
-    // При выборе варианта
-    $autocompleteResults.on('click', '.autocomplete-item', function() {
-        const url = $(this).find('a').attr('href');
-        window.location.href = url;
     });
 });
 </script>

@@ -207,7 +207,7 @@ class CityContextMixin:
                 )
                 # Обновляем объект в памяти
                 city.refresh_from_db(fields=['detection_count'])
-                logger.info(f"Incremented detection count for {city.name}: {city.detection_count}")
+                # logger.info(f"Incremented detection count for {city.name}: {city.detection_count}")
 
         except DatabaseError as e:
             logger.error(f"Database error incrementing detection count for city {city.id}: {e}")

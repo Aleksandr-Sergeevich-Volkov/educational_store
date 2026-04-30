@@ -27,7 +27,7 @@ class ProductSitemap(Sitemap):
     protocol = 'https'
 
     def items(self):
-        return Product.objects.filter(available=True)
+        return Product.objects.filter(available=True).order_by('id')
 
     def lastmod(self, obj):
         return obj.updated
@@ -44,7 +44,7 @@ class ArticleSitemap(Sitemap):
 
     def items(self):
         # Возвращаем QuerySet опубликованных статей
-        return Post.objects.all()
+        return Post.objects.all().order_by('id')
 
     def location(self, obj):
         # Генерируем URL с параметром pk

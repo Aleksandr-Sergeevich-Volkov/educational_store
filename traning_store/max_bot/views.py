@@ -205,6 +205,35 @@ def show_catalog_categories(user_id):
         send_message(user_id, "Категории временно недоступны")
 
 
+def show_table_size(user_id, product_id):
+    """Показывает таблицу размеров"""
+    from .services import send_message_with_image
+
+    try:
+        # ✅ Получаем объект товара
+        product = Product.objects.get(id=product_id, available=True)
+
+        # ✅ Получаем бренд через связь
+        brand = product.brand  # бренд уже есть в товаре
+
+        # ✅ Проверяем, есть ли изображение таблицы размеров
+        if brand.size_table_image:
+            # Формируем полный URL изображения
+            image_url = brand.size_table_image.url
+            if image_url.startswith('/'):
+                image_url = f"https://kompressionnye-chulki24.ru{image_url}"
+
+            text = f"📏 *Таблица размеров для бренда {brand.name}*"
+
+            # Отправляем изображение
+            send_message_with_image(user_id, text, image_url)
+        else:
+            send_message(user_id, f"😔 *Таблица размеров для бренда {brand.name} временно недоступна*")
+
+    except Product.DoesNotExist:
+        send_message(user_id, "❌ *Товар не найден*")
+
+
 def show_compress_classes(user_id):
     """Показывает классы компрессии для фильтрации"""
     classes = Class_compress.objects.all()
@@ -686,6 +715,12 @@ def handle_callback(user_id, callback):
     if callback == 'catalog':
         print("🟢 Showing catalog categories")
         show_catalog_categories(user_id)
+    elif callback == 'back_to_catalog':
+        print("🟢 Showing catalog categories")
+        show_catalog_categories(user_id)
+    elif callback.startswith('size_table_'):
+        product_id = callback.split('_')[2]
+        show_table_size(user_id, product_id)
     elif callback == 'search':
         set_order_state(user_id, 'step', 'search_query')
         send_message(user_id, "🔍 *Введите название товара для поиска:* ")

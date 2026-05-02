@@ -85,3 +85,34 @@ class CartItem(models.Model):
         if self.model_type:
             name += f", {self.model_type.name}"
         return name
+
+
+class FavoriteItem(models.Model):
+    """
+    Модель для хранения избранных товаров пользователя MAX.
+    """
+    user_id = models.CharField(
+        max_length=100,
+        db_index=True,
+        verbose_name='ID пользователя MAX'
+    )
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        related_name='favorited_by',
+        verbose_name='Товар'
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='Дата добавления'
+    )
+
+    class Meta:
+        verbose_name = 'Избранный товар'
+        verbose_name_plural = 'Избранные товары'
+        # Один пользователь не может добавить один товар дважды
+        unique_together = ('user_id', 'product')
+        ordering = ('-created_at',)
+
+    def __str__(self):
+        return f"{self.user_id} - {self.product.name}"

@@ -18,6 +18,9 @@ from orders.tasks import order_created
 from traning_store.settings import ROBOKASSA_LOGIN, ROBOKASSA_PASSWORD_1
 from traning_store.views import generate_payment_link
 
+# max_bot/views.py
+from .favorites_service import (add_to_favorites, get_favorites,
+                                remove_from_favorites)
 from .keyboards import (get_compress_classes_keyboard, get_main_keyboard,
                         get_product_keyboard, get_products_keyboard)
 from .messages import (format_product_card, format_product_list,
@@ -697,6 +700,48 @@ def pay(user_id, order_id):
     send_message(user_id, text)
 
 
+def add_to_favorites_handler(user_id, product_id):
+    """Обработчик добавления товара в избранное"""
+    success = add_to_favorites(user_id, product_id)
+
+    if success:
+        send_message(user_id, "❤️ *Товар добавлен в избранное!*\n\n/favorites — посмотреть избранное")
+    else:
+        send_message(user_id, "ℹ️ *Этот товар уже в вашем избранном*")
+
+
+def show_favorites(user_id):
+    """Показывает список избранных товаров"""
+    favorites = get_favorites(user_id)
+
+    if not favorites.exists():
+        send_message(user_id, "❤️ *Ваш список избранного пуст*\n\nДобавляйте товары через карточку товара")
+        return
+
+    text = "❤️ *Ваше избранное:*\n\n"
+    buttons = []
+
+    for fav in favorites:
+        product = fav.product
+        text += f"• *{product.name[:45]}*\n"
+        text += f"  💰 {product.price:,.0f} ₽\n\n"
+
+        short_name = product.name[:25] + ('...' if len(product.name) > 25 else '')
+        buttons.append([
+            {"type": "callback", "text": f"🔍 {short_name}", "payload": f"product_{product.id}"},
+            {"type": "callback", "text": "❌ Удалить", "payload": f"remove_favorite_{product.id}"}
+        ])
+
+    send_message(user_id, text, {"buttons": buttons})
+
+
+def remove_favorite_handler(user_id, product_id):
+    """Обработчик удаления товара из избранного"""
+    remove_from_favorites(user_id, product_id)
+    send_message(user_id, "🗑 *Товар удалён из избранного*")
+    show_favorites(user_id)
+
+
 def handle_callback(user_id, callback):
     """
     Обработка нажатий на кнопки.
@@ -802,5 +847,16 @@ def handle_callback(user_id, callback):
         # Извлекаем order_id из callback
         order_id = callback.split('_')[2]  # "order_pay_42" → ["order", "pay", "42"] → "42"
         pay(user_id, order_id)
+
+    elif callback.startswith('favorite_'):
+        product_id = callback.split('_')[1]
+        add_to_favorites_handler(user_id, product_id)
+
+    elif callback == 'favorites':
+        show_favorites(user_id)
+
+    elif callback.startswith('remove_favorite_'):
+        product_id = callback.split('_')[2]
+        remove_favorite_handler(user_id, product_id)
     else:
         send_message(user_id, f"Неизвестная команда: {callback}")

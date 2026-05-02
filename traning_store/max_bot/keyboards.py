@@ -8,6 +8,7 @@ def get_main_keyboard():
     return [
         [
             {"type": "callback", "text": "🛍 Каталог", "payload": "catalog"},
+            {"type": "callback", "text": "❤️ Избранное", "payload": "favorites"},
             {"type": "callback", "text": "🔍 Поиск", "payload": "search"}
         ],
         [

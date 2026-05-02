@@ -705,7 +705,9 @@ def add_to_favorites_handler(user_id, product_id):
     success = add_to_favorites(user_id, product_id)
 
     if success:
-        send_message(user_id, "❤️ *Товар добавлен в избранное!*\n\n/favorites — посмотреть избранное")
+        buttons = []
+        buttons.append([{"type": "callback", "text": "❤️ Избранное", "payload": "favorites"}])
+        send_message(user_id, "❤️ *Товар добавлен в избранное!*", buttons)
     else:
         send_message(user_id, "ℹ️ *Этот товар уже в вашем избранном*")
 

@@ -724,7 +724,7 @@ def show_favorites(user_id):
     for fav in favorites:
         product = fav.product
         text += f"• *{product.name[:45]}*\n"
-        text += f"  💰 {product.price:,.0f} ₽\n\n"
+        text += f"  💰 {product.price:,.2f} ₽\n\n"
 
         short_name = product.name[:25] + ('...' if len(product.name) > 25 else '')
         buttons.append([
@@ -732,7 +732,7 @@ def show_favorites(user_id):
             {"type": "callback", "text": "❌ Удалить", "payload": f"remove_favorite_{product.id}"}
         ])
 
-    send_message(user_id, text, {"buttons": buttons})
+    send_message(user_id, text, buttons)
 
 
 def remove_favorite_handler(user_id, product_id):

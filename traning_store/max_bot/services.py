@@ -35,7 +35,7 @@ def send_message(user_id, text, buttons=None):
             }
         ]
 
-    print(f"Payload_!_: {json.dumps(payload, ensure_ascii=False, indent=2)}")
+    print(f"Payload_!: {json.dumps(payload, ensure_ascii=False, indent=2)}")
 
     url = f"https://platform-api.max.ru/messages?user_id={user_id}"
 

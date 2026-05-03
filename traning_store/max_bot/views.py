@@ -199,7 +199,7 @@ def show_catalog_categories(user_id):
     from .keyboards import get_categories_keyboard
     from .services import send_message
 
-    categories = Type_product.objects.all()
+    categories = Type_product.objects.exclude(name='Компрессионный трикотаж')
     if categories.exists():
         text = "Выберите вид изделия:"
         buttons = get_categories_keyboard(categories)

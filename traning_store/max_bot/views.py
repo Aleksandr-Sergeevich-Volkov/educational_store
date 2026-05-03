@@ -716,8 +716,9 @@ def show_favorites(user_id):
     """Показывает список избранных товаров"""
     favorites = get_favorites(user_id)
 
+    keyboard = [[{"type": "callback", "text": "🛍 Перейти в каталог", "payload": "catalog"}]]
     if not favorites.exists():
-        send_message(user_id, "❤️ *Ваш список избранного пуст*\n\nДобавляйте товары через карточку товара")
+        send_message(user_id, "❤️ *Ваш список избранного пуст*\n\nДобавляйте товары через карточку товара", keyboard)
         return
 
     text = "❤️ *Ваше избранное:*\n\n"

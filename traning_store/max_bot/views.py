@@ -18,7 +18,6 @@ from orders.tasks import order_created
 from traning_store.settings import ROBOKASSA_LOGIN, ROBOKASSA_PASSWORD_1
 from traning_store.views import generate_payment_link
 
-# max_bot/views.py
 from .favorites_service import (add_to_favorites, get_favorites,
                                 remove_from_favorites)
 from .keyboards import (get_compress_classes_keyboard, get_main_keyboard,

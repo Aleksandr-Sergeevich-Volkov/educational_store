@@ -76,6 +76,39 @@ def logout_view(request):
     return redirect('/')
 
 
+class SignUpView(CreateView):
+    template_name = 'registration/registration_form.html'
+    form_class = SignUpForm
+    success_url = reverse_lazy('homepage:homepage')
+
+    def form_valid(self, form):
+        # ДИАГНОСТИКА
+        print("\n" + "=" * 60)
+        print("📨 POST данные (CreateView):")
+        print("=" * 60)
+        for key, value in self.request.POST.items():
+            print(f"   {key}: '{value}'")
+        print("=" * 60 + "\n")
+
+        print("📊 Очищенные данные формы:")
+        for key, value in form.cleaned_data.items():
+            print(f"   {key}: '{value}'")
+        print("=" * 60 + "\n")
+
+        # Сохраняем пользователя
+        response = super().form_valid(form)
+
+        # Автоматический вход после регистрации
+        login(self.request, self.object)
+
+        return response
+
+    def form_invalid(self, form):
+        print("\n❌ ФОРМА НЕ ВАЛИДНА!")
+        print(f"Ошибки: {dict(form.errors)}")
+        return super().form_invalid(form)
+
+
 def calculate_signature(*args) -> str:
     """Create signature MD5.
     """

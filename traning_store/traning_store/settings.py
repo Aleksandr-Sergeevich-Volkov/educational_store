@@ -31,10 +31,16 @@ SECRET_KEY = 'django-insecure-4#xre@vo3c)grje)5kj3rrwt6@1=' \
 CSRF_TRUSTED_ORIGINS = ['https://4505485-volkovaleksandr.twc1.net', 'https://kompressionnye-chulki24.ru']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0', '62.113.36.63', '4505485-volkovaleksandr.twc1.net', 'kompressionnye-chulki24.ru', 'www.kompressionnye-chulki24.ru']
-INTERNAL_IPS = ['127.0.0.1']
+import socket
+
+hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+INTERNAL_IPS = []
+INTERNAL_IPS += [ip[: ip.rfind(".")] + ".1" for ip in ips]
+
+# INTERNAL_IPS = ['127.0.0.1', 'localhost']
 
 # Динамический URL для админки
 ADMIN_URL = os.environ.get('DJANGO_ADMIN_URL', 'admin/')

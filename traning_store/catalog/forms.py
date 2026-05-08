@@ -10,8 +10,11 @@ class SignUpForm(UserCreationForm):
 
     def clean_email(self):
         email = self.cleaned_data.get('email', '')
+        if not email:
+            raise forms.ValidationError('Поле "Почта" обязательно для заполнения')
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError('Эта почта уже зарегестрированна')
+        return email
 
     class Meta:
         model = User

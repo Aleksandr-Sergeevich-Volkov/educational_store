@@ -35,15 +35,23 @@
     <!-- Верхняя панель с яркими цветами -->
 <header class="header-bg">
     <div class="container-fluid">
-        <div class="row align-items-center py-2">
+        <div class="row align-items-center py-0">
             <!-- ЛЕВАЯ ЧАСТЬ: Логотип + Геолокация -->
             <div class="col-md-6">
                 <div class="d-flex align-items-center">
                     <!-- Логотип -->
-                    <a class="navbar-brand fw-bold text-dark me-4" href="{% url 'homepage:homepage' %}">
-                        kompressionnye-chulki24.ru
-                    </a>
-                    
+    <div class="col-md-4 mb-3 mb-md-0">
+    <div class="text-center">
+        <div class="mb-3" style="max-width: 100%;">
+            <a class="navbar-brand fw-bold text-dark me-4" href="{% url 'homepage:homepage' %}">
+                <img src="{% static 'logo.jpeg' %}" 
+                     alt="Логотип магазина" 
+                     class="img-fluid"
+                     style="width: 50%; max-width: 300px; height: auto; object-fit: contain;">
+            </a>
+        </div>
+    </div>
+</div>                          
                     <!-- Геолокация -->
                     <div class="city-selector">
                         {% if current_city %}

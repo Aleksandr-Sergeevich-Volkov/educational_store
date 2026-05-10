@@ -141,7 +141,7 @@
 <!-- Три колонки под кнопками - одинаковой ширины -->
 <div class="row mb-4">
     <!-- Левая колонка: логотип (под кнопкой "Каталог") -->
-    <div class="col-md-4 mb-3 mb-md-0">
+    <!--<div class="col-md-4 mb-3 mb-md-0">
         <div class="text-center">
             <div class="mb-3" style="max-width: 100%;">
                 <img src="{% static 'logo.jpeg' %}" 
@@ -153,7 +153,47 @@
                 <a href="catalog/">Всего товаров в нашем магазине: {{prod_count.id__count}}</a>
             </div>
         </div>
+    </div>-->
+
+    <!-- Левая колонка: со скидкой (под кнопкой "Каталог") - выровнено по левому краю -->
+<div class="col-md-4 mb-3 mb-md-0">
+    <div class="text-center">
+        <h6 class="mb-3 text-primary">
+            <i class="bi bi-star-fill me-1"></i>Товары со скидками
+        </h6>
+        <div class="d-flex flex-column gap-3">
+            {% for prod in no_popular_products %}
+            <a href="{% url 'catalog:detail' prod.slug %}" 
+               class="text-decoration-none d-flex align-items-center hover-card p-2 rounded">
+                <div class="flex-shrink-0 me-3" style="width: 80px; height: 80px;">
+                    <img src="{{ prod.main_images.0.image.url }}" 
+                         alt="{{ prod.name }}" 
+                         class="img-fluid rounded"
+                         style="width: 100%; height: 100%; object-fit: contain; background: #f8f9fa;">
+                </div>
+                <div class="flex-grow-1 text-start">
+                    <div class="fw-medium text-dark mb-1" style="font-size: 0.9rem; line-height: 1.2;">
+                        {{ prod.name|truncatechars:40 }}
+                    </div>                    
+                    <!-- Добавлен артикул -->
+                    {% if prod.articul and prod.brand%}
+                    <div class="text-muted small mb-1">
+                        <i class="bi bi-upc-scan me-1"></i>{{ prod.brand.name }} Арт: {{ prod.articul }}
+                    </div>
+                    {% endif %} 
+                    <div class="text-success fw-bold">
+    <span class="text-muted small fw-normal text-decoration-line-through">
+        {% widthratio prod.price 100 110 %} ₽
+    </span>
+    <span class="ms-2">{{ prod.price }} ₽</span>
+    <span class="badge bg-danger ms-2">-10%</span>
+</div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
     </div>
+</div>    
     
     <!-- Средняя колонка: популярное (под кнопкой "Поиск") - выровнено по левому краю -->
 <div class="col-md-4 mb-3 mb-md-0">

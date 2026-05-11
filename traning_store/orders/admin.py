@@ -2,6 +2,8 @@ import csv
 import datetime
 
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
 from django.http import HttpResponse
 
 from .models import Order, OrderItem
@@ -61,3 +63,15 @@ class OrderAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Order, OrderAdmin)
+
+
+# Отменяем стандартную регистрацию
+admin.site.unregister(User)
+
+
+class MyUserAdmin(UserAdmin):
+    list_display = ('username', 'email', 'date_joined', 'first_name',
+                    'last_name', 'is_staff')
+
+
+admin.site.register(User, MyUserAdmin)

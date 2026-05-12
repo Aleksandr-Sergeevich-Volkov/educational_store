@@ -12,6 +12,7 @@ class Post(models.Model):
     text = models.TextField(
         'Текст',
     )
+    views = models.PositiveIntegerField(default=0, verbose_name='Количество просмотров')
 
     class Meta:
         verbose_name = 'публикация'

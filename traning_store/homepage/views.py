@@ -12,6 +12,8 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.defaulttags import register
 from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_GET, require_POST
 from django.views.generic import TemplateView
 
@@ -23,6 +25,7 @@ from .models import City, Comment, Post
 logger = logging.getLogger(__name__)
 
 
+@method_decorator(ensure_csrf_cookie, name='dispatch')
 class HomePage(CityContextMixin, TemplateView):
     template_name = 'index.html'
 
@@ -490,6 +493,19 @@ def search_city(request):
     return JsonResponse(list(cities), safe=False)
 
 # views.py в вашем основном приложении
+
+
+@ensure_csrf_cookie
+def increment_views(request, post_id):
+    if request.method == 'POST':
+        try:
+            post = Post.objects.get(id=post_id)
+            post.views += 1
+            post.save(update_fields=['views'])
+            return JsonResponse({'status': 'ok', 'views': post.views})
+        except Post.DoesNotExist:
+            return JsonResponse({'status': 'error'}, status=404)
+    return JsonResponse({'status': 'error'}, status=405)
 
 
 def handler404(request, exception):

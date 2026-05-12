@@ -9,6 +9,7 @@
     <title>{% block title %}Компрессионный трикотаж{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}Интернет-магазин компрессионного трикотажа{% endblock %}">
     <meta name="keywords" content="{% block meta_keywords %}компрессионный трикотаж, медицинский трикотаж{% endblock %}">
+    <meta name="csrf-token" content="{{ csrf_token }}">
     
     {% block extra_meta %}{% endblock %}
     
@@ -171,6 +172,13 @@
 	]
 }
 </script>
+ <script>
+        // Глобальная функция получения токена
+        window.getCsrfToken = function() {
+            const meta = document.querySelector('meta[name="csrf-token"]');
+            return meta ? meta.content : null;
+        };
+    </script>
 <!-- В вашем основном шаблоне, где есть поле поиска -->
 {% block extra_js %}
 <script>

@@ -227,3 +227,11 @@ LOGGING = {
         'level': 'INFO',
     },
 }
+
+
+# Включаем HttpOnly для CSRF cookie
+CSRF_COOKIE_HTTPONLY = True  # Защита от XSS → кражи токена
+
+# Другие рекомендованные настройки
+CSRF_COOKIE_SECURE = True    # Только HTTPS (для production)
+CSRF_COOKIE_SAMESITE = 'Lax'  # Защита от CSRF

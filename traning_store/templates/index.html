@@ -252,10 +252,10 @@
             <!-- Кнопки в одну строку -->
             <div class="d-flex gap-1">
                 <button class="btn btn-outline-primary btn-sm flex-fill" 
-                        onclick="toggleFullText({{ post.id }}, '{{ post.text|escapejs }}')"
-                        style="white-space: nowrap;">
-                    📖 Читать полный текст
-                </button>
+        onclick="toggleFullText({{ post.id }}, '{{ post.text|escapejs }}')"
+        style="white-space: nowrap;">
+    📖 Читать полный текст 👁️ <span id="views-count-{{ post.id }}">{{ post.views }}</span>
+</button>
                 
                 <button class="btn btn-outline-secondary btn-sm flex-fill" 
                         data-post-id="{{ post.id }}"
@@ -265,7 +265,7 @@
                     💬 Комментарии ({{ post.comment_count }})
                 </button>
             </div>
-            
+            <div id="full-text-{{ post.id }}" style="display: none;"></div>
             <!-- Блок комментариев (изначально скрыт) -->
             <div id="comments-{{ post.id }}" class="comments-section mt-3" style="display: {% if request.GET.open_comments == post.id|stringformat:'i' %}block{% else %}none{% endif %};">
                 <div class="card">
@@ -598,20 +598,47 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Ваши существующие функции для постов и комментариев
-function toggleFullText(postId, fullText) {
-    const textElement = document.getElementById(`text-${postId}`);
-    const button = event.target;
+// Функция для CSRF токена
+function getCsrfToken() {
+    // Безопасный способ — из meta-тега, а не из cookie
+    const metaTag = document.querySelector('meta[name="csrf-token"]');
+    if (metaTag) {
+        return metaTag.getAttribute('content');
+    }
     
-    if (button.textContent.includes('Читать полный текст')) {
-        textElement.textContent = fullText;
-        button.textContent = '📖 Скрыть';
-        button.classList.add('active');
+    // Fallback для старых версий (не рекомендую)
+    console.warn('CSRF meta tag not found');
+    return null;
+}
+
+const openedPosts = new Set();
+
+function toggleFullText(postId, fullText) {
+    const textContainer = document.getElementById(`full-text-${postId}`);
+    
+    if (!openedPosts.has(postId)) {
+        openedPosts.add(postId);
+        
+        fetch(`/post/${postId}/increment/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': window.getCsrfToken(),  // ← безопасно
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'ok') {
+                document.getElementById(`views-count-${postId}`).textContent = data.views;
+            }
+        });
+    }
+    
+    if (textContainer.style.display === 'none' || !textContainer.style.display) {
+        textContainer.innerHTML = fullText;
+        textContainer.style.display = 'block';
     } else {
-        const words = fullText.split(' ');
-        const shortText = words.length > 25 ? words.slice(0, 25).join(' ') + '...' : fullText;
-        textElement.textContent = shortText;
-        button.textContent = '📖 Читать полный текст';
-        button.classList.remove('active');
+        textContainer.style.display = 'none';
     }
 }
 

@@ -23,4 +23,5 @@ urlpatterns = [
     path('yandex_445ca9b51fd08dec.html/', TemplateView.as_view
          (template_name='yandex_445ca9b51fd08dec.html')),
     path('robots.txt/', TemplateView.as_view(template_name='robots.txt')),
+    path('post/<int:post_id>/increment/', views.increment_views, name='increment_views'),
 ]

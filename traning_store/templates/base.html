@@ -1,4 +1,5 @@
 {% load static %}
+{% load csp %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -17,8 +18,8 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="icon" href="{% static 'favicon.ico' %}" type="image">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
     <!-- Yandex.Metrika counter -->
+     {% script %}
 <script type="text/javascript">
     (function(m,e,t,r,i,k,a){
         m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
@@ -29,6 +30,7 @@
 
     ym(104157420, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
 </script>
+{% endscript %}
 <noscript><div><img src="https://mc.yandex.ru/watch/104157420" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 </head>
@@ -78,7 +80,7 @@
                                 </div>
                             </div>
                         {% else %}
-                            <button class="btn btn-sm btn-outline-primary" onclick="detectCity()">
+                            <button class="btn btn-sm btn-outline-primary" document.querySelector('.city-btn').addEventListener('click', detectCity);">
                                 <i class="fas fa-location-arrow me-1"></i>
                                 Определить город
                             </button>
@@ -172,6 +174,7 @@
 	]
 }
 </script>
+{% script %}
  <script>
         // Глобальная функция получения токена
         window.getCsrfToken = function() {
@@ -179,72 +182,81 @@
             return meta ? meta.content : null;
         };
     </script>
+    {% endscript %}
 <!-- В вашем основном шаблоне, где есть поле поиска -->
 {% block extra_js %}
-<script>
-$(document).ready(function() {
-    const $searchInput = $('#id_query');
-    const $autocompleteResults = $('<div class="autocomplete-results"></div>');
-    $searchInput.after($autocompleteResults);
+{% script %}
+<script nonce="{{ request.csp_nonce }}">
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('id_query');
+    if (!searchInput) return;
+    
+    // Создаем контейнер для результатов
+    const autocompleteResults = document.createElement('div');
+    autocompleteResults.className = 'autocomplete-results';
+    searchInput.parentNode.insertBefore(autocompleteResults, searchInput.nextSibling);
     
     let debounceTimer;
     
-    $searchInput.on('input', function() {
+    // Обработка ввода
+    searchInput.addEventListener('input', function() {
         clearTimeout(debounceTimer);
-        const query = $(this).val().trim();
+        const query = this.value.trim();
         
         if (query.length >= 2) {
             debounceTimer = setTimeout(() => {
-                $.ajax({
-                    url: '{% url "homepage:autocomplete" %}',
-                    data: { 'term': query },
-                    dataType: 'json',
-                    success: function(data) {
-                        $autocompleteResults.empty();
-                        
-                        if (data.suggestions && data.suggestions.length > 0) {
-                            $.each(data.suggestions, function(index, suggestion) {
-                                // ✅ Безопасное создание элемента
-                                const $item = $('<div class="autocomplete-item"></div>');
-                                const $link = $('<a></a>');
-                                
-                                // Валидация URL
-                                let url = suggestion.url || '#';
-                                if (url.startsWith('javascript:') || url.startsWith('data:')) {
-                                    url = '#';
-                                }
-                                
-                                $link.attr('href', url);
-                                $link.text(suggestion.name + (suggestion.brand ? ' ' + suggestion.brand : ''));
-                                
-                                $item.append($link);
-                                $autocompleteResults.append($item);
-                            });
-                            $autocompleteResults.show();
-                        } else {
-                            $autocompleteResults.hide();
-                        }
-                    },
-                    error: function() {
-                        $autocompleteResults.hide();
+                fetch(`{% url "homepage:autocomplete" %}?term=${encodeURIComponent(query)}`, {
+                    method: 'GET',
+                    headers: {
+                        'X-CSRFToken': window.getCsrfToken ? window.getCsrfToken() : '',
                     }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    autocompleteResults.innerHTML = '';
+                    
+                    if (data.suggestions && data.suggestions.length > 0) {
+                        data.suggestions.forEach(suggestion => {
+                            // Создаем элемент
+                            const item = document.createElement('div');
+                            item.className = 'autocomplete-item';
+                            
+                            const link = document.createElement('a');
+                            let url = suggestion.url || '#';
+                            if (url.startsWith('javascript:') || url.startsWith('data:')) {
+                                url = '#';
+                            }
+                            link.href = url;
+                            link.textContent = suggestion.name + (suggestion.brand ? ' ' + suggestion.brand : '');
+                            
+                            item.appendChild(link);
+                            autocompleteResults.appendChild(item);
+                        });
+                        autocompleteResults.style.display = 'block';
+                    } else {
+                        autocompleteResults.style.display = 'none';
+                    }
+                })
+                .catch(() => {
+                    autocompleteResults.style.display = 'none';
                 });
-            }, 300); // debounce
+            }, 300);
         } else {
-            $autocompleteResults.hide();
+            autocompleteResults.style.display = 'none';
         }
     });
     
     // Закрытие при клике вне
-    $(document).on('click', function(e) {
-        if (!$(e.target).closest('.autocomplete-results, #id_query').length) {
-            $autocompleteResults.hide();
+    document.addEventListener('click', function(e) {
+        if (!autocompleteResults.contains(e.target) && e.target !== searchInput) {
+            autocompleteResults.style.display = 'none';
         }
     });
 });
 </script>
+{% endscript %}
 
-<style>
+<style nonce="{{ request.csp_nonce }}">
 .autocomplete-results {
     position: absolute;
     background: white;
@@ -323,7 +335,7 @@ $(document).ready(function() {
         </div>
     </div>
 </div>
-
+{% script %}
 <script>
 // Функция определения города
 function detectCity() {
@@ -410,8 +422,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+{% endscript %}
 
-<style>
+<style nonce="{{ request.csp_nonce }}">
 .city-selector {
     position: relative;
 }

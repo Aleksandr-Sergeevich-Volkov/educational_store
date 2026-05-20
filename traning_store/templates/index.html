@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load csp %}
 {% load django_bootstrap5 %}
 
 <head>
@@ -80,7 +81,7 @@
     </div>
 </div>
 
-<style>
+<style nonce="{{ request.csp_nonce }}">
 .telegram-btn {
     display: inline-block;
     transition: all 0.3s ease;
@@ -229,7 +230,7 @@
     </div>
 </div>
 
-<style>
+<style nonce="{{ request.csp_nonce }}">
 .hover-card:hover {
     background-color: #f8f9fa;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -402,7 +403,7 @@
     </div>
 </div>
 
-<style>
+<style nonce="{{ request.csp_nonce }}">
 .contact-card {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     border: 1px solid #e0e0e0;
@@ -457,6 +458,7 @@
 </div>
 {% endblock %}
 {% block extra_js %}
+{%script%}
 <script>
 // Автодополнение для главной страницы
 document.addEventListener('DOMContentLoaded', function() {
@@ -708,8 +710,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+{%endscript%}
 
-<style>
+<style nonce="{{ request.csp_nonce }}">
 /* Стили только для автодополнения */
 .autocomplete-dropdown {
     position: absolute;

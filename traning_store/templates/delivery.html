@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
+{% load csp %}
 {% load static %}
 
 {% block title %}Доставка Яндекс{% endblock %}
@@ -52,6 +53,7 @@
 
 <!-- Скрипт виджета доставки -->
 <script async src="https://ndd-widget.landpro.site/widget.js"></script>
+{%script%}
 <script>
 (function(w) {
     function startWidget() {
@@ -122,6 +124,7 @@ function showNotification(message) {
     }, 5000);
 }
 </script>
+{%endscript%}
 
 <style>
 #delivery-widget {

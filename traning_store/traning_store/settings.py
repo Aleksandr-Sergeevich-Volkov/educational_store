@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'api',
     'rest_framework',
     'max_bot',
+    'csp',
 ]
 
 MIDDLEWARE = [
@@ -84,6 +85,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'csp.middleware.CSPMiddleware',
     'catalog.middleware.CleanURLMiddleware',
 ]
 
@@ -106,6 +108,9 @@ TEMPLATES = [
                 'cart.context_processors.weather',
                 'homepage.context_processors.city_context',
             ],
+            'libraries': {   # <-- ВОТ ЭТОТ СЛОВАРЬ НУЖНО ДОБАВИТЬ
+                'csp': 'csp.templatetags.csp',
+            }
         },
     },
 ]
@@ -235,3 +240,109 @@ CSRF_COOKIE_HTTPONLY = True  # Защита от XSS → кражи токена
 # Другие рекомендованные настройки
 CSRF_COOKIE_SECURE = True    # Только HTTPS (для production)
 CSRF_COOKIE_SAMESITE = 'Lax'  # Защита от CSRF
+
+from csp.constants import NONCE, SELF
+
+CONTENT_SECURITY_POLICY = {
+    "DIRECTIVES": {
+        "default-src": [SELF],
+        
+        # Скрипты
+        "script-src": [
+            SELF,
+            "https://cdn.jsdelivr.net",
+            "https://mc.yandex.ru",
+            "https://code.jquery.com",  # ← добавить
+            "https://ndd-widget.landpro.site",
+            "https://api-maps.yandex.ru",      # ← добавить
+            "https://suggest-maps.yandex.ru",  # ← для подсказок (suggest_apikey)
+            "https://yastatic.net",
+            "https://widget-pvz.dostavka.yandex.net",
+            "https://cdn.jsdelivr.net",
+            NONCE
+        ],
+        "script-src-elem": [
+            SELF,
+            "https://cdn.jsdelivr.net",
+            "https://mc.yandex.ru",
+            "https://ndd-widget.landpro.site",
+            "https://api-maps.yandex.ru",      # ← добавить
+            "https://suggest-maps.yandex.ru",  # ← для подсказок (suggest_apikey)
+            "https://yastatic.net",
+            "https://widget-pvz.dostavka.yandex.net",
+            "https://cdn.jsdelivr.net"
+            NONCE
+        ],
+        
+        # Стили
+        "style-src": [
+            SELF,
+            "https://cdn.jsdelivr.net",
+            "https://cdnjs.cloudflare.com",
+            "https://api-maps.yandex.ru", 
+            "https://cdn.jsdelivr.net",
+            "'unsafe-inline'"
+        ],
+        #"style-src-elem": [
+        #    SELF,
+        #    "https://cdn.jsdelivr.net",
+        #    "https://cdnjs.cloudflare.com",
+        #    NONCE,
+        #    "'unsafe-inline'",  # для Яндекс.Метрики
+        #], 
+        
+        # Изображения
+        "img-src": [
+            SELF,
+            "data:",
+            "https:",
+            "http:"
+        ],
+        
+        # Подключения (fetch, source maps)
+        "connect-src": [
+            SELF,
+            "https://cdn.jsdelivr.net",
+            "https://mc.yandex.ru",
+            "https://cdnjs.cloudflare.com",
+            "wss://mc.yandex.ru",  # ← добавить эту строку
+            "ws://mc.yandex.ru",   # ← на всякий случай (если использует ws)
+            "https://pay.mts.ru",
+            "https://pay.yandex.ru",
+            "https://api-maps.yandex.ru",      # ← добавить
+            "https://suggest-maps.yandex.ru",  # ← добавить
+            "https://widget-pvz.dostavka.yandex.net",
+            "https://log.api-maps.yandex.ru",
+            "https://auth.robokassa.ru",
+            "https://cdn.jsdelivr.net"
+        ],
+        
+        # Шрифты
+        "font-src": [
+            SELF,
+            "data:",
+            "https://cdn.jsdelivr.net",
+            "https://cdnjs.cloudflare.com",
+            "https://yandex.md", 
+            "https://mc.yandex.ru",
+            "https://mc.yandex.md",
+            "https://yastatic.net",  # статические ресурсы Яндекса
+            "https://api-maps.yandex.ru",      # ← добавить
+            "https://suggest-maps.yandex.ru",  # ← добавить
+            "https://widget-pvz.dostavka.yandex.net",
+            "https://auth.robokassa.ru",
+            "https://cdn.jsdelivr.net"
+        ],
+        #"font-src": ["'self'", "data:", "https:", "http:"],
+        "frame-src": [SELF,
+                        "https://robokassa.com",
+                        "https://auth.robokassa.ru",
+                        "https://yandex.ru",
+                        "https://mc.yandex.md",
+                        "https://cdn.jsdelivr.net"
+    ],  # для iframe (платежные системы)
+
+        "object-src": [SELF],
+        "base-uri": [SELF],
+    },
+}

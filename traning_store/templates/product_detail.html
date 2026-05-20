@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
+{% load csp %}
 {% load static %}
 
 <head>
@@ -346,6 +347,7 @@
 }
 </style>
 {% block scripts %}
+{%script%}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('cart-form');
@@ -482,5 +484,6 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 </script>
+{%endscript%}
 {% endblock %}
 {% endblock %}

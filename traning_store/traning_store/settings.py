@@ -303,6 +303,7 @@ CONTENT_SECURITY_POLICY = {
         "connect-src": [
             SELF,
             "https://cdn.jsdelivr.net",
+            "https://core-renderer-tiles.maps.yandex.net",
             "https://api.cdek.ru",           # ← для API CDEK
             "https://services.cdek.ru",       # ← для сервисов CDEK
             "https://mc.yandex.ru",
@@ -333,7 +334,7 @@ CONTENT_SECURITY_POLICY = {
             "https://suggest-maps.yandex.ru",  # ← добавить
             "https://widget-pvz.dostavka.yandex.net",
             "https://auth.robokassa.ru",
-            "https://cdn.jsdelivr.net"
+            "https://fonts.gstatic.com"
         ],
         #"font-src": ["'self'", "data:", "https:", "http:"],
         "frame-src": [SELF,

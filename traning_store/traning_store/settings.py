@@ -303,6 +303,8 @@ CONTENT_SECURITY_POLICY = {
         "connect-src": [
             SELF,
             "https://cdn.jsdelivr.net",
+            "https://api.cdek.ru",           # ← для API CDEK
+            "https://services.cdek.ru",       # ← для сервисов CDEK
             "https://mc.yandex.ru",
             "https://cdnjs.cloudflare.com",
             "wss://mc.yandex.ru",  # ← добавить эту строку

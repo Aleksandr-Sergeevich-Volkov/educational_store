@@ -270,7 +270,7 @@ CONTENT_SECURITY_POLICY = {
             "https://suggest-maps.yandex.ru",  # ← для подсказок (suggest_apikey)
             "https://yastatic.net",
             "https://widget-pvz.dostavka.yandex.net",
-            "https://cdn.jsdelivr.net"
+            "https://cdn.jsdelivr.net",
             NONCE
         ],
         

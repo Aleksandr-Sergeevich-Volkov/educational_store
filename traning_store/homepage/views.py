@@ -101,9 +101,13 @@ class HomePage(CityContextMixin, TemplateView):
         # 3. Остальной ваш код...
         context['search_form'] = SearchForm()
 
-        context['text'] = Post.objects.all().annotate(
+        context['text'] = Post.objects.all().filter(archive=False).annotate(
             comment_count=models.Count('comments')
-        ).order_by('id')
+        ).order_by('-id')
+
+        context['archive'] = Post.objects.all().filter(archive=True).annotate(
+            comment_count=models.Count('comments')
+        ).order_by('-id')
 
         context['prod_count'] = Product.objects.filter(available=True).aggregate(Count('id'))
 

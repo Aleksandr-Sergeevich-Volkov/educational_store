@@ -13,6 +13,7 @@ class Post(models.Model):
         'Текст',
     )
     views = models.PositiveIntegerField(default=0, verbose_name='Количество просмотров')
+    archive = models.BooleanField(default=False, verbose_name='Архив')
 
     class Meta:
         verbose_name = 'публикация'

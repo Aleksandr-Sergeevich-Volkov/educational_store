@@ -239,109 +239,42 @@
 </style>
     
     <!-- Правая колонка: посты (под кнопкой "Подбор") -->
-    <div class="col-md-4">
-        {% for post in text %} 
-        <div class="mb-3">
-            <p class="h5 mb-2">{{ post.title }}</p>          
-            
-            <div class="post-content">
-                <p class="card-text mb-2" id="text-{{ post.id }}">
-                    {{ post.text|truncatewords:25 }}
-                </p>
+  <div class="col-md-4">
+    <!-- Заголовок с иконкой и кнопкой архива -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="mb-0 text-primary">
+            <i class="bi bi-star-fill me-1"></i>Полезные статьи
+        </h6>
+        <button class="btn btn-outline-secondary btn-sm" id="archive-btn">
+            📚 Архив статей 
+            <span class="badge bg-secondary ms-1" id="archive-count">{{ archive|length }}</span>
+        </button>
+    </div>
+    
+    <!-- Блок полезных статей -->
+    <div id="useful-posts">
+        {% for post in text %}
+            {% include 'includes/post_comments.html' with post=post archive=False %}
+        {% empty %}
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle me-1"></i>
+                Пока нет статей. Загляните позже!
             </div>
-            
-            <!-- Кнопки в одну строку -->
-            <div class="d-flex gap-1">
-                <button class="btn btn-outline-primary btn-sm flex-fill" 
-        onclick="toggleFullText({{ post.id }}, '{{ post.text|escapejs }}')"
-        style="white-space: nowrap;">
-    📖 Читать полный текст 👁️ <span id="views-count-{{ post.id }}">{{ post.views }}</span>
-</button>
-                
-                <button class="btn btn-outline-secondary btn-sm flex-fill" 
-                        data-post-id="{{ post.id }}"
-                        data-comment-count="{{ post.comment_count }}"
-                        onclick="toggleComments({{ post.id }})"
-                        style="white-space: nowrap;">
-                    💬 Комментарии ({{ post.comment_count }})
-                </button>
+        {% endfor %}
+    </div>
+    
+    <!-- Блок архивных статей (изначально скрыт) -->
+    <div id="archive-posts" style="display: none;">
+        {% for post in archive %}
+            {% include 'includes/post_comments.html' with post=post archive=True %}
+        {% empty %}
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle me-1"></i>
+                Архив пуст.
             </div>
-            <div id="full-text-{{ post.id }}" style="display: none;"></div>
-            <!-- Блок комментариев (изначально скрыт) -->
-            <div id="comments-{{ post.id }}" class="comments-section mt-3" style="display: {% if request.GET.open_comments == post.id|stringformat:'i' %}block{% else %}none{% endif %};">
-                <div class="card">
-                    <div class="card-header bg-light d-flex justify-content-between align-items-center">
-                        <h6 class="card-title mb-0">💬 Комментарии ({{ post.comment_count }})</h6>
-                        <button class="btn btn-close btn-sm" onclick="toggleComments({{ post.id }})"></button>
-                    </div>
-                    <div class="card-body">
-                        {% if post.comments.all %}
-                            {% for comment in post.comments.all %}
-                            <div class="comment mb-3 pb-3 border-bottom">
-                                <div class="d-flex justify-content-between align-items-start mb-2">
-                                    <div>
-                                        <strong class="text-primary">{{ comment.author.username }}</strong>
-                                        <small class="text-muted ms-2">{{ comment.created_at|date:"d.m.Y H:i" }}</small>
-                                        {% if comment.updated_at != comment.created_at %}
-                                        <small class="text-muted ms-2">(изменено)</small>
-                                        {% endif %}
-                                    </div>
-                                    
-                                    <!-- Кнопки управления для автора комментария -->
-                                    {% if user == comment.author %}
-                                    <div class="btn-group btn-group-sm">
-                                        <a href="{% url 'homepage:edit_comment' post.id comment.id %}" 
-                                           class="btn btn-outline-warning btn-sm"
-                                           title="Редактировать комментарий">
-                                            ✏️
-                                        </a>
-                                        <a href="{% url 'homepage:delete_comment' post.id comment.id %}" 
-                                           class="btn btn-outline-danger btn-sm"
-                                           title="Удалить комментарий"
-                                           onclick="return confirm('Вы уверены, что хотите удалить этот комментарий?');">
-                                            🗑️
-                                        </a>
-                                    </div>
-                                    {% endif %}
-                                </div>
-                                
-                                <!-- Текст комментария -->
-                                <p class="mb-0 comment-text">
-                                    {{ comment.text }}
-                                </p>
-                            </div>
-                            {% endfor %}
-                        {% else %}
-                            <p class="text-muted mb-0">Пока нет комментариев. Будьте первым!</p>
-                        {% endif %}
-                        
-                        <!-- Форма добавления комментария -->
-                        {% if user.is_authenticated %}
-                        <div class="add-comment mt-3 pt-3 border-top">
-                            <form method="post" action="{% url 'homepage:add_comment' post.id %}" class="comment-form">
-                                {% csrf_token %}
-                                <div class="mb-2">
-                                    <textarea name="text" class="form-control form-control-sm" 
-                                              rows="2" placeholder="Напишите комментарий..." required></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-sm">💬 Добавить комментарий</button>
-                            </form>
-                        </div>
-                        {% else %}
-                        <div class="mt-3 pt-3 border-top">
-                            <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-outline-primary btn-sm">
-                                🔑 Войдите, чтобы комментировать
-                            </a>
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
         {% endfor %}
     </div>
 </div>
-<div class="row mt-4">
     <!-- Контакты -->
 <div class="col-12 col-md-4 mb-3 mb-md-0 d-flex align-items-center">
     <div class="card contact-card p-3 w-100">
@@ -458,165 +391,68 @@
 </div>
 {% endblock %}
 {% block extra_js %}
-{%script%}
-<script>
-// Автодополнение для главной страницы
+{% script %}
+<script nonce="{{ request.csp_nonce }}">
 document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('home-search-input');
-    const autocompleteContainer = document.getElementById('home-autocomplete');
+    // ===== Переключение архива =====
+    const archiveBtn = document.getElementById('archive-btn');
+    const usefulPosts = document.getElementById('useful-posts');
+    const archivePosts = document.getElementById('archive-posts');
     
-    if (!searchInput || !autocompleteContainer) return;
+    // Сохраняем реальное количество статей
+    const usefulCount = {{ text|length }};
+    const archiveCount = {{ archive|length }};
     
-    let currentRequest = null;
-    
-    searchInput.addEventListener('input', function() {
-        const query = this.value.trim();
-        
-        // Отменяем предыдущий запрос
-        if (currentRequest) {
-            currentRequest.abort();
-        }
-        
-        // Очищаем и скрываем контейнер
-        autocompleteContainer.innerHTML = '';
-        autocompleteContainer.style.display = 'none';
-        
-        if (query.length >= 2) {
-            // Показываем индикатор загрузки
-            autocompleteContainer.innerHTML = `
-                <div class="autocomplete-loading p-2 text-center text-muted">
-                    <div class="spinner-border spinner-border-sm me-2" role="status"></div>
-                    Поиск...
-                </div>
-            `;
-            autocompleteContainer.style.display = 'block';
+    if (archiveBtn) {
+        archiveBtn.addEventListener('click', function() {
+            const isArchiveVisible = archivePosts.style.display !== 'none';
             
-            // Делаем AJAX запрос
-            currentRequest = new XMLHttpRequest();
-            currentRequest.open('GET', '{% url "homepage:autocomplete" %}?term=' + encodeURIComponent(query));
-            currentRequest.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-            
-            currentRequest.onload = function() {
-                if (currentRequest.status === 200) {
-                    const data = JSON.parse(currentRequest.responseText);
-                    autocompleteContainer.innerHTML = '';
-                    
-                    if (data.suggestions && data.suggestions.length > 0) {
-                       data.suggestions.forEach(item => {
-    const link = document.createElement('a');
-    link.href = item.url || '#';
-    link.className = 'autocomplete-item d-block p-2 border-bottom';
-    link.style.textDecoration = 'none';
-    
-    let html = `
-        <div class="d-flex align-items-center">
-            ${item.image ? `
-                <div class="flex-shrink-0 me-2" style="width: 40px; height: 40px;">
-                    <img src="${item.image}" 
-                         alt="${item.name}" 
-                         class="img-fluid rounded"
-                         style="width: 100%; height: 100%; object-fit: cover;">
-                </div>
-            ` : `
-                <div class="flex-shrink-0 me-2" style="width: 40px; height: 40px;">
-                    <div class="bg-light rounded d-flex align-items-center justify-content-center" 
-                         style="width: 100%; height: 100%;">
-                        <i class="bi bi-image text-muted"></i>
-                    </div>
-                </div>
-            `}
-            
-            <div class="flex-grow-1">
-                <strong class="d-block">${item.name || ''}</strong>
-                <small class="text-muted d-block">
-                    ${item.brand ? `${item.brand} • ` : ''}${item.articul}
-                </small>
-            </div>
-            
-            <div class="flex-shrink-0 text-end ms-2">
-                <span class="text-success fw-bold">${item.price || ''}</span>
-            </div>
-        </div>
-    `;
-    
-    link.innerHTML = html;
-    autocompleteContainer.appendChild(link);
-});
-                        
-                        // Добавляем ссылку "Все результаты"
-                        const allResults = document.createElement('a');
-                        allResults.href = '{% url "homepage:search" %}?query=' + encodeURIComponent(query);
-                        allResults.className = 'autocomplete-all-results d-block p-2 text-center bg-light';
-                        allResults.style.textDecoration = 'none';
-                        allResults.innerHTML = `
-                            <small><strong>Показать все результаты</strong></small>
-                        `;
-                        autocompleteContainer.appendChild(allResults);
-                        
-                        autocompleteContainer.style.display = 'block';
-                    } else {
-                        autocompleteContainer.innerHTML = `
-                            <div class="autocomplete-no-results p-2 text-center text-muted">
-                                <small><i class="bi bi-search me-1"></i>Ничего не найдено</small>
-                            </div>
-                        `;
-                        autocompleteContainer.style.display = 'block';
-                    }
-                }
-            };
-            
-            currentRequest.onerror = function() {
-                autocompleteContainer.innerHTML = `
-                    <div class="autocomplete-error p-2 text-center text-danger">
-                        <small><i class="bi bi-exclamation-triangle me-1"></i>Ошибка соединения</small>
-                    </div>
-                `;
-            };
-            
-            currentRequest.send();
-        }
-    });
-    
-    // Скрываем при клике вне
-    document.addEventListener('click', function(e) {
-        if (!autocompleteContainer.contains(e.target) && e.target !== searchInput) {
-            autocompleteContainer.style.display = 'none';
-        }
-    });
-    
-    // Показываем при фокусе (если есть результаты)
-    searchInput.addEventListener('focus', function() {
-        if (autocompleteContainer.children.length > 0) {
-            autocompleteContainer.style.display = 'block';
-        }
-    });
-    
-    // При потере фокуса скрываем с задержкой
-    searchInput.addEventListener('blur', function() {
-        setTimeout(() => {
-            autocompleteContainer.style.display = 'none';
-        }, 200);
-    });
-});
-
-// Ваши существующие функции для постов и комментариев
-// Функция для CSRF токена
-function getCsrfToken() {
-    // Безопасный способ — из meta-тега, а не из cookie
-    const metaTag = document.querySelector('meta[name="csrf-token"]');
-    if (metaTag) {
-        return metaTag.getAttribute('content');
+            if (isArchiveVisible) {
+                usefulPosts.style.display = 'block';
+                archivePosts.style.display = 'none';
+                archiveBtn.innerHTML = '📚 Архив статей <span class="badge bg-secondary ms-1">' + 
+                                       archiveCount + 
+                                       '</span>';
+            } else {
+                usefulPosts.style.display = 'none';
+                archivePosts.style.display = 'block';
+                archiveBtn.innerHTML = '📖 Полезные статьи <span class="badge bg-secondary ms-1">' + 
+                                       usefulCount + 
+                                       '</span>';
+            }
+        });
     }
     
-    // Fallback для старых версий (не рекомендую)
-    console.warn('CSRF meta tag not found');
-    return null;
-}
+    // ===== Переключение полного текста =====
+    document.querySelectorAll('.toggle-fulltext-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const postId = this.dataset.postId;
+            const fullText = this.dataset.postText;
+            toggleFullText(postId, fullText);
+        });
+    });
+    
+    // ===== Переключение комментариев =====
+    document.querySelectorAll('.toggle-comments-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const postId = this.dataset.postId;
+            toggleComments(postId);
+        });
+    });
+});
 
+// Отслеживаем открытые посты для счетчика просмотров
 const openedPosts = new Set();
 
 function toggleFullText(postId, fullText) {
     const textContainer = document.getElementById(`full-text-${postId}`);
+    
+    if (!textContainer) {
+        console.error(`Контейнер full-text-${postId} не найден`);
+        return;
+    }
     
     if (!openedPosts.has(postId)) {
         openedPosts.add(postId);
@@ -624,16 +460,18 @@ function toggleFullText(postId, fullText) {
         fetch(`/post/${postId}/increment/`, {
             method: 'POST',
             headers: {
-                'X-CSRFToken': window.getCsrfToken(),  // ← безопасно
+                'X-CSRFToken': window.getCsrfToken(),
                 'Content-Type': 'application/json'
             }
         })
         .then(response => response.json())
         .then(data => {
             if (data.status === 'ok') {
-                document.getElementById(`views-count-${postId}`).textContent = data.views;
+                const viewsSpan = document.getElementById(`views-count-${postId}`);
+                if (viewsSpan) viewsSpan.textContent = data.views;
             }
-        });
+        })
+        .catch(error => console.error('Ошибка:', error));
     }
     
     if (textContainer.style.display === 'none' || !textContainer.style.display) {
@@ -645,72 +483,30 @@ function toggleFullText(postId, fullText) {
 }
 
 function toggleComments(postId) {
-    const commentsSection = document.getElementById(`comments-${postId}`);
-    const button = document.querySelector(`[data-post-id="${postId}"]`);
-    const commentCount = button.getAttribute('data-comment-count');
+    const commentsContainer = document.getElementById(`comments-${postId}`);
     
-    if (commentsSection.style.display === 'none') {
-        commentsSection.style.display = 'block';
-        button.textContent = '💬 Скрыть';
-        button.classList.add('active');
-        
-        commentsSection.style.opacity = '0';
-        commentsSection.style.transition = 'opacity 0.3s ease';
-        setTimeout(() => {
-            commentsSection.style.opacity = '1';
-        }, 10);
+    if (!commentsContainer) {
+        console.error(`Контейнер comments-${postId} не найден`);
+        return;
+    }
+    
+    if (commentsContainer.style.display === 'none' || !commentsContainer.style.display) {
+        commentsContainer.style.display = 'block';
     } else {
-        commentsSection.style.opacity = '0';
-        setTimeout(() => {
-            commentsSection.style.display = 'none';
-            button.textContent = `💬 Комментарии (${commentCount})`;
-            button.classList.remove('active');
-        }, 300);
+        commentsContainer.style.display = 'none';
     }
 }
 
-// Обработка формы комментария
-document.addEventListener('DOMContentLoaded', function() {
-    const commentForms = document.querySelectorAll('.comment-form');
-    commentForms.forEach(form => {
-        form.addEventListener('submit', function(e) {
-            const button = this.querySelector('button[type="submit"]');
-            button.innerHTML = '⏳ Отправка...';
-            button.disabled = true;
-        });
-    });
-    
-    // Открытие комментариев из URL параметра
-    const urlParams = new URLSearchParams(window.location.search);
-    const postIdToOpen = urlParams.get('open_comments');
-    
-    if (postIdToOpen) {
-        const commentsDiv = document.getElementById(`comments-${postIdToOpen}`);
-        
-        if (commentsDiv) {
-            commentsDiv.style.display = 'block';
-            
-            const button = document.querySelector(`[onclick*="${postIdToOpen}"]`);
-            if (button && button.textContent.includes('(')) {
-                button.textContent = '💬 Скрыть';
-            }
-            
-            setTimeout(() => {
-                commentsDiv.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'start' 
-                });
-                
-                const textarea = commentsDiv.querySelector('textarea[name="text"]');
-                if (textarea) {
-                    textarea.focus();
-                }
-            }, 100);
-        }
+window.getCsrfToken = function() {
+    const meta = document.querySelector('meta[name="csrf-token"]');
+    if (meta && meta.content) {
+        return meta.content;
     }
-});
+    const input = document.querySelector('input[name="csrfmiddlewaretoken"]');
+    return input ? input.value : null;
+};
 </script>
-{%endscript%}
+{% endscript %}
 
 <style nonce="{{ request.csp_nonce }}">
 /* Стили только для автодополнения */

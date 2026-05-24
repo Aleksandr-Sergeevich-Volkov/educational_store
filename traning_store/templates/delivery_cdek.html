@@ -9,12 +9,13 @@
             <!-- Карточка с виджетом -->
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-primary text-white">
-                    <h4 class="card-title mb-0">🗺️ Выбор пункта выдачи СДЭК_</h4>
+                    <h4 class="card-title mb-0">🗺️ Выбор пункта выдачи СДЭК!</h4>
                 </div>
                 <div class="card-body">
                     <div class="alert alert-info mb-3">
                         <strong>📋 Инструкция:</strong> Нажмите кнопку ниже чтобы открыть карту с пунктами выдачи СДЭК. После выбора пункта виджет закроется автоматически.
                     </div>
+                    
                     <!-- Контейнер для виджета -->
                     <div id="cdek-map" style="width: 100%; min-height: 400px; display: none;"></div>
                     
@@ -25,6 +26,7 @@
                     <div id="selection-status"></div>
                 </div>
             </div>
+            
             <!-- Карточка с формой -->
             <div class="card shadow-sm">
                 <div class="card-header bg-success text-white">
@@ -55,19 +57,13 @@
         </div>
     </div>
 </div>
+
+<!-- ПОДКЛЮЧЕНИЕ ВИДЖЕТА СДЭК - ЭТО ВАЖНО! -->
+<script src="https://cdn.jsdelivr.net/npm/@cdek-it/widget@3" type="text/javascript"></script>
+
 {% script %}
 <script type="text/javascript">
-// Ждем загрузки всех скриптов
-function waitForCDEK() {
-    if (typeof window.CDEKWidget !== 'undefined') {
-        console.log('CDEK Widget загружен');
-        initWidgetLogic();
-    } else {
-        console.log('Ожидание загрузки CDEK Widget...');
-        setTimeout(waitForCDEK, 200);
-    }
-}
-function initWidgetLogic() {
+document.addEventListener('DOMContentLoaded', function() {
     let widget = null;
     const openBtn = document.getElementById('open-widget-btn');
     const widgetContainer = document.getElementById('cdek-map');
@@ -79,8 +75,13 @@ function initWidgetLogic() {
     
     // Функция создания виджета
     function createWidget() {
-        if (widget) {
-            return widget;
+        if (widget) return widget;
+        
+        // Проверяем, загрузился ли CDEK Widget
+        if (typeof window.CDEKWidget === 'undefined') {
+            console.error('CDEKWidget не загружен');
+            alert('Ошибка загрузки виджета. Проверьте подключение к интернету.');
+            return null;
         }
         
         try {
@@ -118,8 +119,7 @@ function initWidgetLogic() {
                     door: [234, 136, 138],
                 },
                 onReady() {
-                    console.log('Виджет СДЭК загружен и готов');
-                    // Показываем контейнер и открываем виджет
+                    console.log('Виджет СДЭК загружен');
                     widgetContainer.style.display = 'block';
                     if (widget && typeof widget.open === 'function') {
                         widget.open();
@@ -136,8 +136,10 @@ function initWidgetLogic() {
                         widget.close();
                     }
                     
-                    // Скрываем контейнер
                     widgetContainer.style.display = 'none';
+                    
+                    const sumField = document.getElementById('id_sum');
+                    const addressField = document.getElementById('id_address_pvz');
                     
                     if (type === 'door') {
                         alert(
@@ -147,8 +149,6 @@ function initWidgetLogic() {
                             'Цена ' + tariff.delivery_sum + ' руб.\n' +
                             'Срок ' + tariff.period_max + ' дн.'
                         );
-                        const sumField = document.getElementById('id_sum');
-                        const addressField = document.getElementById('id_address_pvz');
                         if (sumField) sumField.value = tariff.delivery_sum;
                         if (addressField) addressField.value = address.name;
                     } else {
@@ -157,8 +157,6 @@ function initWidgetLogic() {
                             'Цена ' + tariff.delivery_sum + ' руб.\n' +
                             'Срок ' + tariff.period_max + ' дн.'
                         );
-                        const sumField = document.getElementById('id_sum');
-                        const addressField = document.getElementById('id_address_pvz');
                         if (sumField) sumField.value = tariff.delivery_sum;
                         if (addressField) addressField.value = address.name;
                     }
@@ -169,7 +167,6 @@ function initWidgetLogic() {
                         statusDiv.innerHTML = '<div class="alert alert-success mt-2">✅ Выбран пункт: ' + address.name + '</div>';
                     }
                     
-                    // Меняем текст кнопки обратно
                     openBtn.innerHTML = '📍 Открыть карту ПВЗ СДЭК';
                 },
             });
@@ -185,12 +182,10 @@ function initWidgetLogic() {
         console.log('Кнопка нажата');
         
         if (widget && typeof widget.open === 'function') {
-            // Виджет уже создан, просто открываем
             widgetContainer.style.display = 'block';
             widget.open();
-            openBtn.innerHTML = '🗺️ Карта открыта ...';
+            openBtn.innerHTML = '🗺️ Карта открыта...';
         } else {
-            // Создаем новый виджет
             openBtn.innerHTML = '⏳ Загрузка карты...';
             widget = createWidget();
             if (!widget) {
@@ -199,11 +194,6 @@ function initWidgetLogic() {
             }
         }
     });
-}
-
-// Запускаем ожидание загрузки
-document.addEventListener('DOMContentLoaded', function() {
-    waitForCDEK();
 });
 </script>
 {% endscript %}
@@ -238,7 +228,6 @@ document.addEventListener('DOMContentLoaded', function() {
     margin-bottom: 0.5rem;
 }
 
-/* Стили для контейнера виджета */
 #cdek-map {
     transition: all 0.3s ease;
     border: 1px solid #dee2e6;
@@ -247,7 +236,6 @@ document.addEventListener('DOMContentLoaded', function() {
     margin-bottom: 1rem;
 }
 
-/* Адаптивность для мобильных */
 @media (max-width: 768px) {
     .container-fluid {
         padding: 1rem;

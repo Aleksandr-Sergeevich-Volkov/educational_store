@@ -342,6 +342,7 @@ CONTENT_SECURITY_POLICY = {
                         "https://auth.robokassa.ru",
                         "https://yandex.ru",
                         "https://mc.yandex.md",
+                        "https://mc.yandex.ru/",
                         "https://cdn.jsdelivr.net"
     ],  # для iframe (платежные системы)
 

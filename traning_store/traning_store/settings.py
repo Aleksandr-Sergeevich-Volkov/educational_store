@@ -259,6 +259,7 @@ CONTENT_SECURITY_POLICY = {
             "https://yastatic.net",
             "https://widget-pvz.dostavka.yandex.net",
             "https://cdn.jsdelivr.net",
+            "'unsafe-eval'",                      # КРИТИЧНО для движка карт!
             NONCE
         ],
         "script-src-elem": [
@@ -280,7 +281,7 @@ CONTENT_SECURITY_POLICY = {
             "https://cdn.jsdelivr.net",
             "https://cdnjs.cloudflare.com",
             "https://api-maps.yandex.ru", 
-            "https://cdn.jsdelivr.net",
+            "blob:",                               # КРИТИЧНО! Стили карты грузятся через blob
             "'unsafe-inline'"
         ],
         #"style-src-elem": [
@@ -317,7 +318,8 @@ CONTENT_SECURITY_POLICY = {
             "https://widget-pvz.dostavka.yandex.net",
             "https://log.api-maps.yandex.ru",
             "https://auth.robokassa.ru",
-            "https://cdn.jsdelivr.net"
+            "https://cdn.jsdelivr.net",
+            "https://*.maps.yandex.net",          # Для загрузки тайлов карты
         ],
         
         # Шрифты
@@ -343,8 +345,15 @@ CONTENT_SECURITY_POLICY = {
                         "https://yandex.ru",
                         "https://mc.yandex.md",
                         "https://mc.yandex.ru/",
-                        "https://cdn.jsdelivr.net"
+                        "https://cdn.jsdelivr.net",
+                        "https://api-maps.yandex.ru",          # Нужно для некоторых элементов карты
     ],  # для iframe (платежные системы)
+      "worker-src": [
+            SELF,
+            "blob:",                               # Для web-воркеров карты
+            "https://api-maps.yandex.ru",
+            "https://yastatic.net",
+        ],
 
         "object-src": [SELF],
         "base-uri": [SELF],

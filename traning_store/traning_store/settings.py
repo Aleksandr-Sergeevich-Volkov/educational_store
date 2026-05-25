@@ -243,6 +243,8 @@ CSRF_COOKIE_SAMESITE = 'Lax'  # Защита от CSRF
 
 from csp.constants import NONCE, SELF
 
+CSP_REPORT_ONLY = True
+
 CONTENT_SECURITY_POLICY = {
     "DIRECTIVES": {
         "default-src": [SELF],

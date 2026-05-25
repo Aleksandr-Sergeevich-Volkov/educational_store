@@ -272,6 +272,7 @@ CONTENT_SECURITY_POLICY = {
             "https://yastatic.net",
             "https://widget-pvz.dostavka.yandex.net",
             "https://cdn.jsdelivr.net",
+            "'unsafe-eval'",  # ← ДОБАВИТЬ (критично для Яндекс.Карт)
             NONCE
         ],
         
@@ -321,6 +322,10 @@ CONTENT_SECURITY_POLICY = {
             "https://auth.robokassa.ru",
             "https://cdn.jsdelivr.net",
             "https://*.maps.yandex.net",          # Для загрузки тайлов карты
+            "https://*.yandex.ru",        # ← ДОБАВИТЬ (все поддомены)
+            "https://*.yandex.net",       # ← ДОБАВИТЬ
+            "wss://*.yandex.ru",   # ← ДОБАВИТЬ
+            "wss://*.yandex.net",  # ← ДОБАВИТЬ
         ],
         
         # Шрифты

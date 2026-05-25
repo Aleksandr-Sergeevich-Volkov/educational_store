@@ -308,6 +308,7 @@ CONTENT_SECURITY_POLICY = {
             "https://api.cdek.ru",           # ← для API CDEK
             "https://services.cdek.ru",       # ← для сервисов CDEK
             "https://mc.yandex.ru",
+            "https://mc.yandex.md",
             "https://cdnjs.cloudflare.com",
             "wss://mc.yandex.ru",  # ← добавить эту строку
             "ws://mc.yandex.ru",   # ← на всякий случай (если использует ws)

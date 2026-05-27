@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load django_bootstrap5 %}
+{% load csp %}
 {% block title %}Доставка СДЭК{% endblock %}
 {% block content %}
 <!DOCTYPE html>
@@ -10,6 +11,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@cdek-it/widget@3" type="text/javascript"></script>
   <script src="https://cdn.jsdelivr.net/npm/@unocss/runtime" type="text/javascript"></script>
   <link href="https://cdn.jsdelivr.net/npm/@unocss/reset/tailwind.min.css" rel="stylesheet">
+  {%script%}
   <script type="text/javascript">
       document.addEventListener('DOMContentLoaded', () => {
           window.widget = new window.CDEKWidget({
@@ -87,6 +89,7 @@
           });
       });
   </script>
+  {%endscript%}
 </head>
 <body>
 <div class="container-fluid py-4">
@@ -95,7 +98,7 @@
             <!-- Карточка с виджетом -->
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-primary text-white">
-                    <h4 class="card-title mb-0">🗺️ Выбор пункта выдачи СДЭК_</h4>
+                    <h4 class="card-title mb-0">🗺️ Выбор пункта выдачи СДЭК</h4>
                 </div>
                 <div class="card-body">
                     <div class="alert alert-info mb-3">

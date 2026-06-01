@@ -241,6 +241,8 @@ CSRF_COOKIE_HTTPONLY = True  # Защита от XSS → кражи токена
 CSRF_COOKIE_SECURE = True    # Только HTTPS (для production)
 CSRF_COOKIE_SAMESITE = 'Lax'  # Защита от CSRF
 
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
+
 from csp.constants import NONCE, SELF
 
 CONTENT_SECURITY_POLICY = {}  # ← пустая политика = ничего не блокирует

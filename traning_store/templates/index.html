@@ -475,7 +475,8 @@ function toggleFullText(postId, fullText) {
     }
     
     if (textContainer.style.display === 'none' || !textContainer.style.display) {
-        textContainer.innerHTML = fullText;
+        // Простое преобразование \n в <br>
+        textContainer.innerHTML = fullText.replace(/\n/g, '<br>');
         textContainer.style.display = 'block';
     } else {
         textContainer.style.display = 'none';

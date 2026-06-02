@@ -11,7 +11,7 @@
     <div class="d-flex gap-1">
         <button class="btn btn-outline-primary btn-sm flex-fill toggle-fulltext-btn" 
                 data-post-id="{{ post.id }}"
-                data-post-text="{{ post.text|escapejs }}"
+                data-post-text="{{ post.text|escape }}"
                 style="white-space: nowrap;">
             📖 Читать полный текст 👁️ <span id="views-count-{{ post.id }}">{{ post.views }}</span>
         </button>

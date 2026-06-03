@@ -98,7 +98,7 @@ def max_webhook(request):
                 search_products(user_id, text)
                 clear_order_state(user_id)
             else:
-                send_message(user_id, "Неизвестная команда_!_")
+                send_message(user_id, "Неизвестная команда_!")
             return JsonResponse({"ok": True})
 
         # Обработка
@@ -107,7 +107,7 @@ def max_webhook(request):
         elif text == '/start':
             send_welcome(user_id)
         elif text == '/help':
-            send_message(user_id, "❓ Помощь в разработке")
+            send_message(user_id, "Для запуска бота нажмите /start")
         else:
             send_message(user_id, "Неизвестная команда. Используйте /help")
         return JsonResponse({"ok": True})  # ← ВАЖНО: возвращаем ответ!

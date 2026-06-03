@@ -245,16 +245,128 @@ SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
 from csp.constants import NONCE, SELF
 
-CONTENT_SECURITY_POLICY = {}  # ← пустая политика = ничего не блокирует
-
-CONTENT_SECURITY_POLICY_REPORT_ONLY = {
+CONTENT_SECURITY_POLICY = {
     "DIRECTIVES": {
-        "default-src": ["'self'"],
-        "script-src": ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https:", "http:"],
-        "style-src": ["'self'", "'unsafe-inline'", "https:", "http:"],
-        "img-src": ["'self'", "data:", "https:", "http:"],
-        "connect-src": ["'self'", "https:", "http:", "wss:", "ws:"],
-        "font-src": ["'self'", "data:", "https:", "http:"],
-        "frame-src": ["'self'", "https:", "http:"],
+        "default-src": [SELF],
+        
+        # Скрипты
+        "script-src": [
+            SELF,
+            "https://cdn.jsdelivr.net",
+            "https://mc.yandex.ru",
+            "https://code.jquery.com",  # ← добавить
+            "https://ndd-widget.landpro.site",
+            "https://api-maps.yandex.ru",      # ← добавить
+            "https://suggest-maps.yandex.ru",  # ← для подсказок (suggest_apikey)
+            "https://yastatic.net",
+            "https://widget-pvz.dostavka.yandex.net",
+            "https://cdn.jsdelivr.net",
+            "https://log.api-maps.yandex.ru",
+            "'unsafe-eval'",                      # КРИТИЧНО для движка карт!
+            NONCE
+        ],
+        "script-src-elem": [
+            SELF,
+            "https://cdn.jsdelivr.net",
+            "https://mc.yandex.ru",
+            "https://ndd-widget.landpro.site",
+            "https://api-maps.yandex.ru",      # ← добавить
+            "https://suggest-maps.yandex.ru",  # ← для подсказок (suggest_apikey)
+            "https://yastatic.net",
+            "https://widget-pvz.dostavka.yandex.net",
+            "https://cdn.jsdelivr.net",
+            "https://log.api-maps.yandex.ru",
+            "'unsafe-eval'",  # ← ДОБАВИТЬ (критично для Яндекс.Карт)
+            NONCE
+        ],
+        
+        # Стили
+        "style-src": [
+            SELF,
+            "https://cdn.jsdelivr.net",
+            "https://cdnjs.cloudflare.com",
+            "https://api-maps.yandex.ru", 
+            "blob:",                               # КРИТИЧНО! Стили карты грузятся через blob
+            "'unsafe-inline'"
+        ],
+        #"style-src-elem": [
+        #    SELF,
+        #    "https://cdn.jsdelivr.net",
+        #    "https://cdnjs.cloudflare.com",
+        #    NONCE,
+        #    "'unsafe-inline'",  # для Яндекс.Метрики
+        #], 
+        
+        # Изображения
+        "img-src": [
+            SELF,
+            "data:",
+            "https:",
+            "http:"
+        ],
+        
+        # Подключения (fetch, source maps)
+        "connect-src": [
+            SELF,
+            "https://cdn.jsdelivr.net",
+            "https://core-renderer-tiles.maps.yandex.net",
+            "https://api.cdek.ru",           # ← для API CDEK
+            "https://services.cdek.ru",       # ← для сервисов CDEK
+            "https://mc.yandex.ru",
+            "https://mc.yandex.md",
+            "https://cdnjs.cloudflare.com",
+            "wss://mc.yandex.ru",  # ← добавить эту строку
+            "ws://mc.yandex.ru",   # ← на всякий случай (если использует ws)
+            "https://pay.mts.ru",
+            "https://pay.yandex.ru",
+            "https://api-maps.yandex.ru",      # ← добавить
+            "https://suggest-maps.yandex.ru",  # ← добавить
+            "https://widget-pvz.dostavka.yandex.net",
+            "https://log.api-maps.yandex.ru",
+            "https://auth.robokassa.ru",
+            "https://cdn.jsdelivr.net",
+            "https://*.maps.yandex.net",          # Для загрузки тайлов карты
+            "https://*.yandex.ru",        # ← ДОБАВИТЬ (все поддомены)
+            "https://*.yandex.net",       # ← ДОБАВИТЬ
+            "wss://*.yandex.ru",   # ← ДОБАВИТЬ
+            "wss://*.yandex.net",  # ← ДОБАВИТЬ
+        ],
+        
+        # Шрифты
+        "font-src": [
+            SELF,
+            "data:",
+            "https://cdn.jsdelivr.net",
+            "https://cdnjs.cloudflare.com",
+            "https://yandex.md", 
+            "https://mc.yandex.ru",
+            "https://mc.yandex.md",
+            "https://yastatic.net",  # статические ресурсы Яндекса
+            "https://api-maps.yandex.ru",      # ← добавить
+            "https://suggest-maps.yandex.ru",  # ← добавить
+            "https://widget-pvz.dostavka.yandex.net",
+            "https://auth.robokassa.ru",
+            "https://fonts.gstatic.com"
+        ],
+        #"font-src": ["'self'", "data:", "https:", "http:"],
+        "frame-src": [SELF,
+                        "https://robokassa.com",
+                        "https://auth.robokassa.ru",
+                        "https://yandex.ru",
+                        "https://mc.yandex.md",
+                        "https://mc.yandex.ru/",
+                        "https://cdn.jsdelivr.net",
+                        "https://api-maps.yandex.ru",          # Нужно для некоторых элементов карты
+    ],  # для iframe (платежные системы)
+      "worker-src": [
+            SELF,
+            "blob:",                               # Для web-воркеров карты
+            "https://api-maps.yandex.ru",
+            "https://yastatic.net",
+        ],
+
+        "object-src": [SELF],
+        "base-uri": [SELF],
     },
 }
+

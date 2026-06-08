@@ -497,6 +497,146 @@ window.getCsrfToken = function() {
     const input = document.querySelector('input[name="csrfmiddlewaretoken"]');
     return input ? input.value : null;
 };
+
+// Автодополнение для главной страницы
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('home-search-input');
+    const autocompleteContainer = document.getElementById('home-autocomplete');
+    
+    if (!searchInput || !autocompleteContainer) return;
+    
+    let currentRequest = null;
+    
+    searchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+        
+        // Отменяем предыдущий запрос
+        if (currentRequest) {
+            currentRequest.abort();
+        }
+        
+        // Очищаем и скрываем контейнер
+        autocompleteContainer.innerHTML = '';
+        autocompleteContainer.style.display = 'none';
+        
+        if (query.length >= 2) {
+            // Показываем индикатор загрузки
+            autocompleteContainer.innerHTML = `
+                <div class="autocomplete-loading p-2 text-center text-muted">
+                    <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                    Поиск...
+                </div>
+            `;
+            autocompleteContainer.style.display = 'block';
+            
+            // Делаем AJAX запрос
+            currentRequest = new XMLHttpRequest();
+            currentRequest.open('GET', '{% url "homepage:autocomplete" %}?term=' + encodeURIComponent(query));
+            currentRequest.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            
+            currentRequest.onload = function() {
+                if (currentRequest.status === 200) {
+                    const data = JSON.parse(currentRequest.responseText);
+                    autocompleteContainer.innerHTML = '';
+                    
+                    if (data.suggestions && data.suggestions.length > 0) {
+                       data.suggestions.forEach(item => {
+    const link = document.createElement('a');
+    link.href = item.url || '#';
+    link.className = 'autocomplete-item d-block p-2 border-bottom';
+    link.style.textDecoration = 'none';
+    
+    let html = `
+        <div class="d-flex align-items-center">
+            ${item.image ? `
+                <div class="flex-shrink-0 me-2" style="width: 40px; height: 40px;">
+                    <img src="${item.image}" 
+                         alt="${item.name}" 
+                         class="img-fluid rounded"
+                         style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+            ` : `
+                <div class="flex-shrink-0 me-2" style="width: 40px; height: 40px;">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center" 
+                         style="width: 100%; height: 100%;">
+                        <i class="bi bi-image text-muted"></i>
+                    </div>
+                </div>
+            `}
+            
+            <div class="flex-grow-1">
+                <strong class="d-block">${item.name || ''}</strong>
+                <small class="text-muted d-block">
+                    ${item.brand ? `${item.brand} • ` : ''}${item.articul}
+                </small>
+            </div>
+            
+            <div class="flex-shrink-0 text-end ms-2">
+                <span class="text-success fw-bold">${item.price || ''}</span>
+            </div>
+        </div>
+    `;
+    
+    link.innerHTML = html;
+    autocompleteContainer.appendChild(link);
+});
+                        
+                        // Добавляем ссылку "Все результаты"
+                        const allResults = document.createElement('a');
+                        allResults.href = '{% url "homepage:search" %}?query=' + encodeURIComponent(query);
+                        allResults.className = 'autocomplete-all-results d-block p-2 text-center bg-light';
+                        allResults.style.textDecoration = 'none';
+                        allResults.innerHTML = `
+                            <small><strong>Показать все результаты</strong></small>
+                        `;
+                        autocompleteContainer.appendChild(allResults);
+                        
+                        autocompleteContainer.style.display = 'block';
+                    } else {
+                        autocompleteContainer.innerHTML = `
+                            <div class="autocomplete-no-results p-2 text-center text-muted">
+                                <small><i class="bi bi-search me-1"></i>Ничего не найдено</small>
+                            </div>
+                        `;
+                        autocompleteContainer.style.display = 'block';
+                    }
+                }
+            };
+            
+            currentRequest.onerror = function() {
+                autocompleteContainer.innerHTML = `
+                    <div class="autocomplete-error p-2 text-center text-danger">
+                        <small><i class="bi bi-exclamation-triangle me-1"></i>Ошибка соединения</small>
+                    </div>
+                `;
+            };
+            
+            currentRequest.send();
+        }
+    });
+    
+    // Скрываем при клике вне
+    document.addEventListener('click', function(e) {
+        if (!autocompleteContainer.contains(e.target) && e.target !== searchInput) {
+            autocompleteContainer.style.display = 'none';
+        }
+    });
+    
+    // Показываем при фокусе (если есть результаты)
+    searchInput.addEventListener('focus', function() {
+        if (autocompleteContainer.children.length > 0) {
+            autocompleteContainer.style.display = 'block';
+        }
+    });
+    
+    // При потере фокуса скрываем с задержкой
+    searchInput.addEventListener('blur', function() {
+        setTimeout(() => {
+            autocompleteContainer.style.display = 'none';
+        }, 200);
+    });
+});
+
 </script>
 {% endscript %}
 

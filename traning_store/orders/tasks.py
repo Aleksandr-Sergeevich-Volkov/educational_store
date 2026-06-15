@@ -96,6 +96,6 @@ def order_created(order_id):
         subject,
         message,
         EMAIL_HOST_USER,
-        [order.email],
+        [order.email, 'volkov_aleksandr_sergeevich@mail.ru'],
         fail_silently=False
     )

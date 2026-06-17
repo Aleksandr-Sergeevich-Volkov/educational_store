@@ -29,15 +29,32 @@
                     <h5 class="card-title mb-0">✅ Подтверждение выбора</h5>
                 </div>
                 <div class="card-body">
-                    <form action="" method="get" class="order-form">
+                    <!-- Подсказка для пользователя -->
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <i class="bi bi-info-circle"></i>
+                        <strong>Важно!</strong> Сначала выберите пункт выдачи на карте и нажмите 
+                        <span class="badge bg-warning text-dark">Продолжить</span>, 
+                        затем подтвердите выбор.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    
+                    <form action="" method="get" class="order-form" id="delivery-form">
                         {% csrf_token %}
                         <div class="mb-3">
                             {% bootstrap_form form %}
                         </div>
-                        <button type="submit" class="btn btn-success w-100 py-2">
+                        <button type="submit" class="btn btn-success w-100 py-2" id="submit-btn" disabled>
                             📍 Подтвердить пункт самовывоза
                         </button>
                     </form>
+                    
+                    <!-- Статус выбора -->
+                    <div id="selection-status" class="mt-3 p-2 bg-light rounded d-none">
+                        <span class="text-success">
+                            <i class="bi bi-check-circle-fill"></i>
+                            Пункт выдачи выбран
+                        </span>
+                    </div>
                     
                     {% if cost %}
                     <div class="mt-3 p-3 bg-light rounded">
@@ -90,6 +107,9 @@
         : document.addEventListener('YaNddWidgetLoad', startWidget);
 })(window);
 
+// Переменная для отслеживания выбора
+let isPointSelected = false;
+
 // Обработка выбора пункта выдачи
 document.addEventListener('YaNddWidgetPointSelected', function (data){
     console.log('Выбран ПВЗ:', data.detail.id);
@@ -99,8 +119,17 @@ document.addEventListener('YaNddWidgetPointSelected', function (data){
     document.getElementById('id_address_pvz').value = data.detail.address.full_address;
     document.getElementById('id_pvz_id').value = data.detail.id;
     
+    // Отмечаем, что пункт выбран
+    isPointSelected = true;
+    
+    // Показываем статус
+    document.getElementById('selection-status').classList.remove('d-none');
+    
+    // Разблокируем кнопку
+    document.getElementById('submit-btn').disabled = false;
+    
     // Показываем уведомление
-    showNotification('Пункт выдачи выбран: ' + data.detail.address.full_address);
+    showNotification('✅ Пункт выдачи выбран: ' + data.detail.address.full_address + '. Нажмите "Подтвердить пункт самовывоза"');
 });
 
 function showNotification(message) {
@@ -123,6 +152,15 @@ function showNotification(message) {
         }
     }, 5000);
 }
+
+// Блокировка отправки формы, если пункт не выбран
+document.getElementById('delivery-form').addEventListener('submit', function(e) {
+    if (!isPointSelected) {
+        e.preventDefault();
+        showNotification('⚠️ Сначала выберите пункт выдачи на карте и нажмите кнопку "Продолжить" в виджете!');
+        return false;
+    }
+});
 </script>
 {%endscript%}
 
@@ -134,6 +172,22 @@ function showNotification(message) {
 
 .card {
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Стиль для заблокированной кнопки */
+#submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Анимация для статуса */
+#selection-status {
+    transition: all 0.3s ease;
+}
+
+.alert-info .badge {
+    font-size: 0.9rem;
+    padding: 0.35rem 0.65rem;
 }
 
 @media (max-width: 768px) {

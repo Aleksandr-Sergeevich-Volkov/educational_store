@@ -9,21 +9,32 @@
             <!-- Карточка с виджетом -->
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-primary text-white">
-                    <h4 class="card-title mb-0">🗺️ Выбор пункта выдачи СДЭК_!_</h4>
+                    <h4 class="card-title mb-0">🗺️ Выбор пункта выдачи СДЭК</h4>
                 </div>
                 <div class="card-body">
-                    <div class="alert alert-info mb-3">
-                        <strong>📋 Инструкция:</strong> Нажмите кнопку ниже чтобы открыть карту с пунктами выдачи СДЭК. После выбора пункта виджет закроется автоматически.
+                    <!-- Подсказка для пользователя -->
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <i class="bi bi-info-circle"></i>
+                        <strong>Важно!</strong> Сначала нажмите кнопку <span class="badge bg-warning text-dark">Открыть карту ПВЗ СДЭК</span>, 
+                        выберите пункт выдачи на карте и нажмите <span class="badge bg-success text-white">Выбрать</span>, 
+                        затем подтвердите выбор.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                     
-                    <!-- КОНТЕЙНЕР ДЛЯ КАРТЫ — ЭТО КРИТИЧЕСКИ ВАЖНО! -->
-                    <div id="cdek-map" style="width: 100%; min-height: 400px; border: 1px solid #dee2e6; border-radius: 8px;"></div>
+                    <!-- КОНТЕЙНЕР ДЛЯ КАРТЫ -->
+                    <div id="cdek-map" style="width: 100%; min-height: 400px; border: 1px solid #dee2e6; border-radius: 8px; display: none;"></div>
                     
                     <button id="open-widget-btn" class="btn btn-warning btn-lg w-100 py-3 mt-3">
                         📍 Открыть карту ПВЗ СДЭК
                     </button>
                     
-                    <div id="selection-status"></div>
+                    <!-- Статус выбора -->
+                    <div id="selection-status" class="mt-3 d-none">
+                        <div class="alert alert-success">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <span id="selected-point-text">Пункт выдачи выбран</span>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -33,7 +44,7 @@
                     <h4 class="card-title mb-0">✅ Подтверждение выбора</h4>
                 </div>
                 <div class="card-body">
-                    <form action="" method="get" class="order-form">
+                    <form action="" method="get" class="order-form" id="delivery-form">
                         {% csrf_token %}
                         
                         <div class="row">
@@ -42,12 +53,8 @@
                             </div>
                         </div>
                         
-                        <div class="alert alert-warning mt-3">
-                            <strong>💡 Важно:</strong> После выбора пункта на карте данные автоматически заполнятся в форме выше, а виджет закроется.
-                        </div>
-                        
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-success w-100 py-2">
+                            <button type="submit" class="btn btn-success w-100 py-2" id="submit-btn" disabled>
                                 ✅ Подтвердить выбор пункта самовывоза
                             </button>
                         </div>
@@ -58,23 +65,25 @@
     </div>
 </div>
 
-<!-- Подключение виджета (без лишних скриптов) -->
+<!-- Подключение виджета СДЭК -->
 <script src="https://cdn.jsdelivr.net/npm/@cdek-it/widget@3" type="text/javascript"></script>
 
 {% script %}
 <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', function() {
     let widget = null;
+    let isPointSelected = false;
+    let selectedPointData = null;
+    
     const openBtn = document.getElementById('open-widget-btn');
     const widgetContainer = document.getElementById('cdek-map');
+    const submitBtn = document.getElementById('submit-btn');
+    const statusDiv = document.getElementById('selection-status');
+    const selectedPointText = document.getElementById('selected-point-text');
+    const deliveryForm = document.getElementById('delivery-form');
     
-    if (!openBtn) {
-        console.error('Кнопка open-widget-btn не найдена');
-        return;
-    }
-    
-    if (!widgetContainer) {
-        console.error('Контейнер cdek-map не найден');
+    if (!openBtn || !widgetContainer || !submitBtn || !deliveryForm) {
+        console.error('Не найдены необходимые элементы');
         return;
     }
     
@@ -82,9 +91,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function createWidget() {
         if (widget) return widget;
         
-        // Проверяем, загрузился ли CDEKWidget
         if (typeof window.CDEKWidget === 'undefined') {
-            console.error('CDEKWidget не загружен. Проверьте подключение скрипта.');
+            console.error('CDEKWidget не загружен');
             return null;
         }
         
@@ -125,7 +133,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 onReady() {
                     console.log('Виджет СДЭК загружен и готов');
                     widgetContainer.style.display = 'block';
-                    // Автоматически открываем виджет после загрузки
                     if (widget && typeof widget.open === 'function') {
                         widget.open();
                     }
@@ -134,39 +141,44 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.log('Расчет стоимости доставки произведен');
                 },
                 onChoose(type, tariff, address) {
-                    console.log('Выбран метод доставки', type, tariff, address);
+                    console.log('Выбран метод доставки:', type, tariff, address);
                     
                     // Закрываем виджет
                     if (widget && typeof widget.close === 'function') {
                         widget.close();
                     }
                     
-                    // Заполняем форму
+                    // Сохраняем данные выбора
+                    isPointSelected = true;
+                    selectedPointData = {
+                        type: type,
+                        tariff: tariff,
+                        address: address
+                    };
+                    
+                    // Заполняем поля формы
                     const sumField = document.getElementById('id_sum');
                     const addressField = document.getElementById('id_address_pvz');
+                    const pvzIdField = document.getElementById('id_pvz_id');
                     
                     if (sumField) sumField.value = tariff.delivery_sum;
                     if (addressField) addressField.value = address.name;
+                    if (pvzIdField) pvzIdField.value = address.code || 'cdek_' + Date.now();
                     
-                    if (type === 'door') {
-                        alert('Выбрана доставка курьером по адресу\n' +
-                              address.formatted + '\n' +
-                              'Цена ' + tariff.delivery_sum + ' руб.\n' +
-                              'Срок ' + tariff.period_max + ' дн.');
-                    } else {
-                        alert('Выбран пункт выдачи заказа ' + address.name + '\n' +
-                              'Цена ' + tariff.delivery_sum + ' руб.\n' +
-                              'Срок ' + tariff.period_max + ' дн.');
-                    }
+                    // Обновляем статус
+                    statusDiv.classList.remove('d-none');
+                    const pointName = type === 'door' ? 'Курьерская доставка' : address.name;
+                    selectedPointText.textContent = '✅ Выбран пункт: ' + pointName + 
+                        ' (Стоимость: ' + tariff.delivery_sum + ' руб.)';
                     
-                    // Показываем статус
-                    const statusDiv = document.getElementById('selection-status');
-                    if (statusDiv) {
-                        statusDiv.innerHTML = '<div class="alert alert-success mt-2">✅ Выбран пункт: ' + address.name + '</div>';
-                    }
+                    // Разблокируем кнопку подтверждения
+                    submitBtn.disabled = false;
                     
-                    // Меняем текст кнопки обратно
-                    if (openBtn) openBtn.innerHTML = '📍 Открыть карту ПВЗ СДЭК';
+                    // Меняем текст кнопки
+                    openBtn.innerHTML = '📍 Открыть карту ПВЗ СДЭК';
+                    
+                    // Показываем уведомление
+                    showNotification('✅ Пункт выдачи выбран: ' + pointName);
                 },
             });
             return widget;
@@ -176,28 +188,57 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Обработчик кнопки
+    // Функция показа уведомлений
+    function showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.className = `alert alert-${type} alert-dismissible fade show`;
+        notification.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        const container = document.querySelector('.container-fluid');
+        container.insertBefore(notification, container.firstChild);
+        
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.remove();
+            }
+        }, 5000);
+    }
+    
+    // Обработчик кнопки открытия карты
     openBtn.addEventListener('click', function() {
         console.log('Кнопка нажата, создаем/открываем виджет');
         
         if (widget && typeof widget.open === 'function') {
-            // Виджет уже создан
             widgetContainer.style.display = 'block';
             widget.open();
             openBtn.innerHTML = '🗺️ Карта открыта...';
         } else {
-            // Создаем новый виджет
             openBtn.innerHTML = '⏳ Загрузка карты...';
             widget = createWidget();
             if (!widget) {
                 openBtn.innerHTML = '📍 Открыть карту ПВЗ СДЭК';
-                alert('Ошибка загрузки виджета. Проверьте подключение к интернету.');
+                showNotification('❌ Ошибка загрузки виджета. Проверьте подключение к интернету.', 'danger');
             }
         }
     });
     
-    // Изначально скрываем контейнер карты
-    widgetContainer.style.display = 'none';
+    // Блокировка отправки формы, если пункт не выбран
+    deliveryForm.addEventListener('submit', function(e) {
+        if (!isPointSelected) {
+            e.preventDefault();
+            showNotification('⚠️ Сначала выберите пункт выдачи на карте и нажмите кнопку "Выбрать" в виджете!', 'warning');
+            return false;
+        }
+    });
+    
+    // Восстановление состояния при повторном открытии карты
+    if (isPointSelected) {
+        submitBtn.disabled = false;
+        statusDiv.classList.remove('d-none');
+    }
 });
 </script>
 {% endscript %}
@@ -230,6 +271,20 @@ document.addEventListener('DOMContentLoaded', function() {
 .form-label {
     font-weight: 500;
     margin-bottom: 0.5rem;
+}
+
+#submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#selection-status {
+    transition: all 0.3s ease;
+}
+
+.alert-info .badge {
+    font-size: 0.9rem;
+    padding: 0.35rem 0.65rem;
 }
 
 /* Адаптивность для мобильных */

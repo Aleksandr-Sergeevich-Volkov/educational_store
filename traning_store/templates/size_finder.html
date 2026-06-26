@@ -1,5 +1,6 @@
 <!-- size_finder.html -->
 {% extends 'base.html' %}
+{% load csp %}
 
 {% block content %}
 <div class="container mt-4">
@@ -121,10 +122,27 @@
     <div class="card-body">
 {% endif %}
 </div>
-
+{% script %}
 <script>
-function updateMeasurementFields() {
-    document.getElementById('sizeFinderForm').submit();
-}
+    // 1. Функция ОСТАЁТСЯ - она нужна для отправки формы
+    function updateMeasurementFields() {
+        document.getElementById('sizeFinderForm').submit();
+    }
+    
+    // 2. ДОБАВЛЯЕМ назначение обработчиков
+    document.addEventListener('DOMContentLoaded', function() {
+        // Назначаем на все поля, которые должны вызывать отправку
+        // Например, на селект бренда
+        var brandSelect = document.querySelector('#id_brand'); // или ваш ID
+        if (brandSelect) {
+            brandSelect.addEventListener('change', updateMeasurementFields);
+        }
+        
+        // На все поля измерений (если они есть)
+        document.querySelectorAll('.measurement-input, input[type="number"]').forEach(function(input) {
+            input.addEventListener('change', updateMeasurementFields);
+        });
+    });
 </script>
+{% endscript %}
 {% endblock %}

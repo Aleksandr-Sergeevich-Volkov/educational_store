@@ -56,9 +56,14 @@ class SizeAdmin(admin.ModelAdmin):
 
 @admin.register(SizeDetail)
 class SizeDetailAdmin(admin.ModelAdmin):
-    list_display = ['size', 'ankle_display', 'calf_display', 'mid_thigh_display']
+    list_display = ['size', 'ankle_display', 'calf_display', 'mid_thigh_display', 'brand_name']
     list_filter = ['size__brand']
     search_fields = ['size__name', 'size__brand__name']
+
+    def brand_name(self, obj):
+        return obj.size.brand.name
+    brand_name.short_description = 'Бренд'
+    brand_name.admin_order_field = 'size__brand__name'
 
     def ankle_display(self, obj):
         return obj.get_range_display('ankle_circumference')

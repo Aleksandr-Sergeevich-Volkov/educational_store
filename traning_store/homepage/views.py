@@ -387,30 +387,41 @@ def size_finder(request):
     measurement_form = None
     results = []
     selected_brand = None
-    measurement_fields = {}  # Инициализируем пустым словарем
 
     if request.method == 'POST':
         if brand_form.is_valid():
             selected_brand = brand_form.cleaned_data['brand']
 
-            # Используем динамическую форму
             measurement_form = SmartMeasurementForm(
                 request.POST,
                 brand=selected_brand
             )
-            if measurement_form and measurement_form.is_valid():
-                measurements = measurement_form.cleaned_data
-                results = find_matching_sizes(selected_brand, measurements)
 
-                # Определяем какие поля показывать в результатах
-                measurement_fields = get_measurement_fields_config(selected_brand)
+            if measurement_form and measurement_form.is_valid():
+                # Обрабатываем выбранные диапазоны
+                measurements = {}
+                for key, value in measurement_form.cleaned_data.items():
+                    if value and value != '':
+                        # Разбираем диапазон "18-20" на lower и upper
+                        try:
+                            parts = value.split('-')
+                            if len(parts) == 2:
+                                # Сохраняем как среднее значение или как диапазон
+                                lower = int(parts[0])
+                                upper = int(parts[1])
+                                # Используем среднее значение для поиска
+                                measurements[key] = (lower + upper) // 2
+                        except (ValueError, TypeError):
+                            pass
+
+                if measurements:
+                    results = find_matching_sizes(selected_brand, measurements)
 
     return render(request, 'size_finder.html', {
         'brand_form': brand_form,
         'measurement_form': measurement_form,
         'results': results,
         'selected_brand': selected_brand,
-        'measurement_fields': measurement_fields,
     })
 
 

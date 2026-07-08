@@ -370,3 +370,28 @@ CONTENT_SECURITY_POLICY = {
     },
 }
 
+SPAM_PROTECTION = {
+    'ENABLED': True,
+    
+    # Только российские почтовые сервисы
+    'ALLOWED_EMAIL_DOMAINS': [
+        'mail.ru',
+        'yandex.ru',
+        'yandex.ua',
+        'yandex.by',
+        'yandex.kz',
+        'rambler.ru',
+        'list.ru',
+        'bk.ru',
+        'inbox.ru',
+        'mail.ua',
+        'mail.by',
+        'mail.kz',
+    ],
+    
+    'BANNED_USERNAME_PATTERNS': [
+        r'^[a-z]{10,}$',
+        r'^[a-z]+\d+[a-z]+$',
+        r'^[a-z]{5,}\d{4,}$',
+    ],
+}

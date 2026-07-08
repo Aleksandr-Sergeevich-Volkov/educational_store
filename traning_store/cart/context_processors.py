@@ -29,10 +29,10 @@ def currency(request):
     response = requests.get(ENDPOINT,)
     data = response.json().get('rates')
     EUR = round(1 / data['EUR'], 2)
-    TRY = round(1 / data['TRY'], 2)
+    CNY = round(1 / data['CNY'], 2)
     USD = round(1 / data['USD'], 2)
     return {'EUR': f'EUR: {EUR}',
-            'TRY': f'TRY: {TRY}',
+            'CNY': f'CNY: {CNY}',
             'USD': f'USD: {USD}'}
 
 
@@ -68,7 +68,7 @@ def weather(request):
     if not API_key:
         return {'city_temp': ''}
 
-    coordinates = {'Химки': [55.897, 37.4297], 'Хатанга': [71.964027, 102.440613]}
+    coordinates = {'Химки': [55.897, 37.4297], 'Хайнань': [20.0334, 110.32398]}
     lang = 'ru'
     city_temp = {}
 

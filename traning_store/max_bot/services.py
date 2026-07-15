@@ -1,6 +1,7 @@
 """
 Сервисы для отправки сообщений в MAX API
 """
+
 import json
 import logging
 from decimal import Decimal
@@ -14,7 +15,7 @@ from .state import get_cart_state, set_cart_state
 
 logger = logging.getLogger(__name__)
 
-MAX_API_URL = "https://platform-api.max.ru/messages"
+MAX_API_URL = "https://platform-api2.max.ru/messages"
 
 
 def send_message(user_id, text, buttons=None):
@@ -22,22 +23,19 @@ def send_message(user_id, text, buttons=None):
 
     headers = {
         "Authorization": settings.MAX_BOT_TOKEN,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
     }
 
     payload = {"text": text}
 
     if buttons:
         payload["attachments"] = [
-            {
-                "type": "inline_keyboard",
-                "payload": {"buttons": buttons}
-            }
+            {"type": "inline_keyboard", "payload": {"buttons": buttons}}
         ]
 
     print(f"Payload_: {json.dumps(payload, ensure_ascii=False, indent=2)}")
 
-    url = f"https://platform-api.max.ru/messages?user_id={user_id}"
+    url = f"https://platform-api2.max.ru/messages?user_id={user_id}"
 
     try:
         response = requests.post(url, json=payload, headers=headers, timeout=10)
@@ -53,7 +51,7 @@ def send_message_with_image(user_id, text, image_url, buttons=None):
     """
     headers = {
         "Authorization": settings.MAX_BOT_TOKEN,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
     }
 
     payload = {"text": text}
@@ -63,23 +61,17 @@ def send_message_with_image(user_id, text, image_url, buttons=None):
 
     # Добавляем кнопки, если есть
     if buttons:
-        attachments.append({
-            "type": "inline_keyboard",
-            "payload": buttons
-        })
+        attachments.append({"type": "inline_keyboard", "payload": buttons})
 
     # Добавляем изображение
     if image_url:
-        attachments.append({
-            "type": "image",
-            "payload": {"url": image_url}
-        })
+        attachments.append({"type": "image", "payload": {"url": image_url}})
 
     if attachments:
         payload["attachments"] = attachments
-    print(f'payload_!_@_$_#: {payload}')
+    print(f"payload_!_@_$_#: {payload}")
 
-    url = f"https://platform-api.max.ru/messages?user_id={user_id}"
+    url = f"https://platform-api2.max.ru/messages?user_id={user_id}"
 
     try:
         response = requests.post(url, json=payload, headers=headers, timeout=10)
@@ -96,7 +88,7 @@ class CartService:
         self.user_id = str(user_id)
         # Загружаем состояние корзины из Redis
         self.state = get_cart_state(self.user_id)
-        self.coupon_id = self.state.get('coupon_id')
+        self.coupon_id = self.state.get("coupon_id")
 
     def add(self, product, quantity=1, size=None, color=None, model_type=None):
         """
@@ -109,10 +101,7 @@ class CartService:
             size=size,
             color=color,
             model_type=model_type,
-            defaults={
-                'quantity': quantity,
-                'price_at_add': product.price
-            }
+            defaults={"quantity": quantity, "price_at_add": product.price},
         )
 
         if not created:
@@ -132,22 +121,22 @@ class CartService:
             self.remove(cart_item_id)
             return
 
-        cart_item = CartItem.objects.filter(id=cart_item_id, user_id=self.user_id).first()
+        cart_item = CartItem.objects.filter(
+            id=cart_item_id, user_id=self.user_id
+        ).first()
         if cart_item:
             cart_item.quantity = quantity
             cart_item.save()
 
     def get_items(self):
         """Получить все позиции корзины с предзагрузкой связанных данных"""
-        return CartItem.objects.filter(
-            user_id=self.user_id
-        ).select_related(
-            'product', 'size', 'color', 'model_type'
+        return CartItem.objects.filter(user_id=self.user_id).select_related(
+            "product", "size", "color", "model_type"
         )
 
     def save_state(self):
         """Сохраняет состояние корзины в Redis"""
-        self.state['coupon_id'] = self.coupon_id
+        self.state["coupon_id"] = self.coupon_id
         set_cart_state(self.user_id, self.state)
 
     def set_coupon(self, coupon_id):
@@ -175,16 +164,16 @@ class CartService:
         coupon = self.get_coupon
         if coupon:
             discount_percent = Decimal(str(coupon.discount))
-            return (discount_percent / Decimal('100')) * self.get_total()
-        return Decimal('0')
+            return (discount_percent / Decimal("100")) * self.get_total()
+        return Decimal("0")
 
     def get_total_price(self):
         """Общая стоимость корзины"""
-        total = Decimal('0')
+        total = Decimal("0")
         for item in self.get_items():
             total += item.get_total_price()
-        print(f'self.get_discount():{self.get_discount()}')
-        print(f'total: {total}')
+        print(f"self.get_discount():{self.get_discount()}")
+        print(f"total: {total}")
         return total - self.get_discount()
 
     def get_total_items(self):

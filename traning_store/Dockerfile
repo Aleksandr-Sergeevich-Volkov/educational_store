@@ -11,7 +11,8 @@ RUN apt-get -y update && apt-get install -y nano
 WORKDIR /app
 # Дальнейшие инструкции будут выполняться в директории /app
 # Скопируйте сертификат в образ
-COPY russian_trusted_root_ca.cer /usr/local/share/ca-certificates/
+COPY russian_trusted_root_ca_pem.crt /usr/local/share/ca-certificates/
+COPY russian_trusted_sub_ca_pem.crt /usr/local/share/ca-certificates/
 
 # Обновите доверенные сертификаты внутри контейнера
 RUN update-ca-certificates

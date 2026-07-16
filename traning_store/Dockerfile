@@ -12,8 +12,8 @@ WORKDIR /app
 # Дальнейшие инструкции будут выполняться в директории /app
 # Скопируйте сертификат в образ
 
-COPY russian_trusted_root_ca_pem.crt /usr/local/share/ca-certificates/
-COPY russian_trusted_sub_ca_pem.crt /usr/local/share/ca-certificates/
+COPY russian_trusted_root_ca_pem.crt /usr/local/share/ca-certificates/russian_trusted_root_ca.crt
+COPY russian_trusted_sub_ca_pem.crt /usr/local/share/ca-certificates/russian_trusted_sub_ca.crt
 
 # Обновите доверенные сертификаты внутри контейнера
 RUN update-ca-certificates

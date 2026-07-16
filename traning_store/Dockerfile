@@ -17,6 +17,7 @@ COPY russian_trusted_sub_ca_pem.crt /usr/local/share/ca-certificates/russian_tru
 
 # Обновите доверенные сертификаты внутри контейнера
 RUN update-ca-certificates
+RUN ln -sf /etc/ssl/certs/ca-certificates.crt /usr/lib/ssl/cert.pem
 
 RUN pip install gunicorn==20.1.0
 

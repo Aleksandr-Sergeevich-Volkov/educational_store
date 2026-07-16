@@ -4,17 +4,18 @@ FROM python:3.9.10
 
 # Установка nano в том же образе
 RUN apt-get -y update && apt-get install -y nano
-# Скопируйте сертификат в образ
-COPY russian_trusted_root_ca.cer /usr/local/share/ca-certificates/
-
-# Обновите доверенные сертификаты внутри контейнера
-RUN update-ca-certificates
 
 # Переходим в образе в директорию /app: в ней будем хранить код проекта.
 # Если директории с указанным именем нет, она будет создана. 
 # Название директории может быть любым.
 WORKDIR /app
 # Дальнейшие инструкции будут выполняться в директории /app
+# Скопируйте сертификат в образ
+COPY russian_trusted_root_ca.cer /usr/local/share/ca-certificates/
+
+# Обновите доверенные сертификаты внутри контейнера
+RUN update-ca-certificates
+
 RUN pip install gunicorn==20.1.0
 
 # Скопировать с локального компьютера файл зависимостей

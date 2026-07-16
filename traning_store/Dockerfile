@@ -27,7 +27,7 @@ ENV REQUESTS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 
 # Создаём ссылку для совместимости
 RUN ln -sf /etc/ssl/certs/ca-certificates.crt /usr/lib/ssl/cert.pem
-
+#
 RUN pip install gunicorn==20.1.0
 
 # Скопировать с локального компьютера файл зависимостей

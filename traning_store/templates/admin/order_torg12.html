@@ -1,0 +1,496 @@
+<!-- templates/admin/order_torg12.html -->
+{% load csp %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ТОРГ-12 №{{ order.id }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Times New Roman', Arial, sans-serif;
+            font-size: 10px;
+            padding: 20px;
+            background: #fff;
+            color: #000;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .form-header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .form-header h1 {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 2px 0;
+        }
+        .form-header .sub {
+            font-size: 10px;
+        }
+        .form-header .code {
+            float: right;
+            font-size: 9px;
+            border: 1px solid #000;
+            padding: 2px 5px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9px;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 3px 4px;
+            vertical-align: middle;
+        }
+        th {
+            background-color: #e8e8e8 !important;
+            font-weight: bold;
+            text-align: center;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .text-left { text-align: left; }
+        .bold { font-weight: bold; }
+        
+        .info-label {
+            font-weight: bold;
+            width: 12%;
+            background: #f0f0f0;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        .info-value {
+            width: 38%;
+        }
+        
+        .total-row {
+            font-weight: bold;
+            background: #f0f0f0 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        .discount-row {
+            background: #e8e8e8 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        .delivery-row {
+            background: #d0d0d0 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        .grand-total {
+            background: #c0c0c0 !important;
+            font-weight: bold;
+            font-size: 11px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        .courier-block {
+            border: 2px solid #000;
+            background: #f5f5f5 !important;
+            margin: 10px 0;
+            padding: 8px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        .courier-block td {
+            padding: 5px 8px;
+            font-size: 10px;
+            border: 1px solid #000;
+        }
+        .courier-title {
+            text-align: center;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        
+        .vat-free {
+            background: #e8e8e8 !important;
+            border: 1px solid #000;
+            text-align: center;
+            font-weight: bold;
+            padding: 5px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        
+        .no-print {
+            display: block;
+            margin-top: 30px;
+            text-align: center;
+            padding: 15px;
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            body { padding: 10px; }
+        }
+        .btn {
+            padding: 8px 25px;
+            font-size: 14px;
+            cursor: pointer;
+            border: 1px solid #666;
+            border-radius: 5px;
+            margin: 0 5px;
+            background: #e0e0e0;
+            color: #000;
+        }
+        .btn-print { background: #4CAF50; color: white; border-color: #4CAF50; }
+        .btn-close { background: #f44336; color: white; border-color: #f44336; }
+        .btn-back { background: #6c757d; color: white; border-color: #6c757d; }
+        .btn:hover { opacity: 0.8; }
+        
+        .signature-name {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+<!-- ==================== ШАПКА ФОРМЫ ==================== -->
+<div class="form-header">
+    <div class="code">Форма по ОКУД 0330212</div>
+    <h1>ТОВАРНАЯ НАКЛАДНАЯ</h1>
+    <div class="sub">Унифицированная форма № ТОРГ-12<br>
+    Утверждена постановлением Госкомстата России от 25.12.98 № 132</div>
+    <br>
+    <table style="width: 60%; margin: 0 auto;">
+        <tr>
+            <td style="border: none; text-align: right; width: 50%;">Номер документа:</td>
+            <td style="border: none; text-align: left; font-weight: bold;">№ {{ order.id }}</td>
+            <td style="border: none; text-align: right; width: 30%;">Дата составления:</td>
+            <td style="border: none; text-align: left; font-weight: bold;">{{ order.created|date:"d.m.Y" }}</td>
+        </tr>
+    </table>
+</div>
+
+<!-- ==================== ИНФОРМАЦИЯ О СТОРОНАХ ==================== -->
+<table class="info-block">
+    <tr>
+        <td class="info-label">Грузоотправитель:</td>
+        <td class="info-value">
+            <strong>ООО "КОНСАЛТИНГОВЫЙ ЦЕНТР "АЛГОРИТМ"</strong><br>
+            г. Москва, ул. Примерная, д. 1<br>
+            ИНН 7719138441, КПП 771901001
+        </td>
+        <td class="info-label" style="width: 10%;">ОКПО</td>
+        <td style="width: 15%;">45356214</td>
+    </tr>
+    <tr>
+        <td class="info-label">Грузополучатель:</td>
+        <td class="info-value">
+            <strong>{{ order.get_full_name }}</strong><br>
+            {{ order.get_delivery_address }}<br>
+            Телефон: {{ order.phone|default:"-" }}
+        </td>
+        <td class="info-label">ОКПО</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td class="info-label">Поставщик:</td>
+        <td class="info-value">
+            <strong>ООО "КОНСАЛТИНГОВЫЙ ЦЕНТР "АЛГОРИТМ"</strong><br>
+            г. Москва, ул. Примерная, д. 1<br>
+            ИНН 7719138441, КПП 771901001
+        </td>
+        <td class="info-label">ОКПО</td>
+        <td>45356214</td>
+    </tr>
+    <tr>
+        <td class="info-label">Плательщик:</td>
+        <td class="info-value">
+            <strong>{{ order.get_full_name }}</strong><br>
+            {{ order.email }}
+        </td>
+        <td class="info-label">ОКПО</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td class="info-label">Основание:</td>
+        <td class="info-value" colspan="3">Заказ №{{ order.id }} от {{ order.created|date:"d.m.Y" }}</td>
+    </tr>
+    <tr>
+        <td colspan="4" class="vat-free">
+            ⚡ ТОВАР ОСВОБОЖДЕН ОТ НДС (УСН) ⚡
+        </td>
+    </tr>
+</table>
+
+<!-- ==================== БЛОК ДЛЯ КУРЬЕРА ==================== -->
+<table class="courier-block">
+    <tr>
+        <td colspan="4" class="courier-title">📦 ИНФОРМАЦИЯ ДЛЯ ДОСТАВКИ</td>
+    </tr>
+    <tr>
+        <td style="font-weight: bold; width: 12%;">Получатель:</td>
+        <td style="width: 38%;"><strong>{{ order.get_full_name }}</strong></td>
+        <td style="font-weight: bold; width: 12%;">Телефон:</td>
+        <td style="width: 38%;"><strong>{{ order.phone|default:"-" }}</strong></td>
+    </tr>
+    <tr>
+        <td style="font-weight: bold;">Адрес доставки:</td>
+        <td colspan="3"><strong>{{ order.get_delivery_address }}</strong></td>
+    </tr>
+    <tr>
+        <td style="font-weight: bold;">Вид доставки:</td>
+        <td>{{ order.delivery_type|default:"-" }}</td>
+        <td style="font-weight: bold;">Трек-номер:</td>
+        <td><strong>{{ order.track_number|default:"-" }}</strong></td>
+    </tr>
+</table>
+
+<!-- ==================== ТАБЛИЦА ТОВАРОВ ==================== -->
+<table>
+    <thead>
+        <tr>
+            <th rowspan="2" style="width: 3%;">№ п/п</th>
+            <th rowspan="2" style="width: 22%;">Товар<br><small>наименование, характеристика, сорт, артикул</small></th>
+            <th colspan="2" style="width: 8%;">Единица измерения</th>
+            <th rowspan="2" style="width: 4%;">Вид упаковки</th>
+            <th colspan="2" style="width: 6%;">Количество</th>
+            <th rowspan="2" style="width: 6%;">Масса брутто</th>
+            <th rowspan="2" style="width: 6%;">Кол-во (масса нетто)</th>
+            <th rowspan="2" style="width: 7%;">Цена, руб.</th>
+            <th rowspan="2" style="width: 9%;">Сумма без НДС, руб.</th>
+            <th colspan="2" style="width: 7%;">НДС</th>
+            <th rowspan="2" style="width: 10%;">Сумма с НДС, руб.</th>
+        </tr>
+        <tr>
+            <th>код</th>
+            <th>наименование</th>
+            <th>в одном месте</th>
+            <th>мест, штук</th>
+            <th>ставка, %</th>
+            <th>сумма, руб.</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in order.items.all %}
+        <tr>
+            <td class="text-center">{{ forloop.counter }}</td>                    <!-- 1 -->
+            <td>{{ item.product.name }}</td>                                      <!-- 2 -->
+            <td class="text-center">-</td>                                        <!-- 3 -->
+            <td class="text-center">шт.</td>                                      <!-- 4 -->
+            <td class="text-center">-</td>                                        <!-- 5 -->
+            <td class="text-center">-</td>                                        <!-- 6 -->
+            <td class="text-center">{{ item.quantity }}</td>                     <!-- 7 -->
+            <td class="text-center">-</td>                                        <!-- 8 -->
+            <td class="text-center">{{ item.quantity }}</td>                     <!-- 9 -->
+            <td class="text-right">{{ item.price|floatformat:2 }}</td>           <!-- 10 -->
+            <td class="text-right">{{ item.get_cost|floatformat:2 }}</td>        <!-- 11 -->
+            <td class="text-center">-</td>                                        <!-- 12 -->
+            <td class="text-center">-</td>                                        <!-- 13 -->
+            <td class="text-right">{{ item.get_cost|floatformat:2 }}</td>        <!-- 14 - Сумма с НДС -->
+        </tr>
+        {% endfor %}
+        
+        <!-- ИТОГО -->
+        <tr class="total-row">
+            <td colspan="9" class="text-right">Итого:</td>
+            <td></td>
+            <td class="text-right">{{ order.get_total_without_delivery|floatformat:2 }}</td>
+            <td></td>
+            <td></td>
+            <td class="text-right">{{ order.get_total_without_delivery|floatformat:2 }}</td>
+        </tr>
+        
+        <!-- СКИДКА -->
+        {% if order.discount > 0 %}
+        <tr class="discount-row">
+            <td colspan="11" class="text-right"><strong>Скидка {{ order.discount }}%:</strong></td>
+            <td></td>
+            <td></td>
+            <td class="text-right"><strong>-{{ order.get_discount_amount|floatformat:2 }}</strong></td>
+        </tr>
+        <tr style="background: #f0f0f0; font-weight: bold;">
+            <td colspan="11" class="text-right">Сумма со скидкой:</td>
+            <td></td>
+            <td></td>
+            <td class="text-right">{{ order.get_total_with_discount|floatformat:2 }}</td>
+        </tr>
+        {% endif %}
+        
+        <!-- ДОСТАВКА -->
+        {% if order.delivery_sum > 0 %}
+        <tr class="delivery-row">
+            <td colspan="11" class="text-right"><strong>Доставка:</strong></td>
+            <td></td>
+            <td></td>
+            <td class="text-right"><strong>{{ order.delivery_sum|floatformat:2 }}</strong></td>
+        </tr>
+        {% endif %}
+        
+        <!-- ВСЕГО ПО НАКЛАДНОЙ -->
+        <tr class="grand-total">
+            <td colspan="11" class="text-right" style="font-size: 12px;">Всего по накладной:</td>
+            <td></td>
+            <td></td>
+            <td class="text-right" style="font-size: 12px;">{{ order.get_total_cost|floatformat:2 }}</td>
+        </tr>
+    </tbody>
+</table>
+<!-- ==================== ИТОГИ ==================== -->
+<table>
+    <tr>
+        <td style="border: none; width: 50%;">
+            <strong>Товарная накладная имеет приложение на</strong> ____ листах
+        </td>
+        <td style="border: none; width: 50%;">
+            <strong>и содержит</strong> {{ order.items.count }} <strong>порядковых номеров записей</strong>
+        </td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <td style="width: 50%;">
+            <strong>Масса груза (нетто)</strong><br>
+            _________________________________<br>
+            <small>(прописью)</small>
+        </td>
+        <td style="width: 50%;">
+            <strong>Масса груза (брутто)</strong><br>
+            _________________________________<br>
+            <small>(прописью)</small>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <strong>Всего мест</strong><br>
+            _________________________________<br>
+            <small>(прописью)</small>
+        </td>
+        <td>
+            <strong>Всего отпущено на сумму</strong><br>
+            {{ order.get_total_cost|floatformat:2 }} руб.<br>
+            <small>({{ order.get_total_cost|floatformat:2 }} рублей)</small>
+            <br><br>
+            <span style="font-weight: bold;">В том числе НДС: - (УСН)</span>
+        </td>
+    </tr>
+</table>
+
+<!-- ==================== ПОДПИСИ ==================== -->
+<table>
+    <!-- Верхняя строка подписей - от поставщика (ваша компания) -->
+    <tr>
+        <td style="border: none; width: 33%; vertical-align: top; padding: 8px 4px;">
+            <strong>Отпуск груза разрешил</strong><br><br>
+            Генеральный директор<br>
+            <small>(должность)</small><br><br>
+            __________________<br>
+            <small>(подпись)</small><br>
+            <strong>Волков А.С.</strong><br>
+            <small>(расшифровка подписи)</small>
+        </td>
+        <td style="border: none; width: 33%; vertical-align: top; padding: 8px 4px;">
+            <strong>Главный (старший) бухгалтер</strong><br><br>
+            __________________<br>
+            <small>(подпись)</small><br>
+            <strong>Волков А.С.</strong><br>
+            <small>(расшифровка подписи)</small>
+        </td>
+        <td style="border: none; width: 34%; vertical-align: top; padding: 8px 4px;">
+            <strong>Отпуск груза произвел</strong><br><br>
+            <small>(должность)</small><br><br>
+            __________________<br>
+            <small>(подпись)</small><br>
+            <small>(расшифровка подписи)</small>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" style="border: none; text-align: left; padding: 5px 4px;">
+            М.П. &nbsp;&nbsp;&nbsp; «____» _______________ 20___ г.
+        </td>
+    </tr>
+    
+    <!-- Нижняя строка подписей - от покупателя (физическое лицо) -->
+    <tr>
+        <td style="border: none; vertical-align: top; padding: 15px 4px 8px;">
+            <strong>По доверенности №</strong> ______<br>
+            от «____» _______________ 20___ г.,<br>
+            выданной __________________________________<br>
+            <small>(кем, кому)</small>
+            <br><br>
+            <small>Для физического лица доверенность не требуется</small>
+        </td>
+        <td style="border: none; vertical-align: top; padding: 15px 4px 8px;">
+            <strong>Груз принял</strong><br><br>
+            <strong>{{ order.get_full_name }}</strong><br>
+            <small>(ФИО покупателя)</small><br><br>
+            <small>(должность)</small><br><br>
+            __________________<br>
+            <small>(подпись)</small><br><br>
+            <small>(расшифровка подписи)</small>
+        </td>
+        <td style="border: none; vertical-align: top; padding: 15px 4px 8px;">
+            <strong>Груз получил грузополучатель</strong><br><br>
+            <strong>{{ order.get_full_name }}</strong><br>
+            <small>(ФИО)</small><br><br>
+            <small>(должность)</small><br><br>
+            __________________<br>
+            <small>(подпись)</small><br><br>
+            <small>(расшифровка подписи)</small>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" style="border: none; text-align: left; padding: 5px 4px;">
+            М.П. &nbsp;&nbsp;&nbsp; «____» _______________ 20___ г.
+        </td>
+    </tr>
+</table>
+
+<!-- ==================== КНОПКИ ==================== -->
+<div class="no-print">
+    <button id="printBtn" class="btn btn-print">🖨️ Печать</button>
+    <button id="adminBtn" class="btn btn-back">🏠 В админку</button>
+    <button id="backBtn" class="btn btn-back">↩ Назад</button>
+    <button id="closeBtn" class="btn btn-close">✖ Закрыть</button>
+</div>
+
+</div>
+
+<!-- ==================== SCRIPT ==================== -->
+{% script %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('printBtn').addEventListener('click', function() {
+            window.print();
+        });
+        document.getElementById('adminBtn').addEventListener('click', function() {
+            window.location.href = "{% url 'admin:index' %}";
+        });
+        document.getElementById('backBtn').addEventListener('click', function() {
+            window.history.back();
+        });
+        document.getElementById('closeBtn').addEventListener('click', function() {
+            try {
+                window.close();
+            } catch(e) {
+                window.location.href = "{% url 'admin:index' %}";
+            }
+        });
+    });
+</script>
+{% endscript %}
+
+</body>
+</html>

@@ -4,8 +4,16 @@ from django.views.generic import TemplateView
 from . import views
 
 urlpatterns = [
-    re_path(r'^create/$', views.order_create, name='order_create'),
-    re_path(r'^admin/order/(?P<order_id>\d+)/$', views.admin_order_detail,
-            name='admin_order_detail'),
-    path('fail/', TemplateView.as_view(template_name='fail.html')),
+    re_path(r"^create/$", views.order_create, name="order_create"),
+    re_path(
+        r"^admin/order/(?P<order_id>\d+)/$",
+        views.admin_order_detail,
+        name="admin_order_detail",
+    ),
+    path("fail/", TemplateView.as_view(template_name="fail.html")),
+    path(
+        "admin/print-order/<int:order_id>/",
+        views.print_order_torg12,
+        name="print_order_torg12",
+    ),
 ]

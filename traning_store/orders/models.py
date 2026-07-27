@@ -11,64 +11,97 @@ class Order(models.Model):
     last_name = models.CharField(max_length=50)
     email = models.EmailField()
     address = models.CharField(max_length=250)
-    address_pvz = models.CharField(max_length=250, default='-')
+    address_pvz = models.CharField(max_length=250, default="-")
     postal_code = models.CharField(max_length=20)
     city = models.CharField(max_length=100)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     paid = models.BooleanField(default=False)
-    coupon = models.ForeignKey(Coupon,
-                               related_name='orders',
-                               on_delete=models.CASCADE,
-                               null=True,
-                               blank=True)
-    discount = models.IntegerField(default=0,
-                                   validators=[MinValueValidator(0),
-                                               MaxValueValidator(100)])
-    delivery_sum = models.DecimalField(default=0,
-                                       max_digits=10,
-                                       decimal_places=2)
-    delivery_type = models.CharField(max_length=50, blank=True, null=True, verbose_name='Вид доставки')
-    track_number = models.CharField(max_length=50, blank=True, null=True, verbose_name='Трек-номер CDEK')
-    order_id = models.CharField(max_length=50, blank=True, null=True, verbose_name='ID заказа в CDEK')
-    delivery_status = models.CharField(max_length=100, blank=True, null=True, verbose_name='Статус доставки')
-    last_status_update = models.DateTimeField(auto_now=True, verbose_name='Последнее обновление статуса')
+    coupon = models.ForeignKey(
+        Coupon, related_name="orders", on_delete=models.CASCADE, null=True, blank=True
+    )
+    discount = models.IntegerField(
+        default=0, validators=[MinValueValidator(0), MaxValueValidator(100)]
+    )
+    delivery_sum = models.DecimalField(default=0, max_digits=10, decimal_places=2)
+    delivery_type = models.CharField(
+        max_length=50, blank=True, null=True, verbose_name="Вид доставки"
+    )
+    track_number = models.CharField(
+        max_length=50, blank=True, null=True, verbose_name="Трек-номер CDEK"
+    )
+    order_id = models.CharField(
+        max_length=50, blank=True, null=True, verbose_name="ID заказа в CDEK"
+    )
+    delivery_status = models.CharField(
+        max_length=100, blank=True, null=True, verbose_name="Статус доставки"
+    )
+    last_status_update = models.DateTimeField(
+        auto_now=True, verbose_name="Последнее обновление статуса"
+    )
 
     class Meta:
-        ordering = ('-created',)
-        verbose_name = 'Заказ'
-        verbose_name_plural = 'Заказы'
+        ordering = ("-created",)
+        verbose_name = "Заказ"
+        verbose_name_plural = "Заказы"
 
     def __str__(self):
-        return 'Order {}'.format(self.id)
+        return "Order {}".format(self.id)
 
     def get_total_cost(self):
         total_cost = sum(item.get_cost() for item in self.items.all())
-        return (total_cost - total_cost * (self.discount / Decimal('100'))) + self.delivery_sum
+        return (
+            total_cost - total_cost * (self.discount / Decimal("100"))
+        ) + self.delivery_sum
+
+    def get_total_quantity(self):
+        """Общее количество товаров"""
+        return sum(item.quantity for item in self.items.all())
+
+    def get_total_without_delivery(self):
+        """Сумма товаров без доставки и скидки"""
+        return sum(item.get_cost() for item in self.items.all())
+
+    def get_discount_amount(self):
+        """Сумма скидки"""
+        total = self.get_total_without_delivery()
+        return total * (self.discount / Decimal("100"))
+
+    def get_total_with_discount(self):
+        """Сумма со скидкой но без доставки"""
+        total = self.get_total_without_delivery()
+        return total - self.get_discount_amount()
+
+    def get_full_name(self):
+        """Полное имя покупателя"""
+        return f"{self.last_name} {self.first_name}".strip()
+
+    def get_delivery_address(self):
+        """Адрес доставки (если ПВЗ, то адрес ПВЗ)"""
+        if self.delivery_type and "PVZ" in self.delivery_type:
+            return self.address_pvz or self.address
+        return self.address
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, related_name='items',
-                              on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, related_name='order_items',
-                                on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, related_name="items", on_delete=models.CASCADE)
+    product = models.ForeignKey(
+        Product, related_name="order_items", on_delete=models.CASCADE
+    )
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField(default=1)
-    size = models.ForeignKey(Size,
-                             default='4',
-                             related_name='order_items',
-                             on_delete=models.CASCADE)
-    color = models.ForeignKey(Color,
-                              default='1',
-                              related_name='order_items',
-                              on_delete=models.CASCADE)
-    m_type = models.ForeignKey(Model_type,
-                               default='1',
-                               related_name='order_items',
-                               on_delete=models.CASCADE)
+    size = models.ForeignKey(
+        Size, default="4", related_name="order_items", on_delete=models.CASCADE
+    )
+    color = models.ForeignKey(
+        Color, default="1", related_name="order_items", on_delete=models.CASCADE
+    )
+    m_type = models.ForeignKey(
+        Model_type, default="1", related_name="order_items", on_delete=models.CASCADE
+    )
 
     def __str__(self):
-        return '{}'.format(self.id)
+        return "{}".format(self.id)
 
     def get_cost(self):
         return self.price * self.quantity

@@ -8,6 +8,8 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from dotenv import load_dotenv
 
+from traning_store.settings import DELIVERY_FIX_SUM
+
 from .forms import Delivery_Cdek_Form, DeliveryForm
 
 load_dotenv()
@@ -15,48 +17,89 @@ logger = logging.getLogger(__name__)
 
 
 def delivery_add(request):
-    ENDPOINT = 'https://b2b-authproxy.taxi.yandex.net/api/b2b/platform/pricing-calculator'
-    HEADERS = {'Authorization': os.getenv('HEADERS_Delivery')}
+    ENDPOINT = (
+        "https://b2b-authproxy.taxi.yandex.net/api/b2b/platform/pricing-calculator"
+    )
+    HEADERS = {"Authorization": os.getenv("HEADERS_Delivery")}
     form = DeliveryForm(request.GET or None)
     cart = Cart(request)
     if form.is_valid():
-        pvz_id = form.cleaned_data['pvz_id']
-        data = {'destination': {'platform_station_id': pvz_id}, 'source': {'platform_station_id': '01978d0f333b73d680d32e7d696090e3'},
-                'tariff': 'self_pickup', 'total_weight': 500, 'client_price': 0, 'payment_method': 'already_paid', 'places': [
-               {"physical_dims": {"weight_gross": 500, "dx": 40, "dy": 25, "dz": 7, "predefined_volume": 7000}}], 'total_assessed_price': 500}
+        pvz_id = form.cleaned_data["pvz_id"]
+        data = {
+            "destination": {"platform_station_id": pvz_id},
+            "source": {"platform_station_id": "01978d0f333b73d680d32e7d696090e3"},
+            "tariff": "self_pickup",
+            "total_weight": 500,
+            "client_price": 0,
+            "payment_method": "already_paid",
+            "places": [
+                {
+                    "physical_dims": {
+                        "weight_gross": 500,
+                        "dx": 40,
+                        "dy": 25,
+                        "dz": 7,
+                        "predefined_volume": 7000,
+                    }
+                }
+            ],
+            "total_assessed_price": 500,
+        }
         homework_statuses = requests.post(
             ENDPOINT,
             headers=HEADERS,
             json=data,
         )
-        cost_ = homework_statuses.json().get('pricing_total')
-        request.session['delivery_cost'] = homework_statuses.json().get('pricing_total').replace('RUB', "")
-        request.session['delivery_address'] = form.cleaned_data['address_pvz'] + ' (Яндекс)'
-        request.session['delivery_type'] = 'yandex'  # Тип доставки
-        if cart.get_total_price() >= Decimal('500'):
-            messages.success(request, 'Поздравляем! Доставка бесплатна!')
+        cost_ = homework_statuses.json().get("pricing_total")
+        request.session["delivery_cost"] = (
+            homework_statuses.json().get("pricing_total").replace("RUB", "")
+        )
+        request.session["delivery_address"] = form.cleaned_data["address_pvz"]
+        request.session["delivery_type"] = "yandex"  # Тип доставки
+        if cart.get_total_price() >= Decimal("500"):
+            messages.success(request, "Поздравляем! Доставка бесплатна!")
         else:
-            messages.info(request, f'Доставка:{cost_} ₽')
-        return redirect('cart:cart_detail')
+            messages.info(request, f"Доставка:{cost_} ₽")
+        return redirect("cart:cart_detail")
     else:
         form = DeliveryForm()
-    return render(request, 'delivery.html', {'form': form, })
+    return render(
+        request,
+        "delivery.html",
+        {
+            "form": form,
+        },
+    )
 
 
 def delivery_add_cdek(request):
     form = Delivery_Cdek_Form(request.GET or None)
     cart = Cart(request)
     if form.is_valid():
-        sum = form.cleaned_data['sum']
-        request.session['delivery_cost'] = sum
-        request.session['delivery_address'] = form.cleaned_data['address_pvz'] + ' (Сдек)'
-        request.session['delivery_type'] = 'cdek'  # Тип доставки
-        if cart.get_total_price() >= Decimal('500'):
-            messages.success(request, 'Поздравляем! Доставка бесплатна!')
+        sum = form.cleaned_data["sum"]
+        request.session["delivery_cost"] = sum
+        request.session["delivery_address"] = form.cleaned_data["address_pvz"]
+        request.session["delivery_type"] = "cdek"  # Тип доставки
+        if cart.get_total_price() >= Decimal("500"):
+            messages.success(request, "Поздравляем! Доставка бесплатна!")
         else:
-            messages.info(request, f'Доставка:{sum} ₽')
-        return redirect('cart:cart_detail')
+            messages.info(request, f"Доставка:{sum} ₽")
+        return redirect("cart:cart_detail")
         # return render(request, 'deliverys.html', {'cost': cost_not_price})
     else:
         form = Delivery_Cdek_Form()
-    return render(request, 'delivery_cdek.html', {'form': form, })
+    return render(
+        request,
+        "delivery_cdek.html",
+        {
+            "form": form,
+        },
+    )
+
+
+def delivery_add_courier(request):
+    Cart(request)
+    request.session["delivery_type"] = "home"
+    request.session["delivery_address"] = "-"
+    request.session["delivery_cost"] = DELIVERY_FIX_SUM
+    return redirect("cart:cart_detail")

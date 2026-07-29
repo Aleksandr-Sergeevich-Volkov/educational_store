@@ -173,22 +173,39 @@
         </div>
     </div>
 
-    <!-- Кнопки действий -->
     <div class="d-flex flex-column flex-md-row gap-3 mt-4">
-        <a href="{% url 'catalog:catalog' %}" class="btn btn-outline-primary">
-            ← Продолжить покупки
-        </a>
+    <a href="{% url 'catalog:catalog' %}" class="btn btn-outline-primary">
+        ← Продолжить покупки
+    </a>
+
+    <!-- Доставка курьером -->
+    <a href="{% url 'delivery:delivery_courier' %}" 
+       class="btn {% if request.session.delivery_type == 'home' %}btn-success{% else %}btn-outline-secondary{% endif %}">
+        🏠 Доставка курьером 450 руб
+        {% if request.session.delivery_type == 'home' %}
+            <span class="badge bg-light text-success">✓ Выбрано</span>
+        {% endif %}
+    </a>
+
+    <!-- Доставка в ПВЗ Яндекс -->
+    <a href="{% url 'delivery:delivery' %}" 
+       class="btn {% if request.session.delivery_type == 'yandex' %}btn-success{% else %}btn-outline-secondary{% endif %}">
+        🚚 Доставка в ПВЗ Яндекс
+        {% if request.session.delivery_type == 'yandex' %}
+            <span class="badge bg-light text-success">✓ Выбрано</span>
+        {% endif %}
+    </a>
+
+    <!-- Доставка в ПВЗ СДЭК -->
+    <a href="{% url 'delivery:delivery_cdek' %}" 
+       class="btn {% if request.session.delivery_type == 'cdek' %}btn-success{% else %}btn-outline-secondary{% endif %}">
+        📦 Доставка в ПВЗ СДЭК
+        {% if request.session.delivery_type == 'cdek' %}
+            <span class="badge bg-light text-success">✓ Выбрано</span>
+        {% endif %}
+    </a>
         
-        <div class="btn-group">
-            <a href="{% url 'delivery:delivery' %}" class="btn btn-outline-secondary">
-                🚚 Доставка Яндекс
-            </a>
-            <a href="{% url 'delivery:delivery_cdek' %}" class="btn btn-outline-secondary">
-                📦 Доставка Сдэк
-            </a>
-        </div>
-        
-        {% if request.session.delivery_address is not None %}
+        {% if request.session.delivery_address or request.session.delivery_cost is not None %}
         <a href="{% url 'orders:order_create' %}" class="btn btn-success btn-lg flex-grow-1">
             ✅ Перейти к оформлению заказа
         </a>

@@ -6,10 +6,11 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.db import transaction
 from django.shortcuts import get_object_or_404, render
 
-from traning_store.settings import ROBOKASSA_LOGIN, ROBOKASSA_PASSWORD_1
+from traning_store.settings import (DELIVERY_FIX_SUM, ROBOKASSA_LOGIN,
+                                    ROBOKASSA_PASSWORD_1)
 from traning_store.views import generate_payment_link
 
-from .forms import OrderCreateForm
+from .forms import OrderCreateForm, OrderCreateFormСourier
 from .models import Order, OrderItem
 from .tasks import order_created
 
@@ -163,6 +164,96 @@ def order_create(request):
     else:
         # Используем вспомогательную функцию
         form = OrderCreateForm(initial=_prepare_initial_form_data(request))
+
+    return render(
+        request,
+        "create.html",
+        {
+            "cart": cart,
+            "form": form,
+        },
+    )
+
+
+def order_create_courier(request):
+    cart = Cart(request)
+
+    # Проверка пустой корзины
+    if not cart:
+        return render(
+            request,
+            "create.html",
+            {
+                "form": OrderCreateFormСourier(),
+                "cart": cart,
+                "error": "Ваша корзина пуста",
+            },
+        )
+
+    if request.method == "POST":
+        form = OrderCreateFormСourier(request.POST)
+        if form.is_valid():
+            try:
+                with transaction.atomic():
+                    order = form.save(commit=False)
+
+                    if cart.coupon:
+                        order.coupon = cart.coupon
+                        order.discount = cart.coupon.discount
+                    request.session["delivery_cost"] = DELIVERY_FIX_SUM
+                    request.session["delivery_address"] = form.cleaned_data["address"]
+                    order.delivery_sum = request.session["delivery_cost"]
+                    delivery_sum = DELIVERY_FIX_SUM
+                    print(delivery_sum)
+                    order.save()
+
+                    # Создаем OrderItems с оптимизацией
+                    _create_order_items(order, cart)
+
+                    logger.info(
+                        f"Создан заказ #{order.id} на сумму {order.get_total_cost()}"
+                    )
+
+            except Exception as e:
+                logger.error(f"Ошибка создания заказа: {str(e)}")
+                return render(
+                    request,
+                    "create.html",
+                    {
+                        "cart": cart,
+                        "form": form,
+                        "error": "Произошла ошибка при создании заказа",
+                        "delivery_sum": delivery_sum,  # <-- ПЕРЕДАЕМ В ШАБЛОН
+                    },
+                )
+
+            # Вне транзакции
+            cart.clear()
+            order_created.delay(order.id)
+
+            pay_link = generate_payment_link(
+                merchant_login=ROBOKASSA_LOGIN,
+                merchant_password_1=ROBOKASSA_PASSWORD_1,
+                cost=order.get_total_cost(),
+                number=order.id,
+                description="kompressionnyj_trikotazh",
+                is_test=0,
+                robokassa_payment_url="https://auth.robokassa.ru/Merchant/Index.aspx",
+                email=order.email,
+            )
+
+            return render(
+                request,
+                "created.html",
+                {
+                    "order": order,
+                    "pay_link": pay_link,
+                },
+            )
+
+    else:
+        # Используем вспомогательную функцию
+        form = OrderCreateFormСourier()
 
     return render(
         request,

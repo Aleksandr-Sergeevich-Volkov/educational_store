@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
+
 import os
 import sys
 from pathlib import Path
@@ -26,14 +27,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4#xre@vo3c)grje)5kj3rrwt6@1=' \
-             '8dvyc!@6m-6nzl!kkb9dvm'
-CSRF_TRUSTED_ORIGINS = ['https://4505485-volkovaleksandr.twc1.net', 'https://kompressionnye-chulki24.ru']
+SECRET_KEY = "django-insecure-4#xre@vo3c)grje)5kj3rrwt6@1=8dvyc!@6m-6nzl!kkb9dvm"
+CSRF_TRUSTED_ORIGINS = [
+    "https://4505485-volkovaleksandr.twc1.net",
+    "https://kompressionnye-chulki24.ru",
+]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '0.0.0.0', '62.113.36.63', '4505485-volkovaleksandr.twc1.net', 'kompressionnye-chulki24.ru', 'www.kompressionnye-chulki24.ru']
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "0.0.0.0",
+    "62.113.36.63",
+    "4505485-volkovaleksandr.twc1.net",
+    "kompressionnye-chulki24.ru",
+    "www.kompressionnye-chulki24.ru",
+]
 import socket
 
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
@@ -43,79 +54,79 @@ INTERNAL_IPS += [ip[: ip.rfind(".")] + ".1" for ip in ips]
 # INTERNAL_IPS = ['127.0.0.1', 'localhost']
 
 # Динамический URL для админки
-ADMIN_URL = os.environ.get('DJANGO_ADMIN_URL', 'admin/')
+ADMIN_URL = os.environ.get("DJANGO_ADMIN_URL", "admin/")
 
 # Настройки аутентификации
 # LOGIN_URL = reverse_lazy('custom_login')
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'catalog.apps.CatalogConfig',
-    'homepage.apps.HomepageConfig',
-    'cart.apps.CartConfig',
-    'orders.apps.OrderConfig',
-    'coupons.apps.CouponsConfig',
-    'delivery.apps.DeliveryConfig',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'six',
-    'django_filters',
-    'django.contrib.staticfiles',
-    'debug_toolbar',
-    'django_bootstrap5',
-    'api',
-    'rest_framework',
-    'max_bot',
-    'csp',
+    "catalog.apps.CatalogConfig",
+    "homepage.apps.HomepageConfig",
+    "cart.apps.CartConfig",
+    "orders.apps.OrderConfig",
+    "coupons.apps.CouponsConfig",
+    "delivery.apps.DeliveryConfig",
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "six",
+    "django_filters",
+    "django.contrib.staticfiles",
+    "debug_toolbar",
+    "django_bootstrap5",
+    "api",
+    "rest_framework",
+    "max_bot",
+    "csp",
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'csp.middleware.CSPMiddleware',
-    'catalog.middleware.CleanURLMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "csp.middleware.CSPMiddleware",
+    "catalog.middleware.CleanURLMiddleware",
 ]
 
-ROOT_URLCONF = 'traning_store.urls'
-TEMPLATES_DIR = BASE_DIR / 'templates'
+ROOT_URLCONF = "traning_store.urls"
+TEMPLATES_DIR = BASE_DIR / "templates"
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATES_DIR],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'cart.context_processors.cart',
-                'cart.context_processors.user_context_processor',
-                'cart.context_processors.currency',
-                'cart.context_processors.weather',
-                'homepage.context_processors.city_context',
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [TEMPLATES_DIR],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "cart.context_processors.cart",
+                "cart.context_processors.user_context_processor",
+                "cart.context_processors.currency",
+                "cart.context_processors.weather",
+                "homepage.context_processors.city_context",
             ],
-            'libraries': {   # <-- ВОТ ЭТОТ СЛОВАРЬ НУЖНО ДОБАВИТЬ
-                'csp': 'csp.templatetags.csp',
-            }
+            "libraries": {  # <-- ВОТ ЭТОТ СЛОВАРЬ НУЖНО ДОБАВИТЬ
+                "csp": "csp.templatetags.csp",
+            },
         },
     },
 ]
 
-WSGI_APPLICATION = 'traning_store.wsgi.application'
+WSGI_APPLICATION = "traning_store.wsgi.application"
 
 
 # Database
@@ -124,13 +135,13 @@ WSGI_APPLICATION = 'traning_store.wsgi.application'
 DATABASES = {
     # Меняем настройку Django: теперь для работы будет использоваться
     # бэкенд postgresql
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB', ''),
-        'USER': os.getenv('POSTGRES_USER', ''),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', ''),
-        'HOST': os.getenv('DB_HOST', ''),
-        'PORT': os.getenv('DB_PORT', 5432)
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("POSTGRES_DB", ""),
+        "USER": os.getenv("POSTGRES_USER", ""),
+        "PASSWORD": os.getenv("POSTGRES_PASSWORD", ""),
+        "HOST": os.getenv("DB_HOST", ""),
+        "PORT": os.getenv("DB_PORT", 5432),
     }
 }
 
@@ -140,25 +151,25 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
 
 # Internationalization
 
-LANGUAGE_CODE = 'ru-RU'
+LANGUAGE_CODE = "ru-RU"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -169,67 +180,68 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'collected_static'
-LOGIN_REDIRECT_URL = '/orders/create/'
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "collected_static"
+LOGIN_REDIRECT_URL = "/orders/create/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-MEDIA_ROOT = BASE_DIR / 'media'
-MEDIA_URL = '/media/'
-CART_SESSION_ID = 'cart'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DELIVERY_FIX_SUM = 450
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/media/"
+CART_SESSION_ID = "cart"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.mail.ru"
 EMAIL_PORT = 465
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 EMAIL_USE_SSL = True
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
-CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//'
-CELERY_RESULT_BACKEND = 'rpc://'
+CELERY_BROKER_URL = "amqp://guest:guest@rabbitmq:5672//"
+CELERY_RESULT_BACKEND = "rpc://"
 CELERY_BROKER_POOL_LIMIT = None
 
-ROBOKASSA_LOGIN = 'kompressionnye_chulki.ru'
-ROBOKASSA_PASSWORD_1 = os.getenv('ROBOKASSA_PASSWORD_1')
-ROBOKASSA_PASSWORD_2 = os.getenv('ROBOKASSA_PASSWORD_2')
+ROBOKASSA_LOGIN = "kompressionnye_chulki.ru"
+ROBOKASSA_PASSWORD_1 = os.getenv("ROBOKASSA_PASSWORD_1")
+ROBOKASSA_PASSWORD_2 = os.getenv("ROBOKASSA_PASSWORD_2")
 ROBOKASSA_TEST_MODE = True
-ROBOKASSA_PASSWORD_U1 = os.getenv('ROBOKASSA_PASSWORD_U1')
-ROBOKASSA_PASSWORD_U2 = os.getenv('ROBOKASSA_PASSWORD_U2')
+ROBOKASSA_PASSWORD_U1 = os.getenv("ROBOKASSA_PASSWORD_U1")
+ROBOKASSA_PASSWORD_U2 = os.getenv("ROBOKASSA_PASSWORD_U2")
 
 # Для начала используйте простой кэш в памяти
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "unique-snowflake",
     }
 }
 
 # Время кэширования геолокации (секунды)
 GEOLOCATION_CACHE_TIMEOUT = 86400  # 24 часа
 
-CDEK_CLIENT_ID = os.getenv('CDEK_CLIENT_ID')
-CDEK_CLIENT_SECRET = os.getenv('CDEK_CLIENT_SECRET')
-MAX_BOT_TOKEN = os.getenv('MAX_BOT_TOKEN', '')
+CDEK_CLIENT_ID = os.getenv("CDEK_CLIENT_ID")
+CDEK_CLIENT_SECRET = os.getenv("CDEK_CLIENT_SECRET")
+MAX_BOT_TOKEN = os.getenv("MAX_BOT_TOKEN", "")
 
-REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
-REDIS_PORT = int(os.getenv('REDIS_PORT', 6379))
-REDIS_DB = int(os.getenv('REDIS_DB', 0))
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
+REDIS_DB = int(os.getenv("REDIS_DB", 0))
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'stream': sys.stdout,
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "stream": sys.stdout,
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'INFO',
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
     },
 }
 
@@ -238,8 +250,8 @@ LOGGING = {
 CSRF_COOKIE_HTTPONLY = True  # Защита от XSS → кражи токена
 
 # Другие рекомендованные настройки
-CSRF_COOKIE_SECURE = True    # Только HTTPS (для production)
-CSRF_COOKIE_SAMESITE = 'Lax'  # Защита от CSRF
+CSRF_COOKIE_SECURE = True  # Только HTTPS (для production)
+CSRF_COOKIE_SAMESITE = "Lax"  # Защита от CSRF
 
 SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
@@ -248,7 +260,6 @@ from csp.constants import NONCE, SELF
 CONTENT_SECURITY_POLICY = {
     "DIRECTIVES": {
         "default-src": [SELF],
-        
         # Скрипты
         "script-src": [
             SELF,
@@ -256,142 +267,131 @@ CONTENT_SECURITY_POLICY = {
             "https://mc.yandex.ru",
             "https://code.jquery.com",  # ← добавить
             "https://ndd-widget.landpro.site",
-            "https://api-maps.yandex.ru",      # ← добавить
+            "https://api-maps.yandex.ru",  # ← добавить
             "https://suggest-maps.yandex.ru",  # ← для подсказок (suggest_apikey)
             "https://yastatic.net",
             "https://widget-pvz.dostavka.yandex.net",
             "https://cdn.jsdelivr.net",
             "https://log.api-maps.yandex.ru",
-            "'unsafe-eval'",                      # КРИТИЧНО для движка карт!
-            NONCE
+            "'unsafe-eval'",  # КРИТИЧНО для движка карт!
+            NONCE,
         ],
         "script-src-elem": [
             SELF,
             "https://cdn.jsdelivr.net",
             "https://mc.yandex.ru",
             "https://ndd-widget.landpro.site",
-            "https://api-maps.yandex.ru",      # ← добавить
+            "https://api-maps.yandex.ru",  # ← добавить
             "https://suggest-maps.yandex.ru",  # ← для подсказок (suggest_apikey)
             "https://yastatic.net",
             "https://widget-pvz.dostavka.yandex.net",
             "https://cdn.jsdelivr.net",
             "https://log.api-maps.yandex.ru",
             "'unsafe-eval'",  # ← ДОБАВИТЬ (критично для Яндекс.Карт)
-            NONCE
+            NONCE,
         ],
-        
         # Стили
         "style-src": [
             SELF,
             "https://cdn.jsdelivr.net",
             "https://cdnjs.cloudflare.com",
-            "https://api-maps.yandex.ru", 
-            "blob:",                               # КРИТИЧНО! Стили карты грузятся через blob
-            "'unsafe-inline'"
+            "https://api-maps.yandex.ru",
+            "blob:",  # КРИТИЧНО! Стили карты грузятся через blob
+            "'unsafe-inline'",
         ],
-        #"style-src-elem": [
+        # "style-src-elem": [
         #    SELF,
         #    "https://cdn.jsdelivr.net",
         #    "https://cdnjs.cloudflare.com",
         #    NONCE,
         #    "'unsafe-inline'",  # для Яндекс.Метрики
-        #], 
-        
+        # ],
         # Изображения
-        "img-src": [
-            SELF,
-            "data:",
-            "https:",
-            "http:"
-        ],
-        
+        "img-src": [SELF, "data:", "https:", "http:"],
         # Подключения (fetch, source maps)
         "connect-src": [
             SELF,
             "https://cdn.jsdelivr.net",
             "https://core-renderer-tiles.maps.yandex.net",
-            "https://api.cdek.ru",           # ← для API CDEK
-            "https://services.cdek.ru",       # ← для сервисов CDEK
+            "https://api.cdek.ru",  # ← для API CDEK
+            "https://services.cdek.ru",  # ← для сервисов CDEK
             "https://mc.yandex.ru",
             "https://mc.yandex.md",
             "https://cdnjs.cloudflare.com",
             "wss://mc.yandex.ru",  # ← добавить эту строку
-            "ws://mc.yandex.ru",   # ← на всякий случай (если использует ws)
+            "ws://mc.yandex.ru",  # ← на всякий случай (если использует ws)
             "https://pay.mts.ru",
             "https://pay.yandex.ru",
-            "https://api-maps.yandex.ru",      # ← добавить
+            "https://api-maps.yandex.ru",  # ← добавить
             "https://suggest-maps.yandex.ru",  # ← добавить
             "https://widget-pvz.dostavka.yandex.net",
             "https://log.api-maps.yandex.ru",
             "https://auth.robokassa.ru",
             "https://cdn.jsdelivr.net",
-            "https://*.maps.yandex.net",          # Для загрузки тайлов карты
-            "https://*.yandex.ru",        # ← ДОБАВИТЬ (все поддомены)
-            "https://*.yandex.net",       # ← ДОБАВИТЬ
-            "wss://*.yandex.ru",   # ← ДОБАВИТЬ
+            "https://*.maps.yandex.net",  # Для загрузки тайлов карты
+            "https://*.yandex.ru",  # ← ДОБАВИТЬ (все поддомены)
+            "https://*.yandex.net",  # ← ДОБАВИТЬ
+            "wss://*.yandex.ru",  # ← ДОБАВИТЬ
             "wss://*.yandex.net",  # ← ДОБАВИТЬ
         ],
-        
         # Шрифты
         "font-src": [
             SELF,
             "data:",
             "https://cdn.jsdelivr.net",
             "https://cdnjs.cloudflare.com",
-            "https://yandex.md", 
+            "https://yandex.md",
             "https://mc.yandex.ru",
             "https://mc.yandex.md",
             "https://yastatic.net",  # статические ресурсы Яндекса
-            "https://api-maps.yandex.ru",      # ← добавить
+            "https://api-maps.yandex.ru",  # ← добавить
             "https://suggest-maps.yandex.ru",  # ← добавить
             "https://widget-pvz.dostavka.yandex.net",
             "https://auth.robokassa.ru",
-            "https://fonts.gstatic.com"
+            "https://fonts.gstatic.com",
         ],
-        #"font-src": ["'self'", "data:", "https:", "http:"],
-        "frame-src": [SELF,
-                        "https://robokassa.com",
-                        "https://auth.robokassa.ru",
-                        "https://yandex.ru",
-                        "https://mc.yandex.md",
-                        "https://mc.yandex.ru/",
-                        "https://cdn.jsdelivr.net",
-                        "https://api-maps.yandex.ru",          # Нужно для некоторых элементов карты
-    ],  # для iframe (платежные системы)
-      "worker-src": [
+        # "font-src": ["'self'", "data:", "https:", "http:"],
+        "frame-src": [
             SELF,
-            "blob:",                               # Для web-воркеров карты
+            "https://robokassa.com",
+            "https://auth.robokassa.ru",
+            "https://yandex.ru",
+            "https://mc.yandex.md",
+            "https://mc.yandex.ru/",
+            "https://cdn.jsdelivr.net",
+            "https://api-maps.yandex.ru",  # Нужно для некоторых элементов карты
+        ],  # для iframe (платежные системы)
+        "worker-src": [
+            SELF,
+            "blob:",  # Для web-воркеров карты
             "https://api-maps.yandex.ru",
             "https://yastatic.net",
         ],
-
         "object-src": [SELF],
         "base-uri": [SELF],
     },
 }
 
 SPAM_PROTECTION = {
-    'ENABLED': True,
-    
+    "ENABLED": True,
     # Только российские почтовые сервисы
-    'ALLOWED_EMAIL_DOMAINS': [
-        'mail.ru',
-        'yandex.ru',
-        'yandex.ua',
-        'yandex.by',
-        'yandex.kz',
-        'rambler.ru',
-        'list.ru',
-        'bk.ru',
-        'inbox.ru',
-        'mail.ua',
-        'mail.by',
-        'mail.kz',
+    "ALLOWED_EMAIL_DOMAINS": [
+        "mail.ru",
+        "yandex.ru",
+        "yandex.ua",
+        "yandex.by",
+        "yandex.kz",
+        "rambler.ru",
+        "list.ru",
+        "bk.ru",
+        "inbox.ru",
+        "mail.ua",
+        "mail.by",
+        "mail.kz",
     ],
-    
-    'BANNED_USERNAME_PATTERNS': [
-        r'^[a-z]{10,}$',
-        r'^[a-z]+\d+[a-z]+$',
-        r'^[a-z]{5,}\d{4,}$',
+    "BANNED_USERNAME_PATTERNS": [
+        r"^[a-z]{10,}$",
+        r"^[a-z]+\d+[a-z]+$",
+        r"^[a-z]{5,}\d{4,}$",
     ],
 }

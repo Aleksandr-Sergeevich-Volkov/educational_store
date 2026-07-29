@@ -16,7 +16,7 @@ def order_created(order_id):
     order_items = OrderItem.objects.filter(order=order)
 
     # Используем ваш домен
-    domain = 'kompressionnye-chulki24.ru'
+    domain = "kompressionnye-chulki24.ru"
 
     # Формируем относительный URL для деталей заказа
     order_detail_path = f"/profile/orders/{order_id}/"
@@ -29,7 +29,8 @@ def order_created(order_id):
 
     # Кодируем next параметр
     from urllib.parse import quote
-    encoded_next = quote(order_detail_path, safe='')
+
+    encoded_next = quote(order_detail_path, safe="")
 
     # Формируем финальную ссылку
     login_with_redirect_url = f"{login_url}?next={encoded_next}"
@@ -40,9 +41,19 @@ def order_created(order_id):
     # Собираем информацию о товарах
     items_info = []
     for item in order_items:
-        size_name = item.size.name if item.size and hasattr(item.size, 'name') else 'не указан'
-        color_name = item.color.name if item.color and hasattr(item.color, 'name') else 'не указан'
-        m_type_name = item.m_type.name if item.m_type and hasattr(item.m_type, 'name') else 'не указан'
+        size_name = (
+            item.size.name if item.size and hasattr(item.size, "name") else "не указан"
+        )
+        color_name = (
+            item.color.name
+            if item.color and hasattr(item.color, "name")
+            else "не указан"
+        )
+        m_type_name = (
+            item.m_type.name
+            if item.m_type and hasattr(item.m_type, "name")
+            else "не указан"
+        )
 
         items_info.append(
             f"- {item.product.name}, "
@@ -56,19 +67,19 @@ def order_created(order_id):
 
     items_text = "\n".join(items_info)
 
-    subject = f'Заказ №{order_id} успешно оформлен'
-    message = f'''Уважаемый(ая) {order.first_name},
+    subject = f"Заказ №{order_id} успешно оформлен"
+    message = f"""Уважаемый(ая) {order.first_name},
 
 Ваш заказ успешно сформирован.
 
 ИНФОРМАЦИЯ О ЗАКАЗЕ:
 ----------------------------------------
 Номер заказа: {order.id}
-Дата заказа: {order.created.strftime('%d.%m.%Y H:%M')}
+Дата заказа: {order.created.strftime("%d.%m.%Y H:%M")}
 Сумма товаров: {float(order.get_total_cost() - order.delivery_sum)} руб.
 Доставка: {order.delivery_sum} руб.
 Общая сумма: {float(order.get_total_cost())} руб.
-Адрес пункта выдачи: {order.address_pvz}
+Адрес пункта выдачи:/Адрес доставки:{order.address_pvz}/{order.address}
 Статус оплаты: {"Оплачен" if order.paid else "Ожидает оплаты"}
 ----------------------------------------
 
@@ -90,12 +101,12 @@ def order_created(order_id):
 
 Спасибо за ваш заказ!
 С уважением, команда {domain}
-'''
+"""
 
     return send_mail(
         subject,
         message,
         EMAIL_HOST_USER,
-        [order.email, 'volkov_aleksandr_sergeevich@mail.ru'],
-        fail_silently=False
+        [order.email, "volkov_aleksandr_sergeevich@mail.ru"],
+        fail_silently=False,
     )

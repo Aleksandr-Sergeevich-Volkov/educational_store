@@ -286,7 +286,7 @@
         {% for item in order.items.all %}
         <tr>
             <td class="text-center">{{ forloop.counter }}</td>                    <!-- 1 -->
-            <td>{{ item.product.name }}</td>                                      <!-- 2 -->
+            <td>{{ item.product.name }},размер {{ item.size.name }},цвет {{ item.color.name }},модель {{ item.m_type.name }}</td>                                      <!-- 2 -->
             <td class="text-center">-</td>                                        <!-- 3 -->
             <td class="text-center">шт.</td>                                      <!-- 4 -->
             <td class="text-center">-</td>                                        <!-- 5 -->
@@ -413,6 +413,7 @@
             <small>(должность)</small><br><br>
             __________________<br>
             <small>(подпись)</small><br>
+            <strong>Волков А.С.</strong><br>
             <small>(расшифровка подписи)</small>
         </td>
     </tr>

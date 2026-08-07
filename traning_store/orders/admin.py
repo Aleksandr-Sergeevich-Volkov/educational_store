@@ -90,6 +90,7 @@ class OrderAdmin(admin.ModelAdmin):
         "id",
         "get_full_name",
         "email",
+        "phone",
         "get_delivery_address_short",
         "get_total_cost_display",
         "paid",
@@ -116,6 +117,7 @@ class OrderAdmin(admin.ModelAdmin):
                 "fields": (
                     ("first_name", "last_name"),
                     ("email"),
+                    "phone",
                     "address",
                     "address_pvz",
                     ("postal_code", "city"),

@@ -34,7 +34,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
@@ -85,6 +85,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "max_bot",
     "csp",
+    "favorites.apps.FavoritesConfig",
 ]
 
 MIDDLEWARE = [
@@ -118,6 +119,7 @@ TEMPLATES = [
                 "cart.context_processors.currency",
                 "cart.context_processors.weather",
                 "homepage.context_processors.city_context",
+                "favorites.context_processors.favorites_context",
             ],
             "libraries": {  # <-- ВОТ ЭТОТ СЛОВАРЬ НУЖНО ДОБАВИТЬ
                 "csp": "csp.templatetags.csp",

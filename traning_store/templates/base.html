@@ -89,55 +89,77 @@
                 </div>
             </div>
 
-            <!-- ПРАВАЯ ЧАСТЬ: Корзина, пользователь, валюта -->
-            <div class="col-md-6">
-                <div class="d-flex align-items-center justify-content-end">
-                    <!-- Корзина -->
-                    <div class="me-3">
-                        {% with total_items=cart|length %}
-                            {% if total_items > 0 %}
-                                <a href="{% url 'cart:cart_detail' %}" class="btn cart-btn btn-sm position-relative">
-                                    🛒 Корзина
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        {{ total_items }}
-                                    </span>
-                                </a>
-                            {% else %}
-                                <span class="cart-empty">🛒 Корзина пуста</span>
-                            {% endif %}
-                        {% endwith %}
-                    </div>
-                    
-                    <!-- Пользователь -->
-                    <div class="me-3">
-                        {% if user.is_authenticated %}
-                            <div class="dropdown">
-                                <button class="btn user-btn btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                    👤 {{ user.username }}
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="{% url 'catalog:profile' user.username %}">Мои заказы</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
-                                </ul>
-                            </div>
-                        {% else %}
-                            <div class="btn-group">
-                                <a href="{% url 'login' %}" class="btn login-btn btn-sm">Войти</a>
-                                <a href="{% url 'registration' %}" class="btn register-btn btn-sm">Регистрация</a>
-                            </div>
-                        {% endif %}
-                    </div>
-                    
-                    <!-- Валюта и погода -->
-                    <div class="text-end">
-                        <div class="currency-weather">
-                            <div>💱 <strong>{{USD}}</strong> / <strong>{{EUR}}</strong> / <strong>{{CNY}}</strong></div>
-                            <div>🌡 <strong>{{city_temp}}</strong></div>
-                        </div>
-                    </div>
+<!-- ПРАВАЯ ЧАСТЬ: Корзина, пользователь, валюта -->
+<div class="col-md-6">
+    <div class="d-flex align-items-center justify-content-end gap-3">
+        <!-- Избранное -->
+        <a href="{% url 'catalog:catalog' %}?favorites=true" 
+           class="nav-link position-relative p-0">
+            <span style="font-size: 1.2rem;">💛</span>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill" 
+                  style="background: linear-gradient(135deg, #2600ff, #00ccff); color: #fff; font-size: 0.65rem; padding: 0.25rem 0.5rem; border: 1px solid #FFD700;">
+                {{ favorites_count }}
+            </span>
+        </a>
+        
+        <!-- Корзина -->
+        <div>
+            {% with total_items=cart|length %}
+                {% if total_items > 0 %}
+                    <a href="{% url 'cart:cart_detail' %}" 
+                       class="btn btn-primary btn-sm position-relative" 
+                       style="height: 31px; display: inline-flex; align-items: center; white-space: nowrap;">
+                        🛒 Корзина
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" 
+                              style="font-size: 0.6rem; padding: 0.2rem 0.4rem; margin-top: -2px;">
+                            {{ total_items }}
+                        </span>
+                    </a>
+                {% else %}
+                    <a href="{% url 'cart:cart_detail' %}" 
+                       class="btn btn-outline-secondary btn-sm" 
+                       style="height: 31px; display: inline-flex; align-items: center; white-space: nowrap;">
+                        🛒 Корзина пуста
+                    </a>
+                {% endif %}
+            {% endwith %}
+        </div>
+        
+        <!-- Пользователь -->
+        <div>
+            {% if user.is_authenticated %}
+                <div class="dropdown">
+                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" 
+                            style="height: 31px; display: inline-flex; align-items: center;">
+                        👤 {{ user.username }}
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'catalog:profile' user.username %}">Мои заказы</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
+                    </ul>
                 </div>
+            {% else %}
+                <div class="btn-group">
+                    <a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm" style="height: 31px; display: inline-flex; align-items: center;">
+                        Войти
+                    </a>
+                    <a href="{% url 'registration' %}" class="btn btn-primary btn-sm" style="height: 31px; display: inline-flex; align-items: center;">
+                        Регистрация
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Валюта и погода -->
+        <div class="text-end">
+            <div class="currency-weather" style="font-size: 0.8rem; line-height: 1.4;">
+                <div>💱 <strong>{{USD}}</strong> / <strong>{{EUR}}</strong> / <strong>{{CNY}}</strong></div>
+                <div>🌡 <strong>{{city_temp}}</strong></div>
             </div>
+        </div>
+    </div>
+</div>
         </div>
     </div>
 </header>

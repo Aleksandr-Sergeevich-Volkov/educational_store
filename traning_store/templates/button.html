@@ -1,0 +1,19 @@
+<!-- favorites/templates/favorites/partials/button.html -->
+{% load favorites_tags %}
+
+<a href="{% url 'favorites:toggle' product.id %}" 
+   class="favorite-link btn btn-outline-{{ size|default:'md' }} 
+          {% if is_favorite %}active bg-white text-warning {% endif %}"
+   title="{% if is_favorite %}Удалить из избранного{% else %}Добавить в избранное{% endif %}">
+    <i class="{% if is_favorite %}fas fa-heart{% else %}far fa-heart{% endif %}"></i>
+    
+    {% if show_text %}
+        <span class="ms-1 d-none d-sm-inline">
+            {% if is_favorite %}
+                В избранном
+            {% else %}
+                В избранное
+            {% endif %}
+        </span>
+    {% endif %}
+</a>

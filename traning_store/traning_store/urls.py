@@ -9,18 +9,17 @@ from . import views
 from .views import SignUpView
 
 urlpatterns = [
-    re_path(r'^coupons/', include(('coupons.urls', 'coupons'),
-                                  namespace='coupons')),
-    re_path(r'^orders/', include(('orders.urls', 'orders'),
-                                 namespace='orders')),
-    re_path(r'^cart/', include(('cart.urls', 'cart'), namespace='cart')),
-    path('', include('homepage.urls')),
-    path('', include('catalog.urls')),
-    path('api/', include('api.urls')),  # API приложения
-    path('bot/', include('max_bot.urls')),  # ← все маршруты бота
-    path('', include('delivery.urls')),
-    path('auth/login/', views.login_view, name='login'),
-    path('logout/', views.logout_view, name='logout'),
+    re_path(r"^coupons/", include(("coupons.urls", "coupons"), namespace="coupons")),
+    re_path(r"^orders/", include(("orders.urls", "orders"), namespace="orders")),
+    re_path(r"^cart/", include(("cart.urls", "cart"), namespace="cart")),
+    path("", include("homepage.urls")),
+    path("", include("catalog.urls")),
+    path("favorites/", include("favorites.urls", namespace="favorites")),
+    path("api/", include("api.urls")),  # API приложения
+    path("bot/", include("max_bot.urls")),  # ← все маршруты бота
+    path("", include("delivery.urls")),
+    path("auth/login/", views.login_view, name="login"),
+    path("logout/", views.logout_view, name="logout"),
     # path(
     #    'auth/registration/',
     #    CreateView.as_view(
@@ -31,26 +30,26 @@ urlpatterns = [
     #    name='registration',
     # ), """
     path(
-        'auth/registration/',
+        "auth/registration/",
         SignUpView.as_view(),  # ← теперь используем свою view
-        name='registration',
+        name="registration",
     ),
-    path('fail/', TemplateView.as_view(template_name='fail.html')),
-    path('robokassa/result/', views.result_payment),
-    path('robokassa/success/', views.check_success_payment),
+    path("fail/", TemplateView.as_view(template_name="fail.html")),
+    path("robokassa/result/", views.result_payment),
+    path("robokassa/success/", views.check_success_payment),
     # КАСТОМНЫЙ ВХОД ТОЛЬКО ДЛЯ АДМИНКИ
-    path(f'{settings.ADMIN_URL}login/', views.admin_login, name='admin_login'),
+    path(f"{settings.ADMIN_URL}login/", views.admin_login, name="admin_login"),
     path(settings.ADMIN_URL, admin.site.urls),
-    path('', views.home, name='home'),
+    path("", views.home, name="home"),
 ]
 # Подключаем дебаг-панель:
 if settings.DEBUG:
     #  Добавить к списку urlpatterns список адресов
     #  из приложения debug_toolbar:
     urlpatterns += [
-        path('__debug__/', include(debug_toolbar.urls)),
+        path("__debug__/", include(debug_toolbar.urls)),
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-handler404 = 'homepage.views.handler404'    # myproject.views
-handler403 = 'homepage.views.handler403'
-handler500 = 'homepage.views.handler500'
+handler404 = "homepage.views.handler404"  # myproject.views
+handler403 = "homepage.views.handler403"
+handler500 = "homepage.views.handler500"

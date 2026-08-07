@@ -2,7 +2,8 @@ from decimal import Decimal
 
 from catalog.models import Color, Model_type, Product, Size
 from coupons.models import Coupon
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import (MaxValueValidator, MinValueValidator,
+                                    RegexValidator)
 from django.db import models
 
 
@@ -10,6 +11,17 @@ class Order(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField()
+    phone = models.CharField(
+        max_length=20,
+        validators=[
+            RegexValidator(
+                regex=r"^\+7\d{10}$",
+                message="Телефон должен быть в формате +7XXXXXXXXXX (10 цифр после +7)",
+            )
+        ],
+        help_text="Введите номер в формате: +7XXXXXXXXXX",
+        verbose_name="Телефон",
+    )
     address = models.CharField(max_length=250)
     address_pvz = models.CharField(max_length=250, default="-")
     postal_code = models.CharField(max_length=20)

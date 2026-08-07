@@ -13,6 +13,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView
 from django_filters.views import FilterView
 from dotenv import load_dotenv
+from favorites.utils import SessionFavorites  # ← Добавляем импорт
 from orders.models import Order, OrderItem
 
 from traning_store.settings import (CDEK_CLIENT_ID, CDEK_CLIENT_SECRET,
@@ -31,19 +32,32 @@ load_dotenv()
 
 class ProductListView(FilterView):
     model = Product
-    ordering = 'id'
+    ordering = "id"
     paginate_by = 4
-    template_name = 'product_list.html'
+    template_name = "product_list.html"
     filterset_class = ProductFilter
-    slug_url_kwarg = 'slug'
+    slug_url_kwarg = "slug"
 
     def get_queryset(self):
         queryset = super().get_queryset()
         queryset = queryset.filter(available=True)
-        return queryset.prefetch_related(models.Prefetch(
-            'images',
-            queryset=Gallery.objects.filter(main=True),
-            to_attr='main_images'))
+        # ✅ Добавляем фильтр по избранному
+        show_favorites = self.request.GET.get("favorites") == "true"
+        if show_favorites:
+            session_fav = SessionFavorites(self.request)
+            favorite_ids = session_fav.get_ids()
+            if favorite_ids:
+                queryset = queryset.filter(id__in=favorite_ids)
+            else:
+                # Если нет избранных - возвращаем пустой queryset
+                return queryset.none()
+        return queryset.prefetch_related(
+            models.Prefetch(
+                "images",
+                queryset=Gallery.objects.filter(main=True),
+                to_attr="main_images",
+            )
+        )
 
     def get_seo_context(self):
         """Генерирует SEO-данные в зависимости от примененных фильтров"""
@@ -54,6 +68,16 @@ class ProductListView(FilterView):
         base_description = "Широкий выбор компрессионного трикотажа: гольфы, чулки, колготки. Все классы компрессии. Доставка по РФ."
         base_h1 = "Компрессионный трикотаж"
         base_keywords = "компрессионный трикотаж, купить компрессионные чулки, гольфы, колготки, варикоз, медицинский трикотаж"
+        # ✅ Проверяем, показываем ли избранное
+        show_favorites = self.request.GET.get("favorites") == "true"
+        if show_favorites:
+            context["seo_title"] = "Избранные товары - Компрессионный трикотаж"
+            context["seo_h1"] = "💛 Избранные товары"
+            context["seo_description"] = (
+                "Ваши избранные товары из каталога компрессионного трикотажа"
+            )
+            context["seo_keywords"] = "избранное, компрессионный трикотаж"
+            return context
 
         # Проверяем, применены ли фильтры
         filters_applied = False
@@ -63,43 +87,43 @@ class ProductListView(FilterView):
         keywords_parts = set()
 
         # Анализируем параметры фильтрации
-        if hasattr(self, 'filterset') and self.filterset:
+        if hasattr(self, "filterset") and self.filterset:
             filters = self.filterset.data
             # Бренд
-            if filters.get('brand'):
+            if filters.get("brand"):
                 try:
-                    brand = Brend.objects.get(id=filters['brand'])
+                    brand = Brend.objects.get(id=filters["brand"])
                     filter_parts.append(f"бренда {brand.name}")
                     keywords_parts.add(brand.name.lower())
                     filters_applied = True
                 except Brend.DoesNotExist:
                     pass
             # Назначение
-            if filters.get('Appointment'):
+            if filters.get("Appointment"):
                 try:
-                    appointment = Appointment.objects.get(id=filters['Appointment'])
+                    appointment = Appointment.objects.get(id=filters["Appointment"])
                     keywords_parts.add(appointment.name.lower())
                 except Appointment.DoesNotExist:
                     pass
 
             # Класс компрессии
-            if filters.get('Class_compress'):
-                class_compress = filters['Class_compress']
+            if filters.get("Class_compress"):
+                class_compress = filters["Class_compress"]
                 filter_parts.append(f"{class_compress} класс компрессии")
                 keywords_parts.add(f"{class_compress} класс компрессии")
                 filters_applied = True
 
             # Тип изделия
-            if filters.get('Type_product'):
-                type_product = Type_product.objects.get(id=filters['Type_product'])
+            if filters.get("Type_product"):
+                type_product = Type_product.objects.get(id=filters["Type_product"])
                 filter_parts.append(f"{type_product}")
                 keywords_parts.add(type_product.name.lower())
                 filters_applied = True
 
             # Пол
-            if filters.get('Male'):
-                male = filters['Male']
-                gender_map = {'1': 'мужские', '2': 'женские', 'U': 'унисекс'}
+            if filters.get("Male"):
+                male = filters["Male"]
+                gender_map = {"1": "мужские", "2": "женские", "U": "унисекс"}
                 gender_text = gender_map.get(male, male)
                 filter_parts.append(gender_text)
                 keywords_parts.add(gender_text)
@@ -108,23 +132,27 @@ class ProductListView(FilterView):
         # Формируем SEO-данные в зависимости от фильтров
         if filters_applied:
             filter_text = " ".join(filter_parts)
-            context['seo_title'] = f"Компрессионный трикотаж {filter_text} - купить в Москве"
-            context['seo_h1'] = f"Компрессионный трикотаж {filter_text}"
-            context['seo_description'] = f"Качественный компрессионный трикотаж {filter_text}. Большой выбор, низкие цены, доставка по России."
-            context['seo_keywords'] = base_keywords
+            context["seo_title"] = (
+                f"Компрессионный трикотаж {filter_text} - купить в Москве"
+            )
+            context["seo_h1"] = f"Компрессионный трикотаж {filter_text}"
+            context["seo_description"] = (
+                f"Качественный компрессионный трикотаж {filter_text}. Большой выбор, низкие цены, доставка по России."
+            )
+            context["seo_keywords"] = base_keywords
             # Генерируем ключевые слова на основе фильтров
             if keywords_parts:
                 base_keywords_list = base_keywords.split(", ")
                 all_keywords = base_keywords_list + list(keywords_parts)
-                context['seo_keywords'] = ", ".join(all_keywords)
+                context["seo_keywords"] = ", ".join(all_keywords)
             else:
-                context['seo_keywords'] = base_keywords
+                context["seo_keywords"] = base_keywords
         else:
             # SEO для главной страницы каталога
-            context['seo_title'] = base_title
-            context['seo_h1'] = base_h1
-            context['seo_description'] = base_description
-            context['seo_keywords'] = base_keywords
+            context["seo_title"] = base_title
+            context["seo_h1"] = base_h1
+            context["seo_description"] = base_description
+            context["seo_keywords"] = base_keywords
 
         return context
 
@@ -137,37 +165,44 @@ class ProductListView(FilterView):
         # 2. cleaned_query_string для пагинации
         cleaned_get = {}
         for key, value in self.request.GET.items():
-            if value and str(value).strip() and key != 'page':
+            if value and str(value).strip() and key != "page":
                 cleaned_get[key] = value
 
-        context['cleaned_query_string'] = urlencode(cleaned_get) if cleaned_get else ''
+        context["cleaned_query_string"] = urlencode(cleaned_get) if cleaned_get else ""
 
         # 3. Счетчик товаров
         filtered_qs = self.filterset.qs
-        context['prod_count'] = filtered_qs.aggregate(Count('id'))
+        context["prod_count"] = filtered_qs.aggregate(Count("id"))
+        # ✅ 4. Добавляем данные избранного
+        session_fav = SessionFavorites(self.request)
+        context["favorites_count"] = session_fav.count()
+        context["favorite_ids"] = session_fav.get_ids()
+        context["show_favorites"] = self.request.GET.get("favorites") == "true"
 
         return context
 
 
 class ProductDetailView(DetailView):
     model = Product
-    template_name = 'product_detail.html'
-    slug_url_kwarg = 'slug'
+    template_name = "product_detail.html"
+    slug_url_kwarg = "slug"
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
         # Увеличиваем счетчик просмотров
         obj.views += 1
-        obj.save(update_fields=['views'])
+        obj.save(update_fields=["views"])
         return obj
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['images_m'] = Gallery.objects.filter(product=self.object).order_by('-main', 'id')
-        context['colors'] = Color.objects.all()
-        context['sizes'] = Size.objects.all()
-        context['model_t'] = Model_type.objects.all()
-        context['cart_product_form'] = CartAddProductForm(product=self.object)
+        context["images_m"] = Gallery.objects.filter(product=self.object).order_by(
+            "-main", "id"
+        )
+        context["colors"] = Color.objects.all()
+        context["sizes"] = Size.objects.all()
+        context["model_t"] = Model_type.objects.all()
+        context["cart_product_form"] = CartAddProductForm(product=self.object)
         return context
 
 
@@ -176,16 +211,18 @@ def user_profile(request, username):
     if request.user != profile:
         # Можно сделать редирект на свой профиль или показать ошибку
         from django.http import HttpResponseForbidden
+
         return HttpResponseForbidden("Вы можете просматривать только свой профиль")
-    orders = Order.objects.filter(email=request.user.email).order_by('-id')
+    orders = Order.objects.filter(email=request.user.email).order_by("-id")
     paginator = Paginator(orders, 7)
-    page_number = request.GET.get('page')
+    page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
-    context = {'orders': page_obj,
-               'profile': profile,
-               'page_obj': page_obj,
-               }
-    return render(request, 'blog/profile.html', context)
+    context = {
+        "orders": page_obj,
+        "profile": profile,
+        "page_obj": page_obj,
+    }
+    return render(request, "blog/profile.html", context)
 
 
 def get_cdek_order_status(track_number):
@@ -195,42 +232,41 @@ def get_cdek_order_status(track_number):
     try:
         # Авторизация в API CDEK (получение токена)
         auth_data = {
-            'grant_type': 'client_credentials',
-            'client_id': CDEK_CLIENT_ID,
-            'client_secret': CDEK_CLIENT_SECRET
+            "grant_type": "client_credentials",
+            "client_id": CDEK_CLIENT_ID,
+            "client_secret": CDEK_CLIENT_SECRET,
         }
         auth_response = requests.post(
-            'https://api.cdek.ru/v2/oauth/token',
-            data=auth_data
+            "https://api.cdek.ru/v2/oauth/token", data=auth_data
         )
         if auth_response.status_code == 200:
-            access_token = auth_response.json().get('access_token')
+            access_token = auth_response.json().get("access_token")
 
             # Запрос информации о заказе
             headers = {
-                'Authorization': f'Bearer {access_token}',
-                'Content-Type': 'application/json'
+                "Authorization": f"Bearer {access_token}",
+                "Content-Type": "application/json",
             }
 
             # Получение информации о заказе по трек-номеру
             order_response = requests.get(
-                f'https://api.cdek.ru/v2/orders?cdek_number={track_number}',
-                headers=headers
+                f"https://api.cdek.ru/v2/orders?cdek_number={track_number}",
+                headers=headers,
             )
 
             if order_response.status_code == 200:
                 data = order_response.json()
                 # Ваш реальный ответ содержит 'entity'
-                if 'entity' in data:
-                    entity = data['entity']
+                if "entity" in data:
+                    entity = data["entity"]
 
                     # Статусы находятся в entity.statuses
-                    if 'statuses' in entity and entity['statuses']:
-                        statuses = entity['statuses']
+                    if "statuses" in entity and entity["statuses"]:
+                        statuses = entity["statuses"]
                         # Первый статус - самый новый
                         latest_status = statuses[0]
                         # Преобразуем дату из строки в datetime объект
-                        date_str = latest_status.get('date_time')
+                        date_str = latest_status.get("date_time")
                         date_obj = None
                         if date_str:
                             try:
@@ -240,13 +276,13 @@ def get_cdek_order_status(track_number):
                                 date_obj = date_str
                         # ПРАВИЛЬНЫЕ ПОЛЯ ИЗ ВАШЕГО ОТВЕТА
                         return {
-                            'code': latest_status.get('code'),           # 'CREATED'
-                            'description': latest_status.get('name'),    # 'Создан'
-                            'date': date_obj,      # '2026-03-18T09:41:46+0000'
-                            'track_number': track_number,
-                            'sharing_url': f'https://www.cdek.ru/ru/tracking?order_id={track_number}',
-                            'all_statuses': statuses,
-                            'service': 'cdek'
+                            "code": latest_status.get("code"),  # 'CREATED'
+                            "description": latest_status.get("name"),  # 'Создан'
+                            "date": date_obj,  # '2026-03-18T09:41:46+0000'
+                            "track_number": track_number,
+                            "sharing_url": f"https://www.cdek.ru/ru/tracking?order_id={track_number}",
+                            "all_statuses": statuses,
+                            "service": "cdek",
                         }
 
     except Exception as e:
@@ -259,17 +295,18 @@ def get_cdek_order_status(track_number):
 def get_yandex_order_status(track_number):
     """Получение статуса от Яндекс.Доставки"""
     try:
-        params = {
-            'request_id': track_number,
-            'slim': True
-        }
-        HEADERS = {'Authorization': os.getenv('HEADERS_Delivery')}
-        response = requests.get('https://b2b-authproxy.taxi.yandex.net/api/b2b/platform/request/info', params=params, headers=HEADERS)
+        params = {"request_id": track_number, "slim": True}
+        HEADERS = {"Authorization": os.getenv("HEADERS_Delivery")}
+        response = requests.get(
+            "https://b2b-authproxy.taxi.yandex.net/api/b2b/platform/request/info",
+            params=params,
+            headers=HEADERS,
+        )
 
         if response.status_code == 200:
             data = response.json()
-            state = data.get('state', {})
-            date_str = state.get('timestamp')
+            state = data.get("state", {})
+            date_str = state.get("timestamp")
             date_obj = None
             if date_str:
                 try:
@@ -278,13 +315,15 @@ def get_yandex_order_status(track_number):
                     print(f"Yandex error: {e}")
                     date_obj = date_str
             return {
-                'code': state.get('status'),                    # 'SORTING_CENTER_LOADED'
-                'description': state.get('description'),        # 'Создан в сортировочном центре'
-                'date': date_obj,                               # '2026-03-20T19:51:12.000000Z'
-                'track_number': data.get('request_id'),         # трек-номер
-                'sharing_url': data.get('sharing_url'),         # ссылка для отслеживания
-                'all_statuses': None,                           # Яндекс не возвращает историю в этом запросе
-                'service': 'yandex'
+                "code": state.get("status"),  # 'SORTING_CENTER_LOADED'
+                "description": state.get(
+                    "description"
+                ),  # 'Создан в сортировочном центре'
+                "date": date_obj,  # '2026-03-20T19:51:12.000000Z'
+                "track_number": data.get("request_id"),  # трек-номер
+                "sharing_url": data.get("sharing_url"),  # ссылка для отслеживания
+                "all_statuses": None,  # Яндекс не возвращает историю в этом запросе
+                "service": "yandex",
             }
     except Exception as e:
         print(f"Yandex error: {e}")
@@ -296,41 +335,53 @@ def user_order_detail(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     # Получаем статус CDEK если есть трек-номер
     delivery_status = None
-    if order.track_number and order.delivery_type == 'cdek':  # предполагаем, что у модели Order есть поле cdek_track_number
+    if (
+        order.track_number and order.delivery_type == "cdek"
+    ):  # предполагаем, что у модели Order есть поле cdek_track_number
         delivery_status = get_cdek_order_status(order.track_number)
-    elif order.delivery_type == 'yandex':
+    elif order.delivery_type == "yandex":
         delivery_status = get_yandex_order_status(order.track_number)
-    if order.paid is False and request.user == profile and request.user.is_authenticated:
-        pay_link = generate_payment_link(merchant_login=ROBOKASSA_LOGIN,
-                                         merchant_password_1=ROBOKASSA_PASSWORD_1,
-                                         cost=order.get_total_cost(),
-                                         number=order.id,
-                                         description='kompressionnyj_trikotazh',
-                                         is_test=0,
-                                         robokassa_payment_url='https://auth.robokassa.ru/Merchant/Index.aspx',
-                                         email=order.email,)
+    if (
+        order.paid is False
+        and request.user == profile
+        and request.user.is_authenticated
+    ):
+        pay_link = generate_payment_link(
+            merchant_login=ROBOKASSA_LOGIN,
+            merchant_password_1=ROBOKASSA_PASSWORD_1,
+            cost=order.get_total_cost(),
+            number=order.id,
+            description="kompressionnyj_trikotazh",
+            is_test=0,
+            robokassa_payment_url="https://auth.robokassa.ru/Merchant/Index.aspx",
+            email=order.email,
+        )
         order_item = OrderItem.objects.filter(order=order_id)
-        context = {'order_item': order_item,
-                   'pay_link': pay_link,
-                   'order': order,
-                   'delivery_status': delivery_status,  # добавляем статус досавки в контекст
-                   }
-        return render(request, 'blog/user_orders_detail.html', context)
+        context = {
+            "order_item": order_item,
+            "pay_link": pay_link,
+            "order": order,
+            "delivery_status": delivery_status,  # добавляем статус досавки в контекст
+        }
+        return render(request, "blog/user_orders_detail.html", context)
     else:
         order_item = OrderItem.objects.filter(order=order_id)
-        context = {'order_item': order_item,
-                   'order': order,
-                   'status': delivery_status,  # добавляем статус CDEK в контекст
-                   }
-        return render(request, 'blog/user_orders_detail.html', context)
+        context = {
+            "order_item": order_item,
+            "order": order,
+            "status": delivery_status,  # добавляем статус CDEK в контекст
+        }
+        return render(request, "blog/user_orders_detail.html", context)
 
 
 @login_required
 def profile(request, username):
     instance = User.objects.get(username=username)
     form = UserForm(request.POST or None, instance=instance)
-    context = {'form': form, }
+    context = {
+        "form": form,
+    }
     if not form.is_valid():
-        return render(request, 'blog/user.html', context)
+        return render(request, "blog/user.html", context)
     form.save()
-    return redirect('catalog:profile', username=request.user)
+    return redirect("catalog:profile", username=request.user)

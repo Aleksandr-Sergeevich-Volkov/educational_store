@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load catalog_tags %}
+{% load favorites_tags %}
 {% load filter_helpers %}
 {% load django_bootstrap5 %}
 {% load csp %}
@@ -43,14 +44,30 @@
     {% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <!-- Заголовок и счетчик -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <h1 class="h4 mb-3">{{ seo_h1 }}</h1>
-            <div class="text-muted">Всего товаров: {{ prod_count.id__count }}</div>
+<!-- templates/product_list.html (после <h1>) -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h4 mb-0">{{ seo_h1 }}</h1>
+            
+            <div class="btn-group">
+                <a href="{% url 'catalog:catalog' %}" 
+                   class="btn btn-sm {% if not show_favorites %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+                    Все товары
+                </a>
+                <a href="{% url 'catalog:catalog' %}?favorites=true" 
+                   class="btn btn-sm {% if show_favorites %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+                    💛 Избранное
+                    <span class="badge {% if show_favorites %}bg-success text-primary{% else %}bg-success{% endif %}">
+                        {{ favorites_count }}
+                    </span>
+                </a>
+            </div>
         </div>
+        <div class="text-muted">Всего товаров: {{ prod_count.id__count }}</div>
     </div>
+</div>
+
 
     <!-- Активные фильтры с кнопками удаления -->
     {% if request.GET %}
@@ -224,20 +241,32 @@ document.querySelectorAll('.filter-form select').forEach(select => {
                        class="btn btn-outline-primary mt-2 w-100">
                         Подробнее
                     </a>
+                   <!-- Кнопка избранного (без JS) -->
+    <div class="flex-shrink-0">
+        {% favorite_button product size='sm' show_text=False %}
+    </div>
                 </div>
             </div>
         </div>
         
         {% empty %}
         <div class="col-12">
-            <div class="alert alert-info text-center">
-                <h5>Товары не найдены</h5>
-                <p class="mb-0">Попробуйте изменить параметры фильтрации</p>
-            </div>
-        </div>
+    <div class="alert alert-info text-center">
+        {% if show_favorites %}
+            <h5>💛 У вас пока нет избранных товаров</h5>
+            <p class="mb-0">Добавляйте товары в избранное, чтобы не потерять их</p>
+            <a href="{% url 'catalog:catalog' %}" class="btn btn-primary mt-3">
+                Перейти в каталог
+            </a>
+        {% else %}
+            <h5>Товары не найдены</h5>
+            <p class="mb-0">Попробуйте изменить параметры фильтрации</p>
+        {% endif %}
+    </div>
+</div>
         {% endfor %}
     </div>
-
+    
     <!-- Пагинация (внешний файл) -->
     {% if page_obj.has_other_pages %}
     <div class="row mt-4">

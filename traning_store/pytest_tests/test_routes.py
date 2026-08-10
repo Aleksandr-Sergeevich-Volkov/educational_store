@@ -1,20 +1,9 @@
 from http import HTTPStatus
 
 from cart.cart import Cart
-from catalog.models import (
-    Appointment,
-    Brend,
-    Class_compress,
-    Color,
-    Country,
-    Gallery,
-    Male,
-    Model_type,
-    Product,
-    Size,
-    Soсk,
-    Type_product,
-)
+from catalog.models import (Appointment, Brend, Class_compress, Color, Country,
+                            Gallery, Male, Model_type, Product, Size, Soсk,
+                            Type_product)
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.test import RequestFactory, TestCase
 from django.urls import reverse

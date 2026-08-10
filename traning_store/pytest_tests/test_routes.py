@@ -1,9 +1,20 @@
 from http import HTTPStatus
 
 from cart.cart import Cart
-from catalog.models import (Appointment, Brend, Class_compress, Color, Country,
-                            Gallery, Male, Model_type, Product, Size, Soсk,
-                            Type_product)
+from catalog.models import (
+    Appointment,
+    Brend,
+    Class_compress,
+    Color,
+    Country,
+    Gallery,
+    Male,
+    Model_type,
+    Product,
+    Size,
+    Soсk,
+    Type_product,
+)
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
@@ -181,7 +192,7 @@ class TestRoutes(TestCase):
                 "first_name": "Имя",
                 "last_name": "Фамилия",
                 "email": "volkovaleksandrsergeevich@yandex.ru",
-                "phone": "+79999067174877",
+                "phone": "+79997174877",
                 "address": "Адрес",
                 "address_pvz": "Адрес ПВЗ",
                 "postal_code": "Индекс",

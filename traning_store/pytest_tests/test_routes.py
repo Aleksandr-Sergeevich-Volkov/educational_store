@@ -21,17 +21,21 @@ class TestRoutes(TestCase):
         self.male = Male.objects.create(name="Test Male")
         self.class_compress = Class_compress.objects.create(name="2 class")
         self.sock = Soсk.objects.create(name="Closed")
-        self.type_product = Type_product.objects.create(name="Chulki", description="Компрессионный трикотаж")
+        self.type_product = Type_product.objects.create(
+            name="Chulki", description="Компрессионный трикотаж"
+        )
         # Создаем несколько цветов для ManyToMany
-        self.color_black = Color.objects.create(name="black", color='000000')
-        self.color_white = Color.objects.create(name="white", color='FFFFFF')
-        self.color_red = Color.objects.create(name="red", color='FF0000')
+        self.color_black = Color.objects.create(name="black", color="000000")
+        self.color_white = Color.objects.create(name="white", color="FFFFFF")
+        self.color_red = Color.objects.create(name="red", color="FF0000")
         self.city1 = City.objects.create(name="Москва", is_popular=True)
         self.city2 = City.objects.create(name="Санкт-Петербург", is_popular=True)
 
         # Создание размеров и типов моделей
         self.size = Size.objects.create(name="4", brand=self.brend)
-        self.model_type = Model_type.objects.create(name="Стандартная", brand=self.brend)
+        self.model_type = Model_type.objects.create(
+            name="Стандартная", brand=self.brend
+        )
 
         # Создание тестовых продуктов
         self.product1 = Product.objects.create(
@@ -47,7 +51,7 @@ class TestRoutes(TestCase):
             Size=self.size,
             stock=1,
             price=5999.00,
-            available=True
+            available=True,
         )
         # Добавляем один цвет
         self.product1.Color.add(self.color_black)
@@ -66,7 +70,7 @@ class TestRoutes(TestCase):
             Type_product=self.type_product,
             Model_type=self.model_type,
             stock=1,
-            available=True
+            available=True,
         )
         # Добавляем несколько цветов
         self.product2.Color.add(self.color_black, self.color_white, self.color_red)
@@ -85,7 +89,7 @@ class TestRoutes(TestCase):
             Size=self.size,
             price=7999.00,
             stock=1,
-            available=True
+            available=True,
         )
         # Добавляем несколько цветов
         self.product3.Color.add(self.color_black, self.color_white, self.color_red)
@@ -103,17 +107,21 @@ class TestRoutes(TestCase):
             Size=self.size,
             price=8999.00,
             stock=1,
-            available=True
+            available=True,
         )
         # Добавляем несколько цветов
         self.product4.Color.add(self.color_black, self.color_white, self.color_red)
 
         # Создание галереи для продукта
-        self.gallery1 = Gallery.objects.create(product=self.product1, type_product=self.type_product, image="test1.jpg")
-        self.gallery2 = Gallery.objects.create(product=self.product1, type_product=self.type_product, image="test2.jpg")
+        self.gallery1 = Gallery.objects.create(
+            product=self.product1, type_product=self.type_product, image="test1.jpg"
+        )
+        self.gallery2 = Gallery.objects.create(
+            product=self.product1, type_product=self.type_product, image="test2.jpg"
+        )
 
         # Настройка запроса и корзины
-        self.request = RequestFactory().get('/')
+        self.request = RequestFactory().get("/")
         middleware = SessionMiddleware(get_response=lambda r: None)
         middleware.process_request(self.request)
         self.request.session.save()
@@ -126,21 +134,23 @@ class TestRoutes(TestCase):
         cart = Cart(self.request)
         images_m = Gallery.objects.filter(product=self.product1)
 
-        cart.add(product=self.product1,
-                 quantity=1,
-                 size=self.size,
-                 color=self.color_black,
-                 m_type=self.model_type,
-                 images_m=images_m)
+        cart.add(
+            product=self.product1,
+            quantity=1,
+            size=self.size,
+            color=self.color_black,
+            m_type=self.model_type,
+            images_m=images_m,
+        )
 
         expected_cart_item = {
-            'product_id': '1',
-            'color': self.color_black.name,
-            'images_m': str(images_m),  # Преобразуем QuerySet в строку для сравнения
-            'm_type': 'Стандартная',
-            'price': '5999.0',
-            'quantity': 1,
-            'size': '4'
+            "product_id": "1",
+            "color": self.color_black.name,
+            "images_m": str(images_m),  # Преобразуем QuerySet в строку для сравнения
+            "m_type": "Стандартная",
+            "price": "5999.0",
+            "quantity": 1,
+            "size": "4",
         }
         product = self.product1
         size = self.size
@@ -152,27 +162,32 @@ class TestRoutes(TestCase):
     def test_del_cart(self):
         cart = Cart(self.request)
         images_m = Gallery.objects.filter(product=self.product1)
-        cart.add(product=self.product1,
-                 quantity=1,
-                 size=self.size,
-                 color=self.color_black,
-                 m_type=self.model_type,
-                 images_m=images_m)
+        cart.add(
+            product=self.product1,
+            quantity=1,
+            size=self.size,
+            color=self.color_black,
+            m_type=self.model_type,
+            images_m=images_m,
+        )
         cart.remove(self.product1, self.size, self.color_black, self.model_type)
         self.assertEqual(cart.cart, {})
 
     def test_create_order(self):
         initial_order_count = Order.objects.count()
         initial_order_item_count = OrderItem.objects.count()
-        form = OrderCreateForm(data={
-            'first_name': 'Имя',
-            'last_name': 'Фамилия',
-            'email': 'volkovaleksandrsergeevich@yandex.ru',
-            'address': 'Адрес',
-            'address_pvz': 'Адрес ПВЗ',
-            'postal_code': 'Индекс',
-            'city': 'Город'
-        })
+        form = OrderCreateForm(
+            data={
+                "first_name": "Имя",
+                "last_name": "Фамилия",
+                "email": "volkovaleksandrsergeevich@yandex.ru",
+                "phone": "+79999067174877",
+                "address": "Адрес",
+                "address_pvz": "Адрес ПВЗ",
+                "postal_code": "Индекс",
+                "city": "Город",
+            }
+        )
 
         self.assertTrue(form.is_valid())
         order = form.save()
@@ -183,12 +198,12 @@ class TestRoutes(TestCase):
             quantity=1,
             size=self.size,
             color=self.color_black,
-            m_type=self.model_type
+            m_type=self.model_type,
         )
         self.assertEqual(Order.objects.count(), initial_order_count + 1)
         self.assertEqual(OrderItem.objects.count(), initial_order_item_count + 1)
 
     def test_catalog_detail(self):
-        url = reverse('catalog:detail', kwargs={'slug': self.product1.slug})
+        url = reverse("catalog:detail", kwargs={"slug": self.product1.slug})
         response = self.client.get(url)
         self.assertEqual(response.status_code, HTTPStatus.OK)

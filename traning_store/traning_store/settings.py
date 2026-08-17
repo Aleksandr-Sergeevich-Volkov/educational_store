@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     "max_bot",
     "csp",
     "favorites.apps.FavoritesConfig",
+    "turnstile",
 ]
 
 MIDDLEWARE = [
@@ -275,6 +276,8 @@ CONTENT_SECURITY_POLICY = {
             "https://widget-pvz.dostavka.yandex.net",
             "https://cdn.jsdelivr.net",
             "https://log.api-maps.yandex.ru",
+            "https://challenges.cloudflare.com/turnstile/v0/api.js",
+            "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/",
             "'unsafe-eval'",  # КРИТИЧНО для движка карт!
             NONCE,
         ],
@@ -289,6 +292,7 @@ CONTENT_SECURITY_POLICY = {
             "https://widget-pvz.dostavka.yandex.net",
             "https://cdn.jsdelivr.net",
             "https://log.api-maps.yandex.ru",
+            "https://challenges.cloudflare.com/turnstile/v0/api.js",
             "'unsafe-eval'",  # ← ДОБАВИТЬ (критично для Яндекс.Карт)
             NONCE,
         ],
@@ -298,6 +302,7 @@ CONTENT_SECURITY_POLICY = {
             "https://cdn.jsdelivr.net",
             "https://cdnjs.cloudflare.com",
             "https://api-maps.yandex.ru",
+            "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/",
             "blob:",  # КРИТИЧНО! Стили карты грузятся через blob
             "'unsafe-inline'",
         ],
@@ -335,6 +340,7 @@ CONTENT_SECURITY_POLICY = {
             "https://*.yandex.net",  # ← ДОБАВИТЬ
             "wss://*.yandex.ru",  # ← ДОБАВИТЬ
             "wss://*.yandex.net",  # ← ДОБАВИТЬ
+            "https://challenges.cloudflare.com/",
         ],
         # Шрифты
         "font-src": [
@@ -351,6 +357,7 @@ CONTENT_SECURITY_POLICY = {
             "https://widget-pvz.dostavka.yandex.net",
             "https://auth.robokassa.ru",
             "https://fonts.gstatic.com",
+            "https://challenges.cloudflare.com/turnstile/v0/api.js",
         ],
         # "font-src": ["'self'", "data:", "https:", "http:"],
         "frame-src": [
@@ -362,6 +369,7 @@ CONTENT_SECURITY_POLICY = {
             "https://mc.yandex.ru/",
             "https://cdn.jsdelivr.net",
             "https://api-maps.yandex.ru",  # Нужно для некоторых элементов карты
+            "https://challenges.cloudflare.com/",
         ],  # для iframe (платежные системы)
         "worker-src": [
             SELF,
@@ -397,3 +405,6 @@ SPAM_PROTECTION = {
         r"^[a-z]{5,}\d{4,}$",
     ],
 }
+
+TURNSTILE_SITE_KEY = os.getenv("TURNSTILE_SITE_KEY")
+TURNSTILE_SECRET_KEY = os.getenv("TURNSTILE_SECRET_KEY")

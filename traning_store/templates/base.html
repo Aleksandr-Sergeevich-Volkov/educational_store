@@ -33,6 +33,26 @@
 {% endscript %}
 <noscript><div><img src="https://mc.yandex.ru/watch/104157420" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
+ <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<div class="cf-turnstile" 
+     data-sitekey="0x4AAAAAAESdCsOsYv22-7vx" 
+     data-callback="turnstileCallback"
+     data-appearance="interaction-only">
+</div>
+{% script %}
+<script>
+    function onTurnstileSuccess(token) {
+        console.log('✅ Turnstile пройден!');
+        // Разблокируем кнопку отправки
+        document.getElementById('submit-btn').disabled = false;
+    }
+    
+    function onTurnstileError(error) {
+        console.log('❌ Ошибка Turnstile:', error);
+        document.getElementById('submit-btn').disabled = true;
+    }
+</script>
+{% endscript %}
 </head>
 <body class="d-flex flex-column min-vh-100">
     <!-- Верхняя панель с яркими цветами -->

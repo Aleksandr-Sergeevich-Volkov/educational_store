@@ -4,7 +4,7 @@
     <div class="d-flex justify-content-between align-items-center">
       <h5 class="card-title mb-0">Заказ #{{ order.id }}</h5>
       <span class="badge {% if order.paid %}bg-success{% else %}bg-warning{% endif %}">
-        {% if order.paid %}Оплачен{% else %}Ожидает оплаты{% endif %}
+        {% if order.paid %}Оплачен{% elif order.status == 'canceled' %}Отменен{% else %}Ожидает оплаты{% endif %}
       </span>
     </div>
     <small class="text-muted">от {{ order.created|date:"d.m.Y H:i" }}</small>

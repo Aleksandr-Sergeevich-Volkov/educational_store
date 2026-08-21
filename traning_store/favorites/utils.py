@@ -9,10 +9,10 @@ class SessionFavorites:
         if favorites is None:
             # ✅ СОЗДАЕМ СЕССИЮ КАК В КОРЗИНЕ!
             favorites = self.session[self.SESSION_KEY] = []
-            print("🔥 Session created/favorites initialized in __init__")
+            # print("🔥 Session created/favorites initialized in __init__")
 
         self.favorites = favorites
-        print(f"📦 Favorites: {self.favorites}")
+        # print(f"📦 Favorites: {self.favorites}")
 
     def toggle(self, product_id):
         product_id = str(product_id)

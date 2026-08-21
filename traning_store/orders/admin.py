@@ -89,6 +89,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = [
         "id",
         "get_full_name",
+        "status",
         "email",
         "phone",
         "get_delivery_address_short",
@@ -99,8 +100,8 @@ class OrderAdmin(admin.ModelAdmin):
         "track_number",
         "get_status",
     ]
-    list_filter = ["paid", "created", "updated", "delivery_type"]
-    search_fields = ["id", "first_name", "last_name", "email", "track_number"]
+    list_filter = ["paid", "created", "updated", "status", "delivery_type"]
+    search_fields = ["id", "first_name", "last_name", "email", "status", "track_number"]
     inlines = [OrderItemInline]
     actions = [export_to_csv, print_torg12_action]  # Только прямой рендер
     readonly_fields = [
@@ -130,6 +131,7 @@ class OrderAdmin(admin.ModelAdmin):
                 "fields": (
                     "paid",
                     "get_total_cost_display",
+                    "status",
                     ("coupon", "discount"),
                     "delivery_sum",
                 )

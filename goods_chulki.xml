@@ -1,0 +1,787 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<yml_catalog date="2026-08-17T18:12+03:00">
+ <shop>
+  <name>Компрессионные_чулки24</name>
+  <company>ООО "Консалтинговый центр "Алгоритм"</company>
+  <url>https://kompressionnye-chulki24.ru</url>
+  <version>1.0</version>
+  <email>volkovaleksandrsergeevich@yandex.ru</email>
+  <currencies>
+   <currency id="RUB" rate="1"></currency>
+  </currencies>
+  <categories>
+   <category id="1">Компрессионный трикотаж</category>
+   <category id="10" parentId="1">Компрессионные чулки</category>
+   <category id="20" parentId="1">Компрессионные гольфы</category>
+   <category id="30" parentId="1">Компрессионные колготки</category>
+  </categories>
+  <offers>
+   
+   <offer id="45" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/golfy-kompressionnye-luomma-idealista-1-klass-kompressii/</url>
+    <price>3398</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>20</categoryId>
+    <name>Гольфы компрессионные Luomma Idealista ID-200 1 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_172450.png</picture>
+    <description>
+    <![CDATA[<p>Купить Гольфы компрессионные Luomma Idealista 1 класс компрессии LUOMMA_IDEALISTA арт. ID-200 цена с доставкой</p>]]>
+    </description>
+    
+    <collectionId>cat_2</collectionId>
+    
+   </offer>
+   
+   <offer id="40" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/kolgotki-ergoforma-121-kompressionnye-2-klass-kompressii/</url>
+    <price>3474</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>30</categoryId>
+    <name>Колготки Ergoforma 121 компрессионные 2 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260316_121329_9hDsHZ3.png</picture>
+    <description>
+    <![CDATA[<p>Колготки Ergoforma 121 компрессионные 2 класс компрессии артикул: P280 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_3</collectionId>
+    
+   </offer>
+   
+   <offer id="61" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-ergoforma-eu-226-kompressionnye-shirokaya-rezinka-otkrytyj-nosok-2-klass-kompressii/</url>
+    <price>3574</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки Ergoforma EU 226 компрессионные широкая резинка, открытый носок 2 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/open_sock_beg_1.jpg</picture>
+    <description>
+    <![CDATA[<p>купить арт. EU 226 в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="18" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/golfy-orto-323-muzhskie-s-hlopkom-s-zakrytym-noskom-2-klass-kompressii/</url>
+    <price>1725</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>20</categoryId>
+    <name>Гольфы ORTO 323 мужские с хлопком, с закрытым носком, 2 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_172300.png</picture>
+    <description>
+    <![CDATA[<p>Гольфы ORTO 323 мужские с хлопком, с закрытым носком, 2 класс компрессии артикул: 323 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_2</collectionId>
+    
+   </offer>
+   
+   <offer id="5" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-muzhskie-s-hlopkom-i-multifibroj-zakrytyj-mysok-1-klass/</url>
+    <price>3143</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки ORTO 4217 мужские с закрытым носком, 1 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_165500_kqGy1mV.png</picture>
+    <description>
+    <![CDATA[<p>Чулки ORTO 4217 мужские с закрытым носком, 1 класс компрессии артикул: 4217 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="69" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/golfy-centr-kompress-gm1p-s-zakrytym-myskom-s-silikonom-1-klass-kompressii/</url>
+    <price>970</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>20</categoryId>
+    <name>Гольфы &quot;Центр Компресс&quot; ГМ1(п) с закрытым мыском, с силиконом 1 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260316_115903_EO3w9T2.png</picture>
+    <description>
+    <![CDATA[<p>Гольфы &quot;Центр Компресс&quot; ГМ1(п) с закрытым мыском, с силиконом 1 класс компрессии 1 класс - купить Центр Компресс арт. ГМ1(п)</p>]]>
+    </description>
+    
+    <collectionId>cat_2</collectionId>
+    
+   </offer>
+   
+   <offer id="34" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-ergoforma-kompressionnye-1-klass-kompressii/</url>
+    <price>2840</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки Ergoforma 211 компрессионные 1 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260316_144943.png</picture>
+    <description>
+    <![CDATA[<p>Чулки Ergoforma 211 компрессионные 1 класс компрессии артикул: 211 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="10" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/kolgotki-svetlo-bezhevye-orto-115-zhenskie-i-klass-kompressiii/</url>
+    <price>3480</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>30</categoryId>
+    <name>Колготки ORTO 115 женские  I класс компрессиии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260316_121329_A69B8DS.png</picture>
+    <description>
+    <![CDATA[<p>Колготки ORTO 115 женские  I класс компрессиии артикул: 115 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_3</collectionId>
+    
+   </offer>
+   
+   <offer id="49" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-trives-tk230-s-otkrytym-noskom-2-klass-kompressii/</url>
+    <price>2590</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки Trives ТК.230 с открытым носком 2 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_172904_K0rHrUz.png</picture>
+    <description>
+    <![CDATA[<p>Чулки Trives ТК.230 с открытым носком 2 класс компрессии Trives арт. ТК.230 - заказать в интернет-магазине</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="6" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-orto-4216-zhenskie-c-zakrytym-noskom-plotnye-s-azhurnym-verhom-1-klass-kompressii/</url>
+    <price>3143</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки ORTO 4216 женские c закрытым носком, 1 класс компрессии, плотные с ажурным верхом</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/ChatGPT_Image_16_%D0%BC%D0%B0%D1%80._2026_%D0%B3._12_47_39_LzchjUN.png</picture>
+    <description>
+    <![CDATA[<p>Чулки ORTO 4216 женские c закрытым носком, 1 класс компрессии, плотные с ажурным верхом артикул: 4216 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="63" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/kolgotki-orto-117-muzhskie-i-klass-kompressii/</url>
+    <price>3380</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>30</categoryId>
+    <name>Колготки ОРТО 117 Мужские I класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260316_121329_vXbGUNt.png</picture>
+    <description>
+    <![CDATA[<p>Купить Колготки ОРТО 117 Мужские I класс компрессии ORTO арт. 117 цена с доставкой</p>]]>
+    </description>
+    
+    <collectionId>cat_3</collectionId>
+    
+   </offer>
+   
+   <offer id="35" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-ergoforma-kompressionnye-2-klass-kompressii/</url>
+    <price>2879</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки Ergoforma 221 компрессионные 2 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260316_145119.png</picture>
+    <description>
+    <![CDATA[<p>Чулки Ergoforma 221 компрессионные 2 класс компрессии артикул: 221 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="50" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-trives-tk233e-protivoembolicheskie-c-otkrytym-noskom-2-klass-kompressii/</url>
+    <price>1540</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки Trives TK.233E противоэмболические c открытым носком 2 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_171442_2dU3UOK.png</picture>
+    <description>
+    <![CDATA[<p>Купить Чулки Trives TK.233E противоэмболические c открытым носком 2 класс компрессии Trives арт. TK.233E цена с доставкой</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="44" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-smolenskij-trikotazh-s-otkrytym-myskom-s-silikonom-1-klass-kompressii/</url>
+    <price>2030</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки &quot;Центр Компресс&quot; с открытым мыском, с силиконом 1 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260312_164043_gLAfv1Y.png</picture>
+    <description>
+    <![CDATA[<p>купить арт. ЧСк1(п) в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="57" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-luomma-id-300-s-zakrytym-noskom-2-klass-kompressii/</url>
+    <price>5760</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки Luomma ID-300 с закрытым носком 2 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_170030.png</picture>
+    <description>
+    <![CDATA[<p>Чулки Luomma ID-300 с закрытым носком 2 класс компрессии 2 класс - купить LUOMMA_IDEALISTA арт. ID-300</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="62" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-orto-4223-zhenskie-s-zakrytym-noskom-2-klass-kompressii-plotnye-s-azhurnym-verhom/</url>
+    <price>3143</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки ORTO 4223 женские, с закрытым носком, 2 класс компрессии, плотные с ажурным верхом</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/ChatGPT_Image_11_%D0%BC%D0%B0%D1%80._2026_%D0%B3._15_07_52.png</picture>
+    <description>
+    <![CDATA[<p>Компрессионные чулки Варикоз ORTO - купить арт. 4223</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="19" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/trives-kompressionnye-chulki-zakrytyj-nosok-ccl-2-chernye-tk23120/</url>
+    <price>2590</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки Trives ТК.231.20 с закрытым носком 2 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_165237.png</picture>
+    <description>
+    <![CDATA[<p>Чулки Trives ТК.231.20 с закрытым носком 2 класс компрессии артикул: ТК.231.20 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="12" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/kolgotki-orto-4225-plotnye-ii-klass-kompressii/</url>
+    <price>3480</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>30</categoryId>
+    <name>Колготки ОРТО 4225 Плотные II класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260316_121329.png</picture>
+    <description>
+    <![CDATA[<p>Колготки ОРТО 4225 Плотные II класс компрессии артикул: 4225 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_3</collectionId>
+    
+   </offer>
+   
+   <offer id="39" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/kolgotki-ergoforma-112-kompressionnye-1-klass-kompressii/</url>
+    <price>3078</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>30</categoryId>
+    <name>Колготки Ergoforma 112 компрессионные 1 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260316_122346_fdZKxTT.png</picture>
+    <description>
+    <![CDATA[<p>Колготки Ergoforma 112 компрессионные 1 класс компрессии артикул: 112 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_3</collectionId>
+    
+   </offer>
+   
+   <offer id="11" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/kolgotki-orto-125-ii-klass-kompressii/</url>
+    <price>3480</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>30</categoryId>
+    <name>Колготки ORTO 125 II класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260316_122346.png</picture>
+    <description>
+    <![CDATA[<p>Колготки ORTO 125 II класс компрессии артикул: 125 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_3</collectionId>
+    
+   </offer>
+   
+   <offer id="65" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/golfy-zhenskie-ergoforma-311-kompressionnye-1-klass-kompressii/</url>
+    <price>1470</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>20</categoryId>
+    <name>Гольфы женские Ergoforma 311 компрессионные 1 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260316_120432_jRQb0Qt.png</picture>
+    <description>
+    <![CDATA[<p>Гольфы женские Ergoforma 311 компрессионные 1 класс компрессии 1 класс - купить Ergoforma арт. P280</p>]]>
+    </description>
+    
+    <collectionId>cat_2</collectionId>
+    
+   </offer>
+   
+   <offer id="46" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-smolenskij-trikotazh-s-otkrytym-myskom-s-silikonom-2-klass-kompressii/</url>
+    <price>2133</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки &quot;Центр Компресс&quot; с открытым мыском, с силиконом 2 класс  компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_172904_REmtvzu.png</picture>
+    <description>
+    <![CDATA[<p>Компрессионные чулки Варикоз Смоленский трикотаж - купить арт. ЧСк2(п)</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="8" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-orto-223-zhenskie-s-zakrytym-noskom-2-klass-kompressii-poluprozrachnye-s-azhurnym-verhom/</url>
+    <price>3143</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки ORTO 223 женские, с закрытым носком, 2 класс компрессии, полупрозрачные, с ажурным верхом</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/ChatGPT_Image_16_%D0%BC%D0%B0%D1%80._2026_%D0%B3._12_42_43.png</picture>
+    <description>
+    <![CDATA[<p>Чулки ORTO 223 женские, с закрытым носком, 2 класс компрессии, полупрозрачные, с ажурным верхом артикул: 223 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="38" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-ergoforma-227-protivoembolicheskie-c-otkrytym-noskom-2-klass-kompressii/</url>
+    <price>2683</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки Ergoforma 227 противоэмболические c открытым носком 2 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_171442_IRouayn.png</picture>
+    <description>
+    <![CDATA[<p>Чулки Ergoforma 227 противоэмболические c открытым носком 2 класс компрессии артикул: 227 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="68" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/golfy-trives-tk211-s-zakrytym-noskom-1-klass-kompressii/</url>
+    <price>1310</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>20</categoryId>
+    <name>Гольфы Trives ТК.211 с закрытым носком 1 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260316_115628_LGfYazQ.png</picture>
+    <description>
+    <![CDATA[<p>Купить Гольфы Trives ТК.211 с закрытым носком 1 класс компрессии Trives арт. TK.211 цена с доставкой</p>]]>
+    </description>
+    
+    <collectionId>cat_2</collectionId>
+    
+   </offer>
+   
+   <offer id="51" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-trives-tk233e-protivoembolicheskie-c-otkrytym-noskom-1-klass-kompressii/</url>
+    <price>1360</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки Trives TK.233E  противоэмболические c открытым носком 1 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_171442_e6x2EM0.png</picture>
+    <description>
+    <![CDATA[<p>купить арт. TK.233E в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="66" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/golfy-muzhskie-ergoforma-312-kompressionnye-1-klass-kompressii/</url>
+    <price>1470</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>20</categoryId>
+    <name>Гольфы мужские Ergoforma 312 компрессионные 1 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_172300_lGhEAoh.png</picture>
+    <description>
+    <![CDATA[<p>Гольфы мужские Ergoforma 312 компрессионные 1 класс компрессии 1 класс - купить Ergoforma арт. 312</p>]]>
+    </description>
+    
+    <collectionId>cat_2</collectionId>
+    
+   </offer>
+   
+   <offer id="17" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/golfy-orto-316-muzhskie-s-hlopkom-s-zakrytym-noskom-1-klass-kompressii/</url>
+    <price>1725</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>20</categoryId>
+    <name>Гольфы ORTO 316 мужские с хлопком, с закрытым носком, 1 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_172450_vkqeYCc.png</picture>
+    <description>
+    <![CDATA[<p>Гольфы ORTO 316 мужские с хлопком, с закрытым носком, 1 класс компрессии артикул: 316 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_2</collectionId>
+    
+   </offer>
+   
+   <offer id="47" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-trives-tk23110-s-zakrytym-noskom-1-klass-kompressii/</url>
+    <price>2480</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки Trives ТК.231.10 с закрытым носком 1 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_165500.png</picture>
+    <description>
+    <![CDATA[<p>Купить Чулки Trives ТК.231.10 с закрытым носком 1 класс компрессии Trives арт. ТК.231.10 цена с доставкой</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="13" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/golfy-orto-315-zhenskie-s-zakrytym-noskom-1-klass-kompressii-poluprozrachnye/</url>
+    <price>1725</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>20</categoryId>
+    <name>Гольфы ORTO 315 женские, с закрытым носком 1 класс компрессии полупрозрачные.</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260316_120616.png</picture>
+    <description>
+    <![CDATA[<p>Гольфы ORTO 315 женские, с закрытым носком 1 класс компрессии полупрозрачные. артикул: 315 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_2</collectionId>
+    
+   </offer>
+   
+   <offer id="16" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/golfy-orto-4322-zhenskie-c-zakrytym-noskom-2-klass-kompressii-plotnye-s-multifibroj/</url>
+    <price>1778</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>20</categoryId>
+    <name>Гольфы ORTO 4322 женские c закрытым носком, 2 класс компрессии, плотные, с мультифиброй</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260316_115628.png</picture>
+    <description>
+    <![CDATA[<p>Гольфы ORTO 4322 женские c закрытым носком, 2 класс компрессии, плотные, с мультифиброй артикул: 4322 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_2</collectionId>
+    
+   </offer>
+   
+   <offer id="56" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-luomma-id-300-s-zakrytym-noskom-1-klass-kompressii/</url>
+    <price>5460</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки Luomma ID-300 с закрытым носком 1 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_170213.png</picture>
+    <description>
+    <![CDATA[<p>Чулки Luomma ID-300 с закрытым носком 1 класс компрессии LUOMMA_IDEALISTA арт. ID-300 - заказать в интернет-магазине</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="15" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/golfy-orto-4315-zhenskie-c-zakrytym-noskom-1-klass-kompressii-plotnye-s-multifibroj/</url>
+    <price>1778</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>20</categoryId>
+    <name>Гольфы ORTO 4315 женские c закрытым носком, 1 класс компрессии, плотные, с мультифиброй</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260316_115903.png</picture>
+    <description>
+    <![CDATA[<p>Гольфы ORTO 4315 женские c закрытым носком, 1 класс компрессии, плотные, с мультифиброй артикул: 4315 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_2</collectionId>
+    
+   </offer>
+   
+   <offer id="60" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/kolgotki-luomma-id-100-zhenskie-i-klass-kompressii/</url>
+    <price>5815</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>30</categoryId>
+    <name>Колготки Luomma ID-100 женские I класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260316_122346_iALtZsv.png</picture>
+    <description>
+    <![CDATA[<p>100 женские I класс компрессии - купить арт. ID-100 в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_3</collectionId>
+    
+   </offer>
+   
+   <offer id="67" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/golfy-kompressionnye-luomma-idealista-id-2101-klass-kompressii/</url>
+    <price>3398</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>20</categoryId>
+    <name>Гольфы компрессионные Luomma Idealista ID-210,1 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260316_120616_RZ8WAq2.png</picture>
+    <description>
+    <![CDATA[<p>Гольфы компрессионные Luomma Idealista ID-210,1 класс компрессии 1 класс - купить LUOMMA_IDEALISTA арт. ID-210</p>]]>
+    </description>
+    
+    <collectionId>cat_2</collectionId>
+    
+   </offer>
+   
+   <offer id="54" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-luomma-id-310-s-otkrytym-noskom-2-klass-kompressii/</url>
+    <price>5760</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки Luomma ID-310 с открытым носком 2 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_172904_guUrKh1.png</picture>
+    <description>
+    <![CDATA[<p>310 с открытым носком 2 класс компрессии - купить арт. ID-310 в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="3" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-orto-4220-2-ogo-klassa-kompressii-dlya-muzhchin/</url>
+    <price>3143</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки ORTO 4220 мужские с закрытым носком, 2 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_165237_OnqqBvV.png</picture>
+    <description>
+    <![CDATA[<p>Чулки ORTO 4220 мужские с закрытым носком, 2 класс компрессии артикул: 4220 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="64" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/kolgotki-orto-4124-muzhskie-i-klass-kompressii/</url>
+    <price>3480</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>30</categoryId>
+    <name>Колготки ОРТО 4124 Мужские I класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260316_121329_xrLdQhy.png</picture>
+    <description>
+    <![CDATA[<p>Купить Колготки ОРТО 4124 Мужские I класс компрессии ORTO арт. 4124 цена с доставкой</p>]]>
+    </description>
+    
+    <collectionId>cat_3</collectionId>
+    
+   </offer>
+   
+   <offer id="7" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-orto-216-zhenskie-s-zakrytym-noskom-1-klass-kompressii-poluprozrachnye-s-azhurnym-verhom/</url>
+    <price>3143</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки ORTO 216 женские с закрытым носком, 1 класс компрессии, полупрозрачные, с ажурным верхом</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/ChatGPT_Image_16_%D0%BC%D0%B0%D1%80._2026_%D0%B3._12_47_39.png</picture>
+    <description>
+    <![CDATA[<p>Чулки ORTO 216 женские с закрытым носком, 1 класс компрессии, полупрозрачные, с ажурным верхом артикул: 216 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="59" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/kolgotki-luomma-id-100-zhenskie-2-klass-kompressii/</url>
+    <price>6139</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>30</categoryId>
+    <name>Колготки Luomma ID-100 женские 2 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260316_121329_z3gsl5I.png</picture>
+    <description>
+    <![CDATA[<p>100 женские 2 класс компрессии - купить арт. ID-100 в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_3</collectionId>
+    
+   </offer>
+   
+   <offer id="14" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/golfy-orto-322-zhenskie-s-zakrytym-noskom-2-klass-kompressii-poluprozrachnye/</url>
+    <price>1725</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>20</categoryId>
+    <name>Гольфы ORTO 322 женские, с закрытым носком 2 класс компрессии полупрозрачные.</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260316_120432.png</picture>
+    <description>
+    <![CDATA[<p>Гольфы ORTO 322 женские, с закрытым носком 2 класс компрессии полупрозрачные. артикул: 322 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_2</collectionId>
+    
+   </offer>
+   
+   <offer id="53" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-luomia-id-380-antiembolicheskie-1-klass-kompressii/</url>
+    <price>1928</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки Luomia ID-380 антиэмболические 1 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_171442.png</picture>
+    <description>
+    <![CDATA[<p>380 антиэмболические 1 класс компрессии - купить арт. ID-380 в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="58" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/kolgotki-luomma-id-150-zhenskie-i-klass-kompressii-dlya-beremennyh/</url>
+    <price>5911</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>30</categoryId>
+    <name>Колготки Luomma ID-150 женские I класс компрессии для беременных</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_174412.png</picture>
+    <description>
+    <![CDATA[<p>Компрессионные колготки Беременность LUOMMA_IDEALISTA - купить арт. ID-150</p>]]>
+    </description>
+    
+    <collectionId>cat_3</collectionId>
+    
+   </offer>
+   
+   <offer id="37" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-ergoforma-217-protivoembolicheskie-c-otkrytym-noskom-1-klass-kompressii/</url>
+    <price>2522</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки Ergoforma 217 противоэмболические c открытым носком 1 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_171442_Cn5Fr5N.png</picture>
+    <description>
+    <![CDATA[<p>Чулки Ergoforma 217 противоэмболические c открытым носком 1 класс компрессии артикул: P280 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="48" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-trives-tk230-s-otkrytym-noskom-1-klass-kompressii/</url>
+    <price>2480</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки Trives ТК.230 с открытым носком 1 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_173146.png</picture>
+    <description>
+    <![CDATA[<p>Чулки Trives ТК.230 с открытым носком 1 класс компрессии Trives арт. ТК.230 - заказать в интернет-магазине</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="9" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-orto-620-gospitalnye-protivoembolicheskie-chulki-dlya-rodov/</url>
+    <price>915</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки ORTO 602 госпитальные противоэмболические (чулки для родов)</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_171442_a8kdzws.png</picture>
+    <description>
+    <![CDATA[<p>Чулки ORTO 620 госпитальные противоэмболические (чулки для родов) артикул: 602 - купить в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="52" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-luomia-id-380-antiembolicheskie-2-klass-kompressii/</url>
+    <price>3250</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки Luomia ID-380 антиэмболические 2 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_171442_G0WM597.png</picture>
+    <description>
+    <![CDATA[<p>380 антиэмболические 2 класс компрессии - купить арт. ID-380 в Москве</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+   <offer id="55" available="true">
+    <url>https://kompressionnye-chulki24.ru/catalog/chulki-luomma-id-310-s-otkrytym-noskom-1-klass-kompressii/</url>
+    <price>5460</price>
+    <currencyId>RUB</currencyId>
+    <categoryId>10</categoryId>
+    <name>Чулки Luomma ID-310 с открытым носком 1 класс компрессии</name>
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_172904.png</picture>
+    <description>
+    <![CDATA[<p>Чулки Luomma ID-310 с открытым носком 1 класс компрессии LUOMMA_IDEALISTA арт. ID-310 - заказать в интернет-магазине</p>]]>
+    </description>
+    
+    <collectionId>cat_1</collectionId>
+    
+   </offer>
+   
+  </offers>
+  
+  <collections>
+   
+   <collection id="cat_2">
+    <url>https://kompressionnye-chulki24.ru/search/?query=гольфы</url>
+    
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260316_115903.png</picture>
+    
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260316_120432.png</picture>
+    
+    <name>Компрессионные гольфы - магазин компрессионные_чулки24</name>
+    
+    <description>это один из видов изделий из компрессионного трикотажа, задача которых — улучшить кровообращение в нижних конечностях. В зависимости от зоны поражения пациенту могут рекомендовать носить именно гольфы для поддержания функции сосудов стоп и голеней.</description>
+    
+   </collection>
+   
+   <collection id="cat_3">
+    <url>https://kompressionnye-chulki24.ru/search/?query=колготки</url>
+    
+    <picture>https://kompressionnye-chulki24.ru/media/images/Copilot_20260311_171442_a8kdzws.png</picture>
+    
+    <picture>https://kompressionnye-chulki24.ru/media/images/LUOMMA_IDEALISTA_avito1_ZCZaN7H.jpg</picture>
+    
+    <name>Компрессионные колготки - магазин компрессионные_чулки24</name>
+    
+    <description>это специальные эластичные изделия, которые надеваются на ноги для оказания постоянной компрессии на вены. Они создают давление, которое уменьшает расширение вен и облегчает кровоток. Компрессионные колготки обеспечивают равномерное сжатие по всей длине ноги, усиливая поддержку венозной системы.</description>
+    
+   </collection>
+   
+   <collection id="cat_1">
+    <url>https://kompressionnye-chulki24.ru/search/?query=чулки</url>
+    
+    <picture>https://kompressionnye-chulki24.ru/media/images/Orto_my_ZrgHPtO.jpg</picture>
+    
+    <picture>https://kompressionnye-chulki24.ru/media/images/ChatGPT_Image_16_%D0%BC%D0%B0%D1%80._2026_%D0%B3._12_42_43.png</picture>
+    
+    <name>Компрессионные чулки - магазин компрессионные_чулки24</name>
+    
+    <description>это медицинские изделия из специального трикотажа, использующиеся для лечения и профилактики венозных заболеваний за счет оказываемой на ноги компрессии. Восстанавливают венозный отток от ног, то есть стимулируют кровоток в венах и улучшают отток от тканей. Выглядят почти как обычные чулки, имеют дышащую структуру, гипоаллергенны.</description>
+    
+   </collection>
+   
+  </collections>
+  
+ </shop>
+</yml_catalog>

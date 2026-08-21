@@ -4,12 +4,14 @@ from urllib.parse import urlencode
 import dateutil.parser
 import requests
 from cart.forms import CartAddProductForm
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db import models
 from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 from django.views.generic import DetailView
 from django_filters.views import FilterView
 from dotenv import load_dotenv
@@ -372,6 +374,35 @@ def user_order_detail(request, order_id):
             "status": delivery_status,  # добавляем статус CDEK в контекст
         }
         return render(request, "blog/user_orders_detail.html", context)
+
+
+@login_required
+def cancel_order(request, order_id):
+    """Отмена заказа пользователем"""
+    profile = get_object_or_404(User, username=request.user)
+    order = get_object_or_404(Order, id=order_id)
+
+    # Проверяем, можно ли отменить заказ
+    if order.status == "canceled" and request.user == profile:
+        messages.warning(request, "Этот заказ уже отменен")
+        return redirect("catalog:user_order_detail", order_id=order.id)
+
+    if order.status in ["delivered", "shipped"] and request.user == profile:
+        messages.error(request, "Заказ уже отправлен или доставлен. Отмена невозможна.")
+        return redirect("catalog:user_order_detail", order_id=order.id)
+
+    if order.paid and request.user == profile:
+        messages.warning(request, "Заказ оплачен. Для отмены свяжитесь с поддержкой.")
+        return redirect("catalog:user_order_detail", order_id=order.id)
+
+    if request.user == profile and request.user.is_authenticated:
+        # Отменяем заказ
+        order.status = "canceled"
+        order.canceled_at = timezone.now()  # если добавите поле
+        order.save()
+
+        messages.success(request, f"Заказ #{order.id} успешно отменен")
+        return redirect("catalog:user_order_detail", order_id=order.id)
 
 
 @login_required

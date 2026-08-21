@@ -8,6 +8,22 @@ from django.db import models
 
 
 class Order(models.Model):
+    STATUS_CHOICES = [
+        ("created", "Создан"),
+        ("confirmed", "Подтвержден"),
+        ("processing", "В обработке"),
+        ("shipped", "Отправлен"),
+        ("delivered", "Доставлен"),
+        ("canceled", "Отменен"),
+    ]
+
+    # Добавляем поле (можно сразу с default='created')
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="created",
+        verbose_name="Статус заказа",
+    )
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField()

@@ -23,6 +23,14 @@
     <price>{{ product.price|floatformat:0 }}</price>
     <currencyId>RUB</currencyId>
     <categoryId>{{ product.category_id }}</categoryId>
+    <!-- НОВЫЙ БЛОК С УСЛОВИЯМИ ДОСТАВКИ -->
+    <delivery-options>
+        <!-- Для региона Москва и Московская область -->
+        <option cost="0" days="1-3" order-before="18">
+            <region>Москва</region>
+            <region>Московская область</region>
+        </option>
+    </delivery-options>
     <name>{{ product.name }}</name>
     <picture>https://kompressionnye-chulki24.ru{{ product.main_image_url }}</picture>
     <description>

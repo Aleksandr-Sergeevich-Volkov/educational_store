@@ -52,12 +52,12 @@
         <!-- Рекламный баннер с бесплатной доставкой -->
         <a href="catalog/" 
            class="btn btn-primary d-flex align-items-center justify-content-center flex-shrink-0"
-           style="padding: 0.5rem 1rem; background-color: #28a3a7fa; border-color: #28a3a7fa;">
+           style="padding: 0.5rem 1rem; background-color: #a7289cfa; border-color: #28a3a7fa;">
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="me-2" viewBox="0 0 16 16">
                 <path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H6a2 2 0 1 1-4 0H1.5a1.5 1.5 0 0 1-1.5-1.5v-7zM3 12a1 1 0 1 0 2 0 1 1 0 0 0-2 0zm9-1a1 1 0 1 0 2 0 1 1 0 0 0-2 0z"/>
                 <path d="M4.5 5h4.5v1.5h-6V6H4v-.5z"/>
             </svg>
-            <span style="font-size: 0.95rem;">Акция до конца лета:🚚 Бесплатная доставка от 500₽</span>
+            <span style="font-size: 0.95rem;">Акция до конца года:🚚 Доставка по Москве и МО бесплатна</span>
         </a>
     </div>
     
@@ -385,16 +385,16 @@
 {% script %}
 <script nonce="{{ request.csp_nonce }}">
 document.addEventListener('DOMContentLoaded', function() {
-    // ===== Переключение архива =====
+    
+    // ===== ПЕРЕКЛЮЧЕНИЕ АРХИВА =====
     const archiveBtn = document.getElementById('archive-btn');
     const usefulPosts = document.getElementById('useful-posts');
     const archivePosts = document.getElementById('archive-posts');
     
-    // Сохраняем реальное количество статей
-    const usefulCount = {{ text|length }};
-    const archiveCount = {{ archive|length }};
-    
-    if (archiveBtn) {
+    if (archiveBtn && usefulPosts && archivePosts) {
+        const usefulCount = {{ text|length }};
+        const archiveCount = {{ archive|length }};
+        
         archiveBtn.addEventListener('click', function() {
             const isArchiveVisible = archivePosts.style.display !== 'none';
             
@@ -402,93 +402,259 @@ document.addEventListener('DOMContentLoaded', function() {
                 usefulPosts.style.display = 'block';
                 archivePosts.style.display = 'none';
                 archiveBtn.innerHTML = '📚 Архив статей <span class="badge bg-secondary ms-1">' + 
-                                       archiveCount + 
-                                       '</span>';
+                                       archiveCount + '</span>';
             } else {
                 usefulPosts.style.display = 'none';
                 archivePosts.style.display = 'block';
                 archiveBtn.innerHTML = '📖 Полезные статьи <span class="badge bg-secondary ms-1">' + 
-                                       usefulCount + 
-                                       '</span>';
+                                       usefulCount + '</span>';
             }
         });
     }
     
-    // ===== Переключение полного текста =====
-    document.querySelectorAll('.toggle-fulltext-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
+    // ===== РАСКРЫТИЕ/СВЁРТЫВАНИЕ ТЕКСТА =====
+    function expandText(postId) {
+        const shortText = document.getElementById(`short-text-${postId}`);
+        const fullText = document.getElementById(`full-text-${postId}`);
+        const expandBtn = document.querySelector(`.expand-btn[data-post-id="${postId}"]`);
+        const postCard = document.getElementById(`post-${postId}`);
+        
+        if (!shortText || !fullText || !expandBtn) return;
+        
+        shortText.style.display = 'none';
+        fullText.style.display = 'block';
+        
+        const viewsSpan = document.getElementById(`views-count-${postId}`);
+        const viewsCount = viewsSpan ? viewsSpan.textContent : '0';
+        
+        expandBtn.innerHTML = '📕 Свернуть текст 👁️ <span class="views-count" id="views-count-' + postId + '">' + 
+                             viewsCount + '</span>';
+        expandBtn.className = 'btn btn-outline-secondary btn-sm flex-fill expand-btn';
+        expandBtn.dataset.expanded = 'true';
+        
+        if (postCard && !postCard.dataset.viewed) {
+            postCard.dataset.viewed = 'true';
+            fetch(`/post/${postId}/increment/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': window.getCsrfToken(),
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    const viewsSpan = document.getElementById(`views-count-${postId}`);
+                    if (viewsSpan) viewsSpan.textContent = data.views;
+                }
+            })
+            .catch(error => console.error('Ошибка:', error));
+        }
+    }
+    
+    function collapseText(postId) {
+        const shortText = document.getElementById(`short-text-${postId}`);
+        const fullText = document.getElementById(`full-text-${postId}`);
+        const expandBtn = document.querySelector(`.expand-btn[data-post-id="${postId}"]`);
+        
+        if (!shortText || !fullText || !expandBtn) return;
+        
+        shortText.style.display = 'block';
+        fullText.style.display = 'none';
+        
+        const viewsSpan = document.getElementById(`views-count-${postId}`);
+        const viewsCount = viewsSpan ? viewsSpan.textContent : '0';
+        
+        expandBtn.innerHTML = '📖 Читать полностью текст 👁️ <span class="views-count" id="views-count-' + postId + '">' + 
+                             viewsCount + '</span>';
+        expandBtn.className = 'btn btn-outline-primary btn-sm flex-fill expand-btn';
+        expandBtn.dataset.expanded = 'false';
+    }
+    
+    // ===== ОБРАБОТЧИКИ ДЛЯ КНОПОК РАСКРЫТИЯ =====
+    document.querySelectorAll('.expand-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
             const postId = this.dataset.postId;
-            const fullText = this.dataset.postText;
-            toggleFullText(postId, fullText);
+            if (!postId) return;
+            
+            if (this.dataset.expanded === 'true') {
+                collapseText(postId);
+            } else {
+                expandText(postId);
+            }
         });
     });
     
-    // ===== Переключение комментариев =====
-    document.querySelectorAll('.toggle-comments-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
+    // ===== ОБРАБОТЧИКИ ДЛЯ "ЧИТАТЬ ДАЛЕЕ" В ТЕКСТЕ =====
+    document.querySelectorAll('.expand-trigger').forEach(trigger => {
+        trigger.addEventListener('click', function() {
             const postId = this.dataset.postId;
-            toggleComments(postId);
+            if (postId) expandText(postId);
         });
     });
+    
+    // ===== ПЕРЕКЛЮЧЕНИЕ КОММЕНТАРИЕВ (ПОКАЗАТЬ/СКРЫТЬ) =====
+    function toggleComments(postId) {
+        const commentsContainer = document.getElementById(`comments-${postId}`);
+        if (!commentsContainer) return;
+        
+        if (commentsContainer.style.display === 'none') {
+            commentsContainer.style.display = 'block';
+        } else {
+            commentsContainer.style.display = 'none';
+        }
+    }
+    
+    // Кнопки "Комментарии"
+    document.querySelectorAll('.toggle-comments-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const postId = this.dataset.postId;
+            if (postId) toggleComments(postId);
+        });
+    });
+    
+    // Кнопки "Закрыть" в комментариях
+    document.querySelectorAll('.close-comments-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const postId = this.dataset.postId;
+            if (postId) {
+                const commentsContainer = document.getElementById(`comments-${postId}`);
+                if (commentsContainer) commentsContainer.style.display = 'none';
+            }
+        });
+    });
+    
+    // ===== АВТОДОПОЛНЕНИЕ =====
+    const searchInput = document.getElementById('home-search-input');
+    const autocompleteContainer = document.getElementById('home-autocomplete');
+    
+    if (searchInput && autocompleteContainer) {
+        let currentRequest = null;
+        
+        searchInput.addEventListener('input', function() {
+            const query = this.value.trim();
+            
+            if (currentRequest) {
+                currentRequest.abort();
+            }
+            
+            autocompleteContainer.innerHTML = '';
+            autocompleteContainer.style.display = 'none';
+            
+            if (query.length >= 2) {
+                autocompleteContainer.innerHTML = `
+                    <div class="autocomplete-loading p-2 text-center text-muted">
+                        <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                        Поиск...
+                    </div>
+                `;
+                autocompleteContainer.style.display = 'block';
+                
+                currentRequest = new XMLHttpRequest();
+                currentRequest.open('GET', '{% url "homepage:autocomplete" %}?term=' + encodeURIComponent(query));
+                currentRequest.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                
+                currentRequest.onload = function() {
+                    if (currentRequest.status === 200) {
+                        const data = JSON.parse(currentRequest.responseText);
+                        autocompleteContainer.innerHTML = '';
+                        
+                        if (data.suggestions && data.suggestions.length > 0) {
+                            data.suggestions.forEach(item => {
+                                const link = document.createElement('a');
+                                link.href = item.url || '#';
+                                link.className = 'autocomplete-item d-block p-2 border-bottom';
+                                link.style.textDecoration = 'none';
+                                
+                                let html = `
+                                    <div class="d-flex align-items-center">
+                                        ${item.image ? `
+                                            <div class="flex-shrink-0 me-2" style="width: 40px; height: 40px;">
+                                                <img src="${item.image}" 
+                                                     alt="${item.name}" 
+                                                     class="img-fluid rounded"
+                                                     style="width: 100%; height: 100%; object-fit: cover;">
+                                            </div>
+                                        ` : `
+                                            <div class="flex-shrink-0 me-2" style="width: 40px; height: 40px;">
+                                                <div class="bg-light rounded d-flex align-items-center justify-content-center" 
+                                                     style="width: 100%; height: 100%;">
+                                                    <i class="bi bi-image text-muted"></i>
+                                                </div>
+                                            </div>
+                                        `}
+                                        
+                                        <div class="flex-grow-1">
+                                            <strong class="d-block">${item.name || ''}</strong>
+                                            <small class="text-muted d-block">
+                                                ${item.brand ? `${item.brand} • ` : ''}${item.articul}
+                                            </small>
+                                        </div>
+                                        
+                                        <div class="flex-shrink-0 text-end ms-2">
+                                            <span class="text-success fw-bold">${item.price || ''}</span>
+                                        </div>
+                                    </div>
+                                `;
+                                
+                                link.innerHTML = html;
+                                autocompleteContainer.appendChild(link);
+                            });
+                            
+                            const allResults = document.createElement('a');
+                            allResults.href = '{% url "homepage:search" %}?query=' + encodeURIComponent(query);
+                            allResults.className = 'autocomplete-all-results d-block p-2 text-center bg-light';
+                            allResults.style.textDecoration = 'none';
+                            allResults.innerHTML = `
+                                <small><strong>Показать все результаты</strong></small>
+                            `;
+                            autocompleteContainer.appendChild(allResults);
+                            
+                            autocompleteContainer.style.display = 'block';
+                        } else {
+                            autocompleteContainer.innerHTML = `
+                                <div class="autocomplete-no-results p-2 text-center text-muted">
+                                    <small><i class="bi bi-search me-1"></i>Ничего не найдено</small>
+                                </div>
+                            `;
+                            autocompleteContainer.style.display = 'block';
+                        }
+                    }
+                };
+                
+                currentRequest.onerror = function() {
+                    autocompleteContainer.innerHTML = `
+                        <div class="autocomplete-error p-2 text-center text-danger">
+                            <small><i class="bi bi-exclamation-triangle me-1"></i>Ошибка соединения</small>
+                        </div>
+                    `;
+                };
+                
+                currentRequest.send();
+            }
+        });
+        
+        document.addEventListener('click', function(e) {
+            if (!autocompleteContainer.contains(e.target) && e.target !== searchInput) {
+                autocompleteContainer.style.display = 'none';
+            }
+        });
+        
+        searchInput.addEventListener('focus', function() {
+            if (autocompleteContainer.children.length > 0) {
+                autocompleteContainer.style.display = 'block';
+            }
+        });
+        
+        searchInput.addEventListener('blur', function() {
+            setTimeout(() => {
+                autocompleteContainer.style.display = 'none';
+            }, 200);
+        });
+    }
 });
 
-// Отслеживаем открытые посты для счетчика просмотров
-const openedPosts = new Set();
-
-function toggleFullText(postId, fullText) {
-    const textContainer = document.getElementById(`full-text-${postId}`);
-    
-    if (!textContainer) {
-        console.error(`Контейнер full-text-${postId} не найден`);
-        return;
-    }
-    
-    if (!openedPosts.has(postId)) {
-        openedPosts.add(postId);
-        
-        fetch(`/post/${postId}/increment/`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': window.getCsrfToken(),
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'ok') {
-                const viewsSpan = document.getElementById(`views-count-${postId}`);
-                if (viewsSpan) viewsSpan.textContent = data.views;
-            }
-        })
-        .catch(error => console.error('Ошибка:', error));
-    }
-    
-    if (textContainer.style.display === 'none' || !textContainer.style.display) {
-        // Простое преобразование \n в <br>
-        textContainer.innerHTML = fullText.replace(/\n/g, '<br>');
-        textContainer.style.display = 'block';
-    } else {
-        textContainer.style.display = 'none';
-    }
-}
-
-function toggleComments(postId) {
-    const commentsContainer = document.getElementById(`comments-${postId}`);
-    
-    if (!commentsContainer) {
-        console.error(`Контейнер comments-${postId} не найден`);
-        return;
-    }
-    
-    if (commentsContainer.style.display === 'none' || !commentsContainer.style.display) {
-        commentsContainer.style.display = 'block';
-    } else {
-        commentsContainer.style.display = 'none';
-    }
-}
-
+// ===== ПОЛУЧЕНИЕ CSRF-ТОКЕНА =====
 window.getCsrfToken = function() {
     const meta = document.querySelector('meta[name="csrf-token"]');
     if (meta && meta.content) {
@@ -497,146 +663,6 @@ window.getCsrfToken = function() {
     const input = document.querySelector('input[name="csrfmiddlewaretoken"]');
     return input ? input.value : null;
 };
-
-// Автодополнение для главной страницы
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('home-search-input');
-    const autocompleteContainer = document.getElementById('home-autocomplete');
-    
-    if (!searchInput || !autocompleteContainer) return;
-    
-    let currentRequest = null;
-    
-    searchInput.addEventListener('input', function() {
-        const query = this.value.trim();
-        
-        // Отменяем предыдущий запрос
-        if (currentRequest) {
-            currentRequest.abort();
-        }
-        
-        // Очищаем и скрываем контейнер
-        autocompleteContainer.innerHTML = '';
-        autocompleteContainer.style.display = 'none';
-        
-        if (query.length >= 2) {
-            // Показываем индикатор загрузки
-            autocompleteContainer.innerHTML = `
-                <div class="autocomplete-loading p-2 text-center text-muted">
-                    <div class="spinner-border spinner-border-sm me-2" role="status"></div>
-                    Поиск...
-                </div>
-            `;
-            autocompleteContainer.style.display = 'block';
-            
-            // Делаем AJAX запрос
-            currentRequest = new XMLHttpRequest();
-            currentRequest.open('GET', '{% url "homepage:autocomplete" %}?term=' + encodeURIComponent(query));
-            currentRequest.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-            
-            currentRequest.onload = function() {
-                if (currentRequest.status === 200) {
-                    const data = JSON.parse(currentRequest.responseText);
-                    autocompleteContainer.innerHTML = '';
-                    
-                    if (data.suggestions && data.suggestions.length > 0) {
-                       data.suggestions.forEach(item => {
-    const link = document.createElement('a');
-    link.href = item.url || '#';
-    link.className = 'autocomplete-item d-block p-2 border-bottom';
-    link.style.textDecoration = 'none';
-    
-    let html = `
-        <div class="d-flex align-items-center">
-            ${item.image ? `
-                <div class="flex-shrink-0 me-2" style="width: 40px; height: 40px;">
-                    <img src="${item.image}" 
-                         alt="${item.name}" 
-                         class="img-fluid rounded"
-                         style="width: 100%; height: 100%; object-fit: cover;">
-                </div>
-            ` : `
-                <div class="flex-shrink-0 me-2" style="width: 40px; height: 40px;">
-                    <div class="bg-light rounded d-flex align-items-center justify-content-center" 
-                         style="width: 100%; height: 100%;">
-                        <i class="bi bi-image text-muted"></i>
-                    </div>
-                </div>
-            `}
-            
-            <div class="flex-grow-1">
-                <strong class="d-block">${item.name || ''}</strong>
-                <small class="text-muted d-block">
-                    ${item.brand ? `${item.brand} • ` : ''}${item.articul}
-                </small>
-            </div>
-            
-            <div class="flex-shrink-0 text-end ms-2">
-                <span class="text-success fw-bold">${item.price || ''}</span>
-            </div>
-        </div>
-    `;
-    
-    link.innerHTML = html;
-    autocompleteContainer.appendChild(link);
-});
-                        
-                        // Добавляем ссылку "Все результаты"
-                        const allResults = document.createElement('a');
-                        allResults.href = '{% url "homepage:search" %}?query=' + encodeURIComponent(query);
-                        allResults.className = 'autocomplete-all-results d-block p-2 text-center bg-light';
-                        allResults.style.textDecoration = 'none';
-                        allResults.innerHTML = `
-                            <small><strong>Показать все результаты</strong></small>
-                        `;
-                        autocompleteContainer.appendChild(allResults);
-                        
-                        autocompleteContainer.style.display = 'block';
-                    } else {
-                        autocompleteContainer.innerHTML = `
-                            <div class="autocomplete-no-results p-2 text-center text-muted">
-                                <small><i class="bi bi-search me-1"></i>Ничего не найдено</small>
-                            </div>
-                        `;
-                        autocompleteContainer.style.display = 'block';
-                    }
-                }
-            };
-            
-            currentRequest.onerror = function() {
-                autocompleteContainer.innerHTML = `
-                    <div class="autocomplete-error p-2 text-center text-danger">
-                        <small><i class="bi bi-exclamation-triangle me-1"></i>Ошибка соединения</small>
-                    </div>
-                `;
-            };
-            
-            currentRequest.send();
-        }
-    });
-    
-    // Скрываем при клике вне
-    document.addEventListener('click', function(e) {
-        if (!autocompleteContainer.contains(e.target) && e.target !== searchInput) {
-            autocompleteContainer.style.display = 'none';
-        }
-    });
-    
-    // Показываем при фокусе (если есть результаты)
-    searchInput.addEventListener('focus', function() {
-        if (autocompleteContainer.children.length > 0) {
-            autocompleteContainer.style.display = 'block';
-        }
-    });
-    
-    // При потере фокуса скрываем с задержкой
-    searchInput.addEventListener('blur', function() {
-        setTimeout(() => {
-            autocompleteContainer.style.display = 'none';
-        }, 200);
-    });
-});
-
 </script>
 {% endscript %}
 

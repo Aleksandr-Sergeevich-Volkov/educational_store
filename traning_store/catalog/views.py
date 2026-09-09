@@ -16,6 +16,7 @@ from django.views.generic import DetailView
 from django_filters.views import FilterView
 from dotenv import load_dotenv
 from favorites.utils import SessionFavorites  # ← Добавляем импорт
+from homepage.models import Post
 from orders.models import Order, OrderItem
 
 from traning_store.settings import (CDEK_CLIENT_ID, CDEK_CLIENT_SECRET,
@@ -180,6 +181,19 @@ class ProductListView(FilterView):
         context["favorites_count"] = session_fav.count()
         context["favorite_ids"] = session_fav.get_ids()
         context["show_favorites"] = self.request.GET.get("favorites") == "true"
+        context["text"] = (
+            Post.objects.all()
+            .filter(archive=False)
+            .annotate(comment_count=models.Count("comments"))
+            .order_by("-views")
+        )
+
+        context["archive"] = (
+            Post.objects.all()
+            .filter(archive=True)
+            .annotate(comment_count=models.Count("comments"))
+            .order_by("-views")
+        )
 
         return context
 
@@ -205,6 +219,19 @@ class ProductDetailView(DetailView):
         context["sizes"] = Size.objects.all()
         context["model_t"] = Model_type.objects.all()
         context["cart_product_form"] = CartAddProductForm(product=self.object)
+        context["text"] = (
+            Post.objects.all()
+            .filter(archive=False)
+            .annotate(comment_count=models.Count("comments"))
+            .order_by("-views")
+        )
+
+        context["archive"] = (
+            Post.objects.all()
+            .filter(archive=True)
+            .annotate(comment_count=models.Count("comments"))
+            .order_by("-views")
+        )
         return context
 
 

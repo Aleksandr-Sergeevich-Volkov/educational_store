@@ -187,12 +187,13 @@
     <main class="flex-grow-1 main-bg">
         {% block content %}{% endblock %}
     </main>
-    <!-- Яркий футер -->
     <footer class="footer-bg text-dark py-3 mt-auto">
-        <div class="container-fluid text-center">
+    <div class="container-fluid text-center">
+        {% block footer %}
             <strong>Algorithm Corporation: Skill and hard work will grind everything out</strong>
-        </div>
-    </footer>
+        {% endblock %}
+    </div>
+</footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
     <script type="application/ld+json">

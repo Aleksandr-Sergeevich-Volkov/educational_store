@@ -5,7 +5,11 @@ FROM python:3.9.10
 
 # Установка nano в том же образе
 # RUN apt-get -y update && apt-get install -y nano
-RUN apt-get update && apt-get install -y --no-install-recommends nano && rm -rf /var/lib/apt/lists/*
+RUN apt-get clean && \
+    apt-get update && \
+    apt-get install -y nano && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Переходим в образе в директорию /app: в ней будем хранить код проекта.
 # Если директории с указанным именем нет, она будет создана. 

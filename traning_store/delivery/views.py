@@ -85,7 +85,6 @@ def delivery_add_cdek(request):
         else:
             messages.info(request, f"Доставка:{sum} ₽")
         return redirect("cart:cart_detail")
-        # return render(request, 'deliverys.html', {'cost': cost_not_price})
     else:
         form = Delivery_Cdek_Form()
     return render(

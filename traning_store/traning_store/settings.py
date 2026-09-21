@@ -302,6 +302,7 @@ CONTENT_SECURITY_POLICY = {
             "https://cdn.jsdelivr.net",
             "https://cdnjs.cloudflare.com",
             "https://api-maps.yandex.ru",
+            "https://yastatic.net",
             "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/",
             "blob:",  # КРИТИЧНО! Стили карты грузятся через blob
             "'unsafe-inline'",

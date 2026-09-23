@@ -5,6 +5,29 @@
 
 <head>
     <title>{{ object.name }} - Детальная запись магазина компрессионного трикотажа</title>
+    {%script%}
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "{{ object.name }}",
+  "description": "{{ product.description }}", 
+  "image": "{{ object.image.url }}",
+  "brand": {
+    "@type": "Brand",
+    "name": "{{ object.brand }}"
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": "{{ request.build_absolute_uri }}",
+    "priceCurrency": "RUB",
+    "price": "{{ product.price }}",
+    "availability": "https://schema.org/InStock",
+    "itemCondition": "https://schema.org/NewCondition"
+  }
+}
+</script>
+{%endscript%}
 </head>
 
 {% block content %} 

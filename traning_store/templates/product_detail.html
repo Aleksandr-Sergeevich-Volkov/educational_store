@@ -5,29 +5,30 @@
 
 <head>
     <title>{{ object.name }} - Детальная запись магазина компрессионного трикотажа</title>
-    {%script%}
-    <script type="application/ld+json">
+<script type="application/ld+json" nonce="{{ request.csp_nonce }}">
 {
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": "{{ object.name }}",
-  "description": "{{ product.description }}", 
-  "image": "{{ object.image.url }}",
+  "name": "{{ object.name|escapejs }}",
+  "image": [
+    "{{ request.scheme }}://{{ request.get_host }}{{ object.image.url }}"
+  ],
+  "description": "{{ product.description|default:'компрессионный трикотаж'|escapejs }}",
   "brand": {
     "@type": "Brand",
-    "name": "{{ object.brand }}"
+    "name": "{{ object.brand|escapejs }}"
   },
+  "sku": "{{ product.articul }}",
   "offers": {
     "@type": "Offer",
     "url": "{{ request.build_absolute_uri }}",
     "priceCurrency": "RUB",
-    "price": "{{ product.price }}",
+    "price": "{{ product.price|floatformat:'2u' }}",
     "availability": "https://schema.org/InStock",
     "itemCondition": "https://schema.org/NewCondition"
   }
 }
 </script>
-{%endscript%}
 </head>
 
 {% block content %} 
@@ -85,16 +86,11 @@
                                 </ul>
 
                                 <!-- Цена -->
-                                <div class="mb-4" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-                                    <div class="d-flex align-items-center">
-                                        <span class="h2 text-primary mb-0">
-                                            ₽{{ product.price }}
-                                            <meta itemprop="price" content="{{ product.price|floatformat:'2u' }}">
-                                            <meta itemprop="priceCurrency" content="RUB">
-                                        </span>
-                                        <meta itemprop="availability" href="http://schema.org/InStock">
-                                    </div>
-                                </div>           
+                               <div class="mb-4">
+    <div class="d-flex align-items-center">
+        <span class="h2 text-primary mb-0">₽{{ product.price }}</span>
+    </div>
+</div>
            <!-- Форма добавления в корзину -->
 <form action="{% url 'cart:cart_add' product.id %}" method="post" 
       class="mb-3" id="cart-form">

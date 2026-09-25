@@ -4,7 +4,9 @@
 {% load static %}
 
 <head>
-    <title>{{ object.name }} - Детальная запись магазина компрессионного трикотажа</title>
+    <title>{{ object.name }} - Детальная запись магазина компрессионного трикотажа</title>    
+</head>
+ {% block extra_meta %}
 <script type="application/ld+json" nonce="{{ request.csp_nonce }}">
 {
   "@context": "https://schema.org",
@@ -29,7 +31,7 @@
   }
 }
 </script>
-</head>
+{% endblock %}
 
 {% block content %} 
 <div class="container-fluid">

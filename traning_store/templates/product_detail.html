@@ -4,16 +4,19 @@
 {% load static %}
 
 <head>
-    <title>{{ object.name }} - Детальная запись магазина компрессионного трикотажа</title>    
+    <title>{{ object.name }} - Детальная запись магазина компрессионного трикотажа</title
 </head>
- {% block extra_meta %}
+
+{% block extra_meta %}
 <script type="application/ld+json" nonce="{{ request.csp_nonce }}">
 {
   "@context": "https://schema.org",
   "@type": "Product",
   "name": "{{ object.name|escapejs }}",
   "image": [
-    "{{ request.scheme }}://{{ request.get_host }}{{ object.image.url }}"
+    {% for image in images_m %}
+      "https://{{ request.get_host }}{{ image.image.url }}"{% if not forloop.last %},{% endif %}
+    {% endfor %}
   ],
   "description": "{{ product.description|default:'компрессионный трикотаж'|escapejs }}",
   "brand": {
@@ -23,7 +26,7 @@
   "sku": "{{ product.articul }}",
   "offers": {
     "@type": "Offer",
-    "url": "{{ request.build_absolute_uri }}",
+    "url": "https://{{ request.get_host }}{{ request.path }}",
     "priceCurrency": "RUB",
     "price": "{{ product.price|floatformat:'2u' }}",
     "availability": "https://schema.org/InStock",
@@ -32,14 +35,12 @@
 }
 </script>
 {% endblock %}
-
 {% block content %} 
 <div class="container-fluid">
     <div class="row mt-3">
         <!-- Основная информация о товаре - 2/3 экрана -->
         <div class="col-12 col-lg-8 col-md-7">
-            <div itemscope itemtype="https://schema.org/Product">  
-                <h1 class="pb-2 mb-3" itemprop="name">{{ object.name }}</h1>
+                <h1 class="pb-2 mb-3">{{ object.name }}</h1>
                 
                 <!-- Галерея изображений и форма -->
                 <div class="row">
@@ -51,8 +52,7 @@
                                 <img src="{{ image.image.url }}" 
                                      alt="{{ object.name }}" 
                                      class="img-fluid rounded shadow" 
-                                     style="max-height: 500px; width: auto;"
-                                     itemprop="image">
+                                     style="max-height: 500px; width: auto;">
                             </div>
                             {% empty %}
                             <div class="text-center bg-light rounded" style="height: 400px; display: flex; align-items: center; justify-content: center;">
@@ -70,12 +70,12 @@
                                 
                                 <ul class="list-unstyled mb-4">
                                     <li class="mb-2">
-                                        <strong>Производитель:</strong> 
-                                        <span itemprop="brand">{{ object.brand }}</span>
+                                        <strong>Производитель:</strong>                                        
+                                        <span>{{ object.brand }}</span>
                                     </li>
                                     <li class="mb-2">
                                         <strong>Категория:</strong> 
-                                        <span itemprop="description">компрессионный трикотаж</span>
+                                        <span>компрессионный трикотаж</span>
                                     </li>
                                     <li class="mb-2">
                                         <strong>Артикул:</strong> 
@@ -88,7 +88,7 @@
                                 </ul>
 
                                 <!-- Цена -->
-                               <div class="mb-4">
+                                <div class="mb-4">
     <div class="d-flex align-items-center">
         <span class="h2 text-primary mb-0">₽{{ product.price }}</span>
     </div>

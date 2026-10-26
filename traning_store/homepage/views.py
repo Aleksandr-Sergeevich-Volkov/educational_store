@@ -62,44 +62,11 @@ class HomePage(CityContextMixin, TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
 
-        # Ваш существующий код получения города...
-        from .models import City
+        # ▼▼▼ Вместо всего блока про City ▼▼▼
+        from .context import get_header_context
 
-        city_id = self.request.session.get("current_city_id")
-        current_city = None
-
-        if city_id:
-            try:
-                current_city = City.objects.get(id=city_id)
-            except City.DoesNotExist:
-                pass
-
-        if not current_city:
-            try:
-                from .services.geo import SimpleGeolocation
-
-                ip = SimpleGeolocation.get_client_ip(self.request)
-                city_name, region_name = SimpleGeolocation.get_city_by_ip(ip)
-
-                if city_name:
-                    from django.db.models import Q
-
-                    current_city = City.objects.filter(
-                        Q(name__iexact=city_name) | Q(region__icontains=region_name)
-                    ).first()
-
-                    if current_city:
-                        self.request.session["current_city_id"] = current_city.id
-            except City.DoesNotExist:
-                pass
-
-        if not current_city:
-            current_city = City.objects.filter(is_default=True).first()
-            if current_city:
-                self.request.session["current_city_id"] = current_city.id
-
-        context["current_city"] = current_city
-        context["popular_cities"] = City.objects.filter(is_popular=True)[:10]
+        context.update(get_header_context(self.request))
+        # ▲▲▲ ▲▲▲
 
         # 3. Остальной ваш код...
         context["search_form"] = SearchForm()
@@ -153,6 +120,26 @@ class HomePage(CityContextMixin, TemplateView):
         context["popular_categories"] = Type_product.objects.all()[:4]
         context["popular_brands"] = Brend.objects.exclude(name="Venoteks")[:6]
         return context
+
+
+@require_GET
+def change_city(request):
+    city_id = request.GET.get("city_id")
+    if city_id:
+        try:
+            from .models import City
+
+            city = City.objects.get(id=city_id)
+            request.session["current_city_id"] = city.id
+            request.session.modified = True
+            # Если нужен счётчик — вызовите increment_city_detection_count
+        except City.DoesNotExist:
+            pass
+
+    from .context import get_header_context
+
+    context = get_header_context(request)
+    return render(request, "includes/_header.html", context)
 
 
 def search(request):
@@ -295,6 +282,22 @@ def search(request):
 
 @require_GET
 def autocomplete(request):
+    term = (request.GET.get("query") or request.GET.get("term", "")).strip()
+    suggestions = []
+    if len(term) >= 2:
+        # ваша логика поиска
+        suggestions = Product.objects.filter(name__icontains=term)[:10]
+    return render(
+        request,
+        "_autocomplete.html",
+        {
+            "suggestions": suggestions,
+        },
+    )
+
+
+@require_GET
+def autocomplete_htmx(request):
     """
     AJAX-функция для автодополнения.
     Возвращает JSON с подсказками, не HTML страницу.

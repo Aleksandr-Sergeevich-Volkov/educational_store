@@ -25,6 +25,7 @@ urlpatterns = [
     path("search/", views.search, name="search"),
     path("search/autocomplete/", views.autocomplete, name="autocomplete"),
     path("size_finder/", views.size_finder, name="size_finder"),
+    path("change-city/", views.change_city, name="change_city"),
     path(
         "yandex_445ca9b51fd08dec.html/",
         TemplateView.as_view(template_name="yandex_445ca9b51fd08dec.html"),

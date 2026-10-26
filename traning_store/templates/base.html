@@ -11,9 +11,12 @@
     <meta name="description" content="{% block meta_description %}Интернет-магазин компрессионного трикотажа{% endblock %}">
     <meta name="keywords" content="{% block meta_keywords %}компрессионный трикотаж, медицинский трикотаж{% endblock %}">
     <meta name="csrf-token" content="{{ csrf_token }}">
+    <script nonce="{{ request.csp_nonce }}"
+        src="https://unpkg.com/htmx.org@2.0.4"
+        integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+"
+        crossorigin="anonymous"></script>
     
     {% block extra_meta %}{% endblock %}
-    {% block product_jsonld %}{% endblock %}
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
@@ -55,135 +58,10 @@
 </script>
 {% endscript %}
 </head>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100"
+hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     <!-- Верхняя панель с яркими цветами -->
-<header class="header-bg">
-    <div class="container-fluid">
-        <div class="row align-items-center py-0">
-            <!-- ЛЕВАЯ ЧАСТЬ: Логотип + Геолокация -->
-            <div class="col-md-6">
-                <div class="d-flex align-items-center">
-                    <!-- Логотип -->
-    <div class="col-md-4 mb-3 mb-md-0">
-    <div class="text-center">
-        <div class="mb-3" style="max-width: 100%;">
-            <a class="navbar-brand fw-bold text-dark me-4" href="{% url 'homepage:homepage' %}">
-                <img src="{% static 'logo.jpeg' %}" 
-                     alt="Логотип магазина" 
-                     class="img-fluid"
-                     style="width: 50%; max-width: 300px; height: auto; object-fit: contain;">
-            </a>
-        </div>
-    </div>
-</div>                          
-                    <!-- Геолокация -->
-                    <div class="city-selector">
-                        {% if current_city %}
-                            <div class="d-flex align-items-center">
-                                <i class="fas fa-map-marker-alt text-danger me-2"></i>
-                                <strong>{{ current_city.name_ru|default:current_city.name }}</strong>
-                                <div class="dropdown ms-2">
-                                    <button class="btn btn-sm btn-link p-0" type="button" 
-                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fas fa-chevron-down text-muted"></i>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        {% for city in popular_cities %}
-                                            <li>
-                                                <a class="dropdown-item city-change-link" 
-                                                   href="{{ request.path }}?city_id={{ city.id }}&change_city=1"
-                                                   data-city-id="{{ city.id }}">
-                                                    {{ city.name_ru|default:city.name }}
-                                                </a>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            </div>
-                        {% else %}
-                            <button class="btn btn-sm btn-outline-primary" document.querySelector('.city-btn').addEventListener('click', detectCity);">
-                                <i class="fas fa-location-arrow me-1"></i>
-                                Определить город
-                            </button>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-
-<!-- ПРАВАЯ ЧАСТЬ: Корзина, пользователь, валюта -->
-<div class="col-md-6">
-    <div class="d-flex align-items-center justify-content-end gap-3">
-        <!-- Избранное -->
-        <a href="{% url 'catalog:catalog' %}?favorites=true" 
-           class="nav-link position-relative p-0">
-            <span style="font-size: 1.2rem;">💛</span>
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill" 
-                  style="background: linear-gradient(135deg, #2600ff, #00ccff); color: #fff; font-size: 0.65rem; padding: 0.25rem 0.5rem; border: 1px solid #FFD700;">
-                {{ favorites_count }}
-            </span>
-        </a>
-        
-        <!-- Корзина -->
-        <div>
-            {% with total_items=cart|length %}
-                {% if total_items > 0 %}
-                    <a href="{% url 'cart:cart_detail' %}" 
-                       class="btn btn-primary btn-sm position-relative" 
-                       style="height: 31px; display: inline-flex; align-items: center; white-space: nowrap;">
-                        🛒 Корзина
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" 
-                              style="font-size: 0.6rem; padding: 0.2rem 0.4rem; margin-top: -2px;">
-                            {{ total_items }}
-                        </span>
-                    </a>
-                {% else %}
-                    <a href="{% url 'cart:cart_detail' %}" 
-                       class="btn btn-outline-secondary btn-sm" 
-                       style="height: 31px; display: inline-flex; align-items: center; white-space: nowrap;">
-                        🛒 Корзина пуста
-                    </a>
-                {% endif %}
-            {% endwith %}
-        </div>
-        
-        <!-- Пользователь -->
-        <div>
-            {% if user.is_authenticated %}
-                <div class="dropdown">
-                    <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" 
-                            style="height: 31px; display: inline-flex; align-items: center;">
-                        👤 {{ user.username }}
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'catalog:profile' user.username %}">Мои заказы</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{% url 'logout' %}">Выйти</a></li>
-                    </ul>
-                </div>
-            {% else %}
-                <div class="btn-group">
-                    <a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm" style="height: 31px; display: inline-flex; align-items: center;">
-                        Войти
-                    </a>
-                    <a href="{% url 'registration' %}" class="btn btn-primary btn-sm" style="height: 31px; display: inline-flex; align-items: center;">
-                        Регистрация
-                    </a>
-                </div>
-            {% endif %}
-        </div>
-        
-        <!-- Валюта и погода -->
-        <div class="text-end">
-            <div class="currency-weather" style="font-size: 0.8rem; line-height: 1.4;">
-                <div>💱 <strong>{{USD}}</strong> / <strong>{{EUR}}</strong> / <strong>{{CNY}}</strong></div>
-                <div>🌡 <strong>{{city_temp}}</strong></div>
-            </div>
-        </div>
-    </div>
-</div>
-        </div>
-    </div>
-</header>
+{% include 'includes/_header.html' %}
     <!-- Основной контент на весь экран -->
     <main class="flex-grow-1 main-bg">
         {% block content %}{% endblock %}

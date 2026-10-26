@@ -266,6 +266,7 @@ CONTENT_SECURITY_POLICY = {
         # Скрипты
         "script-src": [
             SELF,
+            "https://challenges.cloudflare.com",
             "https://cdn.jsdelivr.net",
             "https://mc.yandex.ru",
             "https://code.jquery.com",  # ← добавить
@@ -274,7 +275,6 @@ CONTENT_SECURITY_POLICY = {
             "https://suggest-maps.yandex.ru",  # ← для подсказок (suggest_apikey)
             "https://yastatic.net",
             "https://widget-pvz.dostavka.yandex.net",
-            "https://cdn.jsdelivr.net",
             "https://log.api-maps.yandex.ru",
             "https://challenges.cloudflare.com/turnstile/v0/api.js",
             "https://challenges.cloudflare.com/cdn-cgi/challenge-platform/h/g/turnstile/",
@@ -319,6 +319,8 @@ CONTENT_SECURITY_POLICY = {
         # Подключения (fetch, source maps)
         "connect-src": [
             SELF,
+            "data:",  # ← добавить для Turnstile
+            "https://challenges.cloudflare.com",  # ← добавить для Turnstile
             "https://cdn.jsdelivr.net",
             "https://core-renderer-tiles.maps.yandex.net",
             "https://api.cdek.ru",  # ← для API CDEK
@@ -341,7 +343,7 @@ CONTENT_SECURITY_POLICY = {
             "https://*.yandex.net",  # ← ДОБАВИТЬ
             "wss://*.yandex.ru",  # ← ДОБАВИТЬ
             "wss://*.yandex.net",  # ← ДОБАВИТЬ
-            "https://challenges.cloudflare.com/",
+            "https://challenges.cloudflare.com",
         ],
         # Шрифты
         "font-src": [

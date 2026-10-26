@@ -1,0 +1,16 @@
+{% for s in suggestions %}
+  <a href="{{ s.get_absolute_url }}" class="autocomplete-item d-block p-2 border-bottom">
+    <div class="d-flex align-items-center">
+      {% if s.main_images.0 %}
+        <img src="{{ s.main_images.0.image.url }}" width="40" height="40" class="me-2 rounded">
+      {% endif %}
+      <div>
+        <strong>{{ s.name }}</strong>
+        <small class="text-muted d-block">{{ s.brand.name }} • {{ s.articul }}</small>
+      </div>
+      <span class="ms-auto text-success fw-bold">{{ s.price }} ₽</span>
+    </div>
+  </a>
+{% empty %}
+  <div class="p-2 text-center text-muted"><small>Ничего не найдено</small></div>
+{% endfor %}

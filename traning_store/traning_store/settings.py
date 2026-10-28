@@ -11,9 +11,11 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 import os
+import socket
 import sys
 from pathlib import Path
 
+from csp.constants import NONCE, SELF
 # from django.urls import reverse_lazy
 from dotenv import load_dotenv
 
@@ -45,7 +47,7 @@ ALLOWED_HOSTS = [
     "kompressionnye-chulki24.ru",
     "www.kompressionnye-chulki24.ru",
 ]
-import socket
+
 
 hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
 INTERNAL_IPS = []
@@ -258,7 +260,6 @@ CSRF_COOKIE_SAMESITE = "Lax"  # Защита от CSRF
 
 SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
-from csp.constants import NONCE, SELF
 
 CONTENT_SECURITY_POLICY = {
     "DIRECTIVES": {

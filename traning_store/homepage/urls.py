@@ -11,6 +11,7 @@ urlpatterns = [
     path("detect-city/", views.detect_city, name="detect_city"),
     path("search-city/", views.search_city, name="search_city"),
     path("<int:pk>/", views.detail_view, name="detail"),
+    path("post/<int:post_id>/comments/", views.post_comments, name="post_comments"),
     path("<int:post_id>/comment/", views.add_comment, name="add_comment"),
     path(
         "<int:post_id>/edit_comment/<int:comment_id>/",
@@ -26,6 +27,8 @@ urlpatterns = [
     path("search/autocomplete/", views.autocomplete, name="autocomplete"),
     path("size_finder/", views.size_finder, name="size_finder"),
     path("change-city/", views.change_city, name="change_city"),
+    path("archive-posts/", views.archive_posts, name="archive_posts"),
+    path("useful-posts/", views.useful_posts, name="useful_posts"),
     path(
         "yandex_445ca9b51fd08dec.html/",
         TemplateView.as_view(template_name="yandex_445ca9b51fd08dec.html"),

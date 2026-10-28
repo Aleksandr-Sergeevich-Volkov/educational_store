@@ -8,11 +8,12 @@ from django.contrib.postgres.search import TrigramSimilarity
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
 from django.db.models import Count, Prefetch, Q
-from django.http import JsonResponse
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.defaulttags import register
 from django.urls import reverse
 from django.utils.decorators import method_decorator
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_GET, require_POST
 from django.views.generic import TemplateView
@@ -140,6 +141,28 @@ def change_city(request):
 
     context = get_header_context(request)
     return render(request, "includes/_header.html", context)
+
+
+@require_GET
+def archive_posts(request):
+    archive = (
+        Post.objects.all()
+        .filter(archive=True)
+        .annotate(comment_count=models.Count("comments"))
+        .order_by("-views")
+    )
+    return render(request, "includes/_archive_posts.html", {"archive": archive})
+
+
+@require_GET
+def useful_posts(request):
+    text = (
+        Post.objects.all()
+        .filter(archive=False)
+        .annotate(comment_count=models.Count("comments"))
+        .order_by("-views")
+    )
+    return render(request, "includes/_useful_posts.html", {"text": text})
 
 
 def search(request):
@@ -351,9 +374,33 @@ def detail_view(request, pk):
     )
 
 
-@login_required
+@require_GET
+def post_comments(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    # сохраняем страницу, с которой пришёл запрос, в сессию
+    referer = request.META.get("HTTP_REFERER") or "/"
+    if not url_has_allowed_host_and_scheme(referer, allowed_hosts={request.get_host()}):
+        referer = "/"
+
+    # формируем next: страница + ?open_comments=ID
+    separator = "&" if "?" in referer else "?"
+    full_next = f"{referer}{separator}open_comments={post_id}"
+
+    request.session["comments_next"] = full_next
+    return render(
+        request,
+        "includes/_comments.html",
+        {
+            "post": post,
+            "next": full_next,
+        },
+    )
+
+
+@require_POST
 def add_comment(request, post_id):
-    # print(f'test{post_id}')
+    if not request.user.is_authenticated:
+        return HttpResponseForbidden("Войдите, чтобы комментировать")
     post = get_object_or_404(Post, pk=post_id)
     form = CommentForm(request.POST)
     if form.is_valid():
@@ -361,6 +408,9 @@ def add_comment(request, post_id):
         comment.author = request.user
         comment.post = post
         comment.save()
+
+    if request.headers.get("HX-Request") == "true":
+        return render(request, "includes/_comments.html", {"post": post})
     return redirect(f"{reverse('homepage:homepage')}?open_comments={post_id}")
 
 

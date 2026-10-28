@@ -224,41 +224,14 @@
 </style>
     
     <!-- Правая колонка: посты (под кнопкой "Подбор") -->
-  <div class="col-md-4">
-    <!-- Заголовок с иконкой и кнопкой архива -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h6 class="mb-0 text-primary">
-            <i class="bi bi-star-fill me-1"></i>Полезные статьи
-        </h6>
-        <button class="btn btn-outline-secondary btn-sm" id="archive-btn">
-            📚 Архив статей 
-            <span class="badge bg-secondary ms-1" id="archive-count">{{ archive|length }}</span>
-        </button>
+ <div class="col-md-4">
+    <div id="posts-container">
+        {% include 'includes/_useful_posts.html' %}
     </div>
-    
-    <!-- Блок полезных статей -->
-    <div id="useful-posts">
-        {% for post in text %}
-            {% include 'includes/post_comments.html' with post=post archive=False %}
-        {% empty %}
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle me-1"></i>
-                Пока нет статей. Загляните позже!
-            </div>
-        {% endfor %}
-    </div>
+</div>
     
     <!-- Блок архивных статей (изначально скрыт) -->
-    <div id="archive-posts" style="display: none;">
-        {% for post in archive %}
-            {% include 'includes/post_comments.html' with post=post archive=True %}
-        {% empty %}
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle me-1"></i>
-                Архив пуст.
-            </div>
-        {% endfor %}
-    </div>
+   
 </div>
     <!-- Контакты -->
 <div class="col-12 col-md-4 mb-3 mb-md-0 d-flex align-items-center">
@@ -384,54 +357,56 @@
 {% block extra_js %}
 {% script %}
 <script nonce="{{ request.csp_nonce }}">
-document.addEventListener('DOMContentLoaded', function() {
-    
-    // ===== ПЕРЕКЛЮЧЕНИЕ АРХИВА =====
-    const archiveBtn = document.getElementById('archive-btn');
-    const usefulPosts = document.getElementById('useful-posts');
-    const archivePosts = document.getElementById('archive-posts');
-    
-    if (archiveBtn && usefulPosts && archivePosts) {
-        const usefulCount = {{ text|length }};
-        const archiveCount = {{ archive|length }};
-        
-        archiveBtn.addEventListener('click', function() {
-            const isArchiveVisible = archivePosts.style.display !== 'none';
-            
-            if (isArchiveVisible) {
-                usefulPosts.style.display = 'block';
-                archivePosts.style.display = 'none';
-                archiveBtn.innerHTML = '📚 Архив статей <span class="badge bg-secondary ms-1">' + 
-                                       archiveCount + '</span>';
-            } else {
-                usefulPosts.style.display = 'none';
-                archivePosts.style.display = 'block';
-                archiveBtn.innerHTML = '📖 Полезные статьи <span class="badge bg-secondary ms-1">' + 
-                                       usefulCount + '</span>';
-            }
-        });
+
+// ===== CSRF-ТОКЕН (глобально, до DOMContentLoaded) =====
+window.getCsrfToken = function() {
+    const meta = document.querySelector('meta[name="csrf-token"]');
+    if (meta && meta.content) return meta.content;
+    const input = document.querySelector('input[name="csrfmiddlewaretoken"]');
+    return input ? input.value : null;
+};
+
+// ===== ДЕЛЕГИРОВАННЫЕ ОБРАБОТЧИКИ (не требуют DOMContentLoaded) =====
+// Закрытие автокомплита при клике вне
+document.addEventListener('click', function(e) {
+    const box = document.getElementById('home-autocomplete');
+    const input = document.getElementById('home-search-input');
+    if (box && !box.contains(e.target) && e.target !== input) {
+        box.innerHTML = '';
     }
-    
-    // ===== РАСКРЫТИЕ/СВЁРТЫВАНИЕ ТЕКСТА =====
+});
+
+// Закрытие комментариев
+document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.close-comments-btn');
+    if (!btn) return;
+    const postId = btn.dataset.postId;
+    const container = document.getElementById(`comments-container-${postId}`);
+    if (container) container.innerHTML = '';
+});
+
+// ===== DOMContentLoaded: раскрытие текста =====
+document.addEventListener('DOMContentLoaded', function() {
+
     function expandText(postId) {
         const shortText = document.getElementById(`short-text-${postId}`);
         const fullText = document.getElementById(`full-text-${postId}`);
         const expandBtn = document.querySelector(`.expand-btn[data-post-id="${postId}"]`);
         const postCard = document.getElementById(`post-${postId}`);
-        
+
         if (!shortText || !fullText || !expandBtn) return;
-        
+
         shortText.style.display = 'none';
         fullText.style.display = 'block';
-        
+
         const viewsSpan = document.getElementById(`views-count-${postId}`);
         const viewsCount = viewsSpan ? viewsSpan.textContent : '0';
-        
-        expandBtn.innerHTML = '📕 Свернуть текст 👁️ <span class="views-count" id="views-count-' + postId + '">' + 
+
+        expandBtn.innerHTML = '📕 Свернуть текст 👁️ <span class="views-count" id="views-count-' + postId + '">' +
                              viewsCount + '</span>';
         expandBtn.className = 'btn btn-outline-secondary btn-sm flex-fill expand-btn';
         expandBtn.dataset.expanded = 'true';
-        
+
         if (postCard && !postCard.dataset.viewed) {
             postCard.dataset.viewed = 'true';
             fetch(`/post/${postId}/increment/`, {
@@ -451,32 +426,30 @@ document.addEventListener('DOMContentLoaded', function() {
             .catch(error => console.error('Ошибка:', error));
         }
     }
-    
+
     function collapseText(postId) {
         const shortText = document.getElementById(`short-text-${postId}`);
         const fullText = document.getElementById(`full-text-${postId}`);
         const expandBtn = document.querySelector(`.expand-btn[data-post-id="${postId}"]`);
-        
+
         if (!shortText || !fullText || !expandBtn) return;
-        
+
         shortText.style.display = 'block';
         fullText.style.display = 'none';
-        
+
         const viewsSpan = document.getElementById(`views-count-${postId}`);
         const viewsCount = viewsSpan ? viewsSpan.textContent : '0';
-        
-        expandBtn.innerHTML = '📖 Читать полностью текст 👁️ <span class="views-count" id="views-count-' + postId + '">' + 
+
+        expandBtn.innerHTML = '📖 Читать полностью текст 👁️ <span class="views-count" id="views-count-' + postId + '">' +
                              viewsCount + '</span>';
         expandBtn.className = 'btn btn-outline-primary btn-sm flex-fill expand-btn';
         expandBtn.dataset.expanded = 'false';
     }
-    
-    // ===== ОБРАБОТЧИКИ ДЛЯ КНОПОК РАСКРЫТИЯ =====
+
     document.querySelectorAll('.expand-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const postId = this.dataset.postId;
             if (!postId) return;
-            
             if (this.dataset.expanded === 'true') {
                 collapseText(postId);
             } else {
@@ -484,64 +457,30 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-    
-    // ===== ОБРАБОТЧИКИ ДЛЯ "ЧИТАТЬ ДАЛЕЕ" В ТЕКСТЕ =====
+
     document.querySelectorAll('.expand-trigger').forEach(trigger => {
         trigger.addEventListener('click', function() {
             const postId = this.dataset.postId;
             if (postId) expandText(postId);
         });
     });
-    
-    // ===== ПЕРЕКЛЮЧЕНИЕ КОММЕНТАРИЕВ (ПОКАЗАТЬ/СКРЫТЬ) =====
-    function toggleComments(postId) {
-        const commentsContainer = document.getElementById(`comments-${postId}`);
-        if (!commentsContainer) return;
-        
-        if (commentsContainer.style.display === 'none') {
-            commentsContainer.style.display = 'block';
-        } else {
-            commentsContainer.style.display = 'none';
-        }
-    }
-    
-    // Кнопки "Комментарии"
-    document.querySelectorAll('.toggle-comments-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const postId = this.dataset.postId;
-            if (postId) toggleComments(postId);
-        });
-    });
-    
-    // Кнопки "Закрыть" в комментариях
-    document.querySelectorAll('.close-comments-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const postId = this.dataset.postId;
-            if (postId) {
-                const commentsContainer = document.getElementById(`comments-${postId}`);
-                if (commentsContainer) commentsContainer.style.display = 'none';
-            }
-        });
-    });
 });
 
-document.addEventListener('click', function(e) {
-    const box = document.getElementById('home-autocomplete');
-    const input = document.getElementById('home-search-input');
-    if (box && !box.contains(e.target) && e.target !== input) {
-        box.innerHTML = '';
+document.addEventListener('DOMContentLoaded', function() {
+    const params = new URLSearchParams(window.location.search);
+    const openComments = params.get('open_comments');
+    if (openComments) {
+        const btn = document.querySelector(`[hx-get*="/post/${openComments}/comments/"]`);
+        if (btn) btn.click();
     }
 });
 
-// ===== ПОЛУЧЕНИЕ CSRF-ТОКЕНА =====
-window.getCsrfToken = function() {
-    const meta = document.querySelector('meta[name="csrf-token"]');
-    if (meta && meta.content) {
-        return meta.content;
+document.body.addEventListener('htmx:afterSwap', function(evt) {
+    if (evt.detail.target.id && evt.detail.target.id.startsWith('comments-container-')) {
+        const textarea = evt.detail.target.querySelector('textarea[name="text"]');
+        if (textarea) textarea.focus();
     }
-    const input = document.querySelector('input[name="csrfmiddlewaretoken"]');
-    return input ? input.value : null;
-};
+});
 </script>
 {% endscript %}
 

@@ -1,0 +1,61 @@
+{% extends "admin/change_list.html" %}
+{% load csp %}
+
+{% block content %}
+  {{ block.super }}
+
+  {% script %}
+  <script>
+    (function () {
+      function initTopScroll() {
+        // Контейнер с таблицей результатов в changelist
+        var results = document.querySelector("#changelist-form .results");
+        if (!results) return;
+
+        var table = results.querySelector("table");
+        if (!table) return;
+
+        // Уже добавлен — выходим (защита от повторной инициализации)
+        if (results.previousElementSibling &&
+            results.previousElementSibling.classList.contains("top-scroll")) {
+          return;
+        }
+
+        // Верхний скролл-контейнер
+        var topScroll = document.createElement("div");
+        topScroll.className = "top-scroll";
+        topScroll.style.overflowX = "auto";
+        topScroll.style.overflowY = "hidden";
+        topScroll.style.height = "14px";          // тонкая полоса
+        topScroll.style.marginBottom = "2px";
+
+        var ghost = document.createElement("div");
+        ghost.style.height = "1px";
+        ghost.style.width = table.scrollWidth + "px"; // ширина = ширине таблицы
+
+        topScroll.appendChild(ghost);
+        results.parentNode.insertBefore(topScroll, results);
+
+        // Синхронизация в обе стороны
+        topScroll.addEventListener("scroll", function () {
+          results.scrollLeft = topScroll.scrollLeft;
+        });
+        results.addEventListener("scroll", function () {
+          topScroll.scrollLeft = results.scrollLeft;
+        });
+
+        // Пересчёт ширины при ресайзе окна
+        window.addEventListener("resize", function () {
+          ghost.style.width = table.scrollWidth + "px";
+        });
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initTopScroll);
+      } else {
+        initTopScroll();
+      }
+    })();
+  </script>
+  {% endscript %}
+{% endblock %}

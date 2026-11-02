@@ -23,7 +23,7 @@ jobs:
       run: python -m flake8 traning_store/
 
   test_django_tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     services:
       postgres:
         image: postgres:13.10        
@@ -59,7 +59,7 @@ jobs:
         python manage.py test -v 2
 
   test_django_pytests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     services:
       postgres:
         image: postgres:13.10        

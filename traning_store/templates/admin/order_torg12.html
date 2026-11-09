@@ -460,28 +460,35 @@
 </table>
 
 <!-- ==================== КНОПКИ ==================== -->
+
 <div class="no-print">
     <button id="printBtn" class="btn btn-print">🖨️ Печать</button>
+    <button id="receiptBtn" class="btn btn-back" style="background: #17a2b8; border-color: #17a2b8;">🧾 Товарный чек</button>
     <button id="adminBtn" class="btn btn-back">🏠 В админку</button>
     <button id="backBtn" class="btn btn-back">↩ Назад</button>
     <button id="closeBtn" class="btn btn-close">✖ Закрыть</button>
 </div>
 
-</div>
-
-<!-- ==================== SCRIPT ==================== -->
 {% script %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('printBtn').addEventListener('click', function() {
             window.print();
         });
+        
+        // Товарный чек — открываем в новой вкладке
+        document.getElementById('receiptBtn').addEventListener('click', function() {
+           window.open("{% url 'orders:print_order_receipt' order.id %}", '_blank');
+        });
+        
         document.getElementById('adminBtn').addEventListener('click', function() {
             window.location.href = "{% url 'admin:index' %}";
         });
+        
         document.getElementById('backBtn').addEventListener('click', function() {
             window.history.back();
         });
+        
         document.getElementById('closeBtn').addEventListener('click', function() {
             try {
                 window.close();

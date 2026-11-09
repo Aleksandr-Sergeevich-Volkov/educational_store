@@ -271,3 +271,10 @@ def print_order_torg12(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     context = {"order": order, "usn": True, "vat_text": "Без НДС (УСН)"}
     return render(request, "admin/order_torg12.html", context)
+
+
+@staff_member_required
+def print_order_receipt(request, order_id):
+    """Печать товарного чека"""
+    order = get_object_or_404(Order, id=order_id)
+    return render(request, "admin/order_receipt.html", {"order": order})

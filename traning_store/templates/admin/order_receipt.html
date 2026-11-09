@@ -1,0 +1,247 @@
+<!-- templates/admin/order_receipt.html -->
+{% load csp %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Товарный чек №{{ order.id }}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Times New Roman', Arial, sans-serif;
+            font-size: 11px;
+            padding: 15px;
+            background: #fff;
+            color: #000;
+        }
+        .receipt {
+            max-width: 800px;
+            margin: 0 auto;
+            border: 1px solid #000;
+            padding: 15px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .header h1 {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .header .sub {
+            font-size: 10px;
+            margin-top: 3px;
+        }
+        .seller-info {
+            font-size: 10px;
+            margin-bottom: 10px;
+        }
+        .seller-info p {
+            margin: 2px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+            margin: 10px 0;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 3px 5px;
+        }
+        th {
+            background: #e8e8e8 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+            text-align: center;
+            font-weight: bold;
+        }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .total-row {
+            font-weight: bold;
+            background: #f0f0f0 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        .grand-total {
+            background: #c0c0c0 !important;
+            font-weight: bold;
+            font-size: 12px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        .footer {
+            margin-top: 15px;
+            font-size: 10px;
+        }
+        .signature {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .signature div {
+            width: 45%;
+        }
+        .signature-line {
+            display: inline-block;
+            width: 150px;
+            border-bottom: 1px solid #000;
+            margin: 0 5px;
+        }
+        .no-print {
+            margin-top: 20px;
+            text-align: center;
+            padding: 10px;
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+        @media print {
+            .no-print { display: none !important; }
+            body { padding: 5px; }
+        }
+        .btn {
+            padding: 8px 25px;
+            font-size: 14px;
+            cursor: pointer;
+            border: 1px solid #666;
+            border-radius: 5px;
+            margin: 0 5px;
+        }
+        .btn-print { background: #4CAF50; color: white; border-color: #4CAF50; }
+        .btn-close { background: #f44336; color: white; border-color: #f44336; }
+        .btn-back { background: #6c757d; color: white; border-color: #6c757d; }
+        .btn:hover { opacity: 0.8; }
+        .vat-free {
+            background: #e8e8e8 !important;
+            border: 1px solid #000;
+            text-align: center;
+            font-weight: bold;
+            padding: 4px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+    </style>
+</head>
+<body>
+<div class="receipt">
+
+    <div class="header">
+        <h1>ТОВАРНЫЙ ЧЕК</h1>
+        <div class="sub">№ {{ order.id }} от {{ order.created|date:"d.m.Y" }}</div>
+    </div>
+
+    <div class="seller-info">
+        <p><strong>Продавец:</strong> ООО "КОНСАЛТИНГОВЫЙ ЦЕНТР "АЛГОРИТМ"</p>
+        <p><strong>ИНН:</strong> 7719138441 &nbsp;|&nbsp; <strong>ОКПО:</strong> 45356214</p>
+        <p><strong>Адрес:</strong> г. Москва, ул. Примерная, д. 1</p>
+        <p><strong>Покупатель:</strong> {{ order.get_full_name }}, {{ order.phone|default:"-" }}</p>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 4%;">№</th>
+                <th style="width: 46%;">Наименование товара/услуги</th>
+                <th style="width: 10%;">Ед. изм.</th>
+                <th style="width: 10%;">Кол-во</th>
+                <th style="width: 15%;">Цена, руб.</th>
+                <th style="width: 15%;">Сумма, руб.</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.items.all %}
+            <tr>
+                <td class="text-center">{{ forloop.counter }}</td>
+                <td>{{ item.product.name }}{% if item.size %} (размер: {{ item.size.name }}){% endif %}{% if item.color %} (цвет: {{ item.color.name }}){% endif %}</td>
+                <td class="text-center">шт.</td>
+                <td class="text-center">{{ item.quantity }}</td>
+                <td class="text-right">{{ item.price|floatformat:2 }}</td>
+                <td class="text-right">{{ item.get_cost|floatformat:2 }}</td>
+            </tr>
+            {% endfor %}
+            
+            <tr class="total-row">
+                <td colspan="3" class="text-right">Итого:</td>
+                <td class="text-center">{{ order.get_total_quantity }}</td>
+                <td></td>
+                <td class="text-right">{{ order.get_total_without_delivery|floatformat:2 }}</td>
+            </tr>
+            
+            {% if order.discount > 0 %}
+            <tr style="background: #e8e8e8; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
+                <td colspan="5" class="text-right"><strong>Скидка {{ order.discount }}%:</strong></td>
+                <td class="text-right"><strong>-{{ order.get_discount_amount|floatformat:2 }}</strong></td>
+            </tr>
+            {% endif %}
+            
+            {% if order.delivery_sum > 0 %}
+            <tr style="background: #d0d0d0; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
+                <td colspan="5" class="text-right"><strong>Доставка:</strong></td>
+                <td class="text-right"><strong>{{ order.delivery_sum|floatformat:2 }}</strong></td>
+            </tr>
+            {% endif %}
+            
+            <tr class="grand-total">
+                <td colspan="5" class="text-right">ВСЕГО К ОПЛАТЕ:</td>
+                <td class="text-right">{{ order.get_total_cost|floatformat:2 }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="vat-free">
+        ⚡ БЕЗ НДС (УСН) ⚡
+    </div>
+
+    <div class="footer">
+        <p><strong>Всего наименований:</strong> {{ order.items.count }}, на сумму {{ order.get_total_cost|floatformat:2 }} руб.</p>
+        <p><strong>Оплачено:</strong> {% if order.paid %}✅ Да{% else %}❌ Нет{% endif %}</p>
+        {% if order.track_number %}
+        <p><strong>Трек-номер:</strong> {{ order.track_number }}</p>
+        {% endif %}
+    </div>
+
+    <div class="signature">
+        <div>
+            <strong>Продавец:</strong><br><br>
+            __________________ / Волков А.С. /<br>
+            <small>(подпись)</small>
+        </div>
+        <div>
+            <strong>Покупатель:</strong><br><br>
+            __________________ / {{ order.get_full_name }} /<br>
+            <small>(подпись)</small>
+        </div>
+    </div>
+
+    <div style="margin-top: 15px; text-align: left; font-size: 10px;">
+        М.П. &nbsp;&nbsp;&nbsp; «____» _______________ 20___ г.
+    </div>
+
+</div>
+
+<div class="no-print">
+    <button id="printBtn" class="btn btn-print">🖨️ Печать чека</button>
+    <button id="backBtn" class="btn btn-back">↩ Назад к накладной</button>
+    <button id="closeBtn" class="btn btn-close">✖ Закрыть</button>
+</div>
+
+{% script %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('printBtn').addEventListener('click', function() {
+            window.print();
+        });
+        document.getElementById('backBtn').addEventListener('click', function() {
+            window.history.back();
+        });
+        document.getElementById('closeBtn').addEventListener('click', function() {
+            try { window.close(); } catch(e) { window.location.href = "{% url 'admin:index' %}"; }
+        });
+    });
+</script>
+{% endscript %}
+
+</body>
+</html>

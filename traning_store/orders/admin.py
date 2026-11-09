@@ -85,6 +85,18 @@ def print_torg12_action(modeladmin, request, queryset):
 print_torg12_action.short_description = "Печать ТОРГ-12"
 
 
+def print_receipt_action(modeladmin, request, queryset):
+    """Печать товарного чека"""
+    if queryset.count() != 1:
+        modeladmin.message_user(request, "Выберите ОДИН заказ", level="error")
+        return
+    order = queryset.first()
+    return render(request, "admin/order_receipt.html", {"order": order})
+
+
+print_receipt_action.short_description = "Печать товарного чека"
+
+
 class OrderAdmin(admin.ModelAdmin):
     list_display = [
         "id",
@@ -103,7 +115,11 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ["paid", "created", "updated", "status", "delivery_type"]
     search_fields = ["id", "first_name", "last_name", "email", "status", "track_number"]
     inlines = [OrderItemInline]
-    actions = [export_to_csv, print_torg12_action]  # Только прямой рендер
+    actions = [
+        export_to_csv,
+        print_torg12_action,
+        print_receipt_action,
+    ]  # Только прямой рендер
     readonly_fields = [
         "created",
         "updated",

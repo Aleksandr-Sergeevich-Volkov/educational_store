@@ -19,4 +19,9 @@ urlpatterns = [
         views.print_order_torg12,
         name="print_order_torg12",
     ),
+    path(
+        "admin/print-receipt/<int:order_id>/",
+        views.print_order_receipt,
+        name="print_order_receipt",
+    ),
 ]

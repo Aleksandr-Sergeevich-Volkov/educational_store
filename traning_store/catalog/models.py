@@ -9,165 +9,159 @@ from traning_store.constant import COLOR_LEN, MEASURE_LEN, TITLE_LEN
 
 
 class Country(models.Model):
-    name = models.CharField('Название', max_length=TITLE_LEN)
-    code = models.CharField('Код', max_length=TITLE_LEN)
+    name = models.CharField("Название", max_length=TITLE_LEN)
+    code = models.CharField("Код", max_length=TITLE_LEN)
 
     class Meta:
-        verbose_name = 'Страна'
-        verbose_name_plural = 'Страны'
-        ordering = ('name',)
+        verbose_name = "Страна"
+        verbose_name_plural = "Страны"
+        ordering = ("name",)
 
     def __str__(self):
-        return f'{self.name}, {self.code}'
+        return f"{self.name}, {self.code}"
 
 
 class Brend(models.Model):
-    name = models.CharField('Название', max_length=TITLE_LEN)
+    name = models.CharField("Название", max_length=TITLE_LEN)
     country_brand = models.ForeignKey(
         Country,
         on_delete=models.CASCADE,
     )
     size_table_image = models.ImageField(
-        'Изображение таблицы размеров',
-        upload_to='brands/size_tables/',
+        "Изображение таблицы размеров",
+        upload_to="brands/size_tables/",
         blank=True,
         null=True,
-        help_text='Загрузите изображение с таблицей размеров для этого бренда'
+        help_text="Загрузите изображение с таблицей размеров для этого бренда",
     )
 
     class Meta:
-        verbose_name = 'Бренд'
-        verbose_name_plural = 'Бренды'
-        ordering = ('name',)
+        verbose_name = "Бренд"
+        verbose_name_plural = "Бренды"
+        ordering = ("name",)
 
     def __str__(self):
-        return f'{self.name}'
+        return f"{self.name}"
 
 
 class Appointment(models.Model):
-    name = models.CharField('Название', max_length=TITLE_LEN)
+    name = models.CharField("Название", max_length=TITLE_LEN)
 
     class Meta:
-        verbose_name = 'Назначение'
-        verbose_name_plural = 'Назначения'
-        ordering = ('name',)
+        verbose_name = "Назначение"
+        verbose_name_plural = "Назначения"
+        ordering = ("name",)
 
     def __str__(self):
-        return f'{self.name}'
+        return f"{self.name}"
 
 
 class Male(models.Model):
-    name = models.CharField('Название', max_length=TITLE_LEN)
+    name = models.CharField("Название", max_length=TITLE_LEN)
 
     class Meta:
-        verbose_name = 'Пол'
-        verbose_name_plural = 'Пол'
-        ordering = ('name',)
+        verbose_name = "Пол"
+        verbose_name_plural = "Пол"
+        ordering = ("name",)
 
     def __str__(self):
-        return f'{self.name}'
+        return f"{self.name}"
 
 
 class Color(models.Model):
-    name = models.CharField('Название', max_length=TITLE_LEN)
+    name = models.CharField("Название", max_length=TITLE_LEN)
     color = models.CharField(
-        'Цветовой HEX-код',
+        "Цветовой HEX-код",
         unique=True,
         max_length=COLOR_LEN,
     )
 
     class Meta:
-        verbose_name = 'Цвет'
-        verbose_name_plural = 'Цвет'
-        ordering = ('name',)
+        verbose_name = "Цвет"
+        verbose_name_plural = "Цвет"
+        ordering = ("name",)
 
     def __str__(self):
-        return f'{self.name}'
+        return f"{self.name}"
 
 
 class Class_compress(models.Model):
-    name = models.CharField('Название', max_length=TITLE_LEN)
+    name = models.CharField("Название", max_length=TITLE_LEN)
 
     class Meta:
-        verbose_name = 'Класс компрессии'
-        verbose_name_plural = 'Класс компрессии'
-        ordering = ('name',)
+        verbose_name = "Класс компрессии"
+        verbose_name_plural = "Класс компрессии"
+        ordering = ("name",)
 
     def __str__(self):
-        return f'{self.name}'
+        return f"{self.name}"
 
 
 class Soсk(models.Model):
-    name = models.CharField('Название', max_length=TITLE_LEN)
+    name = models.CharField("Название", max_length=TITLE_LEN)
 
     class Meta:
-        verbose_name = 'Носок'
-        verbose_name_plural = 'Носок'
-        ordering = ('name',)
+        verbose_name = "Носок"
+        verbose_name_plural = "Носок"
+        ordering = ("name",)
 
     def __str__(self):
-        return f'{self.name}'
+        return f"{self.name}"
 
 
 class Type_product(models.Model):
-    name = models.CharField('Название', max_length=TITLE_LEN)
-    description = models.TextField('Описание', blank=True)
+    name = models.CharField("Название", max_length=TITLE_LEN)
+    description = models.TextField("Описание", blank=True)
 
     class Meta:
-        verbose_name = 'Вид изделия'
-        verbose_name_plural = 'Вид изделия'
-        ordering = ('name',)
+        verbose_name = "Вид изделия"
+        verbose_name_plural = "Вид изделия"
+        ordering = ("name",)
 
     def __str__(self):
-        return f'{self.name}'
+        return f"{self.name}"
 
 
 class Size(models.Model):
-    name = models.CharField('Название', max_length=TITLE_LEN)
+    name = models.CharField("Название", max_length=TITLE_LEN)
     brand = models.ForeignKey(
         Brend,  # Связь с брендом
         on_delete=models.CASCADE,
-        verbose_name='Бренд'
+        verbose_name="Бренд",
     )
 
     class Meta:
-        verbose_name = 'Размер'
-        verbose_name_plural = 'Размер'
-        ordering = ('name',)
+        verbose_name = "Размер"
+        verbose_name_plural = "Размер"
+        ordering = ("name",)
 
     def __str__(self):
-        return f'{self.name}'
+        return f"{self.name}"
 
 
 class SizeDetail(models.Model):
     size = models.ForeignKey(
         Size,  # Связь с размером
         on_delete=models.CASCADE,
-        verbose_name='Детали размера'
+        verbose_name="Детали размера",
     )
-    ankle_circumference = IntegerRangeField(
-        verbose_name='Обхват щиколотки (см)'
-    )
+    ankle_circumference = IntegerRangeField(verbose_name="Обхват щиколотки (см)")
 
-    calf_circumference = IntegerRangeField(
-        verbose_name='Обхват икры (см)'
-    )
+    calf_circumference = IntegerRangeField(verbose_name="Обхват икры (см)")
 
-    circumference_under_knee = IntegerRangeField(
-        verbose_name='Обхват под коленом (см)'
-    )
+    circumference_under_knee = IntegerRangeField(verbose_name="Обхват под коленом (см)")
 
     mid_thigh_circumference = IntegerRangeField(
-        verbose_name='Обхват середины бедра (см)'
+        verbose_name="Обхват середины бедра (см)"
     )
 
     Upper_thigh_circumference = IntegerRangeField(
-        verbose_name='Обхват бедра верхний (см)'
+        verbose_name="Обхват бедра верхний (см)"
     )
 
     class Meta:
-        verbose_name = 'Детали размера'
-        verbose_name_plural = 'Детали размеров'
+        verbose_name = "Детали размера"
+        verbose_name_plural = "Детали размеров"
 
     def is_measurement_in_range(self, field_name, value):
         """Проверяет, входит ли измерение в диапазон"""
@@ -191,77 +185,58 @@ class SizeDetail(models.Model):
 
 
 class Model_type(models.Model):
-    name = models.CharField('Название', max_length=TITLE_LEN)
+    name = models.CharField("Название", max_length=TITLE_LEN)
     brand = models.ForeignKey(
         Brend,  # Связь с брендом
         on_delete=models.CASCADE,
-        verbose_name='Бренд'
+        verbose_name="Бренд",
     )
-    description = models.TextField('Описание', blank=True)
+    description = models.TextField("Описание", blank=True)
 
     class Meta:
-        verbose_name = 'Модель'
-        verbose_name_plural = 'Модель'
-        ordering = ('name',)
+        verbose_name = "Модель"
+        verbose_name_plural = "Модель"
+        ordering = ("name",)
 
     def __str__(self):
         return f"{self.name}"
 
 
 class Wide_hips(models.Model):
-    name = models.CharField('Название', max_length=TITLE_LEN)
+    name = models.CharField("Название", max_length=TITLE_LEN)
 
     class Meta:
-        verbose_name = 'Широкое бедро'
-        verbose_name_plural = 'Широкое бедро'
-        ordering = ('name',)
+        verbose_name = "Широкое бедро"
+        verbose_name_plural = "Широкое бедро"
+        ordering = ("name",)
 
     def __str__(self):
-        return f'{self.name}'
+        return f"{self.name}"
 
 
 class Side(models.Model):
-    name = models.CharField('Название', max_length=TITLE_LEN)
+    name = models.CharField("Название", max_length=TITLE_LEN)
 
     class Meta:
-        verbose_name = 'Строна'
-        verbose_name_plural = 'Сторона'
-        ordering = ('name',)
+        verbose_name = "Сторона"
+        verbose_name_plural = "Сторона"
+        ordering = ("name",)
 
     def __str__(self):
-        return f'{self.name}'
+        return f"{self.name}"
 
 
 class Product(models.Model):
-    name = models.CharField('Название', max_length=TITLE_LEN)
-    brand = models.ForeignKey(
-        Brend,
-        on_delete=models.CASCADE
-    )
-    Appointment = models.ForeignKey(
-        Appointment,
-        on_delete=models.CASCADE
-    )
-    Male = models.ForeignKey(
-        Male,
-        on_delete=models.CASCADE
-    )
+    name = models.CharField("Название", max_length=TITLE_LEN)
+    brand = models.ForeignKey(Brend, on_delete=models.CASCADE)
+    Appointment = models.ForeignKey(Appointment, on_delete=models.CASCADE)
+    Male = models.ForeignKey(Male, on_delete=models.CASCADE)
     Color = models.ManyToManyField(  # Изменили имя на множественное число
-        Color,
-        verbose_name='Цвета'
+        Color, verbose_name="Цвета"
     )
-    Class_compress = models.ForeignKey(
-        Class_compress,
-        on_delete=models.CASCADE
-    )
-    Sock = models.ForeignKey(
-        Soсk,
-        on_delete=models.CASCADE
-    )
-    Type_product = models.ForeignKey(
-        Type_product,
-        on_delete=models.CASCADE
-    )
+    Class_compress = models.ForeignKey(Class_compress, on_delete=models.CASCADE)
+    Sock = models.ForeignKey(Soсk, on_delete=models.CASCADE)
+    Type_product = models.ForeignKey(Type_product, on_delete=models.CASCADE)
     Size = models.ForeignKey(
         Size,
         on_delete=models.CASCADE,
@@ -271,26 +246,25 @@ class Product(models.Model):
         on_delete=models.CASCADE,
     )
     Wide_hips = models.ForeignKey(
-        Wide_hips,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
+        Wide_hips, on_delete=models.CASCADE, null=True, blank=True
     )
-    Side = models.ForeignKey(
-        Side,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True
-    )
+    Side = models.ForeignKey(Side, on_delete=models.CASCADE, null=True, blank=True)
     slug = models.SlugField(
         max_length=255,
         unique=True,
         db_index=True,
         verbose_name="URL",
     )
+    size_table_image = models.ImageField(
+        "Изображение таблицы размеров",
+        upload_to="brands/size_tables/",
+        blank=True,
+        null=True,
+        help_text="Загрузите изображение с таблицей размеров для этого товара",
+    )
 
-    articul = models.CharField('Артикул', max_length=MEASURE_LEN, default='P280')
-    code = models.PositiveIntegerField('Код товара', unique=True, null=True, blank=True)
+    articul = models.CharField("Артикул", max_length=MEASURE_LEN, default="P280")
+    code = models.PositiveIntegerField("Код товара", unique=True, null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock = models.PositiveIntegerField()
     available = models.BooleanField(default=True)
@@ -301,9 +275,9 @@ class Product(models.Model):
     seo_description = models.TextField(blank=True)
     seo_alt = models.CharField(max_length=255, blank=True)  # alt для изображений
     # ДОБАВИТЬ эти SEO-поля:
-    seo_h1 = models.CharField('H1 заголовок', max_length=255, blank=True)
-    seo_keywords = models.TextField('Ключевые слова', blank=True)
-    views = models.PositiveIntegerField(default=0, verbose_name='Количество просмотров')
+    seo_h1 = models.CharField("H1 заголовок", max_length=255, blank=True)
+    seo_keywords = models.TextField("Ключевые слова", blank=True)
+    views = models.PositiveIntegerField(default=0, verbose_name="Количество просмотров")
 
     # УЛУЧШИТЬ метод save():
     def save(self, *args, **kwargs):
@@ -329,7 +303,7 @@ class Product(models.Model):
         super().save(*args, **kwargs)
 
     def _generate_code(self):
-        max_code = Product.objects.aggregate(Max('code'))['code__max']
+        max_code = Product.objects.aggregate(Max("code"))["code__max"]
         return (max_code or 51722) + 1  # 51723 будет первым кодом
 
     # ДОБАВИТЬ эти методы:
@@ -341,11 +315,19 @@ class Product(models.Model):
         templates = [
             # Коммерческие шаблоны
             lambda: f"{self.name} - купить арт. {self.articul} в Москве | {self.brand}",
-            lambda: f"Купить {self.name} {self.brand} арт. {self.articul} цена с доставкой",
-            lambda: f"{self.name} {self.brand} арт. {self.articul} - заказать в интернет-магазине",
+            lambda: (
+                f"Купить {self.name} {self.brand} арт. {self.articul} цена с доставкой"
+            ),
+            lambda: (
+                f"{self.name} {self.brand} арт. {self.articul} - заказать в интернет-магазине"
+            ),
             # С характеристиками
-            lambda: f"{self.name} {self.Class_compress} - купить {self.brand} арт. {self.articul}",
-            lambda: f"{self.Type_product} {self.Appointment} {self.brand} - купить арт. {self.articul}",
+            lambda: (
+                f"{self.name} {self.Class_compress} - купить {self.brand} арт. {self.articul}"
+            ),
+            lambda: (
+                f"{self.Type_product} {self.Appointment} {self.brand} - купить арт. {self.articul}"
+            ),
         ]
 
         return random.choice(templates)()
@@ -356,7 +338,7 @@ class Product(models.Model):
 
         # Берем 2-3 основные характеристики
         main_features = []
-        for key in ['Назначение', 'Класс компрессии', 'Вид изделия']:
+        for key in ["Назначение", "Класс компрессии", "Вид изделия"]:
             if key in features and features[key]:
                 main_features.append(features[key].lower())
 
@@ -366,15 +348,14 @@ class Product(models.Model):
         descriptions = [
             f"Купить {self.name.lower()} {self.brand} арт. {self.articul}. {features_text}. "
             f"Выгодная цена, доставка по Москве и России. Гарантия качества.",
-
             f"{self.name} {self.brand} - компрессионный трикотаж. {features_text}. "
             f"Артикул: {self.articul}. Закажите онлайн с доставкой.",
-
             f"Заказать {self.name.lower()} {self.brand} арт. {self.articul}. {features_text}. "
-            f"Официальный поставщик, сертифицированная продукция."
+            f"Официальный поставщик, сертифицированная продукция.",
         ]
 
         import random
+
         description = random.choice(descriptions)
 
         # Ограничение длины для SEO
@@ -395,8 +376,8 @@ class Product(models.Model):
 
         # 2. ОЧЕНЬ ЖЕСТКИЕ фильтры (только реальный спам)
         hard_filters = [
-            'артикул купить',
-            'купить артикул',
+            "артикул купить",
+            "купить артикул",
         ]
 
         for pattern in hard_filters:
@@ -405,9 +386,16 @@ class Product(models.Model):
 
         # 3. Проверка на полную бессмысленность
         meaningful_words = [
-            'компрессионные', 'чулки', 'гольфы', 'колготки',
-            'варикоз', 'класс', 'компрессии',
-            'купить', 'цена', 'заказать'
+            "компрессионные",
+            "чулки",
+            "гольфы",
+            "колготки",
+            "варикоз",
+            "класс",
+            "компрессии",
+            "купить",
+            "цена",
+            "заказать",
         ]
 
         # Хотя бы одно осмысленное слово должно быть
@@ -430,9 +418,11 @@ class Product(models.Model):
         # ИСПРАВЛЕНО: Определяем оба варианта названия для гибкости
         # full_type - как есть из БД (например, "компрессионные чулки")
         # base_type - без "компрессионные" если они есть (например, "чулки")
-        if product_type.startswith('компрессионные '):
+        if product_type.startswith("компрессионные "):
             full_type = product_type  # "компрессионные чулки"
-            base_type = product_type.replace('компрессионные ', '', 1).strip()  # "чулки"
+            base_type = product_type.replace(
+                "компрессионные ", "", 1
+            ).strip()  # "чулки"
         else:
             full_type = product_type
             base_type = product_type
@@ -473,8 +463,12 @@ class Product(models.Model):
 
         # ИСПРАВЛЕНО: Добавили естественные варианты с base_type
         if base_type != full_type:
-            keywords.add(f"{base_type} {class_name} {brand_name}")  # "чулки 2 класса venoteks"
-            keywords.add(f"{brand_name} {base_type} {class_name}")  # "venoteks чулки 2 класс"
+            keywords.add(
+                f"{base_type} {class_name} {brand_name}"
+            )  # "чулки 2 класса venoteks"
+            keywords.add(
+                f"{brand_name} {base_type} {class_name}"
+            )  # "venoteks чулки 2 класс"
 
         # 3. ЗАПРОСЫ С НАЗНАЧЕНИЕМ
         if self.Appointment:
@@ -494,11 +488,15 @@ class Product(models.Model):
 
         # ИСПРАВЛЕНО: Добавили варианты с base_type
         if base_type != full_type:
-            keywords.add(f"{base_type} {brand_name} {appointment_name}")  # "чулки venoteks при варикозе"
-            keywords.add(f"{appointment_name} {base_type} {brand_name}")  # "варикоз чулки venoteks"
+            keywords.add(
+                f"{base_type} {brand_name} {appointment_name}"
+            )  # "чулки venoteks при варикозе"
+            keywords.add(
+                f"{appointment_name} {base_type} {brand_name}"
+            )  # "варикоз чулки venoteks"
 
         # 4. КОММЕРЧЕСКИЕ ЗАПРОСЫ
-        commercial_words = ['купить', 'цена', 'заказать']
+        commercial_words = ["купить", "цена", "заказать"]
 
         # ИСПРАВЛЕНО: Расширили базовые комбинации
         commercial_bases = [
@@ -508,16 +506,18 @@ class Product(models.Model):
 
         # Добавим base_type варианты если они есть
         if base_type != full_type:
-            commercial_bases.extend([
-                f"{brand_name} {base_type}",
-                f"{base_type} {brand_name}",
-            ])
+            commercial_bases.extend(
+                [
+                    f"{brand_name} {base_type}",
+                    f"{base_type} {brand_name}",
+                ]
+            )
 
         for base in commercial_bases:
             for action in commercial_words:
                 keywords.add(f"{action} {base}")
                 # Только для "цена" и "заказать" - обратный порядок
-                if action in ['цена', 'заказать']:
+                if action in ["цена", "заказать"]:
                     keywords.add(f"{base} {action}")
 
         # ИСПРАВЛЕНО: Добавили более естественные коммерческие фразы
@@ -526,10 +526,18 @@ class Product(models.Model):
         keywords.add(f"где купить {full_type} {brand_name}")
 
         # 5. ГЕО-ЗАПРОСЫ (только для Москвы и СПб)
-        geo_cities = ['москва', 'санкт-петербург']
+        geo_cities = ["москва", "санкт-петербург"]
 
         # Только для популярных брендов
-        popular_brands = ['orto', 'ergoforma', 'venoteks', 'trives', 'венотэкс', 'luomma_idealista', 'cмоленский трикотаж']
+        popular_brands = [
+            "orto",
+            "ergoforma",
+            "venoteks",
+            "trives",
+            "венотэкс",
+            "luomma_idealista",
+            "cмоленский трикотаж",
+        ]
         if brand_name in [b.lower() for b in popular_brands]:
             for city in geo_cities:
                 # ИСПРАВЛЕНО: Используем full_type
@@ -545,8 +553,8 @@ class Product(models.Model):
             articul_clean = self.articul.lower()
 
             # Заменяем точки и дефисы на пробелы
-            articul_clean = re.sub(r'[\.\-]', ' ', articul_clean)
-            articul_clean = re.sub(r'\s+', ' ', articul_clean).strip()
+            articul_clean = re.sub(r"[\.\-]", " ", articul_clean)
+            articul_clean = re.sub(r"\s+", " ", articul_clean).strip()
 
             # Проверяем, что артикул имеет смысл
             # Должен содержать буквы и быть не слишком длинным
@@ -563,9 +571,9 @@ class Product(models.Model):
                     keywords.add(f"{brand_name} {full_type} арт {articul_clean}")
 
         # 7. ЦВЕТА (если указаны и это важно)
-        if self.pk and hasattr(self, 'Color') and self.Color.exists():
+        if self.pk and hasattr(self, "Color") and self.Color.exists():
             # Берем только основные цвета
-            main_colors = ['черный', 'телесный', 'бежевый', 'белый']
+            main_colors = ["черный", "телесный", "бежевый", "белый"]
             for color in self.Color.all()[:2]:  # Максимум 2 цвета
                 color_name = str(color).lower()
                 if color_name in main_colors:
@@ -632,7 +640,9 @@ class Product(models.Model):
             score = 0
 
             # Высший приоритет: коммерческие запросы
-            if any(word in keyword for word in ['купить', 'цена', 'сколько', 'заказать']):
+            if any(
+                word in keyword for word in ["купить", "цена", "сколько", "заказать"]
+            ):
                 score -= 50
 
             # Приоритет: начинается с full_type или brand_name
@@ -661,33 +671,37 @@ class Product(models.Model):
     def get_features_dict(self):
         """Полный словарь характеристик для SEO"""
         if self.pk:  # или self.id
-            colors = ', '.join([str(c) for c in self.Color.all()]) if self.Color.exists() else ''
+            colors = (
+                ", ".join([str(c) for c in self.Color.all()])
+                if self.Color.exists()
+                else ""
+            )
         else:
-            colors = ''
+            colors = ""
         return {
-            'Бренд': str(self.brand) if self.brand else '',
-            'Артикул': self.articul,
-            'Назначение': str(self.Appointment) if self.Appointment else '',
-            'Класс компрессии': str(self.Class_compress) if self.Class_compress else '',
-            'Тип носка': str(self.Sock) if self.Sock else '',
-            'Вид изделия': str(self.Type_product) if self.Type_product else '',
-            'Размер': str(self.Size) if self.Size else '',
-            'Модель': str(self.Model_type) if self.Model_type else '',
-            'Пол': str(self.Male) if self.Male else '',
-            'Цвета': colors
+            "Бренд": str(self.brand) if self.brand else "",
+            "Артикул": self.articul,
+            "Назначение": str(self.Appointment) if self.Appointment else "",
+            "Класс компрессии": str(self.Class_compress) if self.Class_compress else "",
+            "Тип носка": str(self.Sock) if self.Sock else "",
+            "Вид изделия": str(self.Type_product) if self.Type_product else "",
+            "Размер": str(self.Size) if self.Size else "",
+            "Модель": str(self.Model_type) if self.Model_type else "",
+            "Пол": str(self.Male) if self.Male else "",
+            "Цвета": colors,
         }
 
     def get_absolute_url(self):
         """Возвращает URL товара"""
-        return reverse('catalog:detail', kwargs={'slug': self.slug})
+        return reverse("catalog:detail", kwargs={"slug": self.slug})
 
 
 class Gallery(models.Model):
-    image = models.ImageField(upload_to='images/')
+    image = models.ImageField(upload_to="images/")
     main = models.BooleanField(default=False)
-    product = models.ForeignKey(Product,
-                                on_delete=models.CASCADE,
-                                related_name='images')
-    type_product = models.ForeignKey(Type_product,
-                                     on_delete=models.CASCADE,
-                                     related_name='type_images')
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="images"
+    )
+    type_product = models.ForeignKey(
+        Type_product, on_delete=models.CASCADE, related_name="type_images"
+    )

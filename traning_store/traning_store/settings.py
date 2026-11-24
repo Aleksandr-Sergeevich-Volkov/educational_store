@@ -16,6 +16,7 @@ import sys
 from pathlib import Path
 
 from csp.constants import NONCE, SELF
+
 # from django.urls import reverse_lazy
 from dotenv import load_dotenv
 
@@ -36,7 +37,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
